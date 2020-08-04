@@ -52,11 +52,11 @@ int main(int argc, char** argv){
     float xs, weight, luminosity = 59740.0;
     
     if (sample == "data_obs"){weight = 1.0;}
-    else if(sample == "DY"){weight = 3.6235;}
-    else if(sample == "DY1"){weight = 0.6298;}
-    else if(sample == "DY2"){weight = 0.5521;}
-    else if(sample == "DY3"){weight = 0.5995;}
-    else if(sample == "DY4"){weight = 0.8211;}
+    else if(sample == "DY"){weight = 1.0;}
+    else if(sample == "DY1"){weight = 1.0;}
+    else if(sample == "DY2"){weight = 1.0;}
+    else if(sample == "DY3"){weight = 1.0;}
+    else if(sample == "DY4"){weight = 1.0;}
     else if(sample == "GGHTT"){xs = 48.58*0.0627; weight = luminosity*xs/N;}
     else if(sample == "GGZHLLTT"){xs = 0.1227*0.0627*3*0.033658; weight = luminosity*xs/N;}
     else if(sample == "GGZHNNTT"){xs = 0.1227*0.0627*0.2000; weight = luminosity*xs/N;}
@@ -70,11 +70,11 @@ int main(int argc, char** argv){
     else if(sample == "TTToSemiLeptonic"){xs = 365.35; weight = luminosity*xs/N;}
     else if(sample == "VBFHTT"){xs = 3.782*0.0627; weight = luminosity*xs/N;}
     else if(sample == "VV2L2Nu"){xs = 11.95; weight = luminosity*xs/N;}
-    else if(sample == "W"){weight = 51.75;}
-    else if(sample == "W1"){weight = 9.082;}
-    else if(sample == "W2"){weight = 4.511;}
-    else if(sample == "W3"){weight = 3.077;}
-    else if(sample == "W4"){weight = 3.233;}
+    else if(sample == "W"){weight = 1.0;}
+    else if(sample == "W1"){weight = 1.0;}
+    else if(sample == "W2"){weight = 1.0;}
+    else if(sample == "W3"){weight = 1.0;}
+    else if(sample == "W4"){weight = 1.0;}
     else if(sample == "WZ2L2Q"){xs = 5.595; weight = luminosity*xs/N;}
     else if(sample == "WZ3LNu"){xs = 4.43; weight = luminosity*xs/N;}
     else if(sample == "WminusHTT"){xs = 0.5328*0.0627; weight = luminosity*xs/N;}
@@ -117,6 +117,7 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("beta_deepcsv_2", &beta_deepcsv_2);
     tree->SetBranchAddress("bphi_deepcsv_2", &bphi_deepcsv_2);
     tree->SetBranchAddress("bm_deepcsv_2", &bm_deepcsv_2);
+    tree->SetBranchAddress("numGenJets", &numGenJets);
     
     TH1F * hist_em = new TH1F("", "", 30, 0., 100.);
     TH1F * hist_emb = new TH1F("", "", 30, 0., 300.);
@@ -149,6 +150,23 @@ int main(int argc, char** argv){
         myb2.SetPtEtaPhiM(bpt_deepcsv_2,beta_deepcsv_2,bphi_deepcsv_2,bm_deepcsv_2);
         
         if (!(myele.DeltaR(mymu)>0.3)) continue;
+        
+        //DY and W per-event weights
+        if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
+            if (numGenJets==0) continue;
+            else if (numGenJets==1) weight = 0.6298;
+            else if (numGenJets==2) weight = 0.5521;
+            else if (numGenJets==3) weight = 0.5995;
+            else if (numGenJets==4) weight = 0.8211;
+        }
+        
+        if (sample=="W" or sample=="W1" or sample=="W2" or sample=="W3" or sample=="W4"){
+            if (numGenJets==0) continue;
+            else if (numGenJets==1) weight = 9.082;
+            else if (numGenJets==2) weight = 4.511;
+            else if (numGenJets==3) weight = 3.077;
+            else if (numGenJets==4) weight = 3.233;
+        }
         
         //filling histograms
         float m_em = (myele + mymu).M();
