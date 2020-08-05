@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-import ROOT
+mport ROOT
 import re
 from array import array
 
@@ -79,7 +78,7 @@ adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
 trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",0.5)
 
-categories=["m_embb"]
+categories=["m_em"]
 ncat=1
 
 for i in range (0,ncat):
@@ -90,6 +89,7 @@ for i in range (0,ncat):
    VV=file.Get(categories[i]).Get("VV")
    Z=file.Get(categories[i]).Get("Z")
    ST=file.Get(categories[i]).Get("ST")
+   bbtt60=divide_width(file.Get(categories[i]).Get("bbtt60"))
 
    Data.GetXaxis().SetTitle("")
    Data.GetXaxis().SetTitleSize(0)
@@ -100,14 +100,14 @@ for i in range (0,ncat):
    Data.GetYaxis().SetTitleSize(0.085)
    Data.GetYaxis().SetTitleOffset(0.7)
    Data.SetTitle("")
-   Data.GetYaxis().SetTitle("Events")
+   Data.GetYaxis().SetTitle("Events/bin")
 
    HTT.SetFillColor(ROOT.TColor.GetColor("#ffccff"))
    W.SetFillColor(ROOT.TColor.GetColor("#9999cc"))
    TT.SetFillColor(ROOT.TColor.GetColor("#4496c8"))
    VV.SetFillColor(ROOT.TColor.GetColor("#ffcc66"))
    Z.SetFillColor(ROOT.TColor.GetColor("#fa5a2a"))
-   ST.SetFillColor(ROOT.TColor.GetColor(1000))
+   ST.SetFillColor(ROOT.TColor.GetColor("#82E0AA"))
 
    Data.SetMarkerStyle(20)
    Data.SetMarkerSize(1)
@@ -119,6 +119,8 @@ for i in range (0,ncat):
    ST.SetLineColor(1)
    Data.SetLineColor(1)
    Data.SetLineWidth(2)
+   bbtt60.SetLineColor(2)
+   bbtt60.SetLineWidth(3)
 
    stack=ROOT.THStack("stack","stack")
    stack.Add(HTT)
@@ -163,6 +165,8 @@ for i in range (0,ncat):
    print Data.GetMaximum(),Data.GetMinimum()
    Data.Draw("e")
    stack.Draw("histsame")
+   bbtt60.Scale(10)
+   bbtt60.Draw("histsame")
 
    errorBand.Draw("e2same")
    Data.Draw("esame")
@@ -214,7 +218,7 @@ for i in range (0,ncat):
    h1.Divide(hwoE)
    h3.Divide(hwoE)
    #h1.GetXaxis().SetTitle("b p_{T} (GeV)")
-   h1.GetXaxis().SetTitle("m^{vis}_{e#mubb} (GeV)")#2(m_{a1}-m_{a2})/(m_{a1}+m_{a2})")#m_{T}(e#mu,MET) (GeV)")#m_{bb#tau#tau} (GeV)")
+   h1.GetXaxis().SetTitle("m^{vis}_{e#mu} (GeV)")#2(m_{a1}-m_{a2})/(m_{a1}+m_{a2})")#m_{T}(e#mu,MET) (GeV)")#m_{bb#tau#tau} (GeV)")
    h1.GetXaxis().SetLabelSize(0.08)
    h1.GetYaxis().SetLabelSize(0.08)
    h1.GetYaxis().SetTitle("Obs./Exp.")

@@ -52,6 +52,7 @@ int main(int argc, char** argv){
     float xs, weight, luminosity = 59740.0;
     
     if (sample == "data_obs"){weight = 1.0;}
+    else if(sample == "bbtt60"){xs = 0.01*48.58*0.1133; weight = luminosity*xs/N;}
     else if(sample == "DY"){weight = 1.0;}
     else if(sample == "DY1"){weight = 1.0;}
     else if(sample == "DY2"){weight = 1.0;}
@@ -119,9 +120,18 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("bm_deepcsv_2", &bm_deepcsv_2);
     tree->SetBranchAddress("numGenJets", &numGenJets);
     
-    TH1F * hist_em = new TH1F("", "", 30, 0., 100.);
+    TH1F * hist_em = new TH1F("", "", 12, 0., 60.);
     TH1F * hist_emb = new TH1F("", "", 30, 0., 300.);
-    TH1F * hist_embb = new TH1F("", "", 30, 0., 600.);
+    TH1F * hist_embb = new TH1F("", "", 60, 0., 600.);
+    
+    //declare workspace for scale factors
+    TFile fwmc("htt_scalefactors_legacy_2018.root");
+    RooWorkspace *wmc = (RooWorkspace*)fwmc.Get("w");
+    fwmc.Close();
+    
+    //access pileup distributions in data/MC
+    reweight::LumiReWeighting* LumiWeights_12;
+    LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2018.root", "pu_distributions_data_2018.root", "pileup", "pileup");
 
     //loop over events
     int n = tree->GetEntries(); //no. of events after skimming
@@ -153,7 +163,7 @@ int main(int argc, char** argv){
         
         //DY and W per-event weights
         if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
-            if (numGenJets==0) continue;
+            if (numGenJets==0) weight = 3.623;
             else if (numGenJets==1) weight = 0.6298;
             else if (numGenJets==2) weight = 0.5521;
             else if (numGenJets==3) weight = 0.5995;
@@ -161,12 +171,47 @@ int main(int argc, char** argv){
         }
         
         if (sample=="W" or sample=="W1" or sample=="W2" or sample=="W3" or sample=="W4"){
-            if (numGenJets==0) continue;
+            if (numGenJets==0) weight = 51.75;
             else if (numGenJets==1) weight = 9.082;
             else if (numGenJets==2) weight = 4.511;
             else if (numGenJets==3) weight = 3.077;
             else if (numGenJets==4) weight = 3.233;
         }
+        
+        //initialize workspace with lepton kinematics
+        wmc->var("m_pt")->setVal(mymu.Pt());
+        wmc->var("m_eta")->setVal(mymu.Eta());
+        wmc->var("m_iso")->setVal(iso_2);
+        wmc->var("e_pt")->setVal(myele.Pt());
+        wmc->var("e_eta")->setVal(myele.Eta());
+        wmc->var("e_iso")->setVal(iso_1);
+        
+        //compute the trigger scale factor
+        float probData = wmc->function("m_trg_8_ic_data")->getVal()*wmc->function("e_trg_23_ic_data")->getVal()*int(triggerMu8E23)+wmc->function("m_trg_23_ic_data")->getVal()*wmc->function("e_trg_12_ic_data")->getVal()*int(triggerMu23E12)-wmc->function("e_trg_23_ic_data")->getVal()*wmc->function("m_trg_23_ic_data")->getVal()*int(triggerMu8E23 && triggerMu23E12);
+        float probMC = wmc->function("m_trg_8_ic_mc")->getVal()*wmc->function("e_trg_23_ic_mc")->getVal()*int(triggerMu8E23)+wmc->function("m_trg_23_ic_mc")->getVal()*wmc->function("e_trg_12_ic_mc")->getVal()*int(triggerMu23E12)-wmc->function("e_trg_23_ic_mc")->getVal()*wmc->function("m_trg_23_ic_mc")->getVal()*int(triggerMu8E23 && triggerMu23E12);
+        float sf_trg=probData/probMC;
+        
+        //compute the e/mu ID/iso/tracking scale factors
+        float sf_emu = wmc->function("m_trk_ratio")->getVal()*wmc->function("e_trk_ratio")->getVal()*wmc->function("e_idiso_ic_ratio")->getVal()*wmc->function("m_idiso_ic_ratio")->getVal();
+        
+        //re-weigh Z pT spectrum in DY samples
+        wmc->var("z_gen_mass")->setVal(genM);
+        wmc->var("z_gen_pt")->setVal(genpT);
+        float zptweight=wmc->function("zptmass_weight_nom")->getVal();
+        
+        //re-weigh top pT spectrum in ttbar samples
+        if (name=="TT" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic" or sample=="TTToHadronic"){
+            float pttop1=pt_top1;
+            if (pttop1>472) pttop1=472;
+            float pttop2=pt_top2;
+            if (pttop2>472) pttop2=472;
+            weight*=sqrt(exp(0.088-0.00087*pttop1+0.00000092*pttop1*pttop1)*exp(0.088-0.00087*pttop2+0.00000092*pttop2*pttop2));
+        }
+        
+        //re-weigh pileup dist
+        puweight = LumiWeights_12->weight(npu);
+        
+        weight *= sf_trg * sf_emu * zptweight * puweight;
         
         //filling histograms
         float m_em = (myele + mymu).M();
@@ -199,5 +244,8 @@ int main(int argc, char** argv){
     
     cout << "************* output: " << output.c_str() << " *************" << endl;
     
+    delete wmc;
+    
 }
+
 
