@@ -1,4 +1,5 @@
-mport ROOT
+#!/usr/bin/env python
+import ROOT
 import re
 from array import array
 
@@ -89,7 +90,7 @@ for i in range (0,ncat):
    VV=file.Get(categories[i]).Get("VV")
    Z=file.Get(categories[i]).Get("Z")
    ST=file.Get(categories[i]).Get("ST")
-   bbtt60=divide_width(file.Get(categories[i]).Get("bbtt60"))
+#   bbtt60=file.Get(categories[i]).Get("bbtt60")
 
    Data.GetXaxis().SetTitle("")
    Data.GetXaxis().SetTitleSize(0)
@@ -100,7 +101,7 @@ for i in range (0,ncat):
    Data.GetYaxis().SetTitleSize(0.085)
    Data.GetYaxis().SetTitleOffset(0.7)
    Data.SetTitle("")
-   Data.GetYaxis().SetTitle("Events/bin")
+   Data.GetYaxis().SetTitle("Events/5GeV")
 
    HTT.SetFillColor(ROOT.TColor.GetColor("#ffccff"))
    W.SetFillColor(ROOT.TColor.GetColor("#9999cc"))
@@ -119,8 +120,8 @@ for i in range (0,ncat):
    ST.SetLineColor(1)
    Data.SetLineColor(1)
    Data.SetLineWidth(2)
-   bbtt60.SetLineColor(2)
-   bbtt60.SetLineWidth(3)
+#   bbtt60.SetLineColor(2)
+#   bbtt60.SetLineWidth(3)
 
    stack=ROOT.THStack("stack","stack")
    stack.Add(HTT)
@@ -165,8 +166,8 @@ for i in range (0,ncat):
    print Data.GetMaximum(),Data.GetMinimum()
    Data.Draw("e")
    stack.Draw("histsame")
-   bbtt60.Scale(10)
-   bbtt60.Draw("histsame")
+#   bbtt60.Scale(10)
+#   bbtt60.Draw("histsame")
 
    errorBand.Draw("e2same")
    Data.Draw("esame")
@@ -179,6 +180,7 @@ for i in range (0,ncat):
    legende.AddEntry(VV,"VV","f")
    legende.AddEntry(Z,"Z+jets","f")
    legende.AddEntry(ST,"Single t","f")
+#   legende.AddEntry(bbtt60,"m_{a}=60","l")
    legende.AddEntry(errorBand,"Uncertainty","f")
    legende.Draw()
 

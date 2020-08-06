@@ -52,7 +52,7 @@ int main(int argc, char** argv){
     float xs, weight, luminosity = 59740.0;
     
     if (sample == "data_obs"){weight = 1.0;}
-    else if(sample == "bbtt60"){xs = 0.01*48.58*0.1133; weight = luminosity*xs/N;}
+    else if(sample == "bbtt60"){xs = 48.58*0.1133; weight = luminosity*xs/N;}
     else if(sample == "DY"){weight = 1.0;}
     else if(sample == "DY1"){weight = 1.0;}
     else if(sample == "DY2"){weight = 1.0;}
@@ -177,42 +177,52 @@ int main(int argc, char** argv){
             else if (numGenJets==3) weight = 3.077;
             else if (numGenJets==4) weight = 3.233;
         }
-        
-        //initialize workspace with lepton kinematics
-        wmc->var("m_pt")->setVal(mymu.Pt());
-        wmc->var("m_eta")->setVal(mymu.Eta());
-        wmc->var("m_iso")->setVal(iso_2);
-        wmc->var("e_pt")->setVal(myele.Pt());
-        wmc->var("e_eta")->setVal(myele.Eta());
-        wmc->var("e_iso")->setVal(iso_1);
-        
-        //compute the trigger scale factor
-        float probData = wmc->function("m_trg_8_ic_data")->getVal()*wmc->function("e_trg_23_ic_data")->getVal()*int(triggerMu8E23)+wmc->function("m_trg_23_ic_data")->getVal()*wmc->function("e_trg_12_ic_data")->getVal()*int(triggerMu23E12)-wmc->function("e_trg_23_ic_data")->getVal()*wmc->function("m_trg_23_ic_data")->getVal()*int(triggerMu8E23 && triggerMu23E12);
-        float probMC = wmc->function("m_trg_8_ic_mc")->getVal()*wmc->function("e_trg_23_ic_mc")->getVal()*int(triggerMu8E23)+wmc->function("m_trg_23_ic_mc")->getVal()*wmc->function("e_trg_12_ic_mc")->getVal()*int(triggerMu23E12)-wmc->function("e_trg_23_ic_mc")->getVal()*wmc->function("m_trg_23_ic_mc")->getVal()*int(triggerMu8E23 && triggerMu23E12);
-        float sf_trg=probData/probMC;
-        
-        //compute the e/mu ID/iso/tracking scale factors
-        float sf_emu = wmc->function("m_trk_ratio")->getVal()*wmc->function("e_trk_ratio")->getVal()*wmc->function("e_idiso_ic_ratio")->getVal()*wmc->function("m_idiso_ic_ratio")->getVal();
-        
-        //re-weigh Z pT spectrum in DY samples
-        wmc->var("z_gen_mass")->setVal(genM);
-        wmc->var("z_gen_pt")->setVal(genpT);
-        float zptweight=wmc->function("zptmass_weight_nom")->getVal();
-        
-        //re-weigh top pT spectrum in ttbar samples
-        if (name=="TT" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic" or sample=="TTToHadronic"){
-            float pttop1=pt_top1;
-            if (pttop1>472) pttop1=472;
-            float pttop2=pt_top2;
-            if (pttop2>472) pttop2=472;
-            weight*=sqrt(exp(0.088-0.00087*pttop1+0.00000092*pttop1*pttop1)*exp(0.088-0.00087*pttop2+0.00000092*pttop2*pttop2));
+
+        //scale factors for MC
+        if (sample!="data_obs"){
+            
+            //initialize workspace with lepton kinematics
+            wmc->var("m_pt")->setVal(mymu.Pt());
+            wmc->var("m_eta")->setVal(mymu.Eta());
+            wmc->var("m_iso")->setVal(iso_2);
+            wmc->var("e_pt")->setVal(myele.Pt());
+            wmc->var("e_eta")->setVal(myele.Eta());
+            wmc->var("e_iso")->setVal(iso_1);
+/*
+            //compute trigger scale factor
+            float probData =wmc->function("m_trg_8_ic_data")->getVal()*wmc->function("e_trg_23_ic_data")->getVal()*int(triggerMu8E23)+wmc->function("m_trg_23_ic_data")->getVal()*wmc->function("e_trg_12_ic_data")->getVal()*int(triggerMu23E12)-wmc->function("e_trg_23_ic_data")->getVal()*wmc->function("m_trg_23_ic_data")->getVal()*int(triggerMu8E23 && triggerMu23E12);
+            float probMC =wmc->function("m_trg_8_ic_mc")->getVal()*wmc->function("e_trg_23_ic_mc")->getVal()*int(triggerMu8E23)+wmc->function("m_trg_23_ic_mc")->getVal()*wmc->function("e_trg_12_ic_mc")->getVal()*int(triggerMu23E12)-wmc->function("e_trg_23_ic_mc")->getVal()*wmc->function("m_trg_23_ic_mc")->getVal()*int(triggerMu8E23 && triggerMu23E12);
+            float sf_trg=probData/probMC;
+            weight *= sf_trg;
+*/
+            //muon and electron ID/iso/tracking scale factors
+            float sf_emu = wmc->function("m_trk_ratio")->getVal()*wmc->function("e_trk_ratio")->getVal()*wmc->function("e_idiso_ic_ratio")->getVal()*wmc->function("m_idiso_ic_ratio")->getVal();
+            weight *= sf_emu;
+
+            //re-weigh Z pT spectrum for DY samples
+            if (name=="Z" or sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
+                wmc->var("z_gen_mass")->setVal(genM);
+                wmc->var("z_gen_pt")->setVal(genpT);
+                float zptweight=wmc->function("zptmass_weight_nom")->getVal();
+                weight *= zptweight;
+            }
+/*
+            //re-weigh top pT spectrum for ttbar samples
+            if (name=="TT" or sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic"){
+                float pttop1=pt_top1;
+                if (pttop1>472) pttop1=472;
+                float pttop2=pt_top2;
+                if (pttop2>472) pttop2=472;
+                float topfactor=sqrt(exp(0.088-0.00087*pttop1+0.00000092*pttop1*pttop1)*exp(0.088-0.00087*pttop2+0.00000092*pttop2*pttop2));
+                weight *= topfactor;
+            }
+
+            //re-weigh pileup distribution
+            float puweight = LumiWeights_12->weight(npu);
+            weight *= puweight;
+*/
         }
-        
-        //re-weigh pileup dist
-        puweight = LumiWeights_12->weight(npu);
-        
-        weight *= sf_trg * sf_emu * zptweight * puweight;
-        
+
         //filling histograms
         float m_em = (myele + mymu).M();
         float m_emb = (myele + mymu + myb1).M();

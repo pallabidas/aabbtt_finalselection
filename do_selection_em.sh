@@ -29,6 +29,6 @@
 ./selection_em.exe /nfs_scratch/htsoi/haabbtt_em2018_1jul/ZZ2L2Q.root outputs/ZZ2L2Q.root ZZ2L2Q VV
 ./selection_em.exe /nfs_scratch/htsoi/haabbtt_em2018_1jul/ZZ4L.root outputs/ZZ4L.root ZZ4L VV
 ./selection_em.exe /nfs_scratch/htsoi/haabbtt_em2018_1jul/data_obs.root outputs/data_obs.root data_obs data_obs
-./selection_em.exe /nfs_scratch/htsoi/haabbtt_em2018_1jul/bbtt60.root outputs/bbtt60.root bbtt60 bbtt60
+#./selection_em.exe /nfs_scratch/htsoi/haabbtt_em2018_1jul/bbtt60.root outputs/bbtt60.root bbtt60 bbtt60
 
 hadd -f outputs/final_em.root outputs/*.root
