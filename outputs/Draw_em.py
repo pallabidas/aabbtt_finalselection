@@ -79,7 +79,7 @@ adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
 trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",0.5)
 
-categories=["m_em"]
+categories=["m_embb"]
 ncat=1
 
 for i in range (0,ncat):
@@ -101,7 +101,7 @@ for i in range (0,ncat):
    Data.GetYaxis().SetTitleSize(0.085)
    Data.GetYaxis().SetTitleOffset(0.7)
    Data.SetTitle("")
-   Data.GetYaxis().SetTitle("Events/5GeV")
+   Data.GetYaxis().SetTitle("Events / 10 GeV")
 
    HTT.SetFillColor(ROOT.TColor.GetColor("#ffccff"))
    W.SetFillColor(ROOT.TColor.GetColor("#9999cc"))
@@ -220,7 +220,7 @@ for i in range (0,ncat):
    h1.Divide(hwoE)
    h3.Divide(hwoE)
    #h1.GetXaxis().SetTitle("b p_{T} (GeV)")
-   h1.GetXaxis().SetTitle("m^{vis}_{e#mu} (GeV)")#2(m_{a1}-m_{a2})/(m_{a1}+m_{a2})")#m_{T}(e#mu,MET) (GeV)")#m_{bb#tau#tau} (GeV)")
+   h1.GetXaxis().SetTitle("m^{vis}_{e#mubb} (GeV)")#2(m_{a1}-m_{a2})/(m_{a1}+m_{a2})")#m_{T}(e#mu,MET) (GeV)")#m_{bb#tau#tau} (GeV)")
    h1.GetXaxis().SetLabelSize(0.08)
    h1.GetYaxis().SetLabelSize(0.08)
    h1.GetYaxis().SetTitle("Obs./Exp.")

@@ -119,6 +119,11 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("bphi_deepcsv_2", &bphi_deepcsv_2);
     tree->SetBranchAddress("bm_deepcsv_2", &bm_deepcsv_2);
     tree->SetBranchAddress("numGenJets", &numGenJets);
+    tree->SetBranchAddress("pt_top1", &pt_top1);
+    tree->SetBranchAddress("pt_top2", &pt_top2);
+    tree->SetBranchAddress("npu", &npu);
+    tree->SetBranchAddress("genM", &genM);
+    tree->SetBranchAddress("genpT", &genpT);
     
     TH1F * hist_em = new TH1F("", "", 12, 0., 60.);
     TH1F * hist_emb = new TH1F("", "", 30, 0., 300.);
@@ -177,7 +182,9 @@ int main(int argc, char** argv){
             else if (numGenJets==3) weight = 3.077;
             else if (numGenJets==4) weight = 3.233;
         }
-
+        
+        float sf_MC = 1.0;
+        
         //scale factors for MC
         if (sample!="data_obs"){
             
@@ -188,49 +195,50 @@ int main(int argc, char** argv){
             wmc->var("e_pt")->setVal(myele.Pt());
             wmc->var("e_eta")->setVal(myele.Eta());
             wmc->var("e_iso")->setVal(iso_1);
-/*
+            
             //compute trigger scale factor
-            float probData =wmc->function("m_trg_8_ic_data")->getVal()*wmc->function("e_trg_23_ic_data")->getVal()*int(triggerMu8E23)+wmc->function("m_trg_23_ic_data")->getVal()*wmc->function("e_trg_12_ic_data")->getVal()*int(triggerMu23E12)-wmc->function("e_trg_23_ic_data")->getVal()*wmc->function("m_trg_23_ic_data")->getVal()*int(triggerMu8E23 && triggerMu23E12);
-            float probMC =wmc->function("m_trg_8_ic_mc")->getVal()*wmc->function("e_trg_23_ic_mc")->getVal()*int(triggerMu8E23)+wmc->function("m_trg_23_ic_mc")->getVal()*wmc->function("e_trg_12_ic_mc")->getVal()*int(triggerMu23E12)-wmc->function("e_trg_23_ic_mc")->getVal()*wmc->function("m_trg_23_ic_mc")->getVal()*int(triggerMu8E23 && triggerMu23E12);
-            float sf_trg=probData/probMC;
-            weight *= sf_trg;
-*/
+            float probData = wmc->function("m_trg_8_ic_data")->getVal()*wmc->function("e_trg_23_ic_data")->getVal()*int(isEMuTrigger_1)+wmc->function("m_trg_23_ic_data")->getVal()*wmc->function("e_trg_12_ic_data")->getVal()*int(isEMuTrigger_2)-wmc->function("e_trg_23_ic_data")->getVal()*wmc->function("m_trg_23_ic_data")->getVal()*int(isEMuTrigger_1 && isEMuTrigger_2);
+            float probMC = wmc->function("m_trg_8_ic_mc")->getVal()*wmc->function("e_trg_23_ic_mc")->getVal()*int(isEMuTrigger_1)+wmc->function("m_trg_23_ic_mc")->getVal()*wmc->function("e_trg_12_ic_mc")->getVal()*int(isEMuTrigger_2)-wmc->function("e_trg_23_ic_mc")->getVal()*wmc->function("m_trg_23_ic_mc")->getVal()*int(isEMuTrigger_1 && isEMuTrigger_2);
+            float sf_trg = probData/probMC;
+            sf_MC *= sf_trg;
+            
             //muon and electron ID/iso/tracking scale factors
             float sf_emu = wmc->function("m_trk_ratio")->getVal()*wmc->function("e_trk_ratio")->getVal()*wmc->function("e_idiso_ic_ratio")->getVal()*wmc->function("m_idiso_ic_ratio")->getVal();
-            weight *= sf_emu;
-
+            sf_MC *= sf_emu;
+            
             //re-weigh Z pT spectrum for DY samples
             if (name=="Z" or sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
                 wmc->var("z_gen_mass")->setVal(genM);
                 wmc->var("z_gen_pt")->setVal(genpT);
-                float zptweight=wmc->function("zptmass_weight_nom")->getVal();
-                weight *= zptweight;
+                float zptweight = wmc->function("zptmass_weight_nom")->getVal();
+                sf_MC *= zptweight;
             }
-/*
+            
             //re-weigh top pT spectrum for ttbar samples
             if (name=="TT" or sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic"){
                 float pttop1=pt_top1;
                 if (pttop1>472) pttop1=472;
                 float pttop2=pt_top2;
                 if (pttop2>472) pttop2=472;
-                float topfactor=sqrt(exp(0.088-0.00087*pttop1+0.00000092*pttop1*pttop1)*exp(0.088-0.00087*pttop2+0.00000092*pttop2*pttop2));
-                weight *= topfactor;
+                float topfactor = sqrt(exp(0.088-0.00087*pttop1+0.00000092*pttop1*pttop1)*exp(0.088-0.00087*pttop2+0.00000092*pttop2*pttop2));
+                sf_MC *= topfactor;
             }
-
+            
             //re-weigh pileup distribution
             float puweight = LumiWeights_12->weight(npu);
-            weight *= puweight;
-*/
+            sf_MC *= puweight;
         }
-
+ 
+        float weight_corr = weight * sf_MC;
+        
         //filling histograms
         float m_em = (myele + mymu).M();
         float m_emb = (myele + mymu + myb1).M();
-        hist_em->Fill(m_em, weight);
-        hist_emb->Fill(m_emb, weight);
+        hist_em->Fill(m_em, weight_corr);
+        hist_emb->Fill(m_emb, weight_corr);
         if (bpt_deepcsv_2 > 20){
             float m_embb = (myele + mymu + myb1 + myb2).M();
-            hist_embb->Fill(m_embb, weight);
+            hist_embb->Fill(m_embb, weight_corr);
         }
     }
 
@@ -252,9 +260,9 @@ int main(int argc, char** argv){
     
     fout->Close();
     
-    cout << "************* output: " << output.c_str() << " *************" << endl;
-    
     delete wmc;
+    
+    cout << "************* output: " << output.c_str() << " *************" << endl;
     
 }
 
