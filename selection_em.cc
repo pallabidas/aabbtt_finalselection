@@ -46,7 +46,7 @@ int main(int argc, char** argv){
     TFile * skimmed = new TFile(input.c_str());
     TTree * tree = (TTree*) skimmed->Get("emu_tree");
     TH1F * nevents = (TH1F*) skimmed->Get("nevents");
-    float N = nevents->GetBinContent(1); //total generated events (before skimming)
+    float N = nevents->GetBinContent(2); //no. of generated events (before skimming) with genweight
     
     //sample weights
     float xs, weight, luminosity = 59740.0;
@@ -100,16 +100,16 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("e_2", &e_2);
     tree->SetBranchAddress("q_2", &q_2);
     tree->SetBranchAddress("iso_2", &iso_2);
-    tree->SetBranchAddress("passMu23E12", &passMu23E12);
-    tree->SetBranchAddress("passMu8E23", &passMu8E23);
-    tree->SetBranchAddress("matchMu23E12_1", &matchMu23E12_1);
-    tree->SetBranchAddress("matchMu8E23_1", &matchMu8E23_1);
-    tree->SetBranchAddress("filterMu23E12_1", &filterMu23E12_1);
-    tree->SetBranchAddress("filterMu8E23_1", &filterMu8E23_1);
-    tree->SetBranchAddress("matchMu23E12_2", &matchMu23E12_2);
-    tree->SetBranchAddress("matchMu8E23_2", &matchMu8E23_2);
-    tree->SetBranchAddress("filterMu23E12_2", &filterMu23E12_2);
-    tree->SetBranchAddress("filterMu8E23_2", &filterMu8E23_2);
+    tree->SetBranchAddress("passMu23E12DZ", &passMu23E12DZ);
+    tree->SetBranchAddress("passMu8E23DZ", &passMu8E23DZ);
+    tree->SetBranchAddress("matchMu23E12DZ_1", &matchMu23E12DZ_1);
+    tree->SetBranchAddress("matchMu8E23DZ_1", &matchMu8E23DZ_1);
+    tree->SetBranchAddress("filterMu23E12DZ_1", &filterMu23E12DZ_1);
+    tree->SetBranchAddress("filterMu8E23DZ_1", &filterMu8E23DZ_1);
+    tree->SetBranchAddress("matchMu23E12DZ_2", &matchMu23E12DZ_2);
+    tree->SetBranchAddress("matchMu8E23DZ_2", &matchMu8E23DZ_2);
+    tree->SetBranchAddress("filterMu23E12DZ_2", &filterMu23E12DZ_2);
+    tree->SetBranchAddress("filterMu8E23DZ_2", &filterMu8E23DZ_2);
     tree->SetBranchAddress("bpt_deepcsv_1", &bpt_deepcsv_1);
     tree->SetBranchAddress("beta_deepcsv_1", &beta_deepcsv_1);
     tree->SetBranchAddress("bphi_deepcsv_1", &bphi_deepcsv_1);
@@ -124,11 +124,28 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("npu", &npu);
     tree->SetBranchAddress("genM", &genM);
     tree->SetBranchAddress("genpT", &genpT);
+    tree->SetBranchAddress("bweight", &bweight);
+    tree->SetBranchAddress("genweight", &genweight);
     
-    TH1F * hist_em = new TH1F("", "", 12, 0., 60.);
-    TH1F * hist_emb = new TH1F("", "", 30, 0., 300.);
-    TH1F * hist_embb = new TH1F("", "", 60, 0., 600.);
+    TH1F * hist_em = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_emb = new TH1F("", "", 40, 50., 450.);
+    TH1F * hist_embb = new TH1F("", "", 50, 100., 600.);
     
+    TH1F * hist_e_pt = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_e_phi = new TH1F("", "", 32, -3.2, 3.2);
+    TH1F * hist_e_eta = new TH1F("", "", 24, -2.4, 2.4);
+    TH1F * hist_m_pt = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_phi = new TH1F("", "", 32, -3.2, 3.2);
+    TH1F * hist_m_eta = new TH1F("", "", 24, -2.4, 2.4);
+    
+    TH1F * hist_b1_pt = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_b1_phi = new TH1F("", "", 32, -3.2, 3.2);
+    TH1F * hist_b1_eta = new TH1F("", "", 24, -2.4, 2.4);
+    TH1F * hist_b2_pt = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_b2_phi = new TH1F("", "", 32, -3.2, 3.2);
+    TH1F * hist_b2_eta = new TH1F("", "", 24, -2.4, 2.4);
+
+
     //declare workspace for scale factors
     TFile fwmc("htt_scalefactors_legacy_2018.root");
     RooWorkspace *wmc = (RooWorkspace*)fwmc.Get("w");
@@ -145,11 +162,11 @@ int main(int argc, char** argv){
         tree->GetEntry(i);
         
         //emu selection
-        bool isEMuTrigger_1 = passMu8E23 && matchMu8E23_1 && filterMu8E23_1 && matchMu8E23_2 && filterMu8E23_2;
-        bool isEMuTrigger_2 = passMu23E12 && matchMu23E12_1 && filterMu23E12_1 && matchMu23E12_2 && filterMu23E12_2;
+        bool isMu8E23trigger = passMu8E23DZ && matchMu8E23DZ_1 && filterMu8E23DZ_1 && matchMu8E23DZ_2 && filterMu8E23DZ_2;
+        bool isMu23E12trigger = passMu23E12DZ && matchMu23E12DZ_1 && filterMu23E12DZ_1 && matchMu23E12DZ_2 && filterMu23E12DZ_2;
         
-        if (!isEMuTrigger_1 && !isEMuTrigger_2) continue;
-        if (!((isEMuTrigger_1 && pt_1>24 && pt_2>9) or (isEMuTrigger_2 && pt_1>13 && pt_2>24))) continue;
+        if (!isMu8E23trigger && !isMu23E12trigger) continue;
+        if (!((isMu8E23trigger && pt_1>24 && pt_2>10) or (isMu23E12trigger && pt_1>13 && pt_2>24))) continue;
         if (!(fabs(eta_1)<2.5 && fabs(eta_2)<2.4)) continue;
         if (!(iso_1<0.15 && iso_2<0.15)) continue;
         if (q_1*q_2>0) continue;
@@ -184,30 +201,31 @@ int main(int argc, char** argv){
         }
         
         float sf_MC = 1.0;
-        
+
         //scale factors for MC
         if (sample!="data_obs"){
             
             //initialize workspace with lepton kinematics
-            wmc->var("m_pt")->setVal(mymu.Pt());
-            wmc->var("m_eta")->setVal(mymu.Eta());
+            wmc->var("m_pt")->setVal(pt_2);
+            wmc->var("m_eta")->setVal(eta_2);
             wmc->var("m_iso")->setVal(iso_2);
-            wmc->var("e_pt")->setVal(myele.Pt());
-            wmc->var("e_eta")->setVal(myele.Eta());
+            wmc->var("e_pt")->setVal(pt_1);
+            wmc->var("e_eta")->setVal(eta_1);
             wmc->var("e_iso")->setVal(iso_1);
             
             //compute trigger scale factor
-            float probData = wmc->function("m_trg_8_ic_data")->getVal()*wmc->function("e_trg_23_ic_data")->getVal()*int(isEMuTrigger_1)+wmc->function("m_trg_23_ic_data")->getVal()*wmc->function("e_trg_12_ic_data")->getVal()*int(isEMuTrigger_2)-wmc->function("e_trg_23_ic_data")->getVal()*wmc->function("m_trg_23_ic_data")->getVal()*int(isEMuTrigger_1 && isEMuTrigger_2);
-            float probMC = wmc->function("m_trg_8_ic_mc")->getVal()*wmc->function("e_trg_23_ic_mc")->getVal()*int(isEMuTrigger_1)+wmc->function("m_trg_23_ic_mc")->getVal()*wmc->function("e_trg_12_ic_mc")->getVal()*int(isEMuTrigger_2)-wmc->function("e_trg_23_ic_mc")->getVal()*wmc->function("m_trg_23_ic_mc")->getVal()*int(isEMuTrigger_1 && isEMuTrigger_2);
+            float probData = wmc->function("m_trg_8_ic_data")->getVal()*wmc->function("e_trg_23_ic_data")->getVal()*int(isMu8E23trigger)+wmc->function("m_trg_23_ic_data")->getVal()*wmc->function("e_trg_12_ic_data")->getVal()*int(isMu23E12trigger)-wmc->function("e_trg_23_ic_data")->getVal()*wmc->function("m_trg_23_ic_data")->getVal()*int(isMu8E23trigger && isMu23E12trigger);
+            float probMC = wmc->function("m_trg_8_ic_mc")->getVal()*wmc->function("e_trg_23_ic_mc")->getVal()*int(isMu8E23trigger)+wmc->function("m_trg_23_ic_mc")->getVal()*wmc->function("e_trg_12_ic_mc")->getVal()*int(isMu23E12trigger)-wmc->function("e_trg_23_ic_mc")->getVal()*wmc->function("m_trg_23_ic_mc")->getVal()*int(isMu8E23trigger && isMu23E12trigger);
             float sf_trg = probData/probMC;
             sf_MC *= sf_trg;
             
             //muon and electron ID/iso/tracking scale factors
-            float sf_emu = wmc->function("m_trk_ratio")->getVal()*wmc->function("e_trk_ratio")->getVal()*wmc->function("e_idiso_ic_ratio")->getVal()*wmc->function("m_idiso_ic_ratio")->getVal();
-            sf_MC *= sf_emu;
+            float sf_mu = wmc->function("m_trk_ratio")->getVal()*wmc->function("m_idiso_ic_ratio")->getVal();
+            float sf_e = wmc->function("e_trk_ratio")->getVal()*wmc->function("e_idiso_ic_ratio")->getVal();
+            sf_MC *= sf_mu * sf_e;
             
             //re-weigh Z pT spectrum for DY samples
-            if (name=="Z" or sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
+            if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
                 wmc->var("z_gen_mass")->setVal(genM);
                 wmc->var("z_gen_pt")->setVal(genpT);
                 float zptweight = wmc->function("zptmass_weight_nom")->getVal();
@@ -215,7 +233,7 @@ int main(int argc, char** argv){
             }
             
             //re-weigh top pT spectrum for ttbar samples
-            if (name=="TT" or sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic"){
+            if (sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic"){
                 float pttop1=pt_top1;
                 if (pttop1>472) pttop1=472;
                 float pttop2=pt_top2;
@@ -227,8 +245,15 @@ int main(int argc, char** argv){
             //re-weigh pileup distribution
             float puweight = LumiWeights_12->weight(npu);
             sf_MC *= puweight;
+            
+            //re-weigh bjet tagging
+            sf_MC *= bweight;
+            
+            //generator weight
+            sf_MC *= genweight;
+            
         }
- 
+
         float weight_corr = weight * sf_MC;
         
         //filling histograms
@@ -240,13 +265,42 @@ int main(int argc, char** argv){
             float m_embb = (myele + mymu + myb1 + myb2).M();
             hist_embb->Fill(m_embb, weight_corr);
         }
+        
+        hist_e_pt->Fill(pt_1, weight_corr);
+        hist_e_phi->Fill(phi_1, weight_corr);
+        hist_e_eta->Fill(eta_1, weight_corr);
+        hist_m_pt->Fill(pt_2, weight_corr);
+        hist_m_phi->Fill(phi_2, weight_corr);
+        hist_m_eta->Fill(eta_2, weight_corr);
+        
+        hist_b1_pt->Fill(bpt_deepcsv_1, weight_corr);
+        hist_b1_phi->Fill(bphi_deepcsv_1, weight_corr);
+        hist_b1_eta->Fill(beta_deepcsv_1, weight_corr);
+        hist_b2_pt->Fill(bpt_deepcsv_2, weight_corr);
+        hist_b2_phi->Fill(bphi_deepcsv_2, weight_corr);
+        hist_b2_eta->Fill(beta_deepcsv_2, weight_corr);
+        
     }
 
     TFile * fout = TFile::Open(output.c_str(), "RECREATE");
     TDirectory * td1 = fout->mkdir("m_em");
     TDirectory * td2 = fout->mkdir("m_emb");
     TDirectory * td3 = fout->mkdir("m_embb");
-
+    
+    TDirectory * td4 = fout->mkdir("e_pt");
+    TDirectory * td5 = fout->mkdir("e_phi");
+    TDirectory * td6 = fout->mkdir("e_eta");
+    TDirectory * td7 = fout->mkdir("mu_pt");
+    TDirectory * td8 = fout->mkdir("mu_phi");
+    TDirectory * td9 = fout->mkdir("mu_eta");
+    
+    TDirectory * td10 = fout->mkdir("b1_pt");
+    TDirectory * td11 = fout->mkdir("b1_phi");
+    TDirectory * td12 = fout->mkdir("b1_eta");
+    TDirectory * td13 = fout->mkdir("b2_pt");
+    TDirectory * td14 = fout->mkdir("b2_phi");
+    TDirectory * td15 = fout->mkdir("b2_eta");
+    
     
     td1->cd();
     hist_em->SetName(name.c_str());
@@ -258,6 +312,45 @@ int main(int argc, char** argv){
     hist_embb->SetName(name.c_str());
     hist_embb->Write();
     
+    td4->cd();
+    hist_e_pt->SetName(name.c_str());
+    hist_e_pt->Write();
+    td5->cd();
+    hist_e_phi->SetName(name.c_str());
+    hist_e_phi->Write();
+    td6->cd();
+    hist_e_eta->SetName(name.c_str());
+    hist_e_eta->Write();
+    td7->cd();
+    hist_m_pt->SetName(name.c_str());
+    hist_m_pt->Write();
+    td8->cd();
+    hist_m_phi->SetName(name.c_str());
+    hist_m_phi->Write();
+    td9->cd();
+    hist_m_eta->SetName(name.c_str());
+    hist_m_eta->Write();
+    
+    td10->cd();
+    hist_b1_pt->SetName(name.c_str());
+    hist_b1_pt->Write();
+    td11->cd();
+    hist_b1_phi->SetName(name.c_str());
+    hist_b1_phi->Write();
+    td12->cd();
+    hist_b1_eta->SetName(name.c_str());
+    hist_b1_eta->Write();
+    td13->cd();
+    hist_b2_pt->SetName(name.c_str());
+    hist_b2_pt->Write();
+    td14->cd();
+    hist_b2_phi->SetName(name.c_str());
+    hist_b2_phi->Write();
+    td15->cd();
+    hist_b2_eta->SetName(name.c_str());
+    hist_b2_eta->Write();
+    
+
     fout->Close();
     
     delete wmc;
