@@ -3,7 +3,7 @@ import ROOT
 import re
 from array import array
 
-def add_channel(channel):
+def add_channel():
     lowX=0.155
     lowY=0.46
     lumi  = ROOT.TPaveText(lowX, lowY+0.06, lowX+0.30, lowY+0.21, "NDC")
@@ -13,8 +13,7 @@ def add_channel(channel):
     lumi.SetTextColor(    1 )
     lumi.SetTextSize(0.072)
     lumi.SetTextFont (   42 )
-    lumi.AddText("e#mu")
-    lumi.AddText(channel)
+    lumi.AddText("e#mu final state")
     return lumi
 
 def add_lumi():
@@ -79,17 +78,19 @@ adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
 trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",0.5)
 
-categories=["m_embb"]
-ncat=1
+categories=["m_em","m_emb","m_embb","e_pt","mu_pt","b1_pt","b2_pt","m_em_nobjet","e_pt_nobjet","mu_pt_nobjet","m_em_VBFenriched","m_emb_VBFenriched","m_embb_VBFenriched","e_pt_VBFenriched","mu_pt_VBFenriched"]
+xaxis=["m_{e#mu} (GeV)","m_{e#mub} (GeV)","m_{e#mubb} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","pt_{b1} (GeV)","pt_{b2} (GeV)","m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","m_{e#mubb} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)"]
+ncat=15
 
 for i in range (0,ncat):
-   Data=file.Get(categories[i]).Get("data_obs")
-   HTT=file.Get(categories[i]).Get("HTT")
-   W=file.Get(categories[i]).Get("W")
-   TT=file.Get(categories[i]).Get("TT")
-   VV=file.Get(categories[i]).Get("VV")
-   Z=file.Get(categories[i]).Get("Z")
-   ST=file.Get(categories[i]).Get("ST")
+   Data=file.Get(categories[i]).Get("data_obs_OS")
+   HTT=file.Get(categories[i]).Get("HTT_OS")
+   W=file.Get(categories[i]).Get("W_OS")
+   TT=file.Get(categories[i]).Get("TT_OS")
+   VV=file.Get(categories[i]).Get("VV_OS")
+   Z=file.Get(categories[i]).Get("Z_OS")
+   ST=file.Get(categories[i]).Get("ST_OS")
+   QCD=file.Get(categories[i]).Get("QCD")
 #   bbtt60=divide_width(file.Get(categories[i]).Get("bbtt60"))
 
    Data.GetXaxis().SetTitle("")
@@ -109,6 +110,7 @@ for i in range (0,ncat):
    VV.SetFillColor(ROOT.TColor.GetColor("#08F7F1"))
    Z.SetFillColor(ROOT.TColor.GetColor("#ffcc66"))
    ST.SetFillColor(ROOT.TColor.GetColor("#4496c8"))
+   QCD.SetFillColor(ROOT.TColor.GetColor("#FDA5BA"))
 
    Data.SetMarkerStyle(20)
    Data.SetMarkerSize(1)
@@ -118,6 +120,7 @@ for i in range (0,ncat):
    VV.SetLineColor(1)
    Z.SetLineColor(1)
    ST.SetLineColor(1)
+   QCD.SetLineColor(1)
    Data.SetLineColor(1)
    Data.SetLineWidth(2)
 #   bbtt60.SetLineColor(2)
@@ -130,6 +133,7 @@ for i in range (0,ncat):
    stack.Add(VV)
    stack.Add(Z)
    stack.Add(ST)
+   stack.Add(QCD)
 
    errorBand = HTT.Clone()
    errorBand.Add(W)
@@ -137,6 +141,7 @@ for i in range (0,ncat):
    errorBand.Add(VV)
    errorBand.Add(Z)
    errorBand.Add(ST)
+   errorBand.Add(QCD)
    errorBand.SetMarkerSize(0)
    errorBand.SetFillColor(new_idx)
    errorBand.SetFillStyle(3001)
@@ -180,6 +185,7 @@ for i in range (0,ncat):
    legende.AddEntry(VV,"VV","f")
    legende.AddEntry(Z,"Z+jets","f")
    legende.AddEntry(ST,"Single t","f")
+   legende.AddEntry(QCD,"QCD","f")
 #  legende.AddEntry(bbtt60,"m_{a}=60","l")
    legende.AddEntry(errorBand,"Uncertainty","f")
    legende.Draw()
@@ -190,6 +196,8 @@ for i in range (0,ncat):
    l2.Draw("same")
    l3=add_Preliminary()
    l3.Draw("same")
+   l4=add_channel()
+   l4.Draw("same")
 
    pad1.RedrawAxis()
 
@@ -220,7 +228,7 @@ for i in range (0,ncat):
    h1.Divide(hwoE)
    h3.Divide(hwoE)
    #h1.GetXaxis().SetTitle("b p_{T} (GeV)")
-   h1.GetXaxis().SetTitle("m^{vis}_{e#mubb} (GeV)")#2(m_{a1}-m_{a2})/(m_{a1}+m_{a2})")#m_{T}(e#mu,MET) (GeV)")#m_{bb#tau#tau} (GeV)")
+   h1.GetXaxis().SetTitle(xaxis[i])
    h1.GetXaxis().SetLabelSize(0.08)
    h1.GetYaxis().SetLabelSize(0.08)
    h1.GetYaxis().SetTitle("Obs./Exp.")
