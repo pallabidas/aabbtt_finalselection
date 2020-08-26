@@ -19,7 +19,7 @@ float genpt_1,genpt_2,geneta_1,geneta_2;
   float bptL_1,betaL_1,bphiL_1,bptL_2,betaL_2,bphiL_2;
   float bptT_1,betaT_1,bphiT_1,bptT_2,betaT_2,bphiT_2;
   float bpt_1,beta_1,bphi_1,bpt_2,beta_2,bphi_2,bflavor_1,bflavor_2,bflavorL_1,bflavorL_2;
-  float bpt_deepcsv_1,beta_deepcsv_1,bphi_deepcsv_1,bm_deepcsv_1,bpt_deepcsv_2,beta_deepcsv_2,bphi_deepcsv_2,bm_deepcsv_2;
+  float bpt_deepcsv_1,beta_deepcsv_1,bphi_deepcsv_1,bm_deepcsv_1,bpt_deepcsv_2,beta_deepcsv_2,bphi_deepcsv_2,bm_deepcsv_2,bflavour_deepcsv_1,bflavour_deepcsv_2,bscore_deepcsv_1,bscore_deepcsv_2;
   float gentau_vispt;
   int run, lumi, evt;
   int nup,njets;

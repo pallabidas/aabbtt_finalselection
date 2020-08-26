@@ -49,7 +49,7 @@ int main(int argc, char** argv){
     float N = nevents->GetBinContent(2); //no. of generated events (before skimming) with genweight
     
     //sample weights
-    float xs, weight, luminosity = 59740.0;
+    float xs, weight, luminosity = 41400.0;
     
     if (sample == "data_obs"){weight = 1.0;}
     else if(sample == "bbtt60"){xs = 48.58*0.1133; weight = luminosity*xs/N;}
@@ -60,9 +60,11 @@ int main(int argc, char** argv){
     else if(sample == "DY3"){weight = 1.0;}
     else if(sample == "DY4"){weight = 1.0;}
     else if(sample == "GGHTT"){xs = 48.58*0.0627; weight = luminosity*xs/N;}
+    else if(sample == "GGHWW"){xs = 48.58*0.2137*0.3258*0.3258; weight = luminosity*xs/N;}
     else if(sample == "GGZHLLTT"){xs = 0.1227*0.0627*3*0.033658; weight = luminosity*xs/N;}
     else if(sample == "GGZHNNTT"){xs = 0.1227*0.0627*0.2000; weight = luminosity*xs/N;}
     else if(sample == "GGZHQQTT"){xs = 0.1227*0.0627*0.6991; weight = luminosity*xs/N;}
+    else if(sample == "GGZHWW"){xs = 0.1227*0.2137; weight = luminosity*xs/N;}
     else if(sample == "ST_tW_antitop"){xs = 35.6; weight = luminosity*xs/N;}
     else if(sample == "ST_tW_top"){xs = 35.6; weight = luminosity*xs/N;}
     else if(sample == "ST_t_antitop"){xs = 26.23; weight = luminosity*xs/N;}
@@ -71,19 +73,30 @@ int main(int argc, char** argv){
     else if(sample == "TTToHadronic"){xs = 377.96; weight = luminosity*xs/N;}
     else if(sample == "TTToSemiLeptonic"){xs = 365.35; weight = luminosity*xs/N;}
     else if(sample == "VBFHTT"){xs = 3.782*0.0627; weight = luminosity*xs/N;}
+    else if(sample == "VBFHWW"){xs = 3.782*0.2137*0.3258*0.3258; weight = luminosity*xs/N;}
     else if(sample == "VV2L2Nu"){xs = 11.95; weight = luminosity*xs/N;}
     else if(sample == "W"){weight = 1.0;}
     else if(sample == "W1"){weight = 1.0;}
     else if(sample == "W2"){weight = 1.0;}
     else if(sample == "W3"){weight = 1.0;}
     else if(sample == "W4"){weight = 1.0;}
+    else if(sample == "WW"){xs = 118.7; weight = luminosity*xs/N;}
+    else if(sample == "WW1L1Nu2Q"){xs = 49.997; weight = luminosity*xs/N;}
+    else if(sample == "WZ"){xs = 47.13; weight = luminosity*xs/N;}
+    else if(sample == "WZ1L1Nu2Q"){xs = 10.71; weight = luminosity*xs/N;}
+    else if(sample == "WZ1L3Nu"){xs = 3.05; weight = luminosity*xs/N;}
     else if(sample == "WZ2L2Q"){xs = 5.595; weight = luminosity*xs/N;}
-    else if(sample == "WZ3LNu"){xs = 4.43; weight = luminosity*xs/N;}
+    else if(sample == "WZ3L1Nu"){xs = 4.708; weight = luminosity*xs/N;}
     else if(sample == "WminusHTT"){xs = 0.5328*0.0627; weight = luminosity*xs/N;}
+    else if(sample == "WminusHWW"){xs = 0.5328*0.2137; weight = luminosity*xs/N;}
     else if(sample == "WplusHTT"){xs = 0.840*0.0627; weight = luminosity*xs/N;}
+    else if(sample == "WplusHWW"){xs = 0.840*0.2137; weight = luminosity*xs/N;}
     else if(sample == "ZHTT"){xs = 0.7612*0.0627; weight = luminosity*xs/N;}
+    else if(sample == "ZHWW"){xs = 0.7612*0.2137; weight = luminosity*xs/N;}
+    else if(sample == "ZZ"){xs = 16.523; weight = luminosity*xs/N;}
     else if(sample == "ZZ2L2Q"){xs = 3.22; weight = luminosity*xs/N;}
     else if(sample == "ZZ4L"){xs = 1.212; weight = luminosity*xs/N;}
+    else if(sample == "ttHnonbb"){xs = 0.5071*(1-0.5824); weight = luminosity*xs/N;}
     else {cout << "Missing sample cross section!!!" << endl; return 0;}
     
     
@@ -207,23 +220,23 @@ int main(int argc, char** argv){
     
     
     //declare workspace for scale factors
-    TFile fwmc("htt_scalefactors_legacy_2018.root");
+    TFile fwmc("htt_scalefactors_legacy_2017.root");
     RooWorkspace *wmc = (RooWorkspace*)fwmc.Get("w");
     fwmc.Close();
-    
+/*
     //access pileup distributions in data/MC
     reweight::LumiReWeighting* LumiWeights_12;
     LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2018.root", "pu_distributions_data_2018.root", "pileup", "pileup");
-    
+*/
     //OS-to-SS qcd correction files
-    TFile fclosure("closure_em_2018.root");
+    TFile fclosure("closure_em_2017.root");
     TH2F *correction=(TH2F*) fclosure.Get("correction");
     TH2F *closureOS=(TH2F*) fclosure.Get("closureOS");
     
-    TFile *fosss= new TFile("osss_em_2018.root","r");
-    TF1 *osss_0jet=(TF1*) fosss->Get("OSSS_qcd_0jet_2018");
-    TF1 *osss_1jet=(TF1*) fosss->Get("OSSS_qcd_1jet_2018");
-    TF1 *osss_2jet=(TF1*) fosss->Get("OSSS_qcd_2jet_2018");
+    TFile *fosss= new TFile("osss_em_2017.root","r");
+    TF1 *osss_0jet=(TF1*) fosss->Get("OSSS_qcd_0jet_2017");
+    TF1 *osss_1jet=(TF1*) fosss->Get("OSSS_qcd_1jet_2017");
+    TF1 *osss_2jet=(TF1*) fosss->Get("OSSS_qcd_2jet_2017");
     
     //loop over events
     int n = tree->GetEntries(); //no. of events after skimming
@@ -251,19 +264,19 @@ int main(int argc, char** argv){
         if (!(myele.DeltaR(mymu)>0.3)) continue;
         
         if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
-            if (numGenJets==0) weight = 3.630;
-            else if (numGenJets==1) weight = 0.6304;
-            else if (numGenJets==2) weight = 0.5528;
-            else if (numGenJets==3) weight = 0.6009;
-            else if (numGenJets==4) weight = 0.8314;
+            if (numGenJets==0) weight = 2.575;
+            else if (numGenJets==1) weight = 0.7084;
+            else if (numGenJets==2) weight = 0.9192;
+            else if (numGenJets==3) weight = 1.648;
+            else if (numGenJets==4) weight = 0.2192;
         }
         
         if (sample=="W" or sample=="W1" or sample=="W2" or sample=="W3" or sample=="W4"){
-            if (numGenJets==0) weight = 51.81;
-            else if (numGenJets==1) weight = 9.091;
-            else if (numGenJets==2) weight = 4.516;
-            else if (numGenJets==3) weight = 3.090;
-            else if (numGenJets==4) weight = 3.227;
+            if (numGenJets==0) weight = 23.67;
+            else if (numGenJets==1) weight = 3.106;
+            else if (numGenJets==2) weight = 3.014;
+            else if (numGenJets==3) weight = 2.202;
+            else if (numGenJets==4) weight = 2.150;
         }
         
         float sf_MC = 1.0;
@@ -307,11 +320,11 @@ int main(int argc, char** argv){
                 float topfactor = sqrt(exp(0.088-0.00087*pttop1+0.00000092*pttop1*pttop1)*exp(0.088-0.00087*pttop2+0.00000092*pttop2*pttop2));
                 sf_MC *= topfactor;
             }
-            
+/*
             //re-weigh pileup distribution
             float puweight = LumiWeights_12->weight(npu);
             sf_MC *= puweight;
-            
+*/
             //generator weight
             sf_MC *= genweight;
             
@@ -739,4 +752,5 @@ int main(int argc, char** argv){
     cout << "************* output: " << output.c_str() << " *************" << endl;
     
 }
+
 

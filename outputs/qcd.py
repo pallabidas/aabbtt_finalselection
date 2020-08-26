@@ -2,9 +2,9 @@ import ROOT
 
 file=ROOT.TFile("final_em.root","update")
 
-dir=["m_em","m_emb","m_embb","e_pt","mu_pt","b1_pt","b2_pt","m_em_nobjet","e_pt_nobjet","mu_pt_nobjet","m_em_VBFenriched","m_emb_VBFenriched","m_embb_VBFenriched","e_pt_VBFenriched","mu_pt_VBFenriched"]
+dir=["m_em_nobjet","e_pt_nobjet","mu_pt_nobjet","m_em_1bjet","m_emb_1bjet","e_pt_1bjet","mu_pt_1bjet","b1_pt_1bjet","m_em_2bjet","m_emb_2bjet","m_embb_2bjet","e_pt_2bjet","mu_pt_2bjet","b1_pt_2bjet","b2_pt_2bjet","m_em_nobjet_VBFenriched","e_pt_nobjet_VBFenriched","mu_pt_nobjet_VBFenriched","m_em_1bjet_VBFenriched","m_emb_1bjet_VBFenriched","e_pt_1bjet_VBFenriched","mu_pt_1bjet_VBFenriched","b1_pt_1bjet_VBFenriched","m_em_2bjet_VBFenriched","m_emb_2bjet_VBFenriched","m_embb_2bjet_VBFenriched","e_pt_2bjet_VBFenriched","mu_pt_2bjet_VBFenriched","b1_pt_2bjet_VBFenriched","b2_pt_2bjet_VBFenriched"]
 
-for i in range (0,15):
+for i in range (0,30):
     Data_SS=file.Get(dir[i]).Get("data_obs_SS")
     HTT_SS=file.Get(dir[i]).Get("HTT_SS")
     W_SS=file.Get(dir[i]).Get("W_SS")

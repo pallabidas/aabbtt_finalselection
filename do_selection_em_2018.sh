@@ -1,9 +1,9 @@
 #./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/embedded.root outputs/embedded.root embedded Z
-./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/DY.root outputs/DY.root DY Z
-./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/DY1.root outputs/DY1.root DY1 Z
-./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/DY2.root outputs/DY2.root DY2 Z
-./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/DY3.root outputs/DY3.root DY3 Z
-./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/DY4.root outputs/DY4.root DY4 Z
+#./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/DY.root outputs/DY.root DY Z
+#./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/DY1.root outputs/DY1.root DY1 Z
+#./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/DY2.root outputs/DY2.root DY2 Z
+#./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/DY3.root outputs/DY3.root DY3 Z
+#./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/DY4.root outputs/DY4.root DY4 Z
 ./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/GGHTT.root outputs/GGHTT.root GGHTT HTT
 ./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/GGZHLLTT.root outputs/GGZHLLTT.root GGZHLLTT HTT
 ./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/GGZHNNTT.root outputs/GGZHNNTT.root GGZHNNTT HTT
@@ -32,4 +32,4 @@
 ./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/data_obs.root outputs/data_obs.root data_obs data_obs
 #./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/bbtt60.root outputs/bbtt60.root bbtt60 bbtt60
 
-hadd -f outputs/final_em.root outputs/*.root
+#hadd -f outputs/final_em.root outputs/*.root
