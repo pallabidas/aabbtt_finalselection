@@ -26,7 +26,7 @@ def add_lumi():
     lumi.SetTextColor(    1 )
     lumi.SetTextSize(0.09)
     lumi.SetTextFont (   42 )
-    lumi.AddText("2018, 59.7 fb^{-1} (13 TeV)")
+    lumi.AddText("2016, 35.9 fb^{-1} (13 TeV)")
     return lumi
 
 def add_CMS():
@@ -72,7 +72,7 @@ ROOT.gStyle.SetOptStat(0)
 c=ROOT.TCanvas("canvas","",0,0,900,600)
 c.cd()
 
-file=ROOT.TFile("final_em.root","r")
+file=ROOT.TFile("final_em_2016.root","r")
 
 adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
@@ -85,11 +85,13 @@ ncat=30
 for i in range (0,ncat):
    Data=file.Get(categories[i]).Get("data_obs_OS")
    HTT=file.Get(categories[i]).Get("HTT_OS")
+   HWW=file.Get(categories[i]).Get("HWW_OS")
    W=file.Get(categories[i]).Get("W_OS")
    TT=file.Get(categories[i]).Get("TT_OS")
    VV=file.Get(categories[i]).Get("VV_OS")
    Z=file.Get(categories[i]).Get("Z_OS")
    ST=file.Get(categories[i]).Get("ST_OS")
+   ttHnonbb=file.Get(categories[i]).Get("ttHnonbb_OS")
    QCD=file.Get(categories[i]).Get("QCD")
 #   bbtt60=divide_width(file.Get(categories[i]).Get("bbtt60"))
 
@@ -105,21 +107,25 @@ for i in range (0,ncat):
    Data.GetYaxis().SetTitle("Events")
 
    HTT.SetFillColor(ROOT.TColor.GetColor("#C125F7"))
+   HWW.SetFillColor(ROOT.TColor.GetColor("#3D4CFF"))
    W.SetFillColor(ROOT.TColor.GetColor("#75D185"))
    TT.SetFillColor(ROOT.TColor.GetColor("#9999cc"))
    VV.SetFillColor(ROOT.TColor.GetColor("#08F7F1"))
    Z.SetFillColor(ROOT.TColor.GetColor("#ffcc66"))
    ST.SetFillColor(ROOT.TColor.GetColor("#4496c8"))
+   ttHnonbb.SetFillColor(ROOT.TColor.GetColor("#3DCCFF"))
    QCD.SetFillColor(ROOT.TColor.GetColor("#FDA5BA"))
 
    Data.SetMarkerStyle(20)
    Data.SetMarkerSize(1)
    HTT.SetLineColor(1)
+   HWW.SetLineColor(1)
    W.SetLineColor(1)
    TT.SetLineColor(1)
    VV.SetLineColor(1)
    Z.SetLineColor(1)
    ST.SetLineColor(1)
+   ttHnonbb.SetLineColor(1)
    QCD.SetLineColor(1)
    Data.SetLineColor(1)
    Data.SetLineWidth(2)
@@ -128,19 +134,23 @@ for i in range (0,ncat):
 
    stack=ROOT.THStack("stack","stack")
    stack.Add(HTT)
+   stack.Add(HWW)
    stack.Add(W)
    stack.Add(TT)
    stack.Add(VV)
    stack.Add(Z)
    stack.Add(ST)
+   stack.Add(ttHnonbb)
    stack.Add(QCD)
 
    errorBand = HTT.Clone()
+   errorBand.Add(HWW)
    errorBand.Add(W)
    errorBand.Add(TT)
    errorBand.Add(VV)
    errorBand.Add(Z)
    errorBand.Add(ST)
+   errorBand.Add(ttHnonbb)
    errorBand.Add(QCD)
    errorBand.SetMarkerSize(0)
    errorBand.SetFillColor(new_idx)
@@ -180,11 +190,13 @@ for i in range (0,ncat):
    legende=make_legend()
    legende.AddEntry(Data,"Observed","elp")
    legende.AddEntry(HTT,"H#rightarrow#tau#tau","f")
+   legende.AddEntry(HWW,"HWW","f")
    legende.AddEntry(W,"W+jets","f")
    legende.AddEntry(TT,"t#bar{t}","f")
    legende.AddEntry(VV,"VV","f")
    legende.AddEntry(Z,"Z+jets","f")
    legende.AddEntry(ST,"Single t","f")
+   legende.AddEntry(ttHnonbb,"ttH (no H#rightarrowbb)","f")
    legende.AddEntry(QCD,"QCD","f")
 #  legende.AddEntry(bbtt60,"m_{a}=60","l")
    legende.AddEntry(errorBand,"Uncertainty","f")
@@ -254,6 +266,7 @@ for i in range (0,ncat):
 
    c.Modified()
    c.SaveAs(categories[i]+".png")
+
 
 
 
