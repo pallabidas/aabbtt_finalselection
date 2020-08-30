@@ -32,4 +32,4 @@
 ./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/data_obs.root outputs/em_2018/data_obs.root data_obs data_obs
 #./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/bbtt60.root outputs/em_2018/bbtt60.root bbtt60 bbtt60
 
-#hadd -f outputs/em_2018/final_em_2018.root outputs/em_2018/*.root
+hadd -f outputs/em_2018/final_em_2018.root outputs/em_2018/*.root

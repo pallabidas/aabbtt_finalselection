@@ -78,7 +78,7 @@ int main(int argc, char** argv){
     else if(sample == "W3"){weight = 1.0;}
     else if(sample == "W4"){weight = 1.0;}
     else if(sample == "WZ2L2Q"){xs = 5.595; weight = luminosity*xs/N;}
-    else if(sample == "WZ3LNu"){xs = 4.43; weight = luminosity*xs/N;}
+    else if(sample == "WZ3LNu"){xs = 4.708; weight = luminosity*xs/N;}
     else if(sample == "WminusHTT"){xs = 0.5328*0.0627; weight = luminosity*xs/N;}
     else if(sample == "WplusHTT"){xs = 0.840*0.0627; weight = luminosity*xs/N;}
     else if(sample == "ZHTT"){xs = 0.7612*0.0627; weight = luminosity*xs/N;}
@@ -268,8 +268,11 @@ int main(int argc, char** argv){
         
         float sf_MC = 1.0;
         
-        //scale factors for MC
+        //scale factors for MC and corrections
         if (sample!="data_obs" && sample!="embedded"){
+            
+            //reject MC with tau_e+tau_mu as duplicated in embedded sample
+            if ((gen_match_1==3 && gen_match_2==4) or (gen_match_1==4 && gen_match_2==3)) continue;
             
             //initialize workspace with lepton kinematics
             wmc->var("m_pt")->setVal(pt_2);
@@ -319,8 +322,11 @@ int main(int argc, char** argv){
         
         float sf_embed = 1.0;
         
-        //scale factors for embedded Z->tautau
+        //scale factors for embedded Z->tautau and corrections
         if (sample=="embedded"){
+            
+            //taus originated from muons in embedded sample
+            if (!(fabs(eta_1)<2.4)) continue;
             
             if (gen_match_1==6 or gen_match_2==6) continue;
             
