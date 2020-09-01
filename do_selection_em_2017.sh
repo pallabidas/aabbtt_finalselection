@@ -26,10 +26,10 @@
 ./selection_em_2017.exe /nfs_scratch/htsoi/haabbtt_em2017_14aug/W3.root outputs/em_2017/W3.root W3 W
 ./selection_em_2017.exe /nfs_scratch/htsoi/haabbtt_em2017_14aug/W4.root outputs/em_2017/W4.root W4 W
 #./selection_em_2017.exe /nfs_scratch/htsoi/haabbtt_em2017_14aug/WW.root outputs/em_2017/WW.root WW VV
-./selection_em_2017.exe /nfs_scratch/htsoi/haabbtt_em2017_14aug/WW1L1Nu2Q.root outputs/em_2017/WW1L1Nu2Q.root WW1L1Nu2Q VV
+#./selection_em_2017.exe /nfs_scratch/htsoi/haabbtt_em2017_14aug/WW1L1Nu2Q.root outputs/em_2017/WW1L1Nu2Q.root WW1L1Nu2Q VV
 #./selection_em_2017.exe /nfs_scratch/htsoi/haabbtt_em2017_14aug/WZ.root outputs/em_2017/WZ.root WZ VV
-./selection_em_2017.exe /nfs_scratch/htsoi/haabbtt_em2017_14aug/WZ1L1Nu2Q.root outputs/em_2017/WZ1L1Nu2Q.root WZ1L1Nu2Q VV
-./selection_em_2017.exe /nfs_scratch/htsoi/haabbtt_em2017_14aug/WZ1L3Nu.root outputs/em_2017/WZ1L3Nu.root WZ1L3Nu VV
+#./selection_em_2017.exe /nfs_scratch/htsoi/haabbtt_em2017_14aug/WZ1L1Nu2Q.root outputs/em_2017/WZ1L1Nu2Q.root WZ1L1Nu2Q VV
+#./selection_em_2017.exe /nfs_scratch/htsoi/haabbtt_em2017_14aug/WZ1L3Nu.root outputs/em_2017/WZ1L3Nu.root WZ1L3Nu VV
 ./selection_em_2017.exe /nfs_scratch/htsoi/haabbtt_em2017_14aug/WZ2L2Q.root outputs/em_2017/WZ2L2Q.root WZ2L2Q VV
 ./selection_em_2017.exe /nfs_scratch/htsoi/haabbtt_em2017_14aug/WZ3L1Nu.root outputs/em_2017/WZ3L1Nu.root WZ3L1Nu VV
 ./selection_em_2017.exe /nfs_scratch/htsoi/haabbtt_em2017_14aug/WminusHTT.root outputs/em_2017/WminusHTT.root WminusHTT HTT
