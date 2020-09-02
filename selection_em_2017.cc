@@ -491,7 +491,7 @@ int main(int argc, char** argv){
                     }
                 }
                 //QCD control region (anti-isolated leptons)
-                if (!(iso_1<0.15 && iso_2<0.15) && (iso_1<0.50 && iso_2<0.50)){
+                if (iso_1<0.15 && iso_2>0.15 && iso_2<0.5){
                     //at least 1 b jet
                     if (bpt_deepcsv_1>20){
                         hist_m_em_OS_atleast_1bjet_QCD->Fill(m_em,weight_corr);
@@ -521,7 +521,7 @@ int main(int argc, char** argv){
                     float ept = myele.Pt();
                     if (mupt > 100) mupt = 99;
                     if (ept > 100) ept = 99;
-                    ssweight *= correction->GetBinContent(correction->GetXaxis()->FindBin(mupt),correction->GetYaxis()->FindBin(ept));
+//                    ssweight *= correction->GetBinContent(correction->GetXaxis()->FindBin(mupt),correction->GetYaxis()->FindBin(ept));
                     ssweight *= closureOS->GetBinContent(closureOS->GetXaxis()->FindBin(mupt),closureOS->GetYaxis()->FindBin(ept));
                     
                     weight_corr *= ssweight;
@@ -579,7 +579,7 @@ int main(int argc, char** argv){
                     }
                 }
                 //QCD control region (anti-isolated leptons)
-                if (!(iso_1<0.15 && iso_2<0.15) && (iso_1<0.50 && iso_2<0.50)){
+                if (iso_1<0.15 && iso_2>0.15 && iso_2<0.5){
                     //at least 1 b jet
                     if (bpt_deepcsv_1>20){
                         hist_m_em_SS_atleast_1bjet_QCD->Fill(m_em,weight_corr);
