@@ -78,9 +78,9 @@ adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
 trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",0.5)
 
-categories=["m_em_1","m_em_2","m_em_3","m_em_4","m_em","m_emb","e_pt_1","e_pt_2","e_pt_3","e_pt_4","mu_pt_1","mu_pt_2","mu_pt_3","mu_pt_4","e_pt","mu_pt"]
-xaxis=["m_{e#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","e pt (GeV)","e pt (GeV)","e pt (GeV)","e pt (GeV)","#mu pt (GeV)","#mu pt (GeV)","#mu pt (GeV)","#mu pt (GeV)","e pt (GeV)","#mu pt (GeV)"]
-ncat=16
+categories=["m_em_nobjet","e_pt_nobjet","mu_pt_nobjet","m_em_1bjet","m_emb_1bjet","e_pt_1bjet","mu_pt_1bjet","m_em_2bjet","m_emb_2bjet","m_embb_2bjet","e_pt_2bjet","mu_pt_2bjet","m_em_nobjet_VBFenriched","e_pt_nobjet_VBFenriched","mu_pt_nobjet_VBFenriched","m_em_1bjet_VBFenriched","m_emb_1bjet_VBFenriched","e_pt_1bjet_VBFenriched","mu_pt_1bjet_VBFenriched","m_em_2bjet_VBFenriched","m_emb_2bjet_VBFenriched","m_embb_2bjet_VBFenriched","e_pt_2bjet_VBFenriched","mu_pt_2bjet_VBFenriched","m_em_VV","e_pt_VV","mu_pt_VV","m_em_1","m_em_2","m_em_3","m_em_4","e_pt_1","e_pt_2","e_pt_3","e_pt_4","mu_pt_1","mu_pt_2","mu_pt_3","mu_pt_4"]
+xaxis=["m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","m_{e#mubb} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","m_{e#mubb} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{e} (GeV)","pt_{e} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","pt_{#mu} (GeV)","pt_{#mu} (GeV)","pt_{#mu} (GeV)"]
+ncat=39
 
 for i in range (0,ncat):
    Data=file.Get(categories[i]).Get("data_obs_OS")
