@@ -13,7 +13,7 @@ def add_channel():
     lumi.SetTextColor(    1 )
     lumi.SetTextSize(0.072)
     lumi.SetTextFont (   42 )
-    lumi.AddText("e#mu final state")
+    lumi.AddText("e#mu")
     return lumi
 
 def add_lumi():
@@ -78,9 +78,9 @@ adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
 trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",0.5)
 
-categories=["m_em_nobjet","e_pt_nobjet","mu_pt_nobjet","m_em_1bjet","m_emb_1bjet","e_pt_1bjet","mu_pt_1bjet","b1_pt_1bjet","m_em_2bjet","m_emb_2bjet","m_embb_2bjet","e_pt_2bjet","mu_pt_2bjet","b1_pt_2bjet","b2_pt_2bjet","m_em_nobjet_VBFenriched","e_pt_nobjet_VBFenriched","mu_pt_nobjet_VBFenriched","m_em_atleast_1bjet_VBFenriched","m_emb_atleast_1bjet_VBFenriched","m_embb_atleast_1bjet_VBFenriched","e_pt_atleast_1bjet_VBFenriched","mu_pt_atleast_1bjet_VBFenriched","b1_pt_atleast_1bjet_VBFenriched","b2_pt_atleast_1bjet_VBFenriched","m_em_VV","e_pt_VV","mu_pt_VV","m_em_atleast_1bjet_QCD","m_emb_atleast_1bjet_QCD","m_embb_atleast_1bjet_QCD","e_pt_atleast_1bjet_QCD","mu_pt_atleast_1bjet_QCD","b1_pt_atleast_1bjet_QCD","b2_pt_atleast_1bjet_QCD"]
-xaxis=["m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","pt_{b1} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","m_{e#mubb} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","pt_{b1} (GeV)","pt_{b2} (GeV)","m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","m_{e#mubb} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","pt_{b1} (GeV)","pt_{b2} (GeV)","m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","m_{e#mubb} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","pt_{b1} (GeV)","pt_{b2} (GeV)"]
-ncat=35
+categories=["m_em_nobjet","e_pt_nobjet","mu_pt_nobjet","m_em_1bjet","m_emb_1bjet","e_pt_1bjet","mu_pt_1bjet","m_em_2bjet","m_emb_2bjet","m_embb_2bjet","e_pt_2bjet","mu_pt_2bjet","m_em_nobjet_VBFenriched","e_pt_nobjet_VBFenriched","mu_pt_nobjet_VBFenriched","m_em_1bjet_VBFenriched","m_emb_1bjet_VBFenriched","e_pt_1bjet_VBFenriched","mu_pt_1bjet_VBFenriched","m_em_2bjet_VBFenriched","m_emb_2bjet_VBFenriched","m_embb_2bjet_VBFenriched","e_pt_2bjet_VBFenriched","mu_pt_2bjet_VBFenriched","m_em_VV","e_pt_VV","mu_pt_VV","m_em_1","m_em_2","m_em_3","m_em_4","e_pt_1","e_pt_2","e_pt_3","e_pt_4","mu_pt_1","mu_pt_2","mu_pt_3","mu_pt_4"]
+xaxis=["m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","m_{e#mubb} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","m_{e#mubb} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{e} (GeV)","pt_{e} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","pt_{#mu} (GeV)","pt_{#mu} (GeV)","pt_{#mu} (GeV)"]
+ncat=39
 
 for i in range (0,ncat):
    Data=file.Get(categories[i]).Get("data_obs_OS")
