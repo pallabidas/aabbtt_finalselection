@@ -150,6 +150,8 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("njets", &njets);
     tree->SetBranchAddress("gen_match_1",&gen_match_1);
     tree->SetBranchAddress("gen_match_2",&gen_match_2);
+    tree->SetBranchAddress("met", &met);
+    tree->SetBranchAddress("metphi", &metphi);
     
     TH1F * hist_m_em_OS_nobjet = new TH1F("", "", 25, 0., 250.);
     TH1F * hist_m_em_SS_nobjet = new TH1F("", "", 25, 0., 250.);
@@ -269,7 +271,7 @@ int main(int argc, char** argv){
         bool isMu23E12trigger = passMu23E12DZ && matchMu23E12DZ_1 && filterMu23E12DZ_1 && matchMu23E12DZ_2 && filterMu23E12DZ_2 && pt_1>13 && pt_2>24;
         
         if (!isMu8E23trigger && !isMu23E12trigger) continue;
-        if (!(fabs(eta_1)<2.5 && fabs(eta_2)<2.4)) continue;
+        if (!(fabs(eta_1)<2.4 && fabs(eta_2)<2.4)) continue;
         if (!(iso_1<0.15 && iso_2<0.15)) continue;
         
         TLorentzVector myele;
@@ -303,6 +305,8 @@ int main(int argc, char** argv){
         
         //scale factors for MC and corrections
         if (sample!="data_obs" && sample!="embedded"){
+            
+            if (gen_match_1==6 or gen_match_2==6) continue;
             
             //reject MC with tau_e+tau_mu as duplicated in embedded sample
             if ((gen_match_1==3 && gen_match_2==4) or (gen_match_1==4 && gen_match_2==3)) continue;
@@ -357,9 +361,6 @@ int main(int argc, char** argv){
         
         //scale factors for embedded Z->tautau and corrections
         if (sample=="embedded"){
-            
-            //taus originated from muons in embedded sample
-            if (!(fabs(eta_1)<2.4)) continue;
             
             if (gen_match_1==6 or gen_match_2==6) continue;
             
@@ -418,7 +419,20 @@ int main(int argc, char** argv){
             bMflavor_2 = bflavour_deepcsv_2;
             nbtag20++;
         }
-//        if ((sample=="data_obs" or sample=="embedded") && nbtag20>0) continue;
+        
+        //defining variables for some categories
+        TLorentzVector mymet;
+        mymet.SetPtEtaPhiM(met,0,metphi,0);
+        
+        float mt_emet=TMass_F((myele).Pt(),mymet.Pt(),(myele).Px(),mymet.Px(),(myele).Py(),mymet.Py());
+        float mt_mumet=TMass_F((mymu).Pt(),mymet.Pt(),(mymu).Px(),mymet.Px(),(mymu).Py(),mymet.Py());
+        
+        float norm_zeta=norm_F(myele.Px()/myele.Pt()+mymu.Px()/mymu.Pt(),myele.Py()/myele.Pt()+mymu.Py()/mymu.Pt());
+        float x_zeta= (myele.Px()/myele.Pt()+mymu.Px()/mymu.Pt())/norm_zeta;
+        float y_zeta= (myele.Py()/myele.Pt()+mymu.Py()/mymu.Pt())/norm_zeta;
+        float p_zeta_mis=mymet.Px()*x_zeta+mymet.Py()*y_zeta;
+        float pzeta_vis=(myele.Px()+mymu.Px())*x_zeta+(myele.Py()+mymu.Py())*y_zeta;
+        float dzeta=p_zeta_mis-0.85*pzeta_vis;
         
         //filling histograms
         float m_em = (myele + mymu).M();
@@ -430,20 +444,20 @@ int main(int argc, char** argv){
             //data or embedded (no btag weights)
             if (sample=="data_obs" or sample=="embedded"){
                 //no bjet
-                if (bpt_deepcsv_1<20){
+                if (nbtag20==0){
                     hist_m_em_OS_nobjet->Fill(m_em,weight_corr);
                     hist_e_pt_OS_nobjet->Fill(pt_1,weight_corr);
                     hist_mu_pt_OS_nobjet->Fill(pt_2,weight_corr);
                 }
                 //1 bjet
-                if (bpt_deepcsv_1>20 && bpt_deepcsv_2<20){
+                if (nbtag20==1){
                     hist_m_em_OS_1bjet->Fill(m_em,weight_corr);
                     hist_m_emb_OS_1bjet->Fill(m_emb,weight_corr);
                     hist_e_pt_OS_1bjet->Fill(pt_1,weight_corr);
                     hist_mu_pt_OS_1bjet->Fill(pt_2,weight_corr);
                 }
                 //2 bjet
-                if (bpt_deepcsv_1>20 && bpt_deepcsv_2>20){
+                if (nbtag20==2){
                     hist_m_em_OS_2bjet->Fill(m_em,weight_corr);
                     hist_m_emb_OS_2bjet->Fill(m_emb,weight_corr);
                     hist_m_embb_OS_2bjet->Fill(m_embb,weight_corr);
@@ -453,20 +467,20 @@ int main(int argc, char** argv){
                 //vbf
                 if (mjj>500){
                     //no bjet
-                    if (bpt_deepcsv_1<20){
+                    if (nbtag20==0){
                         hist_m_em_OS_nobjet_VBFenriched->Fill(m_em,weight_corr);
                         hist_e_pt_OS_nobjet_VBFenriched->Fill(pt_1,weight_corr);
                         hist_mu_pt_OS_nobjet_VBFenriched->Fill(pt_2,weight_corr);
                     }
                     //1 bjet
-                    if (bpt_deepcsv_1>20 && bpt_deepcsv_2<20){
+                    if (nbtag20==1){
                         hist_m_em_OS_1bjet_VBFenriched->Fill(m_em,weight_corr);
                         hist_m_emb_OS_1bjet_VBFenriched->Fill(m_emb,weight_corr);
                         hist_e_pt_OS_1bjet_VBFenriched->Fill(pt_1,weight_corr);
                         hist_mu_pt_OS_1bjet_VBFenriched->Fill(pt_2,weight_corr);
                     }
                     //2 bjet
-                    if (bpt_deepcsv_1>20 && bpt_deepcsv_2>20){
+                    if (nbtag20==2){
                         hist_m_em_OS_2bjet_VBFenriched->Fill(m_em,weight_corr);
                         hist_m_emb_OS_2bjet_VBFenriched->Fill(m_emb,weight_corr);
                         hist_m_embb_OS_2bjet_VBFenriched->Fill(m_embb,weight_corr);
@@ -475,7 +489,7 @@ int main(int argc, char** argv){
                     }
                 }
                 //diboson
-                if (bpt_deepcsv_1<0 && m_em>100){
+                if (nbtag20==0 && m_em>100){
                     hist_m_em_OS_VV->Fill(m_em,weight_corr);
                     hist_e_pt_OS_VV->Fill(pt_1,weight_corr);
                     hist_mu_pt_OS_VV->Fill(pt_2,weight_corr);
@@ -491,7 +505,7 @@ int main(int argc, char** argv){
                 hist_mu_pt_OS_nobjet->Fill(pt_2,weight_corr*weight_btag);
                 
                 //1 bjet
-                if (bpt_deepcsv_1>20 && bpt_deepcsv_2<20){
+                if (nbtag20==1){
                     float weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0);
                     hist_m_em_OS_1bjet->Fill(m_em,weight_corr*weight_btag);
                     hist_m_emb_OS_1bjet->Fill(m_emb,weight_corr*weight_btag);
@@ -499,7 +513,7 @@ int main(int argc, char** argv){
                     hist_mu_pt_OS_1bjet->Fill(pt_2,weight_corr*weight_btag);
                 }
                 //2 bjet
-                if (bpt_deepcsv_1>20 && bpt_deepcsv_2>20){
+                if (nbtag20==2){
                     float weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
                     hist_m_em_OS_2bjet->Fill(m_em,weight_corr*weight_btag);
                     hist_m_emb_OS_2bjet->Fill(m_emb,weight_corr*weight_btag);
@@ -516,7 +530,7 @@ int main(int argc, char** argv){
                     hist_e_pt_OS_nobjet_VBFenriched->Fill(pt_1,weight_corr*weight_btag);
                     hist_mu_pt_OS_nobjet_VBFenriched->Fill(pt_2,weight_corr*weight_btag);
                     //1 bjet
-                    if (bpt_deepcsv_1>20 && bpt_deepcsv_2<20){
+                    if (nbtag20==1){
                         float weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0);
                         hist_m_em_OS_1bjet_VBFenriched->Fill(m_em,weight_corr*weight_btag);
                         hist_m_emb_OS_1bjet_VBFenriched->Fill(m_emb,weight_corr*weight_btag);
@@ -524,7 +538,7 @@ int main(int argc, char** argv){
                         hist_mu_pt_OS_1bjet_VBFenriched->Fill(pt_2,weight_corr*weight_btag);
                     }
                     //2 bjet
-                    if (bpt_deepcsv_1>20 && bpt_deepcsv_2>20){
+                    if (nbtag20==2){
                         float weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
                         hist_m_em_OS_2bjet_VBFenriched->Fill(m_em,weight_corr*weight_btag);
                         hist_m_emb_OS_2bjet_VBFenriched->Fill(m_emb,weight_corr*weight_btag);
@@ -542,31 +556,38 @@ int main(int argc, char** argv){
                     hist_mu_pt_OS_VV->Fill(pt_2,weight_corr*weight_btag);
                 }
             }
-            //baseline for 4 categories (at least 1 bjet)
-            if (bpt_deepcsv_1>20){
-                //m_emb<65 category
+            
+            //selection for 4 categories (at least 1 bjet and additional cuts)
+            if ((nbtag20==1 or nbtag20==2) && pt_1>13 && pt_2>13 && iso_1<0.1 && mt_emet<40 && mt_mumet<40 && dzeta>-30){
+                float weight_btag = 1.0;
+                if (sample!="data_obs" && sample!="embedded"){
+                    //b tag weights for MC for at least 1 bjet
+                    if (nbtag20==1) weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0);
+                    if (nbtag20==2) weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0)+GetSF(1, bMpt_2, bMflavor_2, 0)-GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
+                }
+                //category 1
                 if (m_emb<65){
-                        hist_m_em_OS_1->Fill(m_em,weight_corr);
-                        hist_e_pt_OS_1->Fill(pt_1,weight_corr);
-                        hist_mu_pt_OS_1->Fill(pt_2,weight_corr);
+                    hist_m_em_OS_1->Fill(m_em,weight_corr*weight_btag);
+                    hist_e_pt_OS_1->Fill(pt_1,weight_corr*weight_btag);
+                    hist_mu_pt_OS_1->Fill(pt_2,weight_corr*weight_btag);
                 }
-                //65<m_emb<80 category
+                //category 2
                 if (m_emb>65 && m_emb<80){
-                        hist_m_em_OS_2->Fill(m_em,weight_corr);
-                        hist_e_pt_OS_2->Fill(pt_1,weight_corr);
-                        hist_mu_pt_OS_2->Fill(pt_2,weight_corr);
+                    hist_m_em_OS_2->Fill(m_em,weight_corr*weight_btag);
+                    hist_e_pt_OS_2->Fill(pt_1,weight_corr*weight_btag);
+                    hist_mu_pt_OS_2->Fill(pt_2,weight_corr*weight_btag);
                 }
-                //80<m_emb<95 category
+                //category 3
                 if (m_emb>80 && m_emb<95){
-                        hist_m_em_OS_3->Fill(m_em,weight_corr);
-                        hist_e_pt_OS_3->Fill(pt_1,weight_corr);
-                        hist_mu_pt_OS_3->Fill(pt_2,weight_corr);
+                    hist_m_em_OS_3->Fill(m_em,weight_corr*weight_btag);
+                    hist_e_pt_OS_3->Fill(pt_1,weight_corr*weight_btag);
+                    hist_mu_pt_OS_3->Fill(pt_2,weight_corr*weight_btag);
                 }
-                //m_emb>95 category
+                //category 4
                 if (m_emb>95){
-                        hist_m_em_OS_4->Fill(m_em,weight_corr);
-                        hist_e_pt_OS_4->Fill(pt_1,weight_corr);
-                        hist_mu_pt_OS_4->Fill(pt_2,weight_corr);
+                    hist_m_em_OS_4->Fill(m_em,weight_corr*weight_btag);
+                    hist_e_pt_OS_4->Fill(pt_1,weight_corr*weight_btag);
+                    hist_mu_pt_OS_4->Fill(pt_2,weight_corr*weight_btag);
                 }
             }
         }
@@ -592,20 +613,20 @@ int main(int argc, char** argv){
             //data or embedded (no btag weights)
             if (sample=="data_obs" or sample=="embedded"){
                 //no bjet
-                if (bpt_deepcsv_1<20){
+                if (nbtag20==0){
                     hist_m_em_SS_nobjet->Fill(m_em,weight_corr);
                     hist_e_pt_SS_nobjet->Fill(pt_1,weight_corr);
                     hist_mu_pt_SS_nobjet->Fill(pt_2,weight_corr);
                 }
                 //1 bjet
-                if (bpt_deepcsv_1>20 && bpt_deepcsv_2<20){
+                if (nbtag20==1){
                     hist_m_em_SS_1bjet->Fill(m_em,weight_corr);
                     hist_m_emb_SS_1bjet->Fill(m_emb,weight_corr);
                     hist_e_pt_SS_1bjet->Fill(pt_1,weight_corr);
                     hist_mu_pt_SS_1bjet->Fill(pt_2,weight_corr);
                 }
                 //2 bjet
-                if (bpt_deepcsv_1>20 && bpt_deepcsv_2>20){
+                if (nbtag20==2){
                     hist_m_em_SS_2bjet->Fill(m_em,weight_corr);
                     hist_m_emb_SS_2bjet->Fill(m_emb,weight_corr);
                     hist_m_embb_SS_2bjet->Fill(m_embb,weight_corr);
@@ -615,20 +636,20 @@ int main(int argc, char** argv){
                 //vbf
                 if (mjj>500){
                     //no bjet
-                    if (bpt_deepcsv_1<20){
+                    if (nbtag20==0){
                         hist_m_em_SS_nobjet_VBFenriched->Fill(m_em,weight_corr);
                         hist_e_pt_SS_nobjet_VBFenriched->Fill(pt_1,weight_corr);
                         hist_mu_pt_SS_nobjet_VBFenriched->Fill(pt_2,weight_corr);
                     }
                     //1 bjet
-                    if (bpt_deepcsv_1>20 && bpt_deepcsv_2<20){
+                    if (nbtag20==1){
                         hist_m_em_SS_1bjet_VBFenriched->Fill(m_em,weight_corr);
                         hist_m_emb_SS_1bjet_VBFenriched->Fill(m_emb,weight_corr);
                         hist_e_pt_SS_1bjet_VBFenriched->Fill(pt_1,weight_corr);
                         hist_mu_pt_SS_1bjet_VBFenriched->Fill(pt_2,weight_corr);
                     }
                     //2 bjet
-                    if (bpt_deepcsv_1>20 && bpt_deepcsv_2>20){
+                    if (nbtag20==2){
                         hist_m_em_SS_2bjet_VBFenriched->Fill(m_em,weight_corr);
                         hist_m_emb_SS_2bjet_VBFenriched->Fill(m_emb,weight_corr);
                         hist_m_embb_SS_2bjet_VBFenriched->Fill(m_embb,weight_corr);
@@ -637,7 +658,7 @@ int main(int argc, char** argv){
                     }
                 }
                 //diboson
-                if (bpt_deepcsv_1<0 && m_em>100){
+                if (nbtag20==0 && m_em>100){
                     hist_m_em_SS_VV->Fill(m_em,weight_corr);
                     hist_e_pt_SS_VV->Fill(pt_1,weight_corr);
                     hist_mu_pt_SS_VV->Fill(pt_2,weight_corr);
@@ -653,7 +674,7 @@ int main(int argc, char** argv){
                 hist_mu_pt_SS_nobjet->Fill(pt_2,weight_corr*weight_btag);
                 
                 //1 bjet
-                if (bpt_deepcsv_1>20 && bpt_deepcsv_2<20){
+                if (nbtag20==1){
                     float weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0);
                     hist_m_em_SS_1bjet->Fill(m_em,weight_corr*weight_btag);
                     hist_m_emb_SS_1bjet->Fill(m_emb,weight_corr*weight_btag);
@@ -661,7 +682,7 @@ int main(int argc, char** argv){
                     hist_mu_pt_SS_1bjet->Fill(pt_2,weight_corr*weight_btag);
                 }
                 //2 bjet
-                if (bpt_deepcsv_1>20 && bpt_deepcsv_2>20){
+                if (nbtag20==2){
                     float weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
                     hist_m_em_SS_2bjet->Fill(m_em,weight_corr*weight_btag);
                     hist_m_emb_SS_2bjet->Fill(m_emb,weight_corr*weight_btag);
@@ -678,7 +699,7 @@ int main(int argc, char** argv){
                     hist_e_pt_SS_nobjet_VBFenriched->Fill(pt_1,weight_corr*weight_btag);
                     hist_mu_pt_SS_nobjet_VBFenriched->Fill(pt_2,weight_corr*weight_btag);
                     //1 bjet
-                    if (bpt_deepcsv_1>20 && bpt_deepcsv_2<20){
+                    if (nbtag20==1){
                         float weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0);
                         hist_m_em_SS_1bjet_VBFenriched->Fill(m_em,weight_corr*weight_btag);
                         hist_m_emb_SS_1bjet_VBFenriched->Fill(m_emb,weight_corr*weight_btag);
@@ -686,7 +707,7 @@ int main(int argc, char** argv){
                         hist_mu_pt_SS_1bjet_VBFenriched->Fill(pt_2,weight_corr*weight_btag);
                     }
                     //2 bjet
-                    if (bpt_deepcsv_1>20 && bpt_deepcsv_2>20){
+                    if (nbtag20==2){
                         float weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
                         hist_m_em_SS_2bjet_VBFenriched->Fill(m_em,weight_corr*weight_btag);
                         hist_m_emb_SS_2bjet_VBFenriched->Fill(m_emb,weight_corr*weight_btag);
@@ -704,31 +725,39 @@ int main(int argc, char** argv){
                     hist_mu_pt_SS_VV->Fill(pt_2,weight_corr*weight_btag);
                 }
             }
-            //baseline for 4 categories (at least 1 bjet)
-            if (bpt_deepcsv_1>20){
-                //m_emb<65 category
+            
+            //selection for 4 categories (at least 1 bjet and additional cuts)
+            if ((nbtag20==1 or nbtag20==2) && pt_1>13 && pt_2>13 && iso_1<0.1 && mt_emet<40 && mt_mumet<40 && dzeta>-30){
+            float weight_btag = 1.0;
+            if (sample!="data_obs" && sample!="embedded"){
+                //b tag weights for MC for at least 1 bjet
+                if (nbtag20==1) weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0);
+                if (nbtag20==2) weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0)+GetSF(1, bMpt_2, bMflavor_2, 0)-GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
+            }
+                    
+                //category 1
                 if (m_emb<65){
-                        hist_m_em_SS_1->Fill(m_em,weight_corr);
-                        hist_e_pt_SS_1->Fill(pt_1,weight_corr);
-                        hist_mu_pt_SS_1->Fill(pt_2,weight_corr);
+                    hist_m_em_SS_1->Fill(m_em,weight_corr*weight_btag);
+                    hist_e_pt_SS_1->Fill(pt_1,weight_corr*weight_btag);
+                    hist_mu_pt_SS_1->Fill(pt_2,weight_corr*weight_btag);
                 }
-                //65<m_emb<80 category
+                //category 2
                 if (m_emb>65 && m_emb<80){
-                        hist_m_em_SS_2->Fill(m_em,weight_corr);
-                        hist_e_pt_SS_2->Fill(pt_1,weight_corr);
-                        hist_mu_pt_SS_2->Fill(pt_2,weight_corr);
+                    hist_m_em_SS_2->Fill(m_em,weight_corr*weight_btag);
+                    hist_e_pt_SS_2->Fill(pt_1,weight_corr*weight_btag);
+                    hist_mu_pt_SS_2->Fill(pt_2,weight_corr*weight_btag);
                 }
-                //80<m_emb<95 category
+                //category 3
                 if (m_emb>80 && m_emb<95){
-                        hist_m_em_SS_3->Fill(m_em,weight_corr);
-                        hist_e_pt_SS_3->Fill(pt_1,weight_corr);
-                        hist_mu_pt_SS_3->Fill(pt_2,weight_corr);
+                    hist_m_em_SS_3->Fill(m_em,weight_corr*weight_btag);
+                    hist_e_pt_SS_3->Fill(pt_1,weight_corr*weight_btag);
+                    hist_mu_pt_SS_3->Fill(pt_2,weight_corr*weight_btag);
                 }
-                //m_emb>95 category
+                //category 4
                 if (m_emb>95){
-                        hist_m_em_SS_4->Fill(m_em,weight_corr);
-                        hist_e_pt_SS_4->Fill(pt_1,weight_corr);
-                        hist_mu_pt_SS_4->Fill(pt_2,weight_corr);
+                    hist_m_em_SS_4->Fill(m_em,weight_corr*weight_btag);
+                    hist_e_pt_SS_4->Fill(pt_1,weight_corr*weight_btag);
+                    hist_mu_pt_SS_4->Fill(pt_2,weight_corr*weight_btag);
                 }
             }
         }
