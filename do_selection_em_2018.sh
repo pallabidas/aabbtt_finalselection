@@ -30,6 +30,7 @@
 ./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/ZZ2L2Q.root outputs/em_2018/ZZ2L2Q.root ZZ2L2Q VV
 ./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/ZZ4L.root outputs/em_2018/ZZ4L.root ZZ4L VV
 ./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/data_obs.root outputs/em_2018/data_obs.root data_obs data_obs
-#./selection_em_2018.exe /nfs_scratch/htsoi/haabbtt_em2018_14aug/bbtt60.root outputs/em_2018/bbtt60.root bbtt60 bbtt60
+./selection_em_2018.exe /nfs_scratch/htsoi/signal_haabbtt_em2018_4sep/gghbbtt40.root outputs/em_2018/gghbbtt40.root gghbbtt40 bbtt40
+./selection_em_2018.exe /nfs_scratch/htsoi/signal_haabbtt_em2018_4sep/VBFbbtt40.root outputs/em_2018/VBFbbtt40.root VBFbbtt40 bbtt40
 
 hadd -f outputs/em_2018/final_em_2018.root outputs/em_2018/*.root

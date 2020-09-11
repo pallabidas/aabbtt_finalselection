@@ -11,9 +11,15 @@ def add_channel():
     lumi.SetFillStyle(    0 )
     lumi.SetTextAlign(   12 )
     lumi.SetTextColor(    1 )
-    lumi.SetTextSize(0.072)
+    lumi.SetTextSize(0.055)
     lumi.SetTextFont (   42 )
-    lumi.AddText("e#mu")
+    lumi.AddText("e#mu, m_{a}=40 GeV")
+#    lumi.AddText("m^{vis}_{b#tau#tau} < 65 GeV")
+#    lumi.AddText("65 < m^{vis}_{b#tau#tau} < 80 GeV")
+#    lumi.AddText("80 < m^{vis}_{b#tau#tau} < 95 GeV")
+#    lumi.AddText("m^{vis}_{b#tau#tau} > 95 GeV")
+#    lumi.AddText("#sigma(h)B(h#rightarrowaa#rightarrowbb#tau#tau)=10#sigma_{SM}")
+    lumi.AddText("B(h#rightarrowaa#rightarrowbb#tau#tau) = 5%")
     return lumi
 
 def add_lumi():
@@ -78,9 +84,11 @@ adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
 trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",0.5)
 
-categories=["m_em_nobjet","e_pt_nobjet","mu_pt_nobjet","m_em_1bjet","m_emb_1bjet","e_pt_1bjet","mu_pt_1bjet","m_em_2bjet","m_emb_2bjet","m_embb_2bjet","e_pt_2bjet","mu_pt_2bjet","m_em_nobjet_VBFenriched","e_pt_nobjet_VBFenriched","mu_pt_nobjet_VBFenriched","m_em_1bjet_VBFenriched","m_emb_1bjet_VBFenriched","e_pt_1bjet_VBFenriched","mu_pt_1bjet_VBFenriched","m_em_2bjet_VBFenriched","m_emb_2bjet_VBFenriched","m_embb_2bjet_VBFenriched","e_pt_2bjet_VBFenriched","mu_pt_2bjet_VBFenriched","m_em_VV","e_pt_VV","mu_pt_VV","m_em_1","m_em_2","m_em_3","m_em_4","e_pt_1","e_pt_2","e_pt_3","e_pt_4","mu_pt_1","mu_pt_2","mu_pt_3","mu_pt_4"]
-xaxis=["m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","m_{e#mubb} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mub} (GeV)","m_{e#mubb} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mu} (GeV)","m_{e#mu} (GeV)","pt_{e} (GeV)","pt_{e} (GeV)","pt_{e} (GeV)","pt_{e} (GeV)","pt_{#mu} (GeV)","pt_{#mu} (GeV)","pt_{#mu} (GeV)","pt_{#mu} (GeV)"]
-ncat=39
+#categories=["m_emb","mt_emet","mt_mumet","dzeta"]
+categories=["m_em_1","m_em_2","m_em_3","m_em_4"]
+#xaxis=["m^{vis}_{b#tau#tau} (GeV)","m_{T}(e,#vec{p}^{miss}_{T}) (GeV)","m_{T}(#mu,#vec{p}^{miss}_{T}) (GeV)","D_{#zeta} (GeV)"]
+xaxis=["m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)"]
+ncat=4
 
 for i in range (0,ncat):
    Data=file.Get(categories[i]).Get("data_obs_OS")
@@ -91,7 +99,7 @@ for i in range (0,ncat):
    Z=file.Get(categories[i]).Get("Z_OS")
    ST=file.Get(categories[i]).Get("ST_OS")
    QCD=file.Get(categories[i]).Get("QCD")
-#   bbtt60=divide_width(file.Get(categories[i]).Get("bbtt60"))
+   bbtt40=file.Get(categories[i]).Get("bbtt40_OS")
 
    Data.GetXaxis().SetTitle("")
    Data.GetXaxis().SetTitleSize(0)
@@ -123,8 +131,8 @@ for i in range (0,ncat):
    QCD.SetLineColor(1)
    Data.SetLineColor(1)
    Data.SetLineWidth(2)
-#   bbtt60.SetLineColor(2)
-#   bbtt60.SetLineWidth(3)
+   bbtt40.SetLineColor(2)
+   bbtt40.SetLineWidth(3)
 
    stack=ROOT.THStack("stack","stack")
    stack.Add(HTT)
@@ -171,8 +179,8 @@ for i in range (0,ncat):
    print Data.GetMaximum(),Data.GetMinimum()
    Data.Draw("e")
    stack.Draw("histsame")
-#   bbtt60.Scale(10)
-#   bbtt60.Draw("histsame")
+   bbtt40.Scale(10)
+   bbtt40.Draw("histsame")
 
    errorBand.Draw("e2same")
    Data.Draw("esame")
@@ -185,8 +193,8 @@ for i in range (0,ncat):
    legende.AddEntry(VV,"VV","f")
    legende.AddEntry(Z,"Embedded Z#rightarrow#tau#tau","f")
    legende.AddEntry(ST,"Single t","f")
-   legende.AddEntry(QCD,"QCD","f")
-#  legende.AddEntry(bbtt60,"m_{a}=60","l")
+   legende.AddEntry(QCD,"QCD multijet","f")
+   legende.AddEntry(bbtt40,"h#rightarrowaa#rightarrowbb#tau#tau","l")
    legende.AddEntry(errorBand,"Uncertainty","f")
    legende.Draw()
 
