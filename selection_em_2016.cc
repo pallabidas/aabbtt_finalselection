@@ -52,8 +52,19 @@ int main(int argc, char** argv){
     float xs, weight, luminosity = 35900.0;
     
     if (sample == "data_obs"){weight = 1.0;}
-    else if(sample == "gghbbtt40"){xs = 0.1*48.58*0.1322; weight = luminosity*xs/N;}
-    else if(sample == "VBFbbtt40"){xs = 0.1*3.782*0.1908; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt15"){xs = 0.01*48.58; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt20"){xs = 0.01*48.58; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt25"){xs = 0.01*48.58; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt30"){xs = 0.01*48.58; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt35"){xs = 0.01*48.58; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt40"){xs = 0.01*48.58; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt45"){xs = 0.01*48.58; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt50"){xs = 0.01*48.58; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt55"){xs = 0.01*48.58; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt60"){xs = 0.01*48.58; weight = luminosity*xs/N;}
+    else if(sample == "VBFbbtt20"){xs = 0.01*3.782; weight = luminosity*xs/N;}
+    else if(sample == "VBFbbtt40"){xs = 0.01*3.782; weight = luminosity*xs/N;}
+    else if(sample == "VBFbbtt60"){xs = 0.01*3.782; weight = luminosity*xs/N;}
     else if(sample == "embedded"){weight = 1.0;}
     else if(sample == "DY"){weight = 1.0;}
     else if(sample == "DY1"){weight = 1.0;}
@@ -160,22 +171,53 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("gen_match_2",&gen_match_2);
     tree->SetBranchAddress("met", &met);
     tree->SetBranchAddress("metphi", &metphi);
+    tree->SetBranchAddress("Flag_goodVertices", &Flag_goodVertices);
+    tree->SetBranchAddress("Flag_globalSuperTightHalo2016Filter", &Flag_globalSuperTightHalo2016Filter);
+    tree->SetBranchAddress("Flag_HBHENoiseFilter", &Flag_HBHENoiseFilter);
+    tree->SetBranchAddress("Flag_HBHENoiseIsoFilter", &Flag_HBHENoiseIsoFilter);
+    tree->SetBranchAddress("Flag_EcalDeadCellTriggerPrimitiveFilter", &Flag_EcalDeadCellTriggerPrimitiveFilter);
+    tree->SetBranchAddress("Flag_BadPFMuonFilter", &Flag_BadPFMuonFilter);
+    tree->SetBranchAddress("Flag_eeBadScFilter", &Flag_eeBadScFilter);
+    tree->SetBranchAddress("Flag_ecalBadCalibReducedMINIAODFilter", &Flag_ecalBadCalibReducedMINIAODFilter);
     
-    TH1F * hist_m_emb_OS = new TH1F("", "", 45, 0., 450.);
-    TH1F * hist_m_emb_SS = new TH1F("", "", 45, 0., 450.);
-    TH1F * hist_mt_emet_OS = new TH1F("", "", 16, 0., 160);
-    TH1F * hist_mt_emet_SS = new TH1F("", "", 16, 0., 160);
-    TH1F * hist_mt_mumet_OS = new TH1F("", "", 16, 0., 160);
-    TH1F * hist_mt_mumet_SS = new TH1F("", "", 16, 0., 160);
-    TH1F * hist_dzeta_OS = new TH1F("", "", 31, -190, 120);
-    TH1F * hist_dzeta_SS = new TH1F("", "", 31, -190, 120);
+    TH1F * hist_m_em_0b_OS = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_em_0b_SS = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_e_pt_0b_OS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_e_pt_0b_SS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_0b_OS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_0b_SS = new TH1F("", "", 30, 0., 150.);
+    
+    TH1F * hist_m_em_1b_OS = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_em_1b_SS = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_e_pt_1b_OS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_e_pt_1b_SS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_1b_OS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_1b_SS = new TH1F("", "", 30, 0., 150.);
+    
+    TH1F * hist_m_em_2b_OS = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_em_2b_SS = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_e_pt_2b_OS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_e_pt_2b_SS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_2b_OS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_2b_SS = new TH1F("", "", 30, 0., 150.);
+    
+    TH1F * hist_m_em_OS = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_em_SS = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_emb_OS = new TH1F("", "", 40, 50., 450.);
+    TH1F * hist_m_emb_SS = new TH1F("", "", 40, 50., 450.);
+    TH1F * hist_m_embb_OS = new TH1F("", "", 50, 100., 600.);
+    TH1F * hist_m_embb_SS = new TH1F("", "", 50, 100., 600.);
+    TH1F * hist_e_pt_OS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_e_pt_SS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_OS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_SS = new TH1F("", "", 30, 0., 150.);
     
     TH1F * hist_m_em_OS_1 = new TH1F("", "", 8, 0., 64.);
     TH1F * hist_m_em_SS_1 = new TH1F("", "", 8, 0., 64.);
     TH1F * hist_m_em_OS_2 = new TH1F("", "", 10, 0., 80.);
     TH1F * hist_m_em_SS_2 = new TH1F("", "", 10, 0., 80.);
-    TH1F * hist_m_em_OS_3 = new TH1F("", "", 10, 0., 80.);
-    TH1F * hist_m_em_SS_3 = new TH1F("", "", 10, 0., 80.);
+    TH1F * hist_m_em_OS_3 = new TH1F("", "", 12, 0., 96.);
+    TH1F * hist_m_em_SS_3 = new TH1F("", "", 12, 0., 96.);
     TH1F * hist_m_em_OS_4 = new TH1F("", "", 10, 0., 200.);
     TH1F * hist_m_em_SS_4 = new TH1F("", "", 10, 0., 200.);
     
@@ -203,6 +245,15 @@ int main(int argc, char** argv){
     for(int i = 0; i < n; i++){
         if(i % 10000 == 0) printf("event %d of %d...\n", i, n);
         tree->GetEntry(i);
+        
+        //MET filters
+        if (Flag_goodVertices) continue;
+        if (Flag_globalSuperTightHalo2016Filter) continue;
+        if (Flag_HBHENoiseFilter) continue;
+        if (Flag_HBHENoiseIsoFilter) continue;
+        if (Flag_EcalDeadCellTriggerPrimitiveFilter) continue;
+        if (Flag_BadPFMuonFilter) continue;
+        if ((sample=="data_obs" or sample=="embedded") && Flag_eeBadScFilter) continue;
         
         //emu selection
         bool isMu8E23trigger = passMu8E23 && matchMu8E23_1 && filterMu8E23_1 && matchMu8E23_2 && pt_1>24 && pt_2>10;
@@ -251,7 +302,7 @@ int main(int argc, char** argv){
             
             if (gen_match_1==6 or gen_match_2==6) continue;
             
-            if (sample!="gghbbtt40" && sample!="VBFbbtt40"){
+            if (sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="VBFbbtt20" && sample!="VBFbbtt40" && sample!="VBFbbtt60"){
                 //reject MC with tau_e+tau_mu as duplicated in embedded sample
                 if ((gen_match_1==3 && gen_match_2==4) or (gen_match_1==4 && gen_match_2==3)) continue;
             }
@@ -284,7 +335,7 @@ int main(int argc, char** argv){
             }
             
             //re-weigh top pT spectrum for ttbar samples
-            if (sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic"){
+            if (sample=="TT"){
                 float pttop1=pt_top1;
                 if (pttop1>472) pttop1=472;
                 float pttop2=pt_top2;
@@ -368,6 +419,24 @@ int main(int argc, char** argv){
             nbtag20++;
         }
         
+        //btag weights for MC only
+        float weight_btag_0b = 1.0;
+        float weight_btag_1b = 1.0;
+        float weight_btag_2b = 1.0;
+        float weight_btag_atleast1b = 1.0;
+        if (sample!="data_obs" && sample!="embedded"){
+            //0 bjet (apply to events with any no. of b jet)
+            weight_btag_0b = bTagEventWeight(nbtag20,bMpt_1,bMflavor_1,bMpt_2,bMflavor_2,1,0,0);
+            if (nbtag20>2) weight_btag_0b = 0;
+            //1 bjet (apply to 1b events only)
+            weight_btag_1b = GetSF(1, bMpt_1, bMflavor_1, 0);
+            //2 bjets (apply to 2b events only)
+            weight_btag_2b = GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
+            //at least 1 bjet (apply to 1b and 2b events)
+            if (nbtag20==1) weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0);
+            if (nbtag20==2) weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0)+GetSF(1, bMpt_2, bMflavor_2, 0)-GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
+        }
+        
         //defining variables for some categories
         TLorentzVector mymet;
         mymet.SetPtEtaPhiM(met,0,metphi,0);
@@ -389,44 +458,58 @@ int main(int argc, char** argv){
         
         //OS region
         if (q_1*q_2<0){
-            //plotting distributions of selection variables
+            //0bjet data/embedded
+            if ((sample=="data_obs" or sample=="embedded") && nbtag20==0){
+                hist_m_em_0b_OS->Fill(m_em,weight_corr*weight_btag_0b);
+                hist_e_pt_0b_OS->Fill(pt_1,weight_corr*weight_btag_0b);
+                hist_m_pt_0b_OS->Fill(pt_2,weight_corr*weight_btag_0b);
+            }
+            //0bjet MC
+            if (sample!="data_obs" && sample!="embedded"){
+                hist_m_em_0b_OS->Fill(m_em,weight_corr*weight_btag_0b);
+                hist_e_pt_0b_OS->Fill(pt_1,weight_corr*weight_btag_0b);
+                hist_m_pt_0b_OS->Fill(pt_2,weight_corr*weight_btag_0b);
+            }
+            //1bjet
+            if(nbtag20==1 && fabs(beta_deepcsv_1)<2.4){
+                hist_m_em_1b_OS->Fill(m_em,weight_corr*weight_btag_1b);
+                hist_e_pt_1b_OS->Fill(pt_1,weight_corr*weight_btag_1b);
+                hist_m_pt_1b_OS->Fill(pt_2,weight_corr*weight_btag_1b);
+            }
+            
+            //2bjet
+            if(nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4){
+                hist_m_em_2b_OS->Fill(m_em,weight_corr*weight_btag_2b);
+                hist_e_pt_2b_OS->Fill(pt_1,weight_corr*weight_btag_2b);
+                hist_m_pt_2b_OS->Fill(pt_2,weight_corr*weight_btag_2b);
+            }
+            
             //baseline selection
             if (((nbtag20==1 && fabs(beta_deepcsv_1)<2.4) or (nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4)) && pt_1>13 && pt_2>13 && iso_1<0.1){
-                //btag weights for MC only
-                float weight_btag = 1.0;
-                if (sample!="data_obs" && sample!="embedded"){
-                    //btag weights for MC for at least 1 bjet
-                    if (nbtag20==1) weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0);
-                    if (nbtag20==2) weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0)+GetSF(1, bMpt_2, bMflavor_2, 0)-GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
-                }
-                //signal xs weights for variable distributions (10 times sigma_SM)
-                float weight_signal = 1.0;
-                if (sample=="gghbbtt40" or sample=="VBFbbtt40"){
-                    weight_signal = 50./0.1;
-                }
-
-                hist_m_emb_OS->Fill(m_emb,weight_corr*weight_btag*weight_signal);
-                hist_mt_emet_OS->Fill(mt_emet,weight_corr*weight_btag*weight_signal);
-                hist_mt_mumet_OS->Fill(mt_mumet,weight_corr*weight_btag*weight_signal);
-                hist_dzeta_OS->Fill(dzeta,weight_corr*weight_btag*weight_signal);
+                
+                hist_m_em_OS->Fill(m_em,weight_corr*weight_btag_atleast1b);
+                hist_m_emb_OS->Fill(m_emb,weight_corr*weight_btag_atleast1b);
+                hist_e_pt_OS->Fill(pt_1,weight_corr*weight_btag_atleast1b);
+                hist_m_pt_OS->Fill(pt_2,weight_corr*weight_btag_atleast1b);
+                if (nbtag20==2) hist_m_embb_OS->Fill(m_embb,weight_corr*weight_btag_atleast1b);
                 
                 //the 4 categories
                 if (mt_emet<40 && mt_mumet<40 && dzeta>-30){
                     //category 1
                     if (m_emb<65){
-                        hist_m_em_OS_1->Fill(m_em,weight_corr*weight_btag);
+                        hist_m_em_OS_1->Fill(m_em,weight_corr*weight_btag_atleast1b);
                     }
                     //category 2
                     if (m_emb>65 && m_emb<80){
-                        hist_m_em_OS_2->Fill(m_em,weight_corr*weight_btag);
+                        hist_m_em_OS_2->Fill(m_em,weight_corr*weight_btag_atleast1b);
                     }
                     //category 3
                     if (m_emb>80 && m_emb<95){
-                        hist_m_em_OS_3->Fill(m_em,weight_corr*weight_btag);
+                        hist_m_em_OS_3->Fill(m_em,weight_corr*weight_btag_atleast1b);
                     }
                     //category 4
                     if (m_emb>95){
-                        hist_m_em_OS_4->Fill(m_em,weight_corr*weight_btag);
+                        hist_m_em_OS_4->Fill(m_em,weight_corr*weight_btag_atleast1b);
                     }
                 }
             }
@@ -450,43 +533,58 @@ int main(int argc, char** argv){
             
             weight_corr *= ssweight;
             
-            //plotting distributions of selection variables
+            //0bjet data/embedded
+            if ((sample=="data_obs" or sample=="embedded") && nbtag20==0){
+                hist_m_em_0b_SS->Fill(m_em,weight_corr*weight_btag_0b);
+                hist_e_pt_0b_SS->Fill(pt_1,weight_corr*weight_btag_0b);
+                hist_m_pt_0b_SS->Fill(pt_2,weight_corr*weight_btag_0b);
+            }
+            //0bjet MC
+            if (sample!="data_obs" && sample!="embedded"){
+                hist_m_em_0b_SS->Fill(m_em,weight_corr*weight_btag_0b);
+                hist_e_pt_0b_SS->Fill(pt_1,weight_corr*weight_btag_0b);
+                hist_m_pt_0b_SS->Fill(pt_2,weight_corr*weight_btag_0b);
+            }
+            
+            //1bjet
+            if(nbtag20==1 && fabs(beta_deepcsv_1)<2.4){
+                hist_m_em_1b_SS->Fill(m_em,weight_corr*weight_btag_1b);
+                hist_e_pt_1b_SS->Fill(pt_1,weight_corr*weight_btag_1b);
+                hist_m_pt_1b_SS->Fill(pt_2,weight_corr*weight_btag_1b);
+            }
+            
+            //2bjet
+            if(nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4){
+                hist_m_em_2b_SS->Fill(m_em,weight_corr*weight_btag_2b);
+                hist_e_pt_2b_SS->Fill(pt_1,weight_corr*weight_btag_2b);
+                hist_m_pt_2b_SS->Fill(pt_2,weight_corr*weight_btag_2b);
+            }
             //baseline selection
             if (((nbtag20==1 && fabs(beta_deepcsv_1)<2.4) or (nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4)) && pt_1>13 && pt_2>13 && iso_1<0.1){
-                //btag weights for MC only
-                float weight_btag = 1.0;
-                if (sample!="data_obs" && sample!="embedded"){
-                    //btag weights for MC for at least 1 bjet
-                    if (nbtag20==1) weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0);
-                    if (nbtag20==2) weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0)+GetSF(1, bMpt_2, bMflavor_2, 0)-GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
-                }
-                //signal xs weights for variable distributions (10 times sigma_SM)
-                float weight_signal = 1.0;
-                if (sample=="gghbbtt40" or sample=="VBFbbtt40"){
-                    weight_signal = 50./0.1;
-                }
-                hist_m_emb_SS->Fill(m_emb,weight_corr*weight_btag*weight_signal);
-                hist_mt_emet_SS->Fill(mt_emet,weight_corr*weight_btag*weight_signal);
-                hist_mt_mumet_SS->Fill(mt_mumet,weight_corr*weight_btag*weight_signal);
-                hist_dzeta_SS->Fill(dzeta,weight_corr*weight_btag*weight_signal);
+                
+                hist_m_em_SS->Fill(m_em,weight_corr*weight_btag_atleast1b);
+                hist_m_emb_SS->Fill(m_emb,weight_corr*weight_btag_atleast1b);
+                hist_e_pt_SS->Fill(pt_1,weight_corr*weight_btag_atleast1b);
+                hist_m_pt_SS->Fill(pt_2,weight_corr*weight_btag_atleast1b);
+                if (nbtag20==2) hist_m_embb_SS->Fill(m_embb,weight_corr*weight_btag_atleast1b);
                 
                 //the 4 categories
                 if (mt_emet<40 && mt_mumet<40 && dzeta>-30){
                     //category 1
                     if (m_emb<65){
-                        hist_m_em_SS_1->Fill(m_em,weight_corr*weight_btag);
+                        hist_m_em_SS_1->Fill(m_em,weight_corr*weight_btag_atleast1b);
                     }
                     //category 2
                     if (m_emb>65 && m_emb<80){
-                        hist_m_em_SS_2->Fill(m_em,weight_corr*weight_btag);
+                        hist_m_em_SS_2->Fill(m_em,weight_corr*weight_btag_atleast1b);
                     }
                     //category 3
                     if (m_emb>80 && m_emb<95){
-                        hist_m_em_SS_3->Fill(m_em,weight_corr*weight_btag);
+                        hist_m_em_SS_3->Fill(m_em,weight_corr*weight_btag_atleast1b);
                     }
                     //category 4
                     if (m_emb>95){
-                        hist_m_em_SS_4->Fill(m_em,weight_corr*weight_btag);
+                        hist_m_em_SS_4->Fill(m_em,weight_corr*weight_btag_atleast1b);
                     }
                 }
             }
@@ -494,65 +592,135 @@ int main(int argc, char** argv){
     }
     
     TFile * fout = TFile::Open(output.c_str(), "RECREATE");
-    TDirectory * td1 = fout->mkdir("m_emb");
-    TDirectory * td2 = fout->mkdir("mt_emet");
-    TDirectory * td3 = fout->mkdir("mt_mumet");
-    TDirectory * td4 = fout->mkdir("dzeta");
-    TDirectory * td5 = fout->mkdir("m_em_1");
-    TDirectory * td6 = fout->mkdir("m_em_2");
-    TDirectory * td7 = fout->mkdir("m_em_3");
-    TDirectory * td8 = fout->mkdir("m_em_4");
+    TDirectory * td1 = fout->mkdir("m_em_1");
+    TDirectory * td2 = fout->mkdir("m_em_2");
+    TDirectory * td3 = fout->mkdir("m_em_3");
+    TDirectory * td4 = fout->mkdir("m_em_4");
+    TDirectory * td5 = fout->mkdir("m_em");
+    TDirectory * td6 = fout->mkdir("m_emb");
+    TDirectory * td7 = fout->mkdir("m_embb");
+    TDirectory * td8 = fout->mkdir("pt_e");
+    TDirectory * td9 = fout->mkdir("pt_m");
     
-    TString OS="_OS";
+    TDirectory * td10 = fout->mkdir("m_em_0b");
+    TDirectory * td11 = fout->mkdir("pt_e_0b");
+    TDirectory * td12 = fout->mkdir("pt_m_0b");
+    TDirectory * td13 = fout->mkdir("m_em_1b");
+    TDirectory * td14 = fout->mkdir("pt_e_1b");
+    TDirectory * td15 = fout->mkdir("pt_m_1b");
+    TDirectory * td16 = fout->mkdir("m_em_2b");
+    TDirectory * td17 = fout->mkdir("pt_e_2b");
+    TDirectory * td18 = fout->mkdir("pt_m_2b");
+    
     TString SS="_SS";
     
     td1->cd();
-    hist_m_emb_OS->SetName(name.c_str()+OS);
-    hist_m_emb_OS->Write();
-    hist_m_emb_SS->SetName(name.c_str()+SS);
-    hist_m_emb_SS->Write();
-    
-    td2->cd();
-    hist_mt_emet_OS->SetName(name.c_str()+OS);
-    hist_mt_emet_OS->Write();
-    hist_mt_emet_SS->SetName(name.c_str()+SS);
-    hist_mt_emet_SS->Write();
-    
-    td3->cd();
-    hist_mt_mumet_OS->SetName(name.c_str()+OS);
-    hist_mt_mumet_OS->Write();
-    hist_mt_mumet_SS->SetName(name.c_str()+SS);
-    hist_mt_mumet_SS->Write();
-    
-    td4->cd();
-    hist_dzeta_OS->SetName(name.c_str()+OS);
-    hist_dzeta_OS->Write();
-    hist_dzeta_SS->SetName(name.c_str()+SS);
-    hist_dzeta_SS->Write();
-    
-    td5->cd();
-    hist_m_em_OS_1->SetName(name.c_str()+OS);
+    hist_m_em_OS_1->SetName(name.c_str());
     hist_m_em_OS_1->Write();
     hist_m_em_SS_1->SetName(name.c_str()+SS);
     hist_m_em_SS_1->Write();
     
-    td6->cd();
-    hist_m_em_OS_2->SetName(name.c_str()+OS);
+    td2->cd();
+    hist_m_em_OS_2->SetName(name.c_str());
     hist_m_em_OS_2->Write();
     hist_m_em_SS_2->SetName(name.c_str()+SS);
     hist_m_em_SS_2->Write();
     
-    td7->cd();
-    hist_m_em_OS_3->SetName(name.c_str()+OS);
+    td3->cd();
+    hist_m_em_OS_3->SetName(name.c_str());
     hist_m_em_OS_3->Write();
     hist_m_em_SS_3->SetName(name.c_str()+SS);
     hist_m_em_SS_3->Write();
     
-    td8->cd();
-    hist_m_em_OS_4->SetName(name.c_str()+OS);
+    td4->cd();
+    hist_m_em_OS_4->SetName(name.c_str());
     hist_m_em_OS_4->Write();
     hist_m_em_SS_4->SetName(name.c_str()+SS);
     hist_m_em_SS_4->Write();
+    
+    td5->cd();
+    hist_m_em_OS->SetName(name.c_str());
+    hist_m_em_OS->Write();
+    hist_m_em_SS->SetName(name.c_str()+SS);
+    hist_m_em_SS->Write();
+    
+    td6->cd();
+    hist_m_emb_OS->SetName(name.c_str());
+    hist_m_emb_OS->Write();
+    hist_m_emb_SS->SetName(name.c_str()+SS);
+    hist_m_emb_SS->Write();
+    
+    td7->cd();
+    hist_m_embb_OS->SetName(name.c_str());
+    hist_m_embb_OS->Write();
+    hist_m_embb_SS->SetName(name.c_str()+SS);
+    hist_m_embb_SS->Write();
+    
+    td8->cd();
+    hist_e_pt_OS->SetName(name.c_str());
+    hist_e_pt_OS->Write();
+    hist_e_pt_SS->SetName(name.c_str()+SS);
+    hist_e_pt_SS->Write();
+    
+    td9->cd();
+    hist_m_pt_OS->SetName(name.c_str());
+    hist_m_pt_OS->Write();
+    hist_m_pt_SS->SetName(name.c_str()+SS);
+    hist_m_pt_SS->Write();
+    
+    td10->cd();
+    hist_m_em_0b_OS->SetName(name.c_str());
+    hist_m_em_0b_OS->Write();
+    hist_m_em_0b_SS->SetName(name.c_str()+SS);
+    hist_m_em_0b_SS->Write();
+    
+    td11->cd();
+    hist_e_pt_0b_OS->SetName(name.c_str());
+    hist_e_pt_0b_OS->Write();
+    hist_e_pt_0b_SS->SetName(name.c_str()+SS);
+    hist_e_pt_0b_SS->Write();
+    
+    td12->cd();
+    hist_m_pt_0b_OS->SetName(name.c_str());
+    hist_m_pt_0b_OS->Write();
+    hist_m_pt_0b_SS->SetName(name.c_str()+SS);
+    hist_m_pt_0b_SS->Write();
+    
+    td13->cd();
+    hist_m_em_1b_OS->SetName(name.c_str());
+    hist_m_em_1b_OS->Write();
+    hist_m_em_1b_SS->SetName(name.c_str()+SS);
+    hist_m_em_1b_SS->Write();
+    
+    td14->cd();
+    hist_e_pt_1b_OS->SetName(name.c_str());
+    hist_e_pt_1b_OS->Write();
+    hist_e_pt_1b_SS->SetName(name.c_str()+SS);
+    hist_e_pt_1b_SS->Write();
+    
+    td15->cd();
+    hist_m_pt_1b_OS->SetName(name.c_str());
+    hist_m_pt_1b_OS->Write();
+    hist_m_pt_1b_SS->SetName(name.c_str()+SS);
+    hist_m_pt_1b_SS->Write();
+    
+    td16->cd();
+    hist_m_em_2b_OS->SetName(name.c_str());
+    hist_m_em_2b_OS->Write();
+    hist_m_em_2b_SS->SetName(name.c_str()+SS);
+    hist_m_em_2b_SS->Write();
+    
+    td17->cd();
+    hist_e_pt_2b_OS->SetName(name.c_str());
+    hist_e_pt_2b_OS->Write();
+    hist_e_pt_2b_SS->SetName(name.c_str()+SS);
+    hist_e_pt_2b_SS->Write();
+    
+    td18->cd();
+    hist_m_pt_2b_OS->SetName(name.c_str());
+    hist_m_pt_2b_OS->Write();
+    hist_m_pt_2b_SS->SetName(name.c_str()+SS);
+    hist_m_pt_2b_SS->Write();
     
     
     fout->Close();

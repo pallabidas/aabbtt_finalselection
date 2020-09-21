@@ -2,9 +2,9 @@ import ROOT
 
 file=ROOT.TFile("final_em_2016.root","update")
 
-dir=["m_emb","mt_emet","mt_mumet","dzeta","m_em_1","m_em_2","m_em_3","m_em_4"]
+dir=["m_em_1","m_em_2","m_em_3","m_em_4","m_em","m_emb","m_embb","pt_e","pt_m","m_em_0b","pt_e_0b","pt_m_0b","m_em_1b","pt_e_1b","pt_m_1b","m_em_2b","pt_e_2b","pt_m_2b"]
 
-for i in range (0,8):
+for i in range (0,18):
     Data_SS=file.Get(dir[i]).Get("data_obs_SS")
     HTT_SS=file.Get(dir[i]).Get("HTT_SS")
     HWW_SS=file.Get(dir[i]).Get("HWW_SS")

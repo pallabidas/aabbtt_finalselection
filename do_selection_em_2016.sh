@@ -38,8 +38,22 @@
 ./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/ZZ4L.root outputs/em_2016/ZZ4L.root ZZ4L VV
 ./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/ttHnonbb.root outputs/em_2016/ttHnonbb.root ttHnonbb ttHnonbb
 ./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/data_obs.root outputs/em_2016/data_obs.root data_obs data_obs
-./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/gghbbtt40.root outputs/em_2016/gghbbtt40.root gghbbtt40 bbtt40
-./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/VBFbbtt40.root outputs/em_2016/VBFbbtt40.root VBFbbtt40 bbtt40
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/gghbbtt15.root outputs/em_2016/gghbbtt15.root gghbbtt15 gghbbtt15
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/gghbbtt20.root outputs/em_2016/gghbbtt20.root gghbbtt20 gghbbtt20
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/gghbbtt25.root outputs/em_2016/gghbbtt25.root gghbbtt25 gghbbtt25
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/gghbbtt30.root outputs/em_2016/gghbbtt30.root gghbbtt30 gghbbtt30
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/gghbbtt35.root outputs/em_2016/gghbbtt35.root gghbbtt35 gghbbtt35
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/gghbbtt40.root outputs/em_2016/gghbbtt40.root gghbbtt40 gghbbtt40
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/gghbbtt45.root outputs/em_2016/gghbbtt45.root gghbbtt45 gghbbtt45
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/gghbbtt50.root outputs/em_2016/gghbbtt50.root gghbbtt50 gghbbtt50
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/gghbbtt55.root outputs/em_2016/gghbbtt55.root gghbbtt55 gghbbtt55
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/gghbbtt60.root outputs/em_2016/gghbbtt60.root gghbbtt60 gghbbtt60
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/VBFbbtt20.root outputs/em_2016/VBFbbtt20.root VBFbbtt20 vbfbbtt20
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/VBFbbtt40.root outputs/em_2016/VBFbbtt40.root VBFbbtt40 vbfbbtt40
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/VBFbbtt60.root outputs/em_2016/VBFbbtt60.root VBFbbtt60 vbfbbtt60
+
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/gghbbtt40.root outputs/em_2016/ggh_bbtt40.root gghbbtt40 bbtt40
+./selection_em_2016.exe /nfs_scratch/htsoi/signal_haabbtt_em2016_4sep/VBFbbtt40.root outputs/em_2016/VBF_bbtt40.root VBFbbtt40 bbtt40
 
 hadd -f outputs/em_2016/final_em_2016.root outputs/em_2016/*.root
 

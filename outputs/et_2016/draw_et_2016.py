@@ -13,7 +13,7 @@ def add_channel():
     lumi.SetTextColor(    1 )
     lumi.SetTextSize(0.055)
     lumi.SetTextFont (   42 )
-    lumi.AddText("e#mu")
+    lumi.AddText("e#tau")
 #    lumi.AddText("m^{vis}_{b#tau#tau} < 65 GeV")
 #    lumi.AddText("65 < m^{vis}_{b#tau#tau} < 80 GeV")
 #    lumi.AddText("80 < m^{vis}_{b#tau#tau} < 95 GeV")
@@ -78,17 +78,17 @@ ROOT.gStyle.SetOptStat(0)
 c=ROOT.TCanvas("canvas","",0,0,900,600)
 c.cd()
 
-file=ROOT.TFile("final_em_2016.root","r")
+file=ROOT.TFile("final_et_2016.root","r")
 
 adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
 trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",0.5)
 
 #categories=["m_emb","mt_emet","mt_mumet","dzeta"]
-categories=["m_em_1","m_em_2","m_em_3","m_em_4","m_em","m_emb","m_embb","pt_e","pt_m","m_em_0b","pt_e_0b","pt_m_0b","m_em_1b","pt_e_1b","pt_m_1b","m_em_2b","pt_e_2b","pt_m_2b"]
+categories=["m_et_1","m_et_2","m_et_3","m_et_4","m_et","m_etb","m_etbb","pt_e","pt_t"]
 #xaxis=["m^{vis}_{b#tau#tau} (GeV)","m_{T}(e,#vec{p}^{miss}_{T}) (GeV)","m_{T}(#mu,#vec{p}^{miss}_{T}) (GeV)","D_{#zeta} (GeV)"]
-xaxis=["m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{b#tau#tau} (GeV)","m^{vis}_{bb#tau#tau} (GeV)","e pt (GeV)","#mu pt (GeV)","m^{vis}_{#tau#tau} (GeV)","e pt (GeV)","#mu pt (GeV)","m^{vis}_{#tau#tau} (GeV)","e pt (GeV)","#mu pt (GeV)","m^{vis}_{#tau#tau} (GeV)","e pt (GeV)","#mu pt (GeV)"]
-ncat=18
+xaxis=["m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{b#tau#tau} (GeV)","m^{vis}_{bb#tau#tau} (GeV)","e pt (GeV)","#tau pt (GeV)"]
+ncat=9
 
 for i in range (0,ncat):
    Data=file.Get(categories[i]).Get("data_obs")
@@ -101,7 +101,7 @@ for i in range (0,ncat):
    ST=file.Get(categories[i]).Get("ST")
    ttHnonbb=file.Get(categories[i]).Get("ttHnonbb")
    QCD=file.Get(categories[i]).Get("QCD")
-#   bbtt40=file.Get(categories[i]).Get("gghbbtt40")
+#   bbtt40=file.Get(categories[i]).Get("bbtt40")
 
    Data.GetXaxis().SetTitle("")
    Data.GetXaxis().SetTitleSize(0)
@@ -274,6 +274,7 @@ for i in range (0,ncat):
 
    c.Modified()
    c.SaveAs(categories[i]+".png")
+
 
 
 
