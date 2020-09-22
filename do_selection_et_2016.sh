@@ -18,11 +18,11 @@
 ./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/VBFHTT.root outputs/et_2016/VBFHTT.root VBFHTT HTT
 ./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/VBFHWW.root outputs/et_2016/VBFHWW.root VBFHWW HWW
 ./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/VV2L2Nu.root outputs/et_2016/VV2L2Nu.root VV2L2Nu VV
-./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/W.root outputs/et_2016/W.root W W
-./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/W1.root outputs/et_2016/W1.root W1 W
-./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/W2.root outputs/et_2016/W2.root W2 W
-./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/W3.root outputs/et_2016/W3.root W3 W
-./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/W4.root outputs/et_2016/W4.root W4 W
+#./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/W.root outputs/et_2016/W.root W W
+#./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/W1.root outputs/et_2016/W1.root W1 W
+#./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/W2.root outputs/et_2016/W2.root W2 W
+#./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/W3.root outputs/et_2016/W3.root W3 W
+#./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/W4.root outputs/et_2016/W4.root W4 W
 #./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/WW1L1Nu2Q.root outputs/et_2016/WW1L1Nu2Q.root WW1L1Nu2Q VV
 #./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/WZ1L1Nu2Q.root outputs/et_2016/WZ1L1Nu2Q.root WZ1L1Nu2Q VV
 #./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/WZ1L3Nu.root outputs/et_2016/WZ1L3Nu.root WZ1L3Nu VV

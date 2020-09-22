@@ -85,16 +85,16 @@ new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
 trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",0.5)
 
 #categories=["m_emb","mt_emet","mt_mumet","dzeta"]
-categories=["m_mt_1","m_mt_2","m_mt_3","m_mt_4","m_mt","m_mtb","m_mtbb","pt_m","pt_t"]
+categories=["m_mt_1","m_mt_2","m_mt_3","m_mt_4","m_mt","m_mtb","m_mtbb","pt_m","pt_t","m_mt_0b","pt_m_0b","pt_t_0b","m_mt_1b","pt_m_1b","pt_t_1b","m_mt_2b","pt_m_2b","pt_t_2b","m_mt_vbf","pt_m_vbf","pt_t_vbf","m_mt_vv","pt_m_vv","pt_t_vv"]
 #xaxis=["m^{vis}_{b#tau#tau} (GeV)","m_{T}(e,#vec{p}^{miss}_{T}) (GeV)","m_{T}(#mu,#vec{p}^{miss}_{T}) (GeV)","D_{#zeta} (GeV)"]
-xaxis=["m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{b#tau#tau} (GeV)","m^{vis}_{bb#tau#tau} (GeV)","#mu pt (GeV)","#tau pt (GeV)"]
-ncat=9
+xaxis=["m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{b#tau#tau} (GeV)","m^{vis}_{bb#tau#tau} (GeV)","#mu pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","#mu pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","#mu pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","#mu pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","#mu pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","#mu pt (GeV)","#tau pt (GeV)"]
+ncat=24
 
 for i in range (0,ncat):
    Data=file.Get(categories[i]).Get("data_obs")
    HTT=file.Get(categories[i]).Get("HTT")
    HWW=file.Get(categories[i]).Get("HWW")
-   W=file.Get(categories[i]).Get("W")
+#   W=file.Get(categories[i]).Get("W")
    TT=file.Get(categories[i]).Get("TT")
    VV=file.Get(categories[i]).Get("VV")
    Z=file.Get(categories[i]).Get("Z")
@@ -116,7 +116,7 @@ for i in range (0,ncat):
 
    HTT.SetFillColor(ROOT.TColor.GetColor("#C125F7"))
    HWW.SetFillColor(ROOT.TColor.GetColor("#3D4CFF"))
-   W.SetFillColor(ROOT.TColor.GetColor("#75D185"))
+#   W.SetFillColor(ROOT.TColor.GetColor("#75D185"))
    TT.SetFillColor(ROOT.TColor.GetColor("#9999cc"))
    VV.SetFillColor(ROOT.TColor.GetColor("#08F7F1"))
    Z.SetFillColor(ROOT.TColor.GetColor("#ffcc66"))
@@ -128,7 +128,7 @@ for i in range (0,ncat):
    Data.SetMarkerSize(1)
    HTT.SetLineColor(1)
    HWW.SetLineColor(1)
-   W.SetLineColor(1)
+#   W.SetLineColor(1)
    TT.SetLineColor(1)
    VV.SetLineColor(1)
    Z.SetLineColor(1)
@@ -143,7 +143,7 @@ for i in range (0,ncat):
    stack=ROOT.THStack("stack","stack")
    stack.Add(HTT)
    stack.Add(HWW)
-   stack.Add(W)
+#   stack.Add(W)
    stack.Add(TT)
    stack.Add(VV)
    stack.Add(Z)
@@ -153,7 +153,7 @@ for i in range (0,ncat):
 
    errorBand = HTT.Clone()
    errorBand.Add(HWW)
-   errorBand.Add(W)
+#   errorBand.Add(W)
    errorBand.Add(TT)
    errorBand.Add(VV)
    errorBand.Add(Z)
@@ -199,13 +199,13 @@ for i in range (0,ncat):
    legende.AddEntry(Data,"Observed","elp")
    legende.AddEntry(HTT,"H#rightarrow#tau#tau","f")
    legende.AddEntry(HWW,"HWW","f")
-   legende.AddEntry(W,"W+jets","f")
+#   legende.AddEntry(W,"W+jets","f")
    legende.AddEntry(TT,"t#bar{t}","f")
    legende.AddEntry(VV,"VV","f")
    legende.AddEntry(Z,"Embedded Z#rightarrow#tau#tau","f")
    legende.AddEntry(ST,"Single t","f")
    legende.AddEntry(ttHnonbb,"ttH (no H#rightarrowbb)","f")
-   legende.AddEntry(QCD,"QCD","f")
+   legende.AddEntry(QCD,"jet#rightarrow#tau_{h}","f")
 #   legende.AddEntry(bbtt40,"h#rightarrowaa#rightarrowbb#tau#tau","l")
    legende.AddEntry(errorBand,"Uncertainty","f")
    legende.Draw()

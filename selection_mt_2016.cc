@@ -31,6 +31,7 @@
 #include "RooWorkspace.h"
 #include "RooRealVar.h"
 #include "RooFunctor.h"
+#include "GetTauFR.h"
 
 using namespace std;
 
@@ -85,11 +86,11 @@ int main(int argc, char** argv){
     else if(sample == "VBFHTT"){xs = 3.782*0.0627; weight = luminosity*xs/N;}
     else if(sample == "VBFHWW"){xs = 3.782*0.2137*0.3258*0.3258; weight = luminosity*xs/N;}
     else if(sample == "VV2L2Nu"){xs = 11.95; weight = luminosity*xs/N;}
-    else if(sample == "W"){weight = 1.0;}
-    else if(sample == "W1"){weight = 1.0;}
-    else if(sample == "W2"){weight = 1.0;}
-    else if(sample == "W3"){weight = 1.0;}
-    else if(sample == "W4"){weight = 1.0;}
+//    else if(sample == "W"){weight = 1.0;}
+//    else if(sample == "W1"){weight = 1.0;}
+//    else if(sample == "W2"){weight = 1.0;}
+//    else if(sample == "W3"){weight = 1.0;}
+//    else if(sample == "W4"){weight = 1.0;}
     //    else if(sample == "WW1L1Nu2Q"){xs = 49.997; weight = luminosity*xs/N;}
     //    else if(sample == "WZ1L1Nu2Q"){xs = 10.71; weight = luminosity*xs/N;}
     //    else if(sample == "WZ1L3Nu"){xs = 3.05; weight = luminosity*xs/N;}
@@ -185,6 +186,8 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("byVLooseDeepVSmu_2", &byVLooseDeepVSmu_2);
     tree->SetBranchAddress("byMediumDeepVSjet_2", &byMediumDeepVSjet_2);
     tree->SetBranchAddress("byVVVLooseDeepVSjet_2", &byVVVLooseDeepVSjet_2);
+    tree->SetBranchAddress("byVLooseDeepVSe_2", &byVLooseDeepVSe_2);
+    tree->SetBranchAddress("byTightDeepVSmu_2", &byTightDeepVSmu_2);
     
     TH1F * hist_m_mt = new TH1F("", "", 25, 0., 250.);
     TH1F * hist_m_mt_qcd = new TH1F("", "", 25, 0., 250.);
@@ -206,6 +209,41 @@ int main(int argc, char** argv){
     TH1F * hist_m_mt_4 = new TH1F("", "", 10, 0., 200.);
     TH1F * hist_m_mt_qcd_4 = new TH1F("", "", 10, 0., 200.);
     
+    TH1F * hist_m_mt_0b = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_mt_0b_qcd = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_pt_0b = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_0b_qcd = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_t_pt_0b = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_t_pt_0b_qcd = new TH1F("", "", 30, 0., 150.);
+    
+    TH1F * hist_m_mt_1b = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_mt_1b_qcd = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_pt_1b = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_1b_qcd = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_t_pt_1b = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_t_pt_1b_qcd = new TH1F("", "", 30, 0., 150.);
+    
+    TH1F * hist_m_mt_2b = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_mt_2b_qcd = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_pt_2b = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_2b_qcd = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_t_pt_2b = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_t_pt_2b_qcd = new TH1F("", "", 30, 0., 150.);
+    
+    TH1F * hist_m_mt_vbf = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_mt_vbf_qcd = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_pt_vbf = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_vbf_qcd = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_t_pt_vbf = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_t_pt_vbf_qcd = new TH1F("", "", 30, 0., 150.);
+    
+    TH1F * hist_m_mt_vv = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_mt_vv_qcd = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_pt_vv = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_vv_qcd = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_t_pt_vv = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_t_pt_vv_qcd = new TH1F("", "", 30, 0., 150.);
+    
     //declare workspace for scale factors
     TFile fwmc("htt_scalefactors_legacy_2016.root");
     RooWorkspace *wmc = (RooWorkspace*)fwmc.Get("w");
@@ -220,6 +258,13 @@ int main(int argc, char** argv){
     TF1 *fct_tauid = (TF1*) ftauid->Get("Medium_cent");
     TFile *ftauid_emb = new TFile("TauID_SF_pt_DeepTau2017v2p1VSjet_2016Legacy_EMB.root");
     TF1 *fct_tauid_emb = (TF1*) ftauid_emb->Get("Medium_cent");
+    
+    //access graphs for the tau fake rates
+    TFile *f_taufr = new TFile("FitHistograms_tauFR_2016.root");
+    TGraphAsymmErrors *g_taufr_dm0M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm0_deepmedium_hpt_dm0_deepveryveryveryloose");
+    TGraphAsymmErrors *g_taufr_dm1M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm1_deepmedium_hpt_dm1_deepveryveryveryloose");
+    TGraphAsymmErrors *g_taufr_dm10M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm10_deepmedium_hpt_dm10_deepveryveryveryloose");
+    TGraphAsymmErrors *g_taufr_dm11M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm11_deepmedium_hpt_dm11_deepveryveryveryloose");
     
     //loop over events
     int n = tree->GetEntries(); //no. of events after skimming
@@ -242,10 +287,12 @@ int main(int argc, char** argv){
         
         if (!(pt_2>25)) continue;
         if (!trigger22 && !trigger1920) continue;
-        if (!(byTightDeepVSe_2 && byVLooseDeepVSmu_2)) continue;
         if (!(fabs(eta_1)<2.1 && fabs(eta_2)<2.3)) continue;
         if (!(iso_1<0.15)) continue;
         if (q_1*q_2>0) continue;
+        
+        //discriminators for e/mu faking tau_h (many Z->mumu so tight for mu; rare e+mu so loose for e)
+        if (!(byVLooseDeepVSe_2 && byTightDeepVSmu_2)) continue;
         
         TLorentzVector mymu;
         mymu.SetPtEtaPhiM(pt_1,eta_1,phi_1,m_1);
@@ -278,6 +325,14 @@ int main(int argc, char** argv){
         
         //scale factors for MC and corrections
         if (sample!="data_obs" && sample!="embedded"){
+            
+            //reject MC with a jet faking tau_h as duplicated in fake background estimation
+            if (gen_match_2==6) continue;
+            
+            //reject MC with 2 taus as duplicated in embedded sample except for signal/Higgs
+            if (sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="VBFbbtt20" && sample!="VBFbbtt40" && sample!="VBFbbtt60" && name!="HTT" && name!="HWW" && sample!="ttHnonbb"){
+                if (gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue;
+            }
             
             //initialize workspace with lepton kinematics
             wmc->var("t_pt")->setVal(pt_2);
@@ -406,6 +461,24 @@ int main(int argc, char** argv){
             nbtag20++;
         }
         
+        //btag weights for MC only
+        float weight_btag_0b = 1.0;
+        float weight_btag_1b = 1.0;
+        float weight_btag_2b = 1.0;
+        float weight_btag_atleast1b = 1.0;
+        if (sample!="data_obs" && sample!="embedded"){
+            //0 bjet (apply to events with any no. of b jet)
+            weight_btag_0b = bTagEventWeight(nbtag20,bMpt_1,bMflavor_1,bMpt_2,bMflavor_2,1,0,0);
+            if (nbtag20>2) weight_btag_0b = 0;
+            //1 bjet (apply to 1b events only)
+            weight_btag_1b = GetSF(1, bMpt_1, bMflavor_1, 0);
+            //2 bjets (apply to 2b events only)
+            weight_btag_2b = GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
+            //at least 1 bjet (apply to 1b and 2b events)
+            if (nbtag20==1) weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0);
+            if (nbtag20==2) weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0)+GetSF(1, bMpt_2, bMflavor_2, 0)-GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
+        }
+        
         //defining variables for some categories
         TLorentzVector mymet;
         mymet.SetPtEtaPhiM(met,0,metphi,0);
@@ -425,73 +498,159 @@ int main(int argc, char** argv){
         float m_mtb = (mymu + mytau + myb1).M();
         float m_mtbb = (mymu + mytau + myb1 + myb2).M();
         
-        //at least 1 b jet and additional tau requirement (to be failed in qcd)
-        if (((nbtag20==1 && fabs(beta_deepcsv_1)<2.4) or (nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4))){
-            //btag weights for MC only
-            float weight_btag = 1.0;
+        //jet faking tau_h (to be failed in qcd)
+        if (byMediumDeepVSjet_2){
+            //at least 1 b
+            if (((nbtag20==1 && fabs(beta_deepcsv_1)<2.4) or (nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4))){
+                
+                hist_m_mt->Fill(m_mt,weight_corr*weight_btag_atleast1b);
+                hist_m_mtb->Fill(m_mtb,weight_corr*weight_btag_atleast1b);
+                hist_m_pt->Fill(pt_1,weight_corr*weight_btag_atleast1b);
+                hist_t_pt->Fill(pt_2,weight_corr*weight_btag_atleast1b);
+                if (nbtag20==2) hist_m_mtbb->Fill(m_mtbb,weight_corr*weight_btag_atleast1b);
+                
+                //vbf at least 1 b
+                if (mjj>500){
+                    hist_m_mt_vbf->Fill(m_mt,weight_corr*weight_btag_atleast1b);
+                    hist_m_pt_vbf->Fill(pt_1,weight_corr*weight_btag_atleast1b);
+                    hist_t_pt_vbf->Fill(pt_2,weight_corr*weight_btag_atleast1b);
+                }
+                
+                //the 4 categories
+                if (mt_taumet<60){
+                    //category 1
+                    if (m_mtb<75 && mt_mumet<40){
+                        hist_m_mt_1->Fill(m_mt,weight_corr*weight_btag_atleast1b);
+                    }
+                    //category 2
+                    if (m_mtb>75 && m_mtb<95 && mt_mumet<50 && dzeta<0){
+                        hist_m_mt_2->Fill(m_mt,weight_corr*weight_btag_atleast1b);
+                    }
+                    //category 3
+                    if (m_mtb>95 && m_mtb<115 && mt_mumet<50){
+                        hist_m_mt_3->Fill(m_mt,weight_corr*weight_btag_atleast1b);
+                    }
+                    //category 4
+                    if (m_mtb>115 && mt_mumet<40){
+                        hist_m_mt_4->Fill(m_mt,weight_corr*weight_btag_atleast1b);
+                    }
+                }
+            }
+            //0 bjet data/embedded
+            if ((sample=="data_obs" or sample=="embedded") && nbtag20==0){
+                hist_m_mt_0b->Fill(m_mt,weight_corr*weight_btag_0b);
+                hist_m_pt_0b->Fill(pt_1,weight_corr*weight_btag_0b);
+                hist_t_pt_0b->Fill(pt_2,weight_corr*weight_btag_0b);
+                //diboson
+                if (m_mt>100){
+                    hist_m_mt_vv->Fill(m_mt,weight_corr*weight_btag_0b);
+                    hist_m_pt_vv->Fill(pt_1,weight_corr*weight_btag_0b);
+                    hist_t_pt_vv->Fill(pt_2,weight_corr*weight_btag_0b);
+                }
+            }
+            //0 bjet MC (keep events with any no. of bjet
             if (sample!="data_obs" && sample!="embedded"){
-                //btag weights for MC for at least 1 bjet
-                if (nbtag20==1) weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0);
-                if (nbtag20==2) weight_btag = GetSF(1, bMpt_1, bMflavor_1, 0)+GetSF(1, bMpt_2, bMflavor_2, 0)-GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
-            }
-            //additional tau requirement (to be failed in qcd)
-            if (byMediumDeepVSjet_2){
-                hist_m_mt->Fill(m_mt,weight_corr*weight_btag);
-                hist_m_mtb->Fill(m_mtb,weight_corr*weight_btag);
-                hist_m_pt->Fill(pt_1,weight_corr*weight_btag);
-                hist_t_pt->Fill(pt_2,weight_corr*weight_btag);
-                if (nbtag20==2) hist_m_mtbb->Fill(m_mtbb,weight_corr*weight_btag);
-                
-                //the 4 categories
-                if (mt_taumet<60){
-                    //category 1
-                    if (m_mtb<75 && mt_mumet<40){
-                        hist_m_mt_1->Fill(m_mt,weight_corr*weight_btag);
-                    }
-                    //category 2
-                    if (m_mtb>75 && m_mtb<95 && mt_mumet<50 && dzeta<0){
-                        hist_m_mt_2->Fill(m_mt,weight_corr*weight_btag);
-                    }
-                    //category 3
-                    if (m_mtb>95 && m_mtb<115 && mt_mumet<50){
-                        hist_m_mt_3->Fill(m_mt,weight_corr*weight_btag);
-                    }
-                    //category 4
-                    if (m_mtb>115 && mt_mumet<40){
-                        hist_m_mt_4->Fill(m_mt,weight_corr*weight_btag);
-                    }
+                hist_m_mt_0b->Fill(m_mt,weight_corr*weight_btag_0b);
+                hist_m_pt_0b->Fill(pt_1,weight_corr*weight_btag_0b);
+                hist_t_pt_0b->Fill(pt_2,weight_corr*weight_btag_0b);
+                //diboson
+                if (m_mt>100){
+                    hist_m_mt_vv->Fill(m_mt,weight_corr*weight_btag_0b);
+                    hist_m_pt_vv->Fill(pt_1,weight_corr*weight_btag_0b);
+                    hist_t_pt_vv->Fill(pt_2,weight_corr*weight_btag_0b);
                 }
             }
+            //1 bjet
+            if (nbtag20==1){
+                hist_m_mt_1b->Fill(m_mt,weight_corr*weight_btag_1b);
+                hist_m_pt_1b->Fill(pt_1,weight_corr*weight_btag_1b);
+                hist_t_pt_1b->Fill(pt_2,weight_corr*weight_btag_1b);
+            }
+            //2 bjets
+            if (nbtag20==2){
+                hist_m_mt_2b->Fill(m_mt,weight_corr*weight_btag_2b);
+                hist_m_pt_2b->Fill(pt_1,weight_corr*weight_btag_2b);
+                hist_t_pt_2b->Fill(pt_2,weight_corr*weight_btag_2b);
+            }
+        }
             
-            //for qcd background
-            if (byVVVLooseDeepVSjet_2 && !byMediumDeepVSjet_2){
-                //sf for qcd estimation
-                float weight_qcd = 0.12;
-                hist_m_mt_qcd->Fill(m_mt,weight_corr*weight_btag*weight_qcd);
-                hist_m_mtb_qcd->Fill(m_mtb,weight_corr*weight_btag*weight_qcd);
-                hist_m_pt_qcd->Fill(pt_1,weight_corr*weight_btag*weight_qcd);
-                hist_t_pt_qcd->Fill(pt_2,weight_corr*weight_btag*weight_qcd);
-                if (nbtag20==2) hist_m_mtbb_qcd->Fill(m_mtbb,weight_corr*weight_btag*weight_qcd);
+        //for qcd background
+        if (byVVVLooseDeepVSjet_2 && !byMediumDeepVSjet_2){
+            //fake rates
+            float fr = GetTauFR(mytau.Pt(),l2_decayMode,g_taufr_dm0M,g_taufr_dm1M,g_taufr_dm10M,g_taufr_dm11M,0);
+            float weight_qcd = fr/(1-fr);
+            
+            //at least 1 b
+            if (((nbtag20==1 && fabs(beta_deepcsv_1)<2.4) or (nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4))){
+                
+                hist_m_mt_qcd->Fill(m_mt,weight_corr*weight_btag_atleast1b*weight_qcd);
+                hist_m_mtb_qcd->Fill(m_mtb,weight_corr*weight_btag_atleast1b*weight_qcd);
+                hist_m_pt_qcd->Fill(pt_1,weight_corr*weight_btag_atleast1b*weight_qcd);
+                hist_t_pt_qcd->Fill(pt_2,weight_corr*weight_btag_atleast1b*weight_qcd);
+                if (nbtag20==2) hist_m_mtbb_qcd->Fill(m_mtbb,weight_corr*weight_btag_atleast1b*weight_qcd);
+                
+                //vbf at least 1 b
+                if (mjj>500){
+                    hist_m_mt_vbf_qcd->Fill(m_mt,weight_corr*weight_btag_atleast1b*weight_qcd);
+                    hist_m_pt_vbf_qcd->Fill(pt_1,weight_corr*weight_btag_atleast1b*weight_qcd);
+                    hist_t_pt_vbf_qcd->Fill(pt_2,weight_corr*weight_btag_atleast1b*weight_qcd);
+                }
                 
                 //the 4 categories
                 if (mt_taumet<60){
                     //category 1
                     if (m_mtb<75 && mt_mumet<40){
-                        hist_m_mt_qcd_1->Fill(m_mt,weight_corr*weight_btag*weight_qcd);
+                        hist_m_mt_qcd_1->Fill(m_mt,weight_corr*weight_btag_atleast1b*weight_qcd);
                     }
                     //category 2
                     if (m_mtb>75 && m_mtb<95 && mt_mumet<50 && dzeta<0){
-                        hist_m_mt_qcd_2->Fill(m_mt,weight_corr*weight_btag*weight_qcd);
+                        hist_m_mt_qcd_2->Fill(m_mt,weight_corr*weight_btag_atleast1b*weight_qcd);
                     }
                     //category 3
                     if (m_mtb>95 && m_mtb<115 && mt_mumet<50){
-                        hist_m_mt_qcd_3->Fill(m_mt,weight_corr*weight_btag*weight_qcd);
+                        hist_m_mt_qcd_3->Fill(m_mt,weight_corr*weight_btag_atleast1b*weight_qcd);
                     }
                     //category 4
                     if (m_mtb>115 && mt_mumet<40){
-                        hist_m_mt_qcd_4->Fill(m_mt,weight_corr*weight_btag*weight_qcd);
+                        hist_m_mt_qcd_4->Fill(m_mt,weight_corr*weight_btag_atleast1b*weight_qcd);
                     }
                 }
+            }
+            //0 bjet data/embedded
+            if ((sample=="data_obs" or sample=="embedded") && nbtag20==0){
+                hist_m_mt_0b_qcd->Fill(m_mt,weight_corr*weight_btag_0b*weight_qcd);
+                hist_m_pt_0b_qcd->Fill(pt_1,weight_corr*weight_btag_0b*weight_qcd);
+                hist_t_pt_0b_qcd->Fill(pt_2,weight_corr*weight_btag_0b*weight_qcd);
+                //diboson
+                if (m_mt>100){
+                    hist_m_mt_vv_qcd->Fill(m_mt,weight_corr*weight_btag_0b*weight_qcd);
+                    hist_m_pt_vv_qcd->Fill(pt_1,weight_corr*weight_btag_0b*weight_qcd);
+                    hist_t_pt_vv_qcd->Fill(pt_2,weight_corr*weight_btag_0b*weight_qcd);
+                }
+            }
+            //0 bjet MC (keep events with any no. of bjet
+            if (sample!="data_obs" && sample!="embedded"){
+                hist_m_mt_0b_qcd->Fill(m_mt,weight_corr*weight_btag_0b*weight_qcd);
+                hist_m_pt_0b_qcd->Fill(pt_1,weight_corr*weight_btag_0b*weight_qcd);
+                hist_t_pt_0b_qcd->Fill(pt_2,weight_corr*weight_btag_0b*weight_qcd);
+                //diboson
+                if (m_mt>100){
+                    hist_m_mt_vv_qcd->Fill(m_mt,weight_corr*weight_btag_0b*weight_qcd);
+                    hist_m_pt_vv_qcd->Fill(pt_1,weight_corr*weight_btag_0b*weight_qcd);
+                    hist_t_pt_vv_qcd->Fill(pt_2,weight_corr*weight_btag_0b*weight_qcd);
+                }
+            }
+            //1 bjet
+            if (nbtag20==1){
+                hist_m_mt_1b_qcd->Fill(m_mt,weight_corr*weight_btag_1b*weight_qcd);
+                hist_m_pt_1b_qcd->Fill(pt_1,weight_corr*weight_btag_1b*weight_qcd);
+                hist_t_pt_1b_qcd->Fill(pt_2,weight_corr*weight_btag_1b*weight_qcd);
+            }
+            //2 bjets
+            if (nbtag20==2){
+                hist_m_mt_2b_qcd->Fill(m_mt,weight_corr*weight_btag_2b*weight_qcd);
+                hist_m_pt_2b_qcd->Fill(pt_1,weight_corr*weight_btag_2b*weight_qcd);
+                hist_t_pt_2b_qcd->Fill(pt_2,weight_corr*weight_btag_2b*weight_qcd);
             }
         }
     }
@@ -506,6 +665,22 @@ int main(int argc, char** argv){
     TDirectory * td7 = fout->mkdir("m_mtbb");
     TDirectory * td8 = fout->mkdir("pt_m");
     TDirectory * td9 = fout->mkdir("pt_t");
+    
+    TDirectory * td10 = fout->mkdir("m_mt_0b");
+    TDirectory * td11 = fout->mkdir("pt_m_0b");
+    TDirectory * td12 = fout->mkdir("pt_t_0b");
+    TDirectory * td13 = fout->mkdir("m_mt_1b");
+    TDirectory * td14 = fout->mkdir("pt_m_1b");
+    TDirectory * td15 = fout->mkdir("pt_t_1b");
+    TDirectory * td16 = fout->mkdir("m_mt_2b");
+    TDirectory * td17 = fout->mkdir("pt_m_2b");
+    TDirectory * td18 = fout->mkdir("pt_t_2b");
+    TDirectory * td19 = fout->mkdir("m_mt_vbf");
+    TDirectory * td20 = fout->mkdir("pt_m_vbf");
+    TDirectory * td21 = fout->mkdir("pt_t_vbf");
+    TDirectory * td22 = fout->mkdir("m_mt_vv");
+    TDirectory * td23 = fout->mkdir("pt_m_vv");
+    TDirectory * td24 = fout->mkdir("pt_t_vv");
     
     TString qcd="_qcd";
     
@@ -563,7 +738,95 @@ int main(int argc, char** argv){
     hist_t_pt_qcd->SetName(name.c_str()+qcd);
     hist_t_pt_qcd->Write();
     
+    td10->cd();
+    hist_m_mt_0b->SetName(name.c_str());
+    hist_m_mt_0b->Write();
+    hist_m_mt_0b_qcd->SetName(name.c_str()+qcd);
+    hist_m_mt_0b_qcd->Write();
     
+    td11->cd();
+    hist_m_pt_0b->SetName(name.c_str());
+    hist_m_pt_0b->Write();
+    hist_m_pt_0b_qcd->SetName(name.c_str()+qcd);
+    hist_m_pt_0b_qcd->Write();
+    
+    td12->cd();
+    hist_t_pt_0b->SetName(name.c_str());
+    hist_t_pt_0b->Write();
+    hist_t_pt_0b_qcd->SetName(name.c_str()+qcd);
+    hist_t_pt_0b_qcd->Write();
+    
+    td13->cd();
+    hist_m_mt_1b->SetName(name.c_str());
+    hist_m_mt_1b->Write();
+    hist_m_mt_1b_qcd->SetName(name.c_str()+qcd);
+    hist_m_mt_1b_qcd->Write();
+    
+    td14->cd();
+    hist_m_pt_1b->SetName(name.c_str());
+    hist_m_pt_1b->Write();
+    hist_m_pt_1b_qcd->SetName(name.c_str()+qcd);
+    hist_m_pt_1b_qcd->Write();
+    
+    td15->cd();
+    hist_t_pt_1b->SetName(name.c_str());
+    hist_t_pt_1b->Write();
+    hist_t_pt_1b_qcd->SetName(name.c_str()+qcd);
+    hist_t_pt_1b_qcd->Write();
+    
+    td16->cd();
+    hist_m_mt_2b->SetName(name.c_str());
+    hist_m_mt_2b->Write();
+    hist_m_mt_2b_qcd->SetName(name.c_str()+qcd);
+    hist_m_mt_2b_qcd->Write();
+    
+    td17->cd();
+    hist_m_pt_2b->SetName(name.c_str());
+    hist_m_pt_2b->Write();
+    hist_m_pt_2b_qcd->SetName(name.c_str()+qcd);
+    hist_m_pt_2b_qcd->Write();
+    
+    td18->cd();
+    hist_t_pt_2b->SetName(name.c_str());
+    hist_t_pt_2b->Write();
+    hist_t_pt_2b_qcd->SetName(name.c_str()+qcd);
+    hist_t_pt_2b_qcd->Write();
+    
+    td19->cd();
+    hist_m_mt_vbf->SetName(name.c_str());
+    hist_m_mt_vbf->Write();
+    hist_m_mt_vbf_qcd->SetName(name.c_str()+qcd);
+    hist_m_mt_vbf_qcd->Write();
+    
+    td20->cd();
+    hist_m_pt_vbf->SetName(name.c_str());
+    hist_m_pt_vbf->Write();
+    hist_m_pt_vbf_qcd->SetName(name.c_str()+qcd);
+    hist_m_pt_vbf_qcd->Write();
+    
+    td21->cd();
+    hist_t_pt_vbf->SetName(name.c_str());
+    hist_t_pt_vbf->Write();
+    hist_t_pt_vbf_qcd->SetName(name.c_str()+qcd);
+    hist_t_pt_vbf_qcd->Write();
+    
+    td22->cd();
+    hist_m_mt_vv->SetName(name.c_str());
+    hist_m_mt_vv->Write();
+    hist_m_mt_vv_qcd->SetName(name.c_str()+qcd);
+    hist_m_mt_vv_qcd->Write();
+    
+    td23->cd();
+    hist_m_pt_vv->SetName(name.c_str());
+    hist_m_pt_vv->Write();
+    hist_m_pt_vv_qcd->SetName(name.c_str()+qcd);
+    hist_m_pt_vv_qcd->Write();
+    
+    td24->cd();
+    hist_t_pt_vv->SetName(name.c_str());
+    hist_t_pt_vv->Write();
+    hist_t_pt_vv_qcd->SetName(name.c_str()+qcd);
+    hist_t_pt_vv_qcd->Write();
     
     fout->Close();
     
