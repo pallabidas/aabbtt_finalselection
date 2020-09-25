@@ -1,9 +1,9 @@
-./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/embedded.root outputs/em_2016/embedded.root embedded Z
-#./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/DY.root outputs/em_2016/DY.root DY Z
-#./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/DY1.root outputs/em_2016/DY1.root DY1 Z
-#./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/DY2.root outputs/em_2016/DY2.root DY2 Z
-#./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/DY3.root outputs/em_2016/DY3.root DY3 Z
-#./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/DY4.root outputs/em_2016/DY4.root DY4 Z
+./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/embedded.root outputs/em_2016/embedded.root embedded ZTT
+./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/DY.root outputs/em_2016/DY.root DY Z
+./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/DY1.root outputs/em_2016/DY1.root DY1 Z
+./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/DY2.root outputs/em_2016/DY2.root DY2 Z
+./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/DY3.root outputs/em_2016/DY3.root DY3 Z
+./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/DY4.root outputs/em_2016/DY4.root DY4 Z
 ./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/GGHTT.root outputs/em_2016/GGHTT.root GGHTT HTT
 ./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/GGHWW.root outputs/em_2016/GGHWW.root GGHWW HWW
 ./selection_em_2016.exe /nfs_scratch/htsoi/haabbtt_em2016_14aug/GGZHLLTT.root outputs/em_2016/GGZHLLTT.root GGZHLLTT HTT

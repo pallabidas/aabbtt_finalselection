@@ -180,6 +180,26 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("Flag_eeBadScFilter", &Flag_eeBadScFilter);
     tree->SetBranchAddress("Flag_ecalBadCalibReducedMINIAODFilter", &Flag_ecalBadCalibReducedMINIAODFilter);
     
+    TH1F * hist_m_em_OS = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_em_SS = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_emb_OS = new TH1F("", "", 40, 50., 450.);
+    TH1F * hist_m_emb_SS = new TH1F("", "", 40, 50., 450.);
+    TH1F * hist_m_embb_OS = new TH1F("", "", 50, 100., 600.);
+    TH1F * hist_m_embb_SS = new TH1F("", "", 50, 100., 600.);
+    TH1F * hist_e_pt_OS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_e_pt_SS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_OS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_SS = new TH1F("", "", 30, 0., 150.);
+    
+    TH1F * hist_m_em_OS_1 = new TH1F("", "", 8, 0., 64.);
+    TH1F * hist_m_em_SS_1 = new TH1F("", "", 8, 0., 64.);
+    TH1F * hist_m_em_OS_2 = new TH1F("", "", 10, 0., 80.);
+    TH1F * hist_m_em_SS_2 = new TH1F("", "", 10, 0., 80.);
+    TH1F * hist_m_em_OS_3 = new TH1F("", "", 10, 0., 80.);
+    TH1F * hist_m_em_SS_3 = new TH1F("", "", 10, 0., 80.);
+    TH1F * hist_m_em_OS_4 = new TH1F("", "", 10, 0., 200.);
+    TH1F * hist_m_em_SS_4 = new TH1F("", "", 10, 0., 200.);
+    
     TH1F * hist_m_em_0b_OS = new TH1F("", "", 25, 0., 250.);
     TH1F * hist_m_em_0b_SS = new TH1F("", "", 25, 0., 250.);
     TH1F * hist_e_pt_0b_OS = new TH1F("", "", 30, 0., 150.);
@@ -201,25 +221,19 @@ int main(int argc, char** argv){
     TH1F * hist_m_pt_2b_OS = new TH1F("", "", 30, 0., 150.);
     TH1F * hist_m_pt_2b_SS = new TH1F("", "", 30, 0., 150.);
     
-    TH1F * hist_m_em_OS = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_m_em_SS = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_m_emb_OS = new TH1F("", "", 40, 50., 450.);
-    TH1F * hist_m_emb_SS = new TH1F("", "", 40, 50., 450.);
-    TH1F * hist_m_embb_OS = new TH1F("", "", 50, 100., 600.);
-    TH1F * hist_m_embb_SS = new TH1F("", "", 50, 100., 600.);
-    TH1F * hist_e_pt_OS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_e_pt_SS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_OS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_SS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_em_vbf_OS = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_em_vbf_SS = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_e_pt_vbf_OS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_e_pt_vbf_SS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_vbf_OS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_vbf_SS = new TH1F("", "", 30, 0., 150.);
     
-    TH1F * hist_m_em_OS_1 = new TH1F("", "", 8, 0., 64.);
-    TH1F * hist_m_em_SS_1 = new TH1F("", "", 8, 0., 64.);
-    TH1F * hist_m_em_OS_2 = new TH1F("", "", 10, 0., 80.);
-    TH1F * hist_m_em_SS_2 = new TH1F("", "", 10, 0., 80.);
-    TH1F * hist_m_em_OS_3 = new TH1F("", "", 12, 0., 96.);
-    TH1F * hist_m_em_SS_3 = new TH1F("", "", 12, 0., 96.);
-    TH1F * hist_m_em_OS_4 = new TH1F("", "", 10, 0., 200.);
-    TH1F * hist_m_em_SS_4 = new TH1F("", "", 10, 0., 200.);
+    TH1F * hist_m_em_vv_OS = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_m_em_vv_SS = new TH1F("", "", 25, 0., 250.);
+    TH1F * hist_e_pt_vv_OS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_e_pt_vv_SS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_vv_OS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_pt_vv_SS = new TH1F("", "", 30, 0., 150.);
     
     //declare workspace for scale factors
     TFile fwmc("htt_scalefactors_legacy_2016.root");
@@ -299,12 +313,12 @@ int main(int argc, char** argv){
         
         //scale factors for MC and corrections
         if (sample!="data_obs" && sample!="embedded"){
-            
+            //reject MC with jets faking e/mu as duplicated in qcd estimation
             if (gen_match_1==6 or gen_match_2==6) continue;
             
-            if (sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="VBFbbtt20" && sample!="VBFbbtt40" && sample!="VBFbbtt60"){
-                //reject MC with tau_e+tau_mu as duplicated in embedded sample
-                if ((gen_match_1==3 && gen_match_2==4) or (gen_match_1==4 && gen_match_2==3)) continue;
+            //reject MC with 2 taus as duplicated in embedded sample except for signal/Higgs
+            if (sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="VBFbbtt20" && sample!="VBFbbtt40" && sample!="VBFbbtt60" && name!="HTT" && name!="HWW" && name!="ttHnonbb"){
+                if (gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue;
             }
             
             //initialize workspace with lepton kinematics
@@ -463,12 +477,24 @@ int main(int argc, char** argv){
                 hist_m_em_0b_OS->Fill(m_em,weight_corr*weight_btag_0b);
                 hist_e_pt_0b_OS->Fill(pt_1,weight_corr*weight_btag_0b);
                 hist_m_pt_0b_OS->Fill(pt_2,weight_corr*weight_btag_0b);
+                //diboson
+                if (m_em>100){
+                    hist_m_em_vv_OS->Fill(m_em,weight_corr*weight_btag_0b);
+                    hist_e_pt_vv_OS->Fill(pt_1,weight_corr*weight_btag_0b);
+                    hist_m_pt_vv_OS->Fill(pt_2,weight_corr*weight_btag_0b);
+                }
             }
             //0bjet MC
             if (sample!="data_obs" && sample!="embedded"){
                 hist_m_em_0b_OS->Fill(m_em,weight_corr*weight_btag_0b);
                 hist_e_pt_0b_OS->Fill(pt_1,weight_corr*weight_btag_0b);
                 hist_m_pt_0b_OS->Fill(pt_2,weight_corr*weight_btag_0b);
+                //diboson
+                if (m_em>100){
+                    hist_m_em_vv_OS->Fill(m_em,weight_corr*weight_btag_0b);
+                    hist_e_pt_vv_OS->Fill(pt_1,weight_corr*weight_btag_0b);
+                    hist_m_pt_vv_OS->Fill(pt_2,weight_corr*weight_btag_0b);
+                }
             }
             //1bjet
             if(nbtag20==1 && fabs(beta_deepcsv_1)<2.4){
@@ -485,13 +511,20 @@ int main(int argc, char** argv){
             }
             
             //baseline selection
-            if (((nbtag20==1 && fabs(beta_deepcsv_1)<2.4) or (nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4)) && pt_1>13 && pt_2>13 && iso_1<0.1){
+            if (((nbtag20==1 && fabs(beta_deepcsv_1)<2.4) or (nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4)) && pt_1>13 && pt_2>13){
                 
                 hist_m_em_OS->Fill(m_em,weight_corr*weight_btag_atleast1b);
                 hist_m_emb_OS->Fill(m_emb,weight_corr*weight_btag_atleast1b);
                 hist_e_pt_OS->Fill(pt_1,weight_corr*weight_btag_atleast1b);
                 hist_m_pt_OS->Fill(pt_2,weight_corr*weight_btag_atleast1b);
                 if (nbtag20==2) hist_m_embb_OS->Fill(m_embb,weight_corr*weight_btag_atleast1b);
+                
+                //vbf at least 1 b
+                if (mjj>500){
+                    hist_m_em_vbf_OS->Fill(m_em,weight_corr*weight_btag_atleast1b);
+                    hist_e_pt_vbf_OS->Fill(pt_1,weight_corr*weight_btag_atleast1b);
+                    hist_m_pt_vbf_OS->Fill(pt_2,weight_corr*weight_btag_atleast1b);
+                }
                 
                 //the 4 categories
                 if (mt_emet<40 && mt_mumet<40 && dzeta>-30){
@@ -538,12 +571,24 @@ int main(int argc, char** argv){
                 hist_m_em_0b_SS->Fill(m_em,weight_corr*weight_btag_0b);
                 hist_e_pt_0b_SS->Fill(pt_1,weight_corr*weight_btag_0b);
                 hist_m_pt_0b_SS->Fill(pt_2,weight_corr*weight_btag_0b);
+                //diboson
+                if (m_em>100){
+                    hist_m_em_vv_SS->Fill(m_em,weight_corr*weight_btag_0b);
+                    hist_e_pt_vv_SS->Fill(pt_1,weight_corr*weight_btag_0b);
+                    hist_m_pt_vv_SS->Fill(pt_2,weight_corr*weight_btag_0b);
+                }
             }
             //0bjet MC
             if (sample!="data_obs" && sample!="embedded"){
                 hist_m_em_0b_SS->Fill(m_em,weight_corr*weight_btag_0b);
                 hist_e_pt_0b_SS->Fill(pt_1,weight_corr*weight_btag_0b);
                 hist_m_pt_0b_SS->Fill(pt_2,weight_corr*weight_btag_0b);
+                //diboson
+                if (m_em>100){
+                    hist_m_em_vv_SS->Fill(m_em,weight_corr*weight_btag_0b);
+                    hist_e_pt_vv_SS->Fill(pt_1,weight_corr*weight_btag_0b);
+                    hist_m_pt_vv_SS->Fill(pt_2,weight_corr*weight_btag_0b);
+                }
             }
             
             //1bjet
@@ -560,13 +605,20 @@ int main(int argc, char** argv){
                 hist_m_pt_2b_SS->Fill(pt_2,weight_corr*weight_btag_2b);
             }
             //baseline selection
-            if (((nbtag20==1 && fabs(beta_deepcsv_1)<2.4) or (nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4)) && pt_1>13 && pt_2>13 && iso_1<0.1){
+            if (((nbtag20==1 && fabs(beta_deepcsv_1)<2.4) or (nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4)) && pt_1>13 && pt_2>13){
                 
                 hist_m_em_SS->Fill(m_em,weight_corr*weight_btag_atleast1b);
                 hist_m_emb_SS->Fill(m_emb,weight_corr*weight_btag_atleast1b);
                 hist_e_pt_SS->Fill(pt_1,weight_corr*weight_btag_atleast1b);
                 hist_m_pt_SS->Fill(pt_2,weight_corr*weight_btag_atleast1b);
                 if (nbtag20==2) hist_m_embb_SS->Fill(m_embb,weight_corr*weight_btag_atleast1b);
+                
+                //vbf at least 1 b
+                if (mjj>500){
+                    hist_m_em_vbf_SS->Fill(m_em,weight_corr*weight_btag_atleast1b);
+                    hist_e_pt_vbf_SS->Fill(pt_1,weight_corr*weight_btag_atleast1b);
+                    hist_m_pt_vbf_SS->Fill(pt_2,weight_corr*weight_btag_atleast1b);
+                }
                 
                 //the 4 categories
                 if (mt_emet<40 && mt_mumet<40 && dzeta>-30){
@@ -611,6 +663,12 @@ int main(int argc, char** argv){
     TDirectory * td16 = fout->mkdir("m_em_2b");
     TDirectory * td17 = fout->mkdir("pt_e_2b");
     TDirectory * td18 = fout->mkdir("pt_m_2b");
+    TDirectory * td19 = fout->mkdir("m_em_vbf");
+    TDirectory * td20 = fout->mkdir("pt_e_vbf");
+    TDirectory * td21 = fout->mkdir("pt_m_vbf");
+    TDirectory * td22 = fout->mkdir("m_em_vv");
+    TDirectory * td23 = fout->mkdir("pt_e_vv");
+    TDirectory * td24 = fout->mkdir("pt_m_vv");
     
     TString SS="_SS";
     
@@ -722,6 +780,41 @@ int main(int argc, char** argv){
     hist_m_pt_2b_SS->SetName(name.c_str()+SS);
     hist_m_pt_2b_SS->Write();
     
+    td19->cd();
+    hist_m_em_vbf_OS->SetName(name.c_str());
+    hist_m_em_vbf_OS->Write();
+    hist_m_em_vbf_SS->SetName(name.c_str()+SS);
+    hist_m_em_vbf_SS->Write();
+    
+    td20->cd();
+    hist_e_pt_vbf_OS->SetName(name.c_str());
+    hist_e_pt_vbf_OS->Write();
+    hist_e_pt_vbf_SS->SetName(name.c_str()+SS);
+    hist_e_pt_vbf_SS->Write();
+    
+    td21->cd();
+    hist_m_pt_vbf_OS->SetName(name.c_str());
+    hist_m_pt_vbf_OS->Write();
+    hist_m_pt_vbf_SS->SetName(name.c_str()+SS);
+    hist_m_pt_vbf_SS->Write();
+    
+    td22->cd();
+    hist_m_em_vv_OS->SetName(name.c_str());
+    hist_m_em_vv_OS->Write();
+    hist_m_em_vv_SS->SetName(name.c_str()+SS);
+    hist_m_em_vv_SS->Write();
+    
+    td23->cd();
+    hist_e_pt_vv_OS->SetName(name.c_str());
+    hist_e_pt_vv_OS->Write();
+    hist_e_pt_vv_SS->SetName(name.c_str()+SS);
+    hist_e_pt_vv_SS->Write();
+    
+    td24->cd();
+    hist_m_pt_vv_OS->SetName(name.c_str());
+    hist_m_pt_vv_OS->Write();
+    hist_m_pt_vv_SS->SetName(name.c_str()+SS);
+    hist_m_pt_vv_SS->Write();
     
     fout->Close();
     

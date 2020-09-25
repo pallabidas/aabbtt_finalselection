@@ -86,11 +86,11 @@ int main(int argc, char** argv){
     else if(sample == "VBFHTT"){xs = 3.782*0.0627; weight = luminosity*xs/N;}
     else if(sample == "VBFHWW"){xs = 3.782*0.2137*0.3258*0.3258; weight = luminosity*xs/N;}
     else if(sample == "VV2L2Nu"){xs = 11.95; weight = luminosity*xs/N;}
-//    else if(sample == "W"){weight = 1.0;}
-//    else if(sample == "W1"){weight = 1.0;}
-//    else if(sample == "W2"){weight = 1.0;}
-//    else if(sample == "W3"){weight = 1.0;}
-//    else if(sample == "W4"){weight = 1.0;}
+    //    else if(sample == "W"){weight = 1.0;}
+    //    else if(sample == "W1"){weight = 1.0;}
+    //    else if(sample == "W2"){weight = 1.0;}
+    //    else if(sample == "W3"){weight = 1.0;}
+    //    else if(sample == "W4"){weight = 1.0;}
     //    else if(sample == "WW1L1Nu2Q"){xs = 49.997; weight = luminosity*xs/N;}
     //    else if(sample == "WZ1L1Nu2Q"){xs = 10.71; weight = luminosity*xs/N;}
     //    else if(sample == "WZ1L3Nu"){xs = 3.05; weight = luminosity*xs/N;}
@@ -244,6 +244,28 @@ int main(int argc, char** argv){
     TH1F * hist_t_pt_vv = new TH1F("", "", 30, 0., 150.);
     TH1F * hist_t_pt_vv_qcd = new TH1F("", "", 30, 0., 150.);
     
+    TH1F * hist_0bw_0 = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_0bw_1 = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_0bw_2 = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_1bw = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_2bw = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_al1bw = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_zpt = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_qcd = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_sigtrg_mc = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_xtrg_mc = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_mid_mc = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_top = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_pu = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_gen_mc = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_tid_mc = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_sigtrg_emb = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_xtrg_emb = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_mid_emb = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_embsel = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_gen_emb = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_tid_emb = new TH1F("", "", 40, 0., 2.);
+    
     //declare workspace for scale factors
     TFile fwmc("htt_scalefactors_legacy_2016.root");
     RooWorkspace *wmc = (RooWorkspace*)fwmc.Get("w");
@@ -330,7 +352,7 @@ int main(int argc, char** argv){
             if (gen_match_2==6) continue;
             
             //reject MC with 2 taus as duplicated in embedded sample except for signal/Higgs
-            if (sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="VBFbbtt20" && sample!="VBFbbtt40" && sample!="VBFbbtt60" && name!="HTT" && name!="HWW" && sample!="ttHnonbb"){
+            if (sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="VBFbbtt20" && sample!="VBFbbtt40" && sample!="VBFbbtt60" && name!="HTT" && sample!="ttHnonbb"){
                 if (gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue;
             }
             
@@ -344,13 +366,15 @@ int main(int argc, char** argv){
             wmc->var("m_iso")->setVal(iso_1);
             
             //trigger scale factor
-            if (mymu.Pt()>23) sf_MC *= wmc->function("m_trg_ic_ratio")->getVal();
+            if (mymu.Pt()>23) {sf_MC *= wmc->function("m_trg_ic_ratio")->getVal(); hist_sigtrg_mc->Fill(wmc->function("m_trg_ic_ratio")->getVal());}
             else{
                 sf_MC *= wmc->function("t_trg_pog_deeptau_medium_mutau_ratio")->getVal()*wmc->function("m_trg_19_ic_ratio")->getVal();
+                hist_xtrg_mc->Fill(wmc->function("t_trg_pog_deeptau_medium_mutau_ratio")->getVal()*wmc->function("m_trg_19_ic_ratio")->getVal());
             }
             
             //muon ID/iso/tracking scale factors
             sf_MC *= wmc->function("m_trk_ratio")->getVal()*wmc->function("m_idiso_ic_ratio")->getVal();
+            hist_mid_mc->Fill(wmc->function("m_trk_ratio")->getVal()*wmc->function("m_idiso_ic_ratio")->getVal());
             
             //re-weigh Z pT spectrum for DY samples
             if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
@@ -358,6 +382,7 @@ int main(int argc, char** argv){
                 wmc->var("z_gen_pt")->setVal(genpT);
                 float zptweight = wmc->function("zptmass_weight_nom")->getVal();
                 sf_MC *= zptweight;
+                hist_zpt->Fill(zptweight);
             }
             
             //re-weigh top pT spectrum for ttbar samples
@@ -368,17 +393,21 @@ int main(int argc, char** argv){
                 if (pttop2>472) pttop2=472;
                 float topfactor = sqrt(exp(0.088-0.00087*pttop1+0.00000092*pttop1*pttop1)*exp(0.088-0.00087*pttop2+0.00000092*pttop2*pttop2));
                 sf_MC *= topfactor;
+                hist_top->Fill(topfactor);
             }
             
             //re-weigh pileup distribution
             float puweight = LumiWeights_12->weight(npu);
             sf_MC *= puweight;
+            hist_pu->Fill(puweight);
             
             //generator weight
             sf_MC *= genweight;
+            hist_gen_mc->Fill(genweight);
+            
             
             //tau id sf
-            if (byMediumDeepVSjet_2 && gen_match_2==5) sf_MC *= fct_tauid->Eval(mytau.Pt());
+            if (byMediumDeepVSjet_2 && gen_match_2==5) {sf_MC *= fct_tauid->Eval(mytau.Pt()); hist_tid_mc->Fill(fct_tauid->Eval(mytau.Pt()));}
             
             //ele->tauh and muon->tauh sf
             if (gen_match_2==1 or gen_match_2==3){
@@ -396,13 +425,13 @@ int main(int argc, char** argv){
         }
         
         float sf_embed = 1.0;
-
+        
         //scale factors for embedded Z->tautau and corrections
         if (sample=="embedded"){
             
             //rejecting buggy events
             if (genweight>1.0) continue;
-
+            
             //initialize workspace with lepton kinematics
             wmc->var("t_pt")->setVal(pt_2);
             wmc->var("t_eta")->setVal(eta_2);
@@ -413,35 +442,44 @@ int main(int argc, char** argv){
             wmc->var("m_iso")->setVal(iso_1);
             
             //trigger scale factor
-            if (mymu.Pt()>23) sf_embed *= wmc->function("m_trg_ic_embed_ratio")->getVal();
+            if (mymu.Pt()>23) {sf_embed *= wmc->function("m_trg_ic_embed_ratio")->getVal(); hist_sigtrg_emb->Fill(wmc->function("m_trg_ic_embed_ratio")->getVal());}
             else{
                 sf_embed *= wmc->function("t_trg_pog_deeptau_medium_mutau_ratio")->getVal()*wmc->function("m_trg_19_ic_embed_ratio")->getVal();
+                hist_xtrg_emb->Fill(wmc->function("t_trg_pog_deeptau_medium_mutau_ratio")->getVal()*wmc->function("m_trg_19_ic_embed_ratio")->getVal());
             }
             
             //muon ID/iso/tracking scale factors
             sf_embed *= wmc->function("m_trk_ratio")->getVal()*wmc->function("m_idiso_ic_embed_ratio")->getVal();
+            hist_mid_emb->Fill(wmc->function("m_trk_ratio")->getVal()*wmc->function("m_idiso_ic_embed_ratio")->getVal());
             
             //efficiency of selecting Z->mumu data
+            float embsel =1.0;
             wmc->var("gt1_pt")->setVal(genpt_1);
             wmc->var("gt2_pt")->setVal(pt_2);
             wmc->var("gt1_eta")->setVal(geneta_1);
             wmc->var("gt2_eta")->setVal(eta_2);
             sf_embed *= wmc->function("m_sel_trg_ic_ratio")->getVal();
+            embsel*=wmc->function("m_sel_trg_ic_ratio")->getVal();
             wmc->var("gt_pt")->setVal(genpt_1);
             wmc->var("gt_eta")->setVal(geneta_1);
             sf_embed *= wmc->function("m_sel_id_ic_ratio")->getVal();
+            embsel*=wmc->function("m_sel_id_ic_ratio")->getVal();
             wmc->var("gt_pt")->setVal(pt_2);
             wmc->var("gt_eta")->setVal(eta_2);
             sf_embed *= wmc->function("m_sel_id_ic_ratio")->getVal();
-
+            embsel*=wmc->function("m_sel_id_ic_ratio")->getVal();
+            hist_embsel->Fill(embsel);
+            
             //generator weight
             sf_embed *= genweight;
-
+            hist_gen_emb->Fill(genweight);
+            
             //tau id sf
-            if (byMediumDeepVSjet_2 && gen_match_2==5) sf_embed *= fct_tauid_emb->Eval(mytau.Pt());
-
+            if (byMediumDeepVSjet_2 && gen_match_2==5) {sf_embed *= fct_tauid_emb->Eval(mytau.Pt());
+                hist_tid_emb->Fill(fct_tauid_emb->Eval(mytau.Pt()));}
+            
         }
-
+        
         float weight_corr = weight * sf_MC * sf_embed;
         
         //counting reconstructed btagged jets
@@ -477,6 +515,12 @@ int main(int argc, char** argv){
             //at least 1 bjet (apply to 1b and 2b events)
             if (nbtag20==1) weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0);
             if (nbtag20==2) weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0)+GetSF(1, bMpt_2, bMflavor_2, 0)-GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
+            
+            if (nbtag20==0) hist_0bw_0->Fill(weight_btag_0b);
+            if (nbtag20==1) {hist_0bw_1->Fill(weight_btag_0b); hist_1bw->Fill(weight_btag_1b);}
+            if (nbtag20==2) {hist_0bw_2->Fill(weight_btag_0b); hist_2bw->Fill(weight_btag_2b);}
+            if (nbtag20==1 or nbtag20==2) hist_al1bw->Fill(weight_btag_atleast1b);
+            
         }
         
         //defining variables for some categories
@@ -573,12 +617,14 @@ int main(int argc, char** argv){
                 hist_t_pt_2b->Fill(pt_2,weight_corr*weight_btag_2b);
             }
         }
-            
+        
         //for qcd background
         if (byVVVLooseDeepVSjet_2 && !byMediumDeepVSjet_2){
             //fake rates
             float fr = GetTauFR(mytau.Pt(),l2_decayMode,g_taufr_dm0M,g_taufr_dm1M,g_taufr_dm10M,g_taufr_dm11M,0);
             float weight_qcd = fr/(1-fr);
+            
+            hist_qcd->Fill(weight_qcd);
             
             //at least 1 b
             if (((nbtag20==1 && fabs(beta_deepcsv_1)<2.4) or (nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4))){
@@ -681,6 +727,8 @@ int main(int argc, char** argv){
     TDirectory * td22 = fout->mkdir("m_mt_vv");
     TDirectory * td23 = fout->mkdir("pt_m_vv");
     TDirectory * td24 = fout->mkdir("pt_t_vv");
+
+TDirectory * td25 = fout->mkdir("weights");
     
     TString qcd="_qcd";
     
@@ -827,6 +875,52 @@ int main(int argc, char** argv){
     hist_t_pt_vv->Write();
     hist_t_pt_vv_qcd->SetName(name.c_str()+qcd);
     hist_t_pt_vv_qcd->Write();
+    
+    td25->cd();
+    hist_0bw_0->SetName("0bw_0b");
+    hist_0bw_0->Write();
+    hist_0bw_1->SetName("0bw_1b");
+    hist_0bw_1->Write();
+    hist_0bw_2->SetName("0bw_2b");
+    hist_0bw_2->Write();
+    hist_1bw->SetName("1bw");
+    hist_1bw->Write();
+    hist_2bw->SetName("2bw");
+    hist_2bw->Write();
+    hist_al1bw->SetName("al1bw");
+    hist_al1bw->Write();
+    hist_zpt->SetName("zptweight");
+    hist_zpt->Write();
+    hist_qcd->SetName("qcdweight");
+    hist_qcd->Write();
+    hist_sigtrg_mc->SetName("sigtrg_mc");
+    hist_sigtrg_mc->Write();
+    hist_xtrg_mc->SetName("xtrg_mc");
+    hist_xtrg_mc->Write();
+    hist_mid_mc->SetName("mid_mc");
+    hist_mid_mc->Write();
+    hist_top->SetName("top");
+    hist_top->Write();
+    hist_pu->SetName("pu");
+    hist_pu->Write();
+    hist_gen_mc->SetName("gen_mc");
+    hist_gen_mc->Write();
+    hist_tid_mc->SetName("tid_mc");
+    hist_tid_mc->Write();
+    hist_sigtrg_emb->SetName("sigtrg_emb");
+    hist_sigtrg_emb->Write();
+    hist_xtrg_emb->SetName("xtrg_emb");
+    hist_xtrg_emb->Write();
+    hist_mid_emb->SetName("mid_emb");
+    hist_mid_emb->Write();
+    hist_embsel->SetName("embsel");
+    hist_embsel->Write();
+    hist_gen_emb->SetName("gen_emb");
+    hist_gen_emb->Write();
+    hist_tid_emb->SetName("tid_emb");
+    hist_tid_emb->Write();
+    
+    
     
     fout->Close();
     

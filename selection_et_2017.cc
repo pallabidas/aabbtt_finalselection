@@ -27,7 +27,7 @@
 #include "ScaleFactor.h"
 #include "ZmmSF.h"
 #include "LumiReweightingStandAlone.h"
-#include "btagSF_2016.h"
+#include "btagSF_2017.h"
 #include "RooWorkspace.h"
 #include "RooRealVar.h"
 #include "RooFunctor.h"
@@ -50,7 +50,7 @@ int main(int argc, char** argv){
     float N = nevents->GetBinContent(2); //no. of generated events (before skimming) with genweight
     
     //sample weights
-    float xs, weight, luminosity = 35900.0;
+    float xs, weight, luminosity = 41400.0;
     
     if (sample == "data_obs"){weight = 1.0;}
     else if(sample == "gghbbtt15"){xs = 0.01*48.58; weight = luminosity*xs/N;}
@@ -82,16 +82,20 @@ int main(int argc, char** argv){
     else if(sample == "ST_tW_top"){xs = 35.6; weight = luminosity*xs/N;}
     else if(sample == "ST_t_antitop"){xs = 26.23; weight = luminosity*xs/N;}
     else if(sample == "ST_t_top"){xs = 44.07; weight = luminosity*xs/N;}
-    else if(sample == "TT"){xs = 831.76; weight = luminosity*xs/N;}
+    else if(sample == "TTTo2L2Nu"){xs = 88.29; weight = luminosity*xs/N;}
+    else if(sample == "TTToHadronic"){xs = 377.96; weight = luminosity*xs/N;}
+    else if(sample == "TTToSemiLeptonic"){xs = 365.35; weight = luminosity*xs/N;}
     else if(sample == "VBFHTT"){xs = 3.782*0.0627; weight = luminosity*xs/N;}
     else if(sample == "VBFHWW"){xs = 3.782*0.2137*0.3258*0.3258; weight = luminosity*xs/N;}
     else if(sample == "VV2L2Nu"){xs = 11.95; weight = luminosity*xs/N;}
-    //    else if(sample == "W"){weight = 1.0;}
-    //    else if(sample == "W1"){weight = 1.0;}
-    //    else if(sample == "W2"){weight = 1.0;}
-    //    else if(sample == "W3"){weight = 1.0;}
-    //    else if(sample == "W4"){weight = 1.0;}
+    else if(sample == "W"){weight = 1.0;}
+    else if(sample == "W1"){weight = 1.0;}
+    else if(sample == "W2"){weight = 1.0;}
+    else if(sample == "W3"){weight = 1.0;}
+    else if(sample == "W4"){weight = 1.0;}
+    //    else if(sample == "WW"){xs = 118.7; weight = luminosity*xs/N;}
     //    else if(sample == "WW1L1Nu2Q"){xs = 49.997; weight = luminosity*xs/N;}
+    //    else if(sample == "WZ"){xs = 47.13; weight = luminosity*xs/N;}
     //    else if(sample == "WZ1L1Nu2Q"){xs = 10.71; weight = luminosity*xs/N;}
     //    else if(sample == "WZ1L3Nu"){xs = 3.05; weight = luminosity*xs/N;}
     else if(sample == "WZ2L2Q"){xs = 5.595; weight = luminosity*xs/N;}
@@ -102,6 +106,7 @@ int main(int argc, char** argv){
     else if(sample == "WplusHWW"){xs = 0.840*0.2137; weight = luminosity*xs/N;}
     else if(sample == "ZHTT"){xs = 0.7612*0.0627; weight = luminosity*xs/N;}
     else if(sample == "ZHWW"){xs = 0.7612*0.2137; weight = luminosity*xs/N;}
+    //    else if(sample == "ZZ"){xs = 16.523; weight = luminosity*xs/N;}
     else if(sample == "ZZ2L2Q"){xs = 3.22; weight = luminosity*xs/N;}
     else if(sample == "ZZ4L"){xs = 1.212; weight = luminosity*xs/N;}
     else if(sample == "ttHnonbb"){xs = 0.5071*(1-0.5824); weight = luminosity*xs/N;}
@@ -123,9 +128,19 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("e_2", &e_2);
     tree->SetBranchAddress("q_2", &q_2);
     tree->SetBranchAddress("l2_decayMode", &l2_decayMode);
-    tree->SetBranchAddress("passEle25", &passEle25);
-    tree->SetBranchAddress("matchEle25_1", &matchEle25_1);
-    tree->SetBranchAddress("filterEle25_1", &filterEle25_1);
+    tree->SetBranchAddress("passEle32", &passEle32);
+    tree->SetBranchAddress("matchEle32_1", &matchEle32_1);
+    tree->SetBranchAddress("filterEle32_1", &filterEle32_1);
+    tree->SetBranchAddress("passEle27", &passEle27);
+    tree->SetBranchAddress("matchEle27_1", &matchEle27_1);
+    tree->SetBranchAddress("filterEle27_1", &filterEle27_1);
+    tree->SetBranchAddress("passEle24Tau30", &passEle24Tau30);
+    tree->SetBranchAddress("matchEle24Tau30_1", &matchEle24Tau30_1);
+    tree->SetBranchAddress("filterEle24Tau30_1", &filterEle24Tau30_1);
+    tree->SetBranchAddress("matchEle24Tau30_2", &matchEle24Tau30_2);
+    tree->SetBranchAddress("filterEle24Tau30_2", &filterEle24Tau30_2);
+    tree->SetBranchAddress("matchEmbFilter_Ele24Tau30_1", &matchEmbFilter_Ele24Tau30_1);
+    tree->SetBranchAddress("matchEmbFilter_Ele24Tau30_2", &matchEmbFilter_Ele24Tau30_2);
     tree->SetBranchAddress("bpt_deepcsv_1", &bpt_deepcsv_1);
     tree->SetBranchAddress("beta_deepcsv_1", &beta_deepcsv_1);
     tree->SetBranchAddress("bphi_deepcsv_1", &bphi_deepcsv_1);
@@ -246,22 +261,39 @@ int main(int argc, char** argv){
     TH1F * hist_tid_emb = new TH1F("", "", 40, 0., 2.);
     
     //declare workspace for scale factors
-    TFile fwmc("htt_scalefactors_legacy_2016.root");
+    TFile fwmc("htt_scalefactors_legacy_2017.root");
     RooWorkspace *wmc = (RooWorkspace*)fwmc.Get("w");
     fwmc.Close();
     
     //access pileup distributions in data/MC
     reweight::LumiReWeighting* LumiWeights_12;
-    LumiWeights_12 = new reweight::LumiReWeighting("MC_Moriond17_PU25ns_V1.root", "Data_Pileup_2016_271036-284044_80bins.root", "pileup", "pileup");
+    LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#VBFHToTauTau_M125_13TeV_powheg_pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+    if (sample=="W1") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3#MINIAODSIM", "pileup");
+    else if (sample=="W2") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v5#MINIAODSIM", "pileup");
+    else if (sample=="ST_t_antitop") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+    else if (sample=="DY4" or sample=="Z4") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_v2_94X_mc2017_realistic_v14-v2#MINIAODSIM", "pileup");
+    else if (sample=="W") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3#MINIAODSIM", "pileup");
+    else if (sample=="DY" or sample=="Z") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8#RunIIFall17MiniAODv2-PU2017RECOSIMstep_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+    else if (sample=="WW") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#WW_TuneCP5_13TeV-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+    else if (sample=="WplusH125") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#WplusHToTauTau_M125_13TeV_powheg_pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+    else if (sample=="WZ") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#WZ_TuneCP5_13TeV-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+    else if (sample=="DY4" or sample=="Z4") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+    else if (sample=="ST_tW_top") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2#MINIAODSIM", "pileup");
+    else if (sample=="WminusH125") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#WminusHToTauTau_M125_13TeV_powheg_pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+    else if (sample=="ST_tW_antitop") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2#MINIAODSIM", "pileup");
+    else if (sample=="W3") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+    else if (sample=="ZH125") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#ZHToTauTau_M125_13TeV_powheg_pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+    else if (sample=="TTToSemiLeptonic")  LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+    else if (sample=="TTTo2L2Nu") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
     
     //Tau id sf files for MC and embedded
-    TFile *ftauid = new TFile("TauID_SF_pt_DeepTau2017v2p1VSjet_2016Legacy.root");
+    TFile *ftauid = new TFile("TauID_SF_pt_DeepTau2017v2p1VSjet_2017ReReco.root");
     TF1 *fct_tauid = (TF1*) ftauid->Get("Medium_cent");
-    TFile *ftauid_emb = new TFile("TauID_SF_pt_DeepTau2017v2p1VSjet_2016Legacy_EMB.root");
+    TFile *ftauid_emb = new TFile("TauID_SF_pt_DeepTau2017v2p1VSjet_2017ReReco_EMB.root");
     TF1 *fct_tauid_emb = (TF1*) ftauid_emb->Get("Medium_cent");
     
     //access graphs for the tau fake rates
-    TFile *f_taufr = new TFile("FitHistograms_tauFR_2016.root");
+    TFile *f_taufr = new TFile("FitHistograms_tauFR_2017.root");
     TGraphAsymmErrors *g_taufr_dm0M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm0_deepmedium_hpt_dm0_deepveryveryveryloose");
     TGraphAsymmErrors *g_taufr_dm1M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm1_deepmedium_hpt_dm1_deepveryveryveryloose");
     TGraphAsymmErrors *g_taufr_dm10M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm10_deepmedium_hpt_dm10_deepveryveryveryloose");
@@ -281,12 +313,27 @@ int main(int argc, char** argv){
         if (Flag_EcalDeadCellTriggerPrimitiveFilter) continue;
         if (Flag_BadPFMuonFilter) continue;
         if ((sample=="data_obs" or sample=="embedded") && Flag_eeBadScFilter) continue;
+        if (Flag_ecalBadCalibReducedMINIAODFilter) continue;
         
         //etau selection
-        bool trigger25 = (passEle25 && matchEle25_1 && filterEle25_1 && pt_1>26);
+        bool trigger27 = (passEle27 && pt_1>28 && matchEle27_1 && filterEle27_1);//main
+        bool trigger32 = (passEle32 && pt_1>28 && matchEle32_1 && filterEle32_1);//side
+        bool trigger2430 = (passEle24Tau30 && matchEle24Tau30_1 && filterEle24Tau30_1 && matchEle24Tau30_2 && filterEle24Tau30_2 && pt_1>25 && pt_2>35 && pt_1<28 && fabs(eta_2)<2.1);
+        if (sample=="embedded"){
+            if (fabs(eta_1)>1.479 && pt_1<40){
+                trigger2430=(pt_1>25 && pt_2>35 && pt_1<28 && fabs(eta_2)<2.1);
+                trigger27=(pt_1>28);
+                trigger32=(pt_1>28);
+            }
+            else{
+                trigger2430=(matchEmbFilter_Ele24Tau30_1 && matchEmbFilter_Ele24Tau30_2 && pt_1>25 && pt_2>35 && pt_1<28 && fabs(eta_2)<2.1);
+                trigger27=(passEle27 && pt_1>28 && matchEle27_1 && filterEle27_1);
+                trigger32=(passEle32 && pt_1>28 && matchEle32_1 && filterEle32_1);
+            }
+        }
         
         if (!(pt_2>25)) continue;
-        if (!trigger25) continue;
+        if (!trigger27 && !trigger32 && !trigger2430) continue;
         if (!(fabs(eta_1)<2.1 && fabs(eta_2)<2.3)) continue;
         if (!(iso_1<0.15)) continue;
         if (q_1*q_2>0) continue;
@@ -306,19 +353,19 @@ int main(int argc, char** argv){
         if (!(myele.DeltaR(mytau)>0.4)) continue;
         
         if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
-            if (numGenJets==0) weight = 1.491;
-            else if (numGenJets==1) weight = 0.4757;
-            else if (numGenJets==2) weight = 0.4952;
-            else if (numGenJets==3) weight = 0.5052;
-            else if (numGenJets==4) weight = 0.4144;
+            if (numGenJets==0) weight = 2.575;
+            else if (numGenJets==1) weight = 0.7084;
+            else if (numGenJets==2) weight = 0.9192;
+            else if (numGenJets==3) weight = 1.648;
+            else if (numGenJets==4) weight = 0.2192;
         }
         
         if (sample=="W" or sample=="W1" or sample=="W2" or sample=="W3" or sample=="W4"){
-            if (numGenJets==0) weight = 25.46;
-            else if (numGenJets==1) weight = 5.773;
-            else if (numGenJets==2) weight = 1.792;
-            else if (numGenJets==3) weight = 0.6829;
-            else if (numGenJets==4) weight = 0.7365;
+            if (numGenJets==0) weight = 23.67;
+            else if (numGenJets==1) weight = 3.106;
+            else if (numGenJets==2) weight = 3.014;
+            else if (numGenJets==3) weight = 2.202;
+            else if (numGenJets==4) weight = 2.150;
         }
         
         float sf_MC = 1.0;
@@ -344,8 +391,12 @@ int main(int argc, char** argv){
             wmc->var("e_iso")->setVal(iso_1);
             
             //trigger scale factor
-            sf_MC *= wmc->function("e_trg_ic_ratio")->getVal();
-            hist_trg_mc->Fill(wmc->function("e_trg_ic_ratio")->getVal());
+            if (trigger27 or trigger32) {sf_MC *= wmc->function("e_trg_ic_ratio")->getVal();
+                hist_trg_mc->Fill(wmc->function("e_trg_ic_ratio")->getVal());}
+            else{
+                sf_MC *= wmc->function("t_trg_pog_deeptau_medium_etau_ratio")->getVal()*wmc->function("e_trg_24_ic_ratio")->getVal();
+                hist_trg_mc->Fill(wmc->function("t_trg_pog_deeptau_medium_etau_ratio")->getVal()*wmc->function("e_trg_24_ic_ratio")->getVal());
+            }
             
             //electron ID/iso/tracking scale factors
             sf_MC *= wmc->function("e_trk_ratio")->getVal()*wmc->function("e_idiso_ic_ratio")->getVal();
@@ -361,7 +412,7 @@ int main(int argc, char** argv){
             }
             
             //re-weigh top pT spectrum for ttbar samples
-            if (sample=="TT"){
+            if (sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic"){
                 float pttop1=pt_top1;
                 if (pttop1>472) pttop1=472;
                 float pttop2=pt_top2;
@@ -386,15 +437,15 @@ int main(int argc, char** argv){
             //ele->tauh and muon->tauh sf
             if (gen_match_2==1 or gen_match_2==3){
                 if (fabs(eta_2)<1.460) sf_MC *= 1.22;
-                else if (fabs(eta_2)>1.558) sf_MC *= 1.47;
+                else if (fabs(eta_2)>1.558) sf_MC *= 0.93;
                 else sf_MC *= 0.0;
             }
             if (gen_match_2==2 or gen_match_2==4){
-                if (fabs(eta_2)<0.4) sf_MC *= 0.978*1.311;
-                else if (fabs(eta_2)<0.8) sf_MC *= 1.003*0.995;
-                else if (fabs(eta_2)<1.2) sf_MC *= 0.992*1.275;
-                else if (fabs(eta_2)<1.7) sf_MC *= 1.003*0.892;
-                else sf_MC *= 0.966*5.111;
+                if (fabs(eta_2)<0.4) sf_MC *= 0.979*1.463;
+                else if (fabs(eta_2)<0.8) sf_MC *= 0.963*.952;
+                else if (fabs(eta_2)<1.2) sf_MC *= 0.983*0.952;
+                else if (fabs(eta_2)<1.7) sf_MC *= 0.988*0.744;
+                else sf_MC *= 1.004*4.592;
             }
             
         }
@@ -417,8 +468,22 @@ int main(int argc, char** argv){
             wmc->var("e_iso")->setVal(iso_1);
             
             //trigger scale factor
-            sf_embed *= wmc->function("e_trg_ic_embed_ratio")->getVal();
-            hist_trg_emb->Fill(wmc->function("e_trg_ic_embed_ratio")->getVal());
+            if ((trigger27 or trigger32) && myele.Pt()>28 && (fabs(myele.Eta())<1.479 or myele.Pt()>40)){
+                sf_embed *= wmc->function("e_trg_ic_embed_ratio")->getVal();
+                hist_trg_emb->Fill(wmc->function("e_trg_ic_embed_ratio")->getVal());
+            }
+            else if (trigger2430 && myele.Pt()<28 && fabs(myele.Eta())<1.479){
+                sf_embed *= wmc->function("e_trg_24_ic_embed_ratio")->getVal()*wmc->function("et_emb_LooseChargedIsoPFTau30_kit_ratio")->getVal();
+                hist_trg_emb->Fill(wmc->function("e_trg_24_ic_embed_ratio")->getVal()*wmc->function("et_emb_LooseChargedIsoPFTau30_kit_ratio")->getVal());
+            }
+            else if ((trigger27 or trigger32) && myele.Pt()>28 && fabs(myele.Eta())>1.479 && myele.Pt()<40){
+                sf_embed *= wmc->function("e_trg_ic_data")->getVal();
+                hist_trg_emb->Fill(wmc->function("e_trg_ic_data")->getVal());
+            }
+            if (trigger2430 && myele.Pt()<28 && fabs(myele.Eta())>1.479){
+               sf_embed *= wmc->function("e_trg_24_ic_data")->getVal()*wmc->function("t_trg_mediumDeepTau_etau_data")->getVal();
+                hist_trg_emb->Fill(wmc->function("e_trg_24_ic_data")->getVal()*wmc->function("t_trg_mediumDeepTau_etau_data")->getVal());
+            }
             
             //electron ID/iso/tracking scale factors
             sf_embed *= wmc->function("e_trk_embed_ratio")->getVal()*wmc->function("e_idiso_ic_embed_ratio")->getVal();
@@ -460,12 +525,12 @@ int main(int argc, char** argv){
         float bMflavor_1 = 0;
         float bMpt_2 = 0;
         float bMflavor_2 = 0;
-        if (bpt_deepcsv_1>20 && bscore_deepcsv_1>0.6321){
+        if (bpt_deepcsv_1>20 && bscore_deepcsv_1>0.4941){
             bMpt_1 = bpt_deepcsv_1;
             bMflavor_1 = bflavour_deepcsv_1;
             nbtag20++;
         }
-        if (bpt_deepcsv_2>20 && bscore_deepcsv_2>0.6321){
+        if (bpt_deepcsv_2>20 && bscore_deepcsv_2>0.4941){
             bMpt_2 = bpt_deepcsv_2;
             bMflavor_2 = bflavour_deepcsv_2;
             nbtag20++;
@@ -897,6 +962,7 @@ int main(int argc, char** argv){
     cout << "************* output: " << output.c_str() << " *************" << endl;
     
 }
+
 
 
 

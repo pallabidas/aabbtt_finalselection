@@ -13,7 +13,7 @@ def add_channel():
     lumi.SetTextColor(    1 )
     lumi.SetTextSize(0.055)
     lumi.SetTextFont (   42 )
-    lumi.AddText("e#tau")
+    lumi.AddText("#mu#tau")
 #    lumi.AddText("m^{vis}_{b#tau#tau} < 65 GeV")
 #    lumi.AddText("65 < m^{vis}_{b#tau#tau} < 80 GeV")
 #    lumi.AddText("80 < m^{vis}_{b#tau#tau} < 95 GeV")
@@ -32,7 +32,7 @@ def add_lumi():
     lumi.SetTextColor(    1 )
     lumi.SetTextSize(0.09)
     lumi.SetTextFont (   42 )
-    lumi.AddText("2016, 35.9 fb^{-1} (13 TeV)")
+    lumi.AddText("2017, 41.4 fb^{-1} (13 TeV)")
     return lumi
 
 def add_CMS():
@@ -78,16 +78,16 @@ ROOT.gStyle.SetOptStat(0)
 c=ROOT.TCanvas("canvas","",0,0,900,600)
 c.cd()
 
-file=ROOT.TFile("final_et_2016.root","r")
+file=ROOT.TFile("final_mt_2017.root","r")
 
 adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
 trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",0.5)
 
 #categories=["m_emb","mt_emet","mt_mumet","dzeta"]
-categories=["m_et_1","m_et_2","m_et_3","m_et_4","m_et","m_etb","m_etbb","pt_e","pt_t","m_et_0b","pt_e_0b","pt_t_0b","m_et_1b","pt_e_1b","pt_t_1b","m_et_2b","pt_e_2b","pt_t_2b","m_et_vbf","pt_e_vbf","pt_t_vbf","m_et_vv","pt_e_vv","pt_t_vv"]
+categories=["m_mt_1","m_mt_2","m_mt_3","m_mt_4","m_mt","m_mtb","m_mtbb","pt_m","pt_t","m_mt_0b","pt_m_0b","pt_t_0b","m_mt_1b","pt_m_1b","pt_t_1b","m_mt_2b","pt_m_2b","pt_t_2b","m_mt_vbf","pt_m_vbf","pt_t_vbf","m_mt_vv","pt_m_vv","pt_t_vv"]
 #xaxis=["m^{vis}_{b#tau#tau} (GeV)","m_{T}(e,#vec{p}^{miss}_{T}) (GeV)","m_{T}(#mu,#vec{p}^{miss}_{T}) (GeV)","D_{#zeta} (GeV)"]
-xaxis=["m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{b#tau#tau} (GeV)","m^{vis}_{bb#tau#tau} (GeV)","e pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","e pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","e pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","e pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","e pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","e pt (GeV)","#tau pt (GeV)"]
+xaxis=["m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{b#tau#tau} (GeV)","m^{vis}_{bb#tau#tau} (GeV)","#mu pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","#mu pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","#mu pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","#mu pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","#mu pt (GeV)","#tau pt (GeV)","m^{vis}_{#tau#tau} (GeV)","#mu pt (GeV)","#tau pt (GeV)"]
 ncat=24
 
 for i in range (0,ncat):
@@ -280,6 +280,8 @@ for i in range (0,ncat):
 
    c.Modified()
    c.SaveAs(categories[i]+".png")
+
+
 
 
 

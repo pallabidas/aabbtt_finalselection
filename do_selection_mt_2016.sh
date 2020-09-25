@@ -1,9 +1,9 @@
-#./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/embedded.root outputs/mt_2016/embedded.root embedded Z
-#./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/DY.root outputs/mt_2016/DY.root DY Z
-#./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/DY1.root outputs/mt_2016/DY1.root DY1 Z
-#./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/DY2.root outputs/mt_2016/DY2.root DY2 Z
-#./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/DY3.root outputs/mt_2016/DY3.root DY3 Z
-#./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/DY4.root outputs/mt_2016/DY4.root DY4 Z
+#./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/embedded.root outputs/mt_2016/embedded.root embedded ZTT
+./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/DY.root outputs/mt_2016/DY.root DY Z
+./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/DY1.root outputs/mt_2016/DY1.root DY1 Z
+./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/DY2.root outputs/mt_2016/DY2.root DY2 Z
+./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/DY3.root outputs/mt_2016/DY3.root DY3 Z
+./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/DY4.root outputs/mt_2016/DY4.root DY4 Z
 ./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/GGHTT.root outputs/mt_2016/GGHTT.root GGHTT HTT
 ./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/GGHWW.root outputs/mt_2016/GGHWW.root GGHWW HWW
 ./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/GGZHLLTT.root outputs/mt_2016/GGZHLLTT.root GGZHLLTT HTT
@@ -37,7 +37,7 @@
 ./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/ZZ2L2Q.root outputs/mt_2016/ZZ2L2Q.root ZZ2L2Q VV
 ./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/ZZ4L.root outputs/mt_2016/ZZ4L.root ZZ4L VV
 ./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/ttHnonbb.root outputs/mt_2016/ttHnonbb.root ttHnonbb ttHnonbb
-#./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/data_obs.root outputs/mt_2016/data_obs.root data_obs data_obs
+./selection_mt_2016.exe /nfs_scratch/htsoi/haabbtt_mt2016_14aug/data_obs.root outputs/mt_2016/data_obs.root data_obs data_obs
 ./selection_mt_2016.exe /nfs_scratch/htsoi/signal_haabbtt_mt2016_4sep/gghbbtt15.root outputs/mt_2016/gghbbtt15.root gghbbtt15 gghbbtt15
 ./selection_mt_2016.exe /nfs_scratch/htsoi/signal_haabbtt_mt2016_4sep/gghbbtt20.root outputs/mt_2016/gghbbtt20.root gghbbtt20 gghbbtt20
 ./selection_mt_2016.exe /nfs_scratch/htsoi/signal_haabbtt_mt2016_4sep/gghbbtt25.root outputs/mt_2016/gghbbtt25.root gghbbtt25 gghbbtt25
@@ -55,4 +55,4 @@
 ./selection_mt_2016.exe /nfs_scratch/htsoi/signal_haabbtt_mt2016_4sep/gghbbtt40.root outputs/mt_2016/ggh_bbtt40.root gghbbtt40 bbtt40
 ./selection_mt_2016.exe /nfs_scratch/htsoi/signal_haabbtt_mt2016_4sep/VBFbbtt40.root outputs/mt_2016/VBF_bbtt40.root VBFbbtt40 bbtt40
 
-hadd -f outputs/mt_2016/final_mt_2016.root outputs/mt_2016/*.root
+#hadd -f outputs/mt_2016/final_mt_2016.root outputs/mt_2016/*.root

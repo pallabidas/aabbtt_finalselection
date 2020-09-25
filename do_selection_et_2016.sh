@@ -1,9 +1,9 @@
-./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/embedded.root outputs/et_2016/embedded.root embedded Z
-#./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/DY.root outputs/et_2016/DY.root DY Z
-#./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/DY1.root outputs/et_2016/DY1.root DY1 Z
-#./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/DY2.root outputs/et_2016/DY2.root DY2 Z
-#./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/DY3.root outputs/et_2016/DY3.root DY3 Z
-#./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/DY4.root outputs/et_2016/DY4.root DY4 Z
+#./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/embedded.root outputs/et_2016/embedded.root embedded ZTT
+./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/DY.root outputs/et_2016/DY.root DY Z
+./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/DY1.root outputs/et_2016/DY1.root DY1 Z
+./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/DY2.root outputs/et_2016/DY2.root DY2 Z
+./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/DY3.root outputs/et_2016/DY3.root DY3 Z
+./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/DY4.root outputs/et_2016/DY4.root DY4 Z
 ./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/GGHTT.root outputs/et_2016/GGHTT.root GGHTT HTT
 ./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/GGHWW.root outputs/et_2016/GGHWW.root GGHWW HWW
 ./selection_et_2016.exe /nfs_scratch/htsoi/haabbtt_et2016_14aug/GGZHLLTT.root outputs/et_2016/GGZHLLTT.root GGZHLLTT HTT
@@ -55,5 +55,5 @@
 ./selection_et_2016.exe /nfs_scratch/htsoi/signal_haabbtt_et2016_4sep/gghbbtt40.root outputs/et_2016/ggh_bbtt40.root gghbbtt40 bbtt40
 ./selection_et_2016.exe /nfs_scratch/htsoi/signal_haabbtt_et2016_4sep/VBFbbtt40.root outputs/et_2016/VBF_bbtt40.root VBFbbtt40 bbtt40
 
-hadd -f outputs/et_2016/final_et_2016.root outputs/et_2016/*.root
+#hadd -f outputs/et_2016/final_et_2016.root outputs/et_2016/*.root
 

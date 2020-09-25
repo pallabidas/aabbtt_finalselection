@@ -32,7 +32,7 @@ def add_lumi():
     lumi.SetTextColor(    1 )
     lumi.SetTextSize(0.09)
     lumi.SetTextFont (   42 )
-    lumi.AddText("2016, 35.9 fb^{-1} (13 TeV)")
+    lumi.AddText("2017, 41.4 fb^{-1} (13 TeV)")
     return lumi
 
 def add_CMS():
@@ -78,7 +78,7 @@ ROOT.gStyle.SetOptStat(0)
 c=ROOT.TCanvas("canvas","",0,0,900,600)
 c.cd()
 
-file=ROOT.TFile("final_et_2016.root","r")
+file=ROOT.TFile("final_et_2017.root","r")
 
 adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
@@ -280,6 +280,7 @@ for i in range (0,ncat):
 
    c.Modified()
    c.SaveAs(categories[i]+".png")
+
 
 
 
