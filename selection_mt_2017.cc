@@ -318,7 +318,7 @@ int main(int argc, char** argv){
         if (Flag_ecalBadCalibReducedMINIAODFilter) continue;
         
         //mutau selection
-        bool trigger24OR27=((passMu24 && matchMu24_1 && filterMu24_1 && pt_1>25) or (passMu27 && matchMu27_1 && filterMu27_1 && pt_1>27));
+        bool trigger24OR27=((passMu24 && matchMu24_1 && filterMu24_1 && pt_1>25) or (passMu27 && matchMu27_1 && filterMu27_1 && pt_1>28));
         bool trigger2027 = (passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && matchMu20Tau27_2 && filterMu20Tau27_2 && pt_1>21 && pt_1<25 && pt_2>32 && fabs(eta_2)<2.1);
         if (sample=="embedded") trigger2027 = (matchEmbFilter_Mu20Tau27_1 && matchEmbFilter_Mu20Tau27_2 && pt_1>21 && pt_1<25 && pt_2>32 && fabs(eta_2)<2.1);
         if (!trigger24OR27 && !trigger2027) continue;

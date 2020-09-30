@@ -1,4 +1,4 @@
-#./selection_et_2018.exe /nfs_scratch/htsoi/haabbtt_et2018_14aug/embedded.root outputs/et_2018/embedded.root embedded ZTT
+./selection_et_2018.exe /nfs_scratch/htsoi/haabbtt_et2018_14aug/embedded.root outputs/et_2018/embedded.root embedded ZTT
 ./selection_et_2018.exe /nfs_scratch/htsoi/haabbtt_et2018_14aug/DY.root outputs/et_2018/DY.root DY Z
 ./selection_et_2018.exe /nfs_scratch/htsoi/haabbtt_et2018_14aug/DY1.root outputs/et_2018/DY1.root DY1 Z
 ./selection_et_2018.exe /nfs_scratch/htsoi/haabbtt_et2018_14aug/DY2.root outputs/et_2018/DY2.root DY2 Z
@@ -29,7 +29,7 @@
 ./selection_et_2018.exe /nfs_scratch/htsoi/haabbtt_et2018_14aug/ZHTT.root outputs/et_2018/ZHTT.root ZHTT HTT
 ./selection_et_2018.exe /nfs_scratch/htsoi/haabbtt_et2018_14aug/ZZ2L2Q.root outputs/et_2018/ZZ2L2Q.root ZZ2L2Q VV
 ./selection_et_2018.exe /nfs_scratch/htsoi/haabbtt_et2018_14aug/ZZ4L.root outputs/et_2018/ZZ4L.root ZZ4L VV
-./selection_et_2018.exe /nfs_scratch/htsoi/haabbtt_et2018_14aug/data_obs.root outputs/et_2018/data_obs.root data_obs data_obs
+#./selection_et_2018.exe /nfs_scratch/htsoi/haabbtt_et2018_14aug/data_obs.root outputs/et_2018/data_obs.root data_obs data_obs
 #./selection_et_2018.exe /nfs_scratch/htsoi/signal_haabbtt_et2018_4sep/gghbbtt40.root outputs/et_2018/gghbbtt40.root gghbbtt40 bbtt40
 #./selection_et_2018.exe /nfs_scratch/htsoi/signal_haabbtt_et2018_4sep/VBFbbtt40.root outputs/et_2018/VBFbbtt40.root VBFbbtt40 bbtt40
 
