@@ -294,10 +294,10 @@ int main(int argc, char** argv){
     
     //access graphs for the tau fake rates
     TFile *f_taufr = new TFile("FitHistograms_tauFR_2017.root");
-    TGraphAsymmErrors *g_taufr_dm0M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm0_deepmedium_hpt_dm0_deepveryveryveryloose");
-    TGraphAsymmErrors *g_taufr_dm1M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm1_deepmedium_hpt_dm1_deepveryveryveryloose");
-    TGraphAsymmErrors *g_taufr_dm10M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm10_deepmedium_hpt_dm10_deepveryveryveryloose");
-    TGraphAsymmErrors *g_taufr_dm11M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm11_deepmedium_hpt_dm11_deepveryveryveryloose");
+    TGraphAsymmErrors *g_taufr_dm0M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm0_Te_VLmu_deepmedium_hpt_dm0_Te_VLmu_deepveryveryveryloose");
+    TGraphAsymmErrors *g_taufr_dm1M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm1_Te_VLmu_deepmedium_hpt_dm1_Te_VLmu_deepveryveryveryloose");
+    TGraphAsymmErrors *g_taufr_dm10M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm10_Te_VLmu_deepmedium_hpt_dm10_Te_VLmu_deepveryveryveryloose");
+    TGraphAsymmErrors *g_taufr_dm11M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm11_Te_VLmu_deepmedium_hpt_dm11_Te_VLmu_deepveryveryveryloose");
     
     //loop over events
     int n = tree->GetEntries(); //no. of events after skimming
@@ -317,18 +317,18 @@ int main(int argc, char** argv){
         
         //etau selection
         bool trigger27 = (passEle27 && pt_1>28 && matchEle27_1 && filterEle27_1);//main
-        bool trigger32 = (passEle32 && pt_1>28 && matchEle32_1 && filterEle32_1);//side
+        bool trigger32 = (passEle32 && pt_1>33 && matchEle32_1 && filterEle32_1);//side
         bool trigger2430 = (passEle24Tau30 && matchEle24Tau30_1 && filterEle24Tau30_1 && matchEle24Tau30_2 && filterEle24Tau30_2 && pt_1>25 && pt_2>35 && pt_1<28 && fabs(eta_2)<2.1);
         if (sample=="embedded"){
             if (fabs(eta_1)>1.479 && pt_1<40){
-                trigger2430=(pt_1>25 && pt_2>35 && pt_1<28 && fabs(eta_2)<2.1);
-                trigger27=(pt_1>28);
-                trigger32=(pt_1>28);
+                trigger2430 = (pt_1>25 && pt_2>35 && pt_1<28 && fabs(eta_2)<2.1);
+                trigger27 = (pt_1>28);
+                trigger32 = (pt_1>33);
             }
             else{
                 trigger2430=(matchEmbFilter_Ele24Tau30_1 && matchEmbFilter_Ele24Tau30_2 && pt_1>25 && pt_2>35 && pt_1<28 && fabs(eta_2)<2.1);
                 trigger27=(passEle27 && pt_1>28 && matchEle27_1 && filterEle27_1);
-                trigger32=(passEle32 && pt_1>28 && matchEle32_1 && filterEle32_1);
+                trigger32=(passEle32 && pt_1>33 && matchEle32_1 && filterEle32_1);
             }
         }
         
@@ -659,7 +659,8 @@ int main(int argc, char** argv){
         if (byVVVLooseDeepVSjet_2 && !byMediumDeepVSjet_2){
             //fake rates
             float fr = GetTauFR(mytau.Pt(),l2_decayMode,g_taufr_dm0M,g_taufr_dm1M,g_taufr_dm10M,g_taufr_dm11M,0);
-            float weight_qcd = 0.12;
+            if (trigger2430) fr *= 1.5;
+            float weight_qcd = fr/(1-fr);
             hist_qcd->Fill(weight_qcd);
             
             //at least 1 b
