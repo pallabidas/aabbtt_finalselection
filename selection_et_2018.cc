@@ -197,12 +197,12 @@ int main(int argc, char** argv){
     TH1F * hist_m_et_4 = new TH1F("", "", 10, 0., 200.);
     TH1F * hist_m_et_qcd_4 = new TH1F("", "", 10, 0., 200.);
     
-    TH1F * hist_m_et_0b = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_m_et_0b_qcd = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_e_pt_0b = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_e_pt_0b_qcd = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_t_pt_0b = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_t_pt_0b_qcd = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_et_0b = new TH1F("", "", 36, 0., 180.);
+    TH1F * hist_m_et_0b_qcd = new TH1F("", "", 36, 0., 180.);
+    TH1F * hist_e_pt_0b = new TH1F("", "", 80, 20., 100.);
+    TH1F * hist_e_pt_0b_qcd = new TH1F("", "", 80, 20., 100.);
+    TH1F * hist_t_pt_0b = new TH1F("", "", 80, 20., 100.);
+    TH1F * hist_t_pt_0b_qcd = new TH1F("", "", 80, 20., 100.);
     
     TH1F * hist_m_et_1b = new TH1F("", "", 25, 0., 250.);
     TH1F * hist_m_et_1b_qcd = new TH1F("", "", 25, 0., 250.);
@@ -251,6 +251,8 @@ int main(int argc, char** argv){
     TH1F * hist_embsel = new TH1F("", "", 40, 0., 2.);
     TH1F * hist_gen_emb = new TH1F("", "", 40, 0., 2.);
     TH1F * hist_tid_emb = new TH1F("", "", 40, 0., 2.);
+    TH1F * hist_nbtag20 = new TH1F("", "", 5, 0., 5.);
+    TH1F * hist_qcd_jet = new TH1F("", "", 40, 0., 2.);
     
     //declare workspace for scale factors
     TFile fwmc("htt_scalefactors_legacy_2018.root");
@@ -273,6 +275,8 @@ int main(int argc, char** argv){
     TGraphAsymmErrors *g_taufr_dm1M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm1_Te_VLmu_deepmedium_hpt_dm1_Te_VLmu_deepveryveryveryloose");
     TGraphAsymmErrors *g_taufr_dm10M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm10_Te_VLmu_deepmedium_hpt_dm10_Te_VLmu_deepveryveryveryloose");
     TGraphAsymmErrors *g_taufr_dm11M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm11_Te_VLmu_deepmedium_hpt_dm11_Te_VLmu_deepveryveryveryloose");
+    
+    TGraphAsymmErrors *g_taufr_dmall = (TGraphAsymmErrors*) f_taufr->Get("hpt_dmall_Te_VLmu_1jet_deepmedium_hpt_dmall_Te_VLmu_1jet_deepveryveryveryloose");
     
     //loop over events
     int n = tree->GetEntries(); //no. of events after skimming
@@ -342,12 +346,12 @@ int main(int argc, char** argv){
             
             //reject MC with a jet faking tau_h as duplicated in fake background estimation
             if (gen_match_2==6) continue;
-            
+ /*
             //reject MC with 2 taus as duplicated in embedded sample except for signal/Higgs
             if (sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="VBFbbtt20" && sample!="VBFbbtt40" && sample!="VBFbbtt60" && name!="HTT"){
                 if (gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue;
             }
-            
+ */
             //initialize workspace with lepton kinematics
             wmc->var("t_pt")->setVal(pt_2);
             wmc->var("t_eta")->setVal(eta_2);
@@ -425,6 +429,8 @@ int main(int argc, char** argv){
         //scale factors for embedded Z->tautau and corrections
         if (sample=="embedded"){
             
+            if (gen_match_2==6) continue;
+            
             //rejecting buggy events
             if (genweight>1.0) continue;
             
@@ -498,7 +504,7 @@ int main(int argc, char** argv){
             bMflavor_2 = bflavour_deepcsv_2;
             nbtag20++;
         }
-        
+        hist_nbtag20->Fill(nbtag20);
         //btag weights for MC only
         float weight_btag_0b = 1.0;
         float weight_btag_1b = 1.0;
@@ -515,6 +521,7 @@ int main(int argc, char** argv){
             //at least 1 bjet (apply to 1b and 2b events)
             if (nbtag20==1) weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0);
             if (nbtag20==2) weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0)+GetSF(1, bMpt_2, bMflavor_2, 0)-GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
+//            weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0);
             
             if (nbtag20==0) hist_0bw_0->Fill(weight_btag_0b);
             if (nbtag20==1) {hist_0bw_1->Fill(weight_btag_0b); hist_1bw->Fill(weight_btag_1b);}
@@ -622,43 +629,49 @@ int main(int argc, char** argv){
         if (byVVVLooseDeepVSjet_2 && !byMediumDeepVSjet_2){
             //fake rates
             float fr = GetTauFR(mytau.Pt(),l2_decayMode,g_taufr_dm0M,g_taufr_dm1M,g_taufr_dm10M,g_taufr_dm11M,0);
-            if (trigger2430 or trigger2430HPS) fr *= 1.5;
+            float fr_jet = GetTauFR(mytau.Pt(),l2_decayMode,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,0);
+            if (trigger2430 or trigger2430HPS){
+                fr *= 1.5;
+                fr_jet *= 1.5;
+            }
             float weight_qcd = fr/(1-fr);
+            float weight_qcd_jet = fr_jet/(1-fr_jet);
             hist_qcd->Fill(weight_qcd);
+            hist_qcd_jet->Fill(weight_qcd_jet);
             
             //at least 1 b
             if (((nbtag20==1 && fabs(beta_deepcsv_1)<2.4) or (nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4))){
                 
-                hist_m_et_qcd->Fill(m_et,weight_corr*weight_btag_atleast1b*weight_qcd);
-                hist_m_etb_qcd->Fill(m_etb,weight_corr*weight_btag_atleast1b*weight_qcd);
-                hist_e_pt_qcd->Fill(pt_1,weight_corr*weight_btag_atleast1b*weight_qcd);
-                hist_t_pt_qcd->Fill(pt_2,weight_corr*weight_btag_atleast1b*weight_qcd);
-                if (nbtag20==2) hist_m_etbb_qcd->Fill(m_etbb,weight_corr*weight_btag_atleast1b*weight_qcd);
+                hist_m_et_qcd->Fill(m_et,weight_corr*weight_btag_atleast1b*weight_qcd_jet);
+                hist_m_etb_qcd->Fill(m_etb,weight_corr*weight_btag_atleast1b*weight_qcd_jet);
+                hist_e_pt_qcd->Fill(pt_1,weight_corr*weight_btag_atleast1b*weight_qcd_jet);
+                hist_t_pt_qcd->Fill(pt_2,weight_corr*weight_btag_atleast1b*weight_qcd_jet);
+                if (nbtag20==2) hist_m_etbb_qcd->Fill(m_etbb,weight_corr*weight_btag_atleast1b*weight_qcd_jet);
                 
                 //vbf at least 1 b
                 if (mjj>500){
-                    hist_m_et_vbf_qcd->Fill(m_et,weight_corr*weight_btag_atleast1b*weight_qcd);
-                    hist_e_pt_vbf_qcd->Fill(pt_1,weight_corr*weight_btag_atleast1b*weight_qcd);
-                    hist_t_pt_vbf_qcd->Fill(pt_2,weight_corr*weight_btag_atleast1b*weight_qcd);
+                    hist_m_et_vbf_qcd->Fill(m_et,weight_corr*weight_btag_atleast1b*weight_qcd_jet);
+                    hist_e_pt_vbf_qcd->Fill(pt_1,weight_corr*weight_btag_atleast1b*weight_qcd_jet);
+                    hist_t_pt_vbf_qcd->Fill(pt_2,weight_corr*weight_btag_atleast1b*weight_qcd_jet);
                 }
                 
                 //the 4 categories
                 if (mt_taumet<60){
                     //category 1
                     if (m_etb<80 && mt_emet<40){
-                        hist_m_et_qcd_1->Fill(m_et,weight_corr*weight_btag_atleast1b*weight_qcd);
+                        hist_m_et_qcd_1->Fill(m_et,weight_corr*weight_btag_atleast1b*weight_qcd_jet);
                     }
                     //category 2
                     if (m_etb>80 && m_etb<100 && mt_emet<50){
-                        hist_m_et_qcd_2->Fill(m_et,weight_corr*weight_btag_atleast1b*weight_qcd);
+                        hist_m_et_qcd_2->Fill(m_et,weight_corr*weight_btag_atleast1b*weight_qcd_jet);
                     }
                     //category 3
                     if (m_etb>100 && m_etb<120 && mt_emet<50){
-                        hist_m_et_qcd_3->Fill(m_et,weight_corr*weight_btag_atleast1b*weight_qcd);
+                        hist_m_et_qcd_3->Fill(m_et,weight_corr*weight_btag_atleast1b*weight_qcd_jet);
                     }
                     //category 4
                     if (m_etb>120 && mt_emet<40){
-                        hist_m_et_qcd_4->Fill(m_et,weight_corr*weight_btag_atleast1b*weight_qcd);
+                        hist_m_et_qcd_4->Fill(m_et,weight_corr*weight_btag_atleast1b*weight_qcd_jet);
                     }
                 }
             }
@@ -916,6 +929,10 @@ int main(int argc, char** argv){
     hist_gen_emb->Write();
     hist_tid_emb->SetName("tid_emb");
     hist_tid_emb->Write();
+    hist_nbtag20->SetName("nbtag20");
+    hist_nbtag20->Write();
+    hist_qcd_jet->SetName("qcd_jet");
+    hist_qcd_jet->Write();
     
     
     

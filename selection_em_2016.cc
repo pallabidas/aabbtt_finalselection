@@ -200,12 +200,12 @@ int main(int argc, char** argv){
     TH1F * hist_m_em_OS_4 = new TH1F("", "", 10, 0., 200.);
     TH1F * hist_m_em_SS_4 = new TH1F("", "", 10, 0., 200.);
     
-    TH1F * hist_m_em_0b_OS = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_m_em_0b_SS = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_e_pt_0b_OS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_e_pt_0b_SS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_0b_OS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_0b_SS = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_em_0b_OS = new TH1F("", "", 36, 0., 180.);
+    TH1F * hist_m_em_0b_SS = new TH1F("", "", 36, 0., 180.);
+    TH1F * hist_e_pt_0b_OS = new TH1F("", "", 80, 0., 80.);
+    TH1F * hist_e_pt_0b_SS = new TH1F("", "", 80, 0., 80.);
+    TH1F * hist_m_pt_0b_OS = new TH1F("", "", 80, 0., 80.);
+    TH1F * hist_m_pt_0b_SS = new TH1F("", "", 80, 0., 80.);
     
     TH1F * hist_m_em_1b_OS = new TH1F("", "", 25, 0., 250.);
     TH1F * hist_m_em_1b_SS = new TH1F("", "", 25, 0., 250.);
@@ -315,12 +315,12 @@ int main(int argc, char** argv){
         if (sample!="data_obs" && sample!="embedded"){
             //reject MC with jets faking e/mu as duplicated in qcd estimation
             if (gen_match_1==6 or gen_match_2==6) continue;
-            
+ /*
             //reject MC with 2 taus as duplicated in embedded sample except for signal/Higgs
             if (sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="VBFbbtt20" && sample!="VBFbbtt40" && sample!="VBFbbtt60" && name!="HTT" && name!="ttHnonbb"){
                 if (gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue;
             }
-            
+ */
             //initialize workspace with lepton kinematics
             wmc->var("m_pt")->setVal(pt_2);
             wmc->var("m_eta")->setVal(eta_2);

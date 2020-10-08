@@ -209,12 +209,12 @@ int main(int argc, char** argv){
     TH1F * hist_m_mt_4 = new TH1F("", "", 10, 0., 200.);
     TH1F * hist_m_mt_qcd_4 = new TH1F("", "", 10, 0., 200.);
     
-    TH1F * hist_m_mt_0b = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_m_mt_0b_qcd = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_m_pt_0b = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_0b_qcd = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_t_pt_0b = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_t_pt_0b_qcd = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_mt_0b = new TH1F("", "", 36, 0., 180.);
+    TH1F * hist_m_mt_0b_qcd = new TH1F("", "", 36, 0., 180.);
+    TH1F * hist_m_pt_0b = new TH1F("", "", 80, 20., 100.);
+    TH1F * hist_m_pt_0b_qcd = new TH1F("", "", 80, 20., 100.);
+    TH1F * hist_t_pt_0b = new TH1F("", "", 80, 20., 100.);
+    TH1F * hist_t_pt_0b_qcd = new TH1F("", "", 80, 20., 100.);
     
     TH1F * hist_m_mt_1b = new TH1F("", "", 25, 0., 250.);
     TH1F * hist_m_mt_1b_qcd = new TH1F("", "", 25, 0., 250.);
@@ -307,6 +307,11 @@ int main(int argc, char** argv){
         bool trigger22 = ((passMu22eta2p1 && matchMu22eta2p1_1 && filterMu22eta2p1_1 && pt_1>23) or (passTkMu22eta2p1 && matchTkMu22eta2p1_1 && filterTkMu22eta2p1_1 && pt_1>23) or (passMu22 && matchMu22_1 && filterMu22_1 && pt_1>23) or (passTkMu22 && matchTkMu22_1 && filterTkMu22_1 && pt_1>23));
         bool trigger1920 = ((passMu19Tau20 && matchMu19Tau20_1 && matchMu19Tau20_2 && filterMu19Tau20_1 && filterMu19Tau20_2 && pt_1>20 && pt_1<23 && fabs(eta_2)<2.1) or (passMu19Tau20SingleL1 && matchMu19Tau20SingleL1_1 && matchMu19Tau20SingleL1_2 && filterMu19Tau20SingleL1_1 && filterMu19Tau20SingleL1_2 && pt_1>20 && pt_1<23 && fabs(eta_2)<2.1));
         
+        //mutau selection
+//        bool trigger22 = ((passMu22eta2p1 && matchMu22eta2p1_1 && filterMu22eta2p1_1 && pt_1>25) or (passTkMu22eta2p1 && matchTkMu22eta2p1_1 && filterTkMu22eta2p1_1 && pt_1>25) or (passMu22 && matchMu22_1 && filterMu22_1 && pt_1>25) or (passTkMu22 && matchTkMu22_1 && filterTkMu22_1 && pt_1>25));
+//        bool trigger1920 = ((passMu19Tau20 && matchMu19Tau20_1 && matchMu19Tau20_2 && filterMu19Tau20_1 && filterMu19Tau20_2 && pt_1>21 && pt_1<25 && fabs(eta_2)<2.1 && pt_2>38) or (passMu19Tau20SingleL1 && matchMu19Tau20SingleL1_1 && matchMu19Tau20SingleL1_2 && filterMu19Tau20SingleL1_1 && filterMu19Tau20SingleL1_2 && pt_1>21 && pt_1<25 && fabs(eta_2)<2.1 && pt_2>38));
+        
+        
         if (!(pt_2>25)) continue;
         if (!trigger22 && !trigger1920) continue;
         if (!(fabs(eta_1)<2.1 && fabs(eta_2)<2.3)) continue;
@@ -350,12 +355,12 @@ int main(int argc, char** argv){
             
             //reject MC with a jet faking tau_h as duplicated in fake background estimation
             if (gen_match_2==6) continue;
-            
+/*
             //reject MC with 2 taus as duplicated in embedded sample except for signal/Higgs
             if (sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="VBFbbtt20" && sample!="VBFbbtt40" && sample!="VBFbbtt60" && name!="HTT" && sample!="ttHnonbb"){
                 if (gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue;
             }
-            
+*/
             //initialize workspace with lepton kinematics
             wmc->var("t_pt")->setVal(pt_2);
             wmc->var("t_eta")->setVal(eta_2);
@@ -428,6 +433,8 @@ int main(int argc, char** argv){
         
         //scale factors for embedded Z->tautau and corrections
         if (sample=="embedded"){
+            
+            if (gen_match_2==6) continue;
             
             //rejecting buggy events
             if (genweight>1.0) continue;

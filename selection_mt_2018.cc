@@ -198,12 +198,12 @@ int main(int argc, char** argv){
     TH1F * hist_m_mt_4 = new TH1F("", "", 10, 0., 200.);
     TH1F * hist_m_mt_qcd_4 = new TH1F("", "", 10, 0., 200.);
     
-    TH1F * hist_m_mt_0b = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_m_mt_0b_qcd = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_m_pt_0b = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_0b_qcd = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_t_pt_0b = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_t_pt_0b_qcd = new TH1F("", "", 30, 0., 150.);
+    TH1F * hist_m_mt_0b = new TH1F("", "", 36, 0., 180.);
+    TH1F * hist_m_mt_0b_qcd = new TH1F("", "", 36, 0., 180.);
+    TH1F * hist_m_pt_0b = new TH1F("", "", 80, 20., 100.);
+    TH1F * hist_m_pt_0b_qcd = new TH1F("", "", 80, 20., 100.);
+    TH1F * hist_t_pt_0b = new TH1F("", "", 80, 20., 100.);
+    TH1F * hist_t_pt_0b_qcd = new TH1F("", "", 80, 20., 100.);
     
     TH1F * hist_m_mt_1b = new TH1F("", "", 25, 0., 250.);
     TH1F * hist_m_mt_1b_qcd = new TH1F("", "", 25, 0., 250.);
@@ -345,12 +345,12 @@ int main(int argc, char** argv){
             
             //reject MC with a jet faking tau_h as duplicated in fake background estimation
             if (gen_match_2==6) continue;
-            
+/*
             //reject MC with 2 taus as duplicated in embedded sample except for signal/Higgs
             if (sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="VBFbbtt20" && sample!="VBFbbtt40" && sample!="VBFbbtt60" && name!="HTT"){
                 if (gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue;
             }
-            
+*/
             //initialize workspace with lepton kinematics
             wmc->var("t_pt")->setVal(pt_2);
             wmc->var("t_eta")->setVal(eta_2);
@@ -430,6 +430,8 @@ int main(int argc, char** argv){
         
         //scale factors for embedded Z->tautau and corrections
         if (sample=="embedded"){
+            
+            if (gen_match_2==6) continue;
             
             //rejecting buggy events
             if (genweight>1.0) continue;
