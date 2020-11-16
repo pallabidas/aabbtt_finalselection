@@ -1,37 +1,71 @@
-#./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/embedded.root outputs/mt_2018/embedded.root embedded ZTT
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/DY.root outputs/mt_2018/DY.root DY Z
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/DY1.root outputs/mt_2018/DY1.root DY1 Z
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/DY2.root outputs/mt_2018/DY2.root DY2 Z
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/DY3.root outputs/mt_2018/DY3.root DY3 Z
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/DY4.root outputs/mt_2018/DY4.root DY4 Z
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/GGHTT.root outputs/mt_2018/GGHTT.root GGHTT HTT
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/GGZHLLTT.root outputs/mt_2018/GGZHLLTT.root GGZHLLTT HTT
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/GGZHNNTT.root outputs/mt_2018/GGZHNNTT.root GGZHNNTT HTT
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/GGZHQQTT.root outputs/mt_2018/GGZHQQTT.root GGZHQQTT HTT
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/ST_tW_antitop.root outputs/mt_2018/ST_tW_antitop.root ST_tW_antitop ST
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/ST_tW_top.root outputs/mt_2018/ST_tW_top.root ST_tW_top ST
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/ST_t_antitop.root outputs/mt_2018/ST_t_antitop.root ST_t_antitop ST
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/ST_t_top.root outputs/mt_2018/ST_t_top.root ST_t_top ST
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/TTTo2L2Nu.root outputs/mt_2018/TTTo2L2Nu.root TTTo2L2Nu TT
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/TTToHadronic.root outputs/mt_2018/TTToHadronic.root TTToHadronic TT
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/TTToSemiLeptonic.root outputs/mt_2018/TTToSemiLeptonic.root TTToSemiLeptonic TT
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/VBFHTT.root outputs/mt_2018/VBFHTT.root VBFHTT HTT
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/VV2L2Nu.root outputs/mt_2018/VV2L2Nu.root VV2L2Nu VV
-#./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/W.root outputs/mt_2018/W.root W W
-#./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/W1.root outputs/mt_2018/W1.root W1 W
-#./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/W2.root outputs/mt_2018/W2.root W2 W
-#./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/W3.root outputs/mt_2018/W3.root W3 W
-#./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/W4.root outputs/mt_2018/W4.root W4 W
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/WZ2L2Q.root outputs/mt_2018/WZ2L2Q.root WZ2L2Q VV
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/WZ3LNu.root outputs/mt_2018/WZ3LNu.root WZ3LNu VV
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/WminusHTT.root outputs/mt_2018/WminusHTT.root WminusHTT HTT
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/WplusHTT.root outputs/mt_2018/WplusHTT.root WplusHTT HTT
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/ZHTT.root outputs/mt_2018/ZHTT.root ZHTT HTT
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/ZZ2L2Q.root outputs/mt_2018/ZZ2L2Q.root ZZ2L2Q VV
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/ZZ4L.root outputs/mt_2018/ZZ4L.root ZZ4L VV
-./selection_mt_2018.exe /nfs_scratch/htsoi/haabbtt_mt2018_14aug/data_obs.root outputs/mt_2018/data_obs.root data_obs data_obs
-#./selection_mt_2018.exe /nfs_scratch/htsoi/signal_haabbtt_mt2018_4sep/gghbbtt40.root outputs/mt_2018/gghbbtt40.root gghbbtt40 bbtt40
-#./selection_mt_2018.exe /nfs_scratch/htsoi/signal_haabbtt_mt2018_4sep/VBFbbtt40.root outputs/mt_2018/VBFbbtt40.root VBFbbtt40 bbtt40
+inpath="/hdfs/store/user/htsoi/haabbtt_selection/haabbtt_mt2018_7sep"
+outpath="outputs/mt_2018"
+exe="selection_mt_2018.exe"
+#./$exe $inpath/embedded.root $outpath/embedded.root embedded ZTT
+./$exe $inpath/DY.root $outpath/DY.root DY Z
+./$exe $inpath/DY1.root $outpath/DY1.root DY1 Z
+./$exe $inpath/DY2.root $outpath/DY2.root DY2 Z
+./$exe $inpath/DY3.root $outpath/DY3.root DY3 Z
+./$exe $inpath/DY4.root $outpath/DY4.root DY4 Z
+./$exe $inpath/GGHTT.root $outpath/GGHTT.root GGHTT HTT
+./$exe $inpath/GGHWW.root $outpath/GGHWW.root GGHWW HWW
+./$exe $inpath/GGZHLLTT.root $outpath/GGZHLLTT.root GGZHLLTT HTT
+./$exe $inpath/GGZHNNTT.root $outpath/GGZHNNTT.root GGZHNNTT HTT
+./$exe $inpath/GGZHQQTT.root $outpath/GGZHQQTT.root GGZHQQTT HTT
+./$exe $inpath/GGZHWW.root $outpath/GGZHWW.root GGZHWW HWW
+./$exe $inpath/ST_tW_antitop.root $outpath/ST_tW_antitop.root ST_tW_antitop ST
+./$exe $inpath/ST_tW_top.root $outpath/ST_tW_top.root ST_tW_top ST
+./$exe $inpath/ST_t_antitop.root $outpath/ST_t_antitop.root ST_t_antitop ST
+./$exe $inpath/ST_t_top.root $outpath/ST_t_top.root ST_t_top ST
+./$exe $inpath/TTTo2L2Nu.root $outpath/TTTo2L2Nu.root TTTo2L2Nu TT
+./$exe $inpath/TTToHadronic.root $outpath/TTToHadronic.root TTToHadronic TT
+./$exe $inpath/TTToSemiLeptonic.root $outpath/TTToSemiLeptonic.root TTToSemiLeptonic TT
+./$exe $inpath/VBFHTT.root $outpath/VBFHTT.root VBFHTT HTT
+./$exe $inpath/VBFHWW.root $outpath/VBFHWW.root VBFHWW HWW
+./$exe $inpath/VV2L2Nu.root $outpath/VV2L2Nu.root VV2L2Nu VV
+#./$exe $inpath/W.root $outpath/W.root W W
+#./$exe $inpath/W1.root $outpath/W1.root W1 W
+#./$exe $inpath/W2.root $outpath/W2.root W2 W
+#./$exe $inpath/W3.root $outpath/W3.root W3 W
+#./$exe $inpath/W4.root $outpath/W4.root W4 W
+./$exe $inpath/WZ2L2Q.root $outpath/WZ2L2Q.root WZ2L2Q VV
+./$exe $inpath/WZ3LNu.root $outpath/WZ3LNu.root WZ3LNu VV
+./$exe $inpath/WminusHTT.root $outpath/WminusHTT.root WminusHTT HTT
+./$exe $inpath/WminusHWW.root $outpath/WminusHWW.root WminusHWW HWW
+./$exe $inpath/WplusHTT.root $outpath/WplusHTT.root WplusHTT HTT
+./$exe $inpath/WplusHWW.root $outpath/WplusHWW.root WplusHWW HWW
+./$exe $inpath/ZHTT.root $outpath/ZHTT.root ZHTT HTT
+./$exe $inpath/ZHWW.root $outpath/ZHWW.root ZHWW HWW
+./$exe $inpath/ZZ2L2Q.root $outpath/ZZ2L2Q.root ZZ2L2Q VV
+./$exe $inpath/ZZ4L.root $outpath/ZZ4L.root ZZ4L VV
+./$exe $inpath/ttHnonbb.root $outpath/ttHnonbb.root ttHnonbb ttHnonbb
+#./$exe $inpath/data_obs.root $outpath/data_obs.root data_obs data_obs
 
-#hadd -f outputs/mt_2018/final_mt_2018.root outputs/mt_2018/*.root
+./$exe $inpath/ggH_bbtt12.root $outpath/gghbbtt12p.root gghbbtt12 gghbbtt12
+./$exe $inpath/ggH_bbtt20.root $outpath/gghbbtt20p.root gghbbtt20 gghbbtt20
+./$exe $inpath/ggH_bbtt30.root $outpath/gghbbtt30p.root gghbbtt30 gghbbtt30
+./$exe $inpath/ggH_bbtt40.root $outpath/gghbbtt40p.root gghbbtt40 gghbbtt40
+./$exe $inpath/ggH_bbtt50.root $outpath/gghbbtt50p.root gghbbtt50 gghbbtt50
+./$exe $inpath/ggH_bbtt60.root $outpath/gghbbtt60p.root gghbbtt60 gghbbtt60
+./$exe $inpath/vbf_bbtt12.root $outpath/vbfbbtt12p.root vbfbbtt12 vbfbbtt12
+./$exe $inpath/vbf_bbtt20.root $outpath/vbfbbtt20p.root vbfbbtt20 vbfbbtt20
+./$exe $inpath/vbf_bbtt30.root $outpath/vbfbbtt30p.root vbfbbtt30 vbfbbtt30
+./$exe $inpath/vbf_bbtt40.root $outpath/vbfbbtt40p.root vbfbbtt40 vbfbbtt40
+./$exe $inpath/vbf_bbtt50.root $outpath/vbfbbtt50p.root vbfbbtt50 vbfbbtt50
+./$exe $inpath/vbf_bbtt60.root $outpath/vbfbbtt60p.root vbfbbtt60 vbfbbtt60
 
+./$exe $inpath/ggH_bbtt12.root $outpath/gghbbtt12.root gghbbtt12 bbtt12
+./$exe $inpath/ggH_bbtt20.root $outpath/gghbbtt20.root gghbbtt20 bbtt20
+./$exe $inpath/ggH_bbtt30.root $outpath/gghbbtt30.root gghbbtt30 bbtt30
+./$exe $inpath/ggH_bbtt40.root $outpath/gghbbtt40.root gghbbtt40 bbtt40
+./$exe $inpath/ggH_bbtt50.root $outpath/gghbbtt50.root gghbbtt50 bbtt50
+./$exe $inpath/ggH_bbtt60.root $outpath/gghbbtt60.root gghbbtt60 bbtt60
+./$exe $inpath/vbf_bbtt12.root $outpath/vbfbbtt12.root vbfbbtt12 bbtt12
+./$exe $inpath/vbf_bbtt20.root $outpath/vbfbbtt20.root vbfbbtt20 bbtt20
+./$exe $inpath/vbf_bbtt30.root $outpath/vbfbbtt30.root vbfbbtt30 bbtt30
+./$exe $inpath/vbf_bbtt40.root $outpath/vbfbbtt40.root vbfbbtt40 bbtt40
+./$exe $inpath/vbf_bbtt50.root $outpath/vbfbbtt50.root vbfbbtt50 bbtt50
+./$exe $inpath/vbf_bbtt60.root $outpath/vbfbbtt60.root vbfbbtt60 bbtt60
+
+
+#hadd -f $outpath/final_mt_2018.root $outpath/*.root

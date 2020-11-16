@@ -52,19 +52,18 @@ int main(int argc, char** argv){
     float xs, weight, luminosity = 41400.0;
     
     if (sample == "data_obs"){weight = 1.0;}
-    else if(sample == "gghbbtt15"){xs = 48.58*0.1475; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt20"){xs = 48.58*0.1426; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt25"){xs = 48.58*0.1381; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt30"){xs = 48.58*0.1358; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt35"){xs = 48.58*0.1338; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt40"){xs = 48.58*0.1322; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt45"){xs = 48.58*0.1282; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt50"){xs = 48.58*0.1232; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt55"){xs = 48.58*0.1193; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt60"){xs = 48.58*0.1133; weight = luminosity*xs/N;}
-    else if(sample == "VBFbbtt20"){xs = 3.782*0.1983; weight = luminosity*xs/N;}
-    else if(sample == "VBFbbtt40"){xs = 3.782*0.1908; weight = luminosity*xs/N;}
-    else if(sample == "VBFbbtt60"){xs = 3.782*0.1799; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt12"){xs = 0.01*48.58*0.0380; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt20"){xs = 0.01*48.58*0.0355; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt30"){xs = 0.01*48.58*0.0336; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt40"){xs = 0.01*48.58*0.0321; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt50"){xs = 0.01*48.58*0.0329; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt60"){xs = 0.01*48.58*0.0403; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt12"){xs = 0.01*3.782*0.0785; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt20"){xs = 0.01*3.782*0.0749; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt30"){xs = 0.01*3.782*0.0717; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt40"){xs = 0.01*3.782*0.0682; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt50"){xs = 0.01*3.782*0.0661; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt60"){xs = 0.01*3.782*0.0676; weight = luminosity*xs/N;}
     else if(sample == "embedded"){weight = 1.0;}
     else if(sample == "DY"){weight = 1.0;}
     else if(sample == "DY1"){weight = 1.0;}
@@ -77,16 +76,16 @@ int main(int argc, char** argv){
     else if(sample == "GGZHNNTT"){xs = 0.1227*0.0627*0.2000; weight = luminosity*xs/N;}
     else if(sample == "GGZHQQTT"){xs = 0.1227*0.0627*0.6991; weight = luminosity*xs/N;}
     else if(sample == "GGZHWW"){xs = 0.1227*0.2137; weight = luminosity*xs/N;}
-    else if(sample == "ST_tW_antitop"){xs = 35.6; weight = luminosity*xs/N;}
-    else if(sample == "ST_tW_top"){xs = 35.6; weight = luminosity*xs/N;}
-    else if(sample == "ST_t_antitop"){xs = 26.23; weight = luminosity*xs/N;}
-    else if(sample == "ST_t_top"){xs = 44.07; weight = luminosity*xs/N;}
+    else if(sample == "ST_tW_antitop"){xs = 35.85; weight = luminosity*xs/N;}
+    else if(sample == "ST_tW_top"){xs = 35.85; weight = luminosity*xs/N;}
+    else if(sample == "ST_t_antitop"){xs = 80.94; weight = luminosity*xs/N;}
+    else if(sample == "ST_t_top"){xs = 136.02; weight = luminosity*xs/N;}
     else if(sample == "TTTo2L2Nu"){xs = 88.29; weight = luminosity*xs/N;}
     else if(sample == "TTToHadronic"){xs = 377.96; weight = luminosity*xs/N;}
     else if(sample == "TTToSemiLeptonic"){xs = 365.35; weight = luminosity*xs/N;}
     else if(sample == "VBFHTT"){xs = 3.782*0.0627; weight = luminosity*xs/N;}
     else if(sample == "VBFHWW"){xs = 3.782*0.2137*0.3258*0.3258; weight = luminosity*xs/N;}
-    else if(sample == "VV2L2Nu"){xs = 11.95; weight = luminosity*xs/N;}
+    else if(sample == "VV2L2Nu"){xs = 13.84; weight = luminosity*xs/N;}//11.95
     else if(sample == "W"){weight = 1.0;}
     else if(sample == "W1"){weight = 1.0;}
     else if(sample == "W2"){weight = 1.0;}
@@ -97,8 +96,8 @@ int main(int argc, char** argv){
     //    else if(sample == "WZ"){xs = 47.13; weight = luminosity*xs/N;}
     //    else if(sample == "WZ1L1Nu2Q"){xs = 10.71; weight = luminosity*xs/N;}
     //    else if(sample == "WZ1L3Nu"){xs = 3.05; weight = luminosity*xs/N;}
-    else if(sample == "WZ2L2Q"){xs = 5.595; weight = luminosity*xs/N;}
-    else if(sample == "WZ3L1Nu"){xs = 4.708; weight = luminosity*xs/N;}
+    else if(sample == "WZ2L2Q"){xs = 5.52; weight = luminosity*xs/N;}//5.595
+    else if(sample == "WZ3L1Nu"){xs = 4.43; weight = luminosity*xs/N;}//4.708
     else if(sample == "WminusHTT"){xs = 0.5328*0.0627; weight = luminosity*xs/N;}
     else if(sample == "WminusHWW"){xs = 0.5328*0.2137; weight = luminosity*xs/N;}
     else if(sample == "WplusHTT"){xs = 0.840*0.0627; weight = luminosity*xs/N;}
@@ -106,7 +105,7 @@ int main(int argc, char** argv){
     else if(sample == "ZHTT"){xs = 0.7612*0.0627; weight = luminosity*xs/N;}
     else if(sample == "ZHWW"){xs = 0.7612*0.2137; weight = luminosity*xs/N;}
     //    else if(sample == "ZZ"){xs = 16.523; weight = luminosity*xs/N;}
-    else if(sample == "ZZ2L2Q"){xs = 3.22; weight = luminosity*xs/N;}
+    else if(sample == "ZZ2L2Q"){xs = 3.38; weight = luminosity*xs/N;}//3.22
     else if(sample == "ZZ4L"){xs = 1.212; weight = luminosity*xs/N;}
     else if(sample == "ttHnonbb"){xs = 0.5071*(1-0.5824); weight = luminosity*xs/N;}
     else {cout << "Missing sample cross section!!!" << endl; return 0;}
@@ -152,15 +151,8 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("pt_top1", &pt_top1);
     tree->SetBranchAddress("pt_top2", &pt_top2);
     tree->SetBranchAddress("npu", &npu);
-    tree->SetBranchAddress("genM", &genM);
-    tree->SetBranchAddress("genpT", &genpT);
     tree->SetBranchAddress("genweight", &genweight);
-    tree->SetBranchAddress("genpt_1", &genpt_1);
-    tree->SetBranchAddress("genpt_2", &genpt_2);
-    tree->SetBranchAddress("geneta_1", &geneta_1);
-    tree->SetBranchAddress("geneta_2", &geneta_2);
     tree->SetBranchAddress("mjj", &mjj);
-    tree->SetBranchAddress("njets", &njets);
     tree->SetBranchAddress("gen_match_1",&gen_match_1);
     tree->SetBranchAddress("gen_match_2",&gen_match_2);
     tree->SetBranchAddress("met", &met);
@@ -173,67 +165,32 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("Flag_BadPFMuonFilter", &Flag_BadPFMuonFilter);
     tree->SetBranchAddress("Flag_eeBadScFilter", &Flag_eeBadScFilter);
     tree->SetBranchAddress("Flag_ecalBadCalibReducedMINIAODFilter", &Flag_ecalBadCalibReducedMINIAODFilter);
-    
-    TH1F * hist_m_em_OS = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_m_em_SS = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_m_emb_OS = new TH1F("", "", 40, 50., 450.);
-    TH1F * hist_m_emb_SS = new TH1F("", "", 40, 50., 450.);
-    TH1F * hist_m_embb_OS = new TH1F("", "", 50, 100., 600.);
-    TH1F * hist_m_embb_SS = new TH1F("", "", 50, 100., 600.);
-    TH1F * hist_e_pt_OS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_e_pt_SS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_OS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_SS = new TH1F("", "", 30, 0., 150.);
-    
-    TH1F * hist_m_em_OS_1 = new TH1F("", "", 8, 0., 64.);
-    TH1F * hist_m_em_SS_1 = new TH1F("", "", 8, 0., 64.);
-    TH1F * hist_m_em_OS_2 = new TH1F("", "", 10, 0., 80.);
-    TH1F * hist_m_em_SS_2 = new TH1F("", "", 10, 0., 80.);
-    TH1F * hist_m_em_OS_3 = new TH1F("", "", 10, 0., 80.);
-    TH1F * hist_m_em_SS_3 = new TH1F("", "", 10, 0., 80.);
-    TH1F * hist_m_em_OS_4 = new TH1F("", "", 10, 0., 200.);
-    TH1F * hist_m_em_SS_4 = new TH1F("", "", 10, 0., 200.);
-    
-    TH1F * hist_m_em_0b_OS = new TH1F("", "", 36, 0., 180.);
-    TH1F * hist_m_em_0b_SS = new TH1F("", "", 36, 0., 180.);
-    TH1F * hist_e_pt_0b_OS = new TH1F("", "", 80, 0., 80.);
-    TH1F * hist_e_pt_0b_SS = new TH1F("", "", 80, 0., 80.);
-    TH1F * hist_m_pt_0b_OS = new TH1F("", "", 80, 0., 80.);
-    TH1F * hist_m_pt_0b_SS = new TH1F("", "", 80, 0., 80.);
-    
-    TH1F * hist_m_em_1b_OS = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_m_em_1b_SS = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_e_pt_1b_OS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_e_pt_1b_SS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_1b_OS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_1b_SS = new TH1F("", "", 30, 0., 150.);
-    
-    TH1F * hist_m_em_2b_OS = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_m_em_2b_SS = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_e_pt_2b_OS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_e_pt_2b_SS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_2b_OS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_2b_SS = new TH1F("", "", 30, 0., 150.);
-    
-    TH1F * hist_m_em_vbf_OS = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_m_em_vbf_SS = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_e_pt_vbf_OS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_e_pt_vbf_SS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_vbf_OS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_vbf_SS = new TH1F("", "", 30, 0., 150.);
-    
-    TH1F * hist_m_em_vv_OS = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_m_em_vv_SS = new TH1F("", "", 25, 0., 250.);
-    TH1F * hist_e_pt_vv_OS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_e_pt_vv_SS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_vv_OS = new TH1F("", "", 30, 0., 150.);
-    TH1F * hist_m_pt_vv_SS = new TH1F("", "", 30, 0., 150.);
+    tree->SetBranchAddress("m_trg_8_ic_data", &m_trg_8_ic_data);
+    tree->SetBranchAddress("e_trg_23_ic_data", &e_trg_23_ic_data);
+    tree->SetBranchAddress("m_trg_23_ic_data", &m_trg_23_ic_data);
+    tree->SetBranchAddress("e_trg_12_ic_data", &e_trg_12_ic_data);
+    tree->SetBranchAddress("m_trg_8_ic_mc", &m_trg_8_ic_mc);
+    tree->SetBranchAddress("e_trg_23_ic_mc", &e_trg_23_ic_mc);
+    tree->SetBranchAddress("m_trg_23_ic_mc", &m_trg_23_ic_mc);
+    tree->SetBranchAddress("e_trg_12_ic_mc", &e_trg_12_ic_mc);
+    tree->SetBranchAddress("m_trk_ratio", &m_trk_ratio);
+    tree->SetBranchAddress("m_idiso_ic_ratio", &m_idiso_ic_ratio);
+    tree->SetBranchAddress("e_trk_ratio", &e_trk_ratio);
+    tree->SetBranchAddress("e_idiso_ic_ratio", &e_idiso_ic_ratio);
+    tree->SetBranchAddress("zptmass_weight_nom", &zptmass_weight_nom);
+    tree->SetBranchAddress("m_trg_8_ic_embed", &m_trg_8_ic_embed);
+    tree->SetBranchAddress("e_trg_23_ic_embed", &e_trg_23_ic_embed);
+    tree->SetBranchAddress("m_trg_23_ic_embed", &m_trg_23_ic_embed);
+    tree->SetBranchAddress("e_trg_12_ic_embed", &e_trg_12_ic_embed);
+    tree->SetBranchAddress("m_idiso_ic_embed_ratio", &m_idiso_ic_embed_ratio);
+    tree->SetBranchAddress("e_trk_embed_ratio", &e_trk_embed_ratio);
+    tree->SetBranchAddress("e_idiso_ic_embed_ratio", &e_idiso_ic_embed_ratio);
+    tree->SetBranchAddress("m_sel_trg_ic_ratio", &m_sel_trg_ic_ratio);
+    tree->SetBranchAddress("m_sel_id_ic_ratio_1", &m_sel_id_ic_ratio_1);
+    tree->SetBranchAddress("m_sel_id_ic_ratio_2", &m_sel_id_ic_ratio_2);
+    tree->SetBranchAddress("m_sv", &m_sv);
     
     
-    //declare workspace for scale factors
-    TFile fwmc("htt_scalefactors_legacy_2017.root");
-    RooWorkspace *wmc = (RooWorkspace*)fwmc.Get("w");
-    fwmc.Close();
     
     //access pileup distributions in data/MC
     reweight::LumiReWeighting* LumiWeights_12;
@@ -323,37 +280,25 @@ int main(int argc, char** argv){
         if (sample!="data_obs" && sample!="embedded"){
             
             if (gen_match_1==6 or gen_match_2==6) continue;
-/*
+            
             //reject MC with tau_e+tau_mu as duplicated in embedded sample
-            if (sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="VBFbbtt20" && sample!="VBFbbtt40" && sample!="VBFbbtt60" && name!="HTT" && name!="ttHnonbb"){
+            if (sample!="gghbbtt12" && sample!="gghbbtt20" && sample!="gghbbtt30" && sample!="gghbbtt40" && sample!="gghbbtt50" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt20" && sample!="vbfbbtt30" && sample!="vbfbbtt40" && sample!="vbfbbtt50" && sample!="vbfbbtt60" && name!="HTT" && name!="ttHnonbb"){
                 if (gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue;
             }
-*/
-            //initialize workspace with lepton kinematics
-            wmc->var("m_pt")->setVal(pt_2);
-            wmc->var("m_eta")->setVal(eta_2);
-            wmc->var("m_iso")->setVal(iso_2);
-            wmc->var("e_pt")->setVal(pt_1);
-            wmc->var("e_eta")->setVal(eta_1);
-            wmc->var("e_iso")->setVal(iso_1);
             
             //compute trigger scale factor
-            float probData = wmc->function("m_trg_8_ic_data")->getVal()*wmc->function("e_trg_23_ic_data")->getVal()*int(isMu8E23trigger)+wmc->function("m_trg_23_ic_data")->getVal()*wmc->function("e_trg_12_ic_data")->getVal()*int(isMu23E12trigger)-wmc->function("e_trg_23_ic_data")->getVal()*wmc->function("m_trg_23_ic_data")->getVal()*int(isMu8E23trigger && isMu23E12trigger);
-            float probMC = wmc->function("m_trg_8_ic_mc")->getVal()*wmc->function("e_trg_23_ic_mc")->getVal()*int(isMu8E23trigger)+wmc->function("m_trg_23_ic_mc")->getVal()*wmc->function("e_trg_12_ic_mc")->getVal()*int(isMu23E12trigger)-wmc->function("e_trg_23_ic_mc")->getVal()*wmc->function("m_trg_23_ic_mc")->getVal()*int(isMu8E23trigger && isMu23E12trigger);
-            float sf_trg = probData/probMC;
-            sf_MC *= sf_trg;
+            float probData = m_trg_8_ic_data*e_trg_23_ic_data*int(isMu8E23trigger)+m_trg_23_ic_data*e_trg_12_ic_data*int(isMu23E12trigger)-e_trg_23_ic_data*m_trg_23_ic_data*int(isMu8E23trigger && isMu23E12trigger);
+            float probMC = m_trg_8_ic_mc*e_trg_23_ic_mc*int(isMu8E23trigger)+m_trg_23_ic_mc*e_trg_12_ic_mc*int(isMu23E12trigger)-e_trg_23_ic_mc*m_trg_23_ic_mc*int(isMu8E23trigger && isMu23E12trigger);
+            sf_MC *= probData/probMC;
             
             //muon and electron ID/iso/tracking scale factors
-            float sf_mu = wmc->function("m_trk_ratio")->getVal()*wmc->function("m_idiso_ic_ratio")->getVal();
-            float sf_e = wmc->function("e_trk_ratio")->getVal()*wmc->function("e_idiso_ic_ratio")->getVal();
+            float sf_mu = m_trk_ratio * m_idiso_ic_ratio;
+            float sf_e = e_trk_ratio * e_idiso_ic_ratio;
             sf_MC *= sf_mu * sf_e;
             
             //re-weigh Z pT spectrum for DY samples
             if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
-                wmc->var("z_gen_mass")->setVal(genM);
-                wmc->var("z_gen_pt")->setVal(genpT);
-                float zptweight = wmc->function("zptmass_weight_nom")->getVal();
-                sf_MC *= zptweight;
+                sf_MC *= zptmass_weight_nom;
             }
             
             //re-weigh top pT spectrum for ttbar samples
@@ -382,37 +327,18 @@ int main(int argc, char** argv){
             
             if (gen_match_1==6 or gen_match_2==6) continue;
             
-            //initialize workspace with lepton kinematics
-            wmc->var("m_pt")->setVal(pt_2);
-            wmc->var("m_eta")->setVal(eta_2);
-            wmc->var("m_iso")->setVal(iso_2);
-            wmc->var("e_pt")->setVal(pt_1);
-            wmc->var("e_eta")->setVal(eta_1);
-            wmc->var("e_iso")->setVal(iso_1);
-            
             //compute trigger scale factor
-            float probData = wmc->function("m_trg_8_ic_data")->getVal()*wmc->function("e_trg_23_ic_data")->getVal()*int(isMu8E23trigger)+wmc->function("m_trg_23_ic_data")->getVal()*wmc->function("e_trg_12_ic_data")->getVal()*int(isMu23E12trigger)-wmc->function("e_trg_23_ic_data")->getVal()*wmc->function("m_trg_23_ic_data")->getVal()*int(isMu8E23trigger && isMu23E12trigger);
-            float probEmbed = wmc->function("m_trg_8_ic_embed")->getVal()*wmc->function("e_trg_23_ic_embed")->getVal()*int(isMu8E23trigger)+wmc->function("m_trg_23_ic_embed")->getVal()*wmc->function("e_trg_12_ic_embed")->getVal()*int(isMu23E12trigger)-wmc->function("e_trg_23_ic_embed")->getVal()*wmc->function("m_trg_23_ic_embed")->getVal()*int(isMu8E23trigger && isMu23E12trigger);
-            float sf_trg = probData/probEmbed;
-            sf_embed *= sf_trg;
+            float probData = m_trg_8_ic_data*e_trg_23_ic_data*int(isMu8E23trigger)+m_trg_23_ic_data*e_trg_12_ic_data*int(isMu23E12trigger)-e_trg_23_ic_data*m_trg_23_ic_data*int(isMu8E23trigger && isMu23E12trigger);
+            float probEmbed = m_trg_8_ic_embed*e_trg_23_ic_embed*int(isMu8E23trigger)+m_trg_23_ic_embed*e_trg_12_ic_embed*int(isMu23E12trigger)-e_trg_23_ic_embed*m_trg_23_ic_embed*int(isMu8E23trigger && isMu23E12trigger);
+            sf_embed *= probData/probEmbed;
             
             //muon and electron ID/iso/tracking scale factors
-            float sf_mu = wmc->function("m_trk_ratio")->getVal()*wmc->function("m_idiso_ic_embed_ratio")->getVal();
-            float sf_e = wmc->function("e_trk_embed_ratio")->getVal()*wmc->function("e_idiso_ic_embed_ratio")->getVal();
+            float sf_mu = m_trk_ratio * m_idiso_ic_embed_ratio;
+            float sf_e = e_trk_embed_ratio * e_idiso_ic_embed_ratio;
             sf_embed *= sf_mu * sf_e;
             
             //efficiency of selecting Z->mumu data
-            wmc->var("gt1_pt")->setVal(genpt_1);
-            wmc->var("gt2_pt")->setVal(genpt_2);
-            wmc->var("gt1_eta")->setVal(geneta_1);
-            wmc->var("gt2_eta")->setVal(geneta_2);
-            sf_embed *= wmc->function("m_sel_trg_ic_ratio")->getVal();
-            wmc->var("gt_pt")->setVal(genpt_1);
-            wmc->var("gt_eta")->setVal(geneta_1);
-            sf_embed *= wmc->function("m_sel_id_ic_ratio")->getVal();
-            wmc->var("gt_pt")->setVal(genpt_2);
-            wmc->var("gt_eta")->setVal(geneta_2);
-            sf_embed *= wmc->function("m_sel_id_ic_ratio")->getVal();
+            sf_embed *= m_sel_trg_ic_ratio * m_sel_id_ic_ratio_1 * m_sel_id_ic_ratio_2;
             
             //generator weight
             sf_embed *= genweight;
@@ -427,12 +353,12 @@ int main(int argc, char** argv){
         float bMflavor_1 = 0;
         float bMpt_2 = 0;
         float bMflavor_2 = 0;
-        if (bpt_deepcsv_1>20 && bscore_deepcsv_1>0.4941){
+        if (bpt_deepcsv_1>20 && bscore_deepcsv_1>0.4941 && fabs(beta_deepcsv_1)<2.4){
             bMpt_1 = bpt_deepcsv_1;
             bMflavor_1 = bflavour_deepcsv_1;
             nbtag20++;
         }
-        if (bpt_deepcsv_2>20 && bscore_deepcsv_2>0.4941){
+        if (bpt_deepcsv_2>20 && bscore_deepcsv_2>0.4941 && fabs(beta_deepcsv_2)<2.4){
             bMpt_2 = bpt_deepcsv_2;
             bMflavor_2 = bflavour_deepcsv_2;
             nbtag20++;
@@ -452,16 +378,17 @@ int main(int argc, char** argv){
             //2 bjets (apply to 2b events only)
             weight_btag_2b = GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
             //at least 1 bjet (apply to 1b and 2b events)
-            if (nbtag20==1) weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0);
-            if (nbtag20==2) weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0)+GetSF(1, bMpt_2, bMflavor_2, 0)-GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
+            //            if (nbtag20==1) weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0);
+            //            if (nbtag20==2) weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0)+GetSF(1, bMpt_2, bMflavor_2, 0)-GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
+            weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0);
         }
         
         //defining variables for some categories
         TLorentzVector mymet;
         mymet.SetPtEtaPhiM(met,0,metphi,0);
         
-        float mt_emet=TMass_F((myele).Pt(),mymet.Pt(),(myele).Px(),mymet.Px(),(myele).Py(),mymet.Py());
-        float mt_mumet=TMass_F((mymu).Pt(),mymet.Pt(),(mymu).Px(),mymet.Px(),(mymu).Py(),mymet.Py());
+        float mt_tau1=TMass_F((myele).Pt(),mymet.Pt(),(myele).Px(),mymet.Px(),(myele).Py(),mymet.Py());
+        float mt_tau2=TMass_F((mymu).Pt(),mymet.Pt(),(mymu).Px(),mymet.Px(),(mymu).Py(),mymet.Py());
         
         float norm_zeta=norm_F(myele.Px()/myele.Pt()+mymu.Px()/mymu.Pt(),myele.Py()/myele.Pt()+mymu.Py()/mymu.Pt());
         float x_zeta= (myele.Px()/myele.Pt()+mymu.Px()/mymu.Pt())/norm_zeta;
@@ -470,87 +397,16 @@ int main(int argc, char** argv){
         float pzeta_vis=(myele.Px()+mymu.Px())*x_zeta+(myele.Py()+mymu.Py())*y_zeta;
         float dzeta=p_zeta_mis-0.85*pzeta_vis;
         
+        TLorentzVector mytt;
+        mytt.SetPtEtaPhiM((myele+mymu).Pt(),(myele+mymu).Eta(),(myele+mymu).Phi(),m_sv);
         //filling histograms
-        float m_em = (myele + mymu).M();
-        float m_emb = (myele + mymu + myb1).M();
-        float m_embb = (myele + mymu + myb1 + myb2).M();
+        float m_tt = m_sv;
+        float m_btt = (mytt + myb1).M();
+        float m_bbtt = (mytt + myb1 + myb2).M();
         
         //OS region
         if (q_1*q_2<0){
-            //0bjet data/embedded
-            if ((sample=="data_obs" or sample=="embedded") && nbtag20==0){
-                hist_m_em_0b_OS->Fill(m_em,weight_corr*weight_btag_0b);
-                hist_e_pt_0b_OS->Fill(pt_1,weight_corr*weight_btag_0b);
-                hist_m_pt_0b_OS->Fill(pt_2,weight_corr*weight_btag_0b);
-                //diboson
-                if (m_em>100){
-                    hist_m_em_vv_OS->Fill(m_em,weight_corr*weight_btag_0b);
-                    hist_e_pt_vv_OS->Fill(pt_1,weight_corr*weight_btag_0b);
-                    hist_m_pt_vv_OS->Fill(pt_2,weight_corr*weight_btag_0b);
-                }
-            }
-            //0bjet MC
-            if (sample!="data_obs" && sample!="embedded"){
-                hist_m_em_0b_OS->Fill(m_em,weight_corr*weight_btag_0b);
-                hist_e_pt_0b_OS->Fill(pt_1,weight_corr*weight_btag_0b);
-                hist_m_pt_0b_OS->Fill(pt_2,weight_corr*weight_btag_0b);
-                //diboson
-                if (m_em>100){
-                    hist_m_em_vv_OS->Fill(m_em,weight_corr*weight_btag_0b);
-                    hist_e_pt_vv_OS->Fill(pt_1,weight_corr*weight_btag_0b);
-                    hist_m_pt_vv_OS->Fill(pt_2,weight_corr*weight_btag_0b);
-                }
-            }
-            //1bjet
-            if(nbtag20==1 && fabs(beta_deepcsv_1)<2.4){
-                hist_m_em_1b_OS->Fill(m_em,weight_corr*weight_btag_1b);
-                hist_e_pt_1b_OS->Fill(pt_1,weight_corr*weight_btag_1b);
-                hist_m_pt_1b_OS->Fill(pt_2,weight_corr*weight_btag_1b);
-            }
-            
-            //2bjet
-            if(nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4){
-                hist_m_em_2b_OS->Fill(m_em,weight_corr*weight_btag_2b);
-                hist_e_pt_2b_OS->Fill(pt_1,weight_corr*weight_btag_2b);
-                hist_m_pt_2b_OS->Fill(pt_2,weight_corr*weight_btag_2b);
-            }
-            
-            //baseline selection
-            if (((nbtag20==1 && fabs(beta_deepcsv_1)<2.4) or (nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4)) && pt_1>13 && pt_2>13){
-                
-                hist_m_em_OS->Fill(m_em,weight_corr*weight_btag_atleast1b);
-                hist_m_emb_OS->Fill(m_emb,weight_corr*weight_btag_atleast1b);
-                hist_e_pt_OS->Fill(pt_1,weight_corr*weight_btag_atleast1b);
-                hist_m_pt_OS->Fill(pt_2,weight_corr*weight_btag_atleast1b);
-                if (nbtag20==2) hist_m_embb_OS->Fill(m_embb,weight_corr*weight_btag_atleast1b);
-                
-                //vbf at least 1 b
-                if (mjj>500){
-                    hist_m_em_vbf_OS->Fill(m_em,weight_corr*weight_btag_atleast1b);
-                    hist_e_pt_vbf_OS->Fill(pt_1,weight_corr*weight_btag_atleast1b);
-                    hist_m_pt_vbf_OS->Fill(pt_2,weight_corr*weight_btag_atleast1b);
-                }
-                
-                //the 4 categories
-                if (mt_emet<40 && mt_mumet<40 && dzeta>-30){
-                    //category 1
-                    if (m_emb<65){
-                        hist_m_em_OS_1->Fill(m_em,weight_corr*weight_btag_atleast1b);
-                    }
-                    //category 2
-                    if (m_emb>65 && m_emb<80){
-                        hist_m_em_OS_2->Fill(m_em,weight_corr*weight_btag_atleast1b);
-                    }
-                    //category 3
-                    if (m_emb>80 && m_emb<95){
-                        hist_m_em_OS_3->Fill(m_em,weight_corr*weight_btag_atleast1b);
-                    }
-                    //category 4
-                    if (m_emb>95){
-                        hist_m_em_OS_4->Fill(m_em,weight_corr*weight_btag_atleast1b);
-                    }
-                }
-            }
+            //
         }
         
         
@@ -571,259 +427,26 @@ int main(int argc, char** argv){
             
             weight_corr *= ssweight;
             
-            //0bjet data/embedded
-            if ((sample=="data_obs" or sample=="embedded") && nbtag20==0){
-                hist_m_em_0b_SS->Fill(m_em,weight_corr*weight_btag_0b);
-                hist_e_pt_0b_SS->Fill(pt_1,weight_corr*weight_btag_0b);
-                hist_m_pt_0b_SS->Fill(pt_2,weight_corr*weight_btag_0b);
-                //diboson
-                if (m_em>100){
-                    hist_m_em_vv_SS->Fill(m_em,weight_corr*weight_btag_0b);
-                    hist_e_pt_vv_SS->Fill(pt_1,weight_corr*weight_btag_0b);
-                    hist_m_pt_vv_SS->Fill(pt_2,weight_corr*weight_btag_0b);
-                }
-            }
-            //0bjet MC
-            if (sample!="data_obs" && sample!="embedded"){
-                hist_m_em_0b_SS->Fill(m_em,weight_corr*weight_btag_0b);
-                hist_e_pt_0b_SS->Fill(pt_1,weight_corr*weight_btag_0b);
-                hist_m_pt_0b_SS->Fill(pt_2,weight_corr*weight_btag_0b);
-                //diboson
-                if (m_em>100){
-                    hist_m_em_vv_SS->Fill(m_em,weight_corr*weight_btag_0b);
-                    hist_e_pt_vv_SS->Fill(pt_1,weight_corr*weight_btag_0b);
-                    hist_m_pt_vv_SS->Fill(pt_2,weight_corr*weight_btag_0b);
-                }
-            }
-            
-            //1bjet
-            if(nbtag20==1 && fabs(beta_deepcsv_1)<2.4){
-                hist_m_em_1b_SS->Fill(m_em,weight_corr*weight_btag_1b);
-                hist_e_pt_1b_SS->Fill(pt_1,weight_corr*weight_btag_1b);
-                hist_m_pt_1b_SS->Fill(pt_2,weight_corr*weight_btag_1b);
-            }
-            
-            //2bjet
-            if(nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4){
-                hist_m_em_2b_SS->Fill(m_em,weight_corr*weight_btag_2b);
-                hist_e_pt_2b_SS->Fill(pt_1,weight_corr*weight_btag_2b);
-                hist_m_pt_2b_SS->Fill(pt_2,weight_corr*weight_btag_2b);
-            }
-            //baseline selection
-            if (((nbtag20==1 && fabs(beta_deepcsv_1)<2.4) or (nbtag20==2 && fabs(beta_deepcsv_1)<2.4 && fabs(beta_deepcsv_2)<2.4)) && pt_1>13 && pt_2>13){
-                
-                hist_m_em_SS->Fill(m_em,weight_corr*weight_btag_atleast1b);
-                hist_m_emb_SS->Fill(m_emb,weight_corr*weight_btag_atleast1b);
-                hist_e_pt_SS->Fill(pt_1,weight_corr*weight_btag_atleast1b);
-                hist_m_pt_SS->Fill(pt_2,weight_corr*weight_btag_atleast1b);
-                if (nbtag20==2) hist_m_embb_SS->Fill(m_embb,weight_corr*weight_btag_atleast1b);
-                
-                //vbf at least 1 b
-                if (mjj>500){
-                    hist_m_em_vbf_SS->Fill(m_em,weight_corr*weight_btag_atleast1b);
-                    hist_e_pt_vbf_SS->Fill(pt_1,weight_corr*weight_btag_atleast1b);
-                    hist_m_pt_vbf_SS->Fill(pt_2,weight_corr*weight_btag_atleast1b);
-                }
-                
-                //the 4 categories
-                if (mt_emet<40 && mt_mumet<40 && dzeta>-30){
-                    //category 1
-                    if (m_emb<65){
-                        hist_m_em_SS_1->Fill(m_em,weight_corr*weight_btag_atleast1b);
-                    }
-                    //category 2
-                    if (m_emb>65 && m_emb<80){
-                        hist_m_em_SS_2->Fill(m_em,weight_corr*weight_btag_atleast1b);
-                    }
-                    //category 3
-                    if (m_emb>80 && m_emb<95){
-                        hist_m_em_SS_3->Fill(m_em,weight_corr*weight_btag_atleast1b);
-                    }
-                    //category 4
-                    if (m_emb>95){
-                        hist_m_em_SS_4->Fill(m_em,weight_corr*weight_btag_atleast1b);
-                    }
-                }
-            }
+            //
         }
     }
     
     TFile * fout = TFile::Open(output.c_str(), "RECREATE");
-    TDirectory * td1 = fout->mkdir("m_em_1");
-    TDirectory * td2 = fout->mkdir("m_em_2");
-    TDirectory * td3 = fout->mkdir("m_em_3");
-    TDirectory * td4 = fout->mkdir("m_em_4");
-    TDirectory * td5 = fout->mkdir("m_em");
-    TDirectory * td6 = fout->mkdir("m_emb");
-    TDirectory * td7 = fout->mkdir("m_embb");
-    TDirectory * td8 = fout->mkdir("pt_e");
-    TDirectory * td9 = fout->mkdir("pt_m");
     
-    TDirectory * td10 = fout->mkdir("m_em_0b");
-    TDirectory * td11 = fout->mkdir("pt_e_0b");
-    TDirectory * td12 = fout->mkdir("pt_m_0b");
-    TDirectory * td13 = fout->mkdir("m_em_1b");
-    TDirectory * td14 = fout->mkdir("pt_e_1b");
-    TDirectory * td15 = fout->mkdir("pt_m_1b");
-    TDirectory * td16 = fout->mkdir("m_em_2b");
-    TDirectory * td17 = fout->mkdir("pt_e_2b");
-    TDirectory * td18 = fout->mkdir("pt_m_2b");
-    TDirectory * td19 = fout->mkdir("m_em_vbf");
-    TDirectory * td20 = fout->mkdir("pt_e_vbf");
-    TDirectory * td21 = fout->mkdir("pt_m_vbf");
-    TDirectory * td22 = fout->mkdir("m_em_vv");
-    TDirectory * td23 = fout->mkdir("pt_e_vv");
-    TDirectory * td24 = fout->mkdir("pt_m_vv");
+    TDirectory * td11 = fout->mkdir("m_tt_c1");
     
     TString SS="_SS";
     
-    td1->cd();
-    hist_m_em_OS_1->SetName(name.c_str());
-    hist_m_em_OS_1->Write();
-    hist_m_em_SS_1->SetName(name.c_str()+SS);
-    hist_m_em_SS_1->Write();
-    
-    td2->cd();
-    hist_m_em_OS_2->SetName(name.c_str());
-    hist_m_em_OS_2->Write();
-    hist_m_em_SS_2->SetName(name.c_str()+SS);
-    hist_m_em_SS_2->Write();
-    
-    td3->cd();
-    hist_m_em_OS_3->SetName(name.c_str());
-    hist_m_em_OS_3->Write();
-    hist_m_em_SS_3->SetName(name.c_str()+SS);
-    hist_m_em_SS_3->Write();
-    
-    td4->cd();
-    hist_m_em_OS_4->SetName(name.c_str());
-    hist_m_em_OS_4->Write();
-    hist_m_em_SS_4->SetName(name.c_str()+SS);
-    hist_m_em_SS_4->Write();
-    
-    td5->cd();
-    hist_m_em_OS->SetName(name.c_str());
-    hist_m_em_OS->Write();
-    hist_m_em_SS->SetName(name.c_str()+SS);
-    hist_m_em_SS->Write();
-    
-    td6->cd();
-    hist_m_emb_OS->SetName(name.c_str());
-    hist_m_emb_OS->Write();
-    hist_m_emb_SS->SetName(name.c_str()+SS);
-    hist_m_emb_SS->Write();
-    
-    td7->cd();
-    hist_m_embb_OS->SetName(name.c_str());
-    hist_m_embb_OS->Write();
-    hist_m_embb_SS->SetName(name.c_str()+SS);
-    hist_m_embb_SS->Write();
-    
-    td8->cd();
-    hist_e_pt_OS->SetName(name.c_str());
-    hist_e_pt_OS->Write();
-    hist_e_pt_SS->SetName(name.c_str()+SS);
-    hist_e_pt_SS->Write();
-    
-    td9->cd();
-    hist_m_pt_OS->SetName(name.c_str());
-    hist_m_pt_OS->Write();
-    hist_m_pt_SS->SetName(name.c_str()+SS);
-    hist_m_pt_SS->Write();
-    
-    td10->cd();
-    hist_m_em_0b_OS->SetName(name.c_str());
-    hist_m_em_0b_OS->Write();
-    hist_m_em_0b_SS->SetName(name.c_str()+SS);
-    hist_m_em_0b_SS->Write();
-    
     td11->cd();
-    hist_e_pt_0b_OS->SetName(name.c_str());
-    hist_e_pt_0b_OS->Write();
-    hist_e_pt_0b_SS->SetName(name.c_str()+SS);
-    hist_e_pt_0b_SS->Write();
+    hist_m_tt_c1_OS->SetName(name.c_str());
+    hist_m_tt_c1_OS->Write();
+    hist_m_tt_c1_SS->SetName(name.c_str()+SS);
+    hist_m_tt_c1_SS->Write();
+
     
-    td12->cd();
-    hist_m_pt_0b_OS->SetName(name.c_str());
-    hist_m_pt_0b_OS->Write();
-    hist_m_pt_0b_SS->SetName(name.c_str()+SS);
-    hist_m_pt_0b_SS->Write();
-    
-    td13->cd();
-    hist_m_em_1b_OS->SetName(name.c_str());
-    hist_m_em_1b_OS->Write();
-    hist_m_em_1b_SS->SetName(name.c_str()+SS);
-    hist_m_em_1b_SS->Write();
-    
-    td14->cd();
-    hist_e_pt_1b_OS->SetName(name.c_str());
-    hist_e_pt_1b_OS->Write();
-    hist_e_pt_1b_SS->SetName(name.c_str()+SS);
-    hist_e_pt_1b_SS->Write();
-    
-    td15->cd();
-    hist_m_pt_1b_OS->SetName(name.c_str());
-    hist_m_pt_1b_OS->Write();
-    hist_m_pt_1b_SS->SetName(name.c_str()+SS);
-    hist_m_pt_1b_SS->Write();
-    
-    td16->cd();
-    hist_m_em_2b_OS->SetName(name.c_str());
-    hist_m_em_2b_OS->Write();
-    hist_m_em_2b_SS->SetName(name.c_str()+SS);
-    hist_m_em_2b_SS->Write();
-    
-    td17->cd();
-    hist_e_pt_2b_OS->SetName(name.c_str());
-    hist_e_pt_2b_OS->Write();
-    hist_e_pt_2b_SS->SetName(name.c_str()+SS);
-    hist_e_pt_2b_SS->Write();
-    
-    td18->cd();
-    hist_m_pt_2b_OS->SetName(name.c_str());
-    hist_m_pt_2b_OS->Write();
-    hist_m_pt_2b_SS->SetName(name.c_str()+SS);
-    hist_m_pt_2b_SS->Write();
-    
-    td19->cd();
-    hist_m_em_vbf_OS->SetName(name.c_str());
-    hist_m_em_vbf_OS->Write();
-    hist_m_em_vbf_SS->SetName(name.c_str()+SS);
-    hist_m_em_vbf_SS->Write();
-    
-    td20->cd();
-    hist_e_pt_vbf_OS->SetName(name.c_str());
-    hist_e_pt_vbf_OS->Write();
-    hist_e_pt_vbf_SS->SetName(name.c_str()+SS);
-    hist_e_pt_vbf_SS->Write();
-    
-    td21->cd();
-    hist_m_pt_vbf_OS->SetName(name.c_str());
-    hist_m_pt_vbf_OS->Write();
-    hist_m_pt_vbf_SS->SetName(name.c_str()+SS);
-    hist_m_pt_vbf_SS->Write();
-    
-    td22->cd();
-    hist_m_em_vv_OS->SetName(name.c_str());
-    hist_m_em_vv_OS->Write();
-    hist_m_em_vv_SS->SetName(name.c_str()+SS);
-    hist_m_em_vv_SS->Write();
-    
-    td23->cd();
-    hist_e_pt_vv_OS->SetName(name.c_str());
-    hist_e_pt_vv_OS->Write();
-    hist_e_pt_vv_SS->SetName(name.c_str()+SS);
-    hist_e_pt_vv_SS->Write();
-    
-    td24->cd();
-    hist_m_pt_vv_OS->SetName(name.c_str());
-    hist_m_pt_vv_OS->Write();
-    hist_m_pt_vv_SS->SetName(name.c_str()+SS);
-    hist_m_pt_vv_SS->Write();
     
     fout->Close();
     
-    delete wmc;
     
     cout << "************* output: " << output.c_str() << " *************" << endl;
     
