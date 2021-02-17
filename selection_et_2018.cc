@@ -49,6 +49,11 @@ int main(int argc, char** argv){
     TH1F * nevents = (TH1F*) skimmed->Get("nevents");
     float N = nevents->GetBinContent(2); //no. of generated events (before skimming) with genweight
     
+    std::string dnnfile = sample.c_str();
+    dnnfile = "/hdfs/store/user/htsoi/dnn/et18/" + dnnfile + ".root";
+    TFile * dnn = new TFile(dnnfile.c_str());
+    TTree * tree_dnn = (TTree*) dnn->Get("etau_tree_dnn");
+    
     //sample weights
     float xs, weight, luminosity = 59740.0;
     
@@ -192,7 +197,44 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("m_sel_id_ic_ratio_2", &m_sel_id_ic_ratio_2);
     tree->SetBranchAddress("m_sv", &m_sv);
     
+    tree_dnn->SetBranchAddress("pred_1b", &pred_1b);
+    tree_dnn->SetBranchAddress("pred_2b", &pred_2b);
     
+    TH1F * hist_p_1b_OS = new TH1F("","", 40, 0., 1.);
+    TH1F * hist_p_1b_SS = new TH1F("","", 40, 0., 1.);
+    TH1F * hist_p_2b_OS = new TH1F("","", 20, 0., 1.);
+    TH1F * hist_p_2b_SS = new TH1F("","", 20, 0., 1.);
+    
+    TH1F * hist_p_1b_z_OS = new TH1F("","", 40, 0.98, 1.);
+    TH1F * hist_p_1b_z_SS = new TH1F("","", 40, 0.98, 1.);
+    TH1F * hist_p_2b_z_OS = new TH1F("","", 40, 0.999, 1.);
+    TH1F * hist_p_2b_z_SS = new TH1F("","", 40, 0.999, 1.);
+    
+    TH1F * hist_m_tt_1_OS = new TH1F("","", 9, 10., 100.);
+    TH1F * hist_m_tt_1_SS = new TH1F("","", 9, 10., 100.);
+    TH1F * hist_m_tt_2_OS = new TH1F("","", 12, 10., 106.);
+    TH1F * hist_m_tt_2_SS = new TH1F("","", 12, 10., 106.);
+    TH1F * hist_m_tt_3_OS = new TH1F("","", 12, 10., 106.);
+    TH1F * hist_m_tt_3_SS = new TH1F("","", 12, 10., 106.);
+    TH1F * hist_m_tt_4_OS = new TH1F("","", 15, 0., 300.);
+    TH1F * hist_m_tt_4_SS = new TH1F("","", 15, 0., 300.);
+    TH1F * hist_m_tt_5_OS = new TH1F("","", 8, 10., 106.);
+    TH1F * hist_m_tt_5_SS = new TH1F("","", 8, 10., 106.);
+    TH1F * hist_m_tt_6_OS = new TH1F("","", 8, 10., 106.);
+    TH1F * hist_m_tt_6_SS = new TH1F("","", 8, 10., 106.);
+    TH1F * hist_m_tt_7_OS = new TH1F("","", 15, 0., 300.);
+    TH1F * hist_m_tt_7_SS = new TH1F("","", 15, 0., 300.);
+    
+    TH1F * hist_m_tt_1_CB_OS = new TH1F("","", 9, 10., 82.);
+    TH1F * hist_m_tt_1_CB_SS = new TH1F("","", 9, 10., 82.);
+    TH1F * hist_m_tt_2_CB_OS = new TH1F("","", 12, 10., 106.);
+    TH1F * hist_m_tt_2_CB_SS = new TH1F("","", 12, 10., 106.);
+    TH1F * hist_m_tt_3_CB_OS = new TH1F("","", 10, 0., 200.);
+    TH1F * hist_m_tt_3_CB_SS = new TH1F("","", 10, 0., 200.);
+    TH1F * hist_m_tt_4_CB_OS = new TH1F("","", 10, 10., 110.);
+    TH1F * hist_m_tt_4_CB_SS = new TH1F("","", 10, 10., 110.);
+    TH1F * hist_m_tt_5_CB_OS = new TH1F("","", 10, 0., 200.);
+    TH1F * hist_m_tt_5_CB_SS = new TH1F("","", 10, 0., 200.);
 
     //access pileup distributions in data/MC
     reweight::LumiReWeighting* LumiWeights_12;
@@ -218,6 +260,7 @@ int main(int argc, char** argv){
     for(int i = 0; i < n; i++){
         if(i % 10000 == 0) printf("event %d of %d...\n", i, n);
         tree->GetEntry(i);
+        tree_dnn->GetEntry(i);
         
         //MET filters
         if (Flag_goodVertices) continue;
@@ -336,13 +379,17 @@ int main(int argc, char** argv){
                 else if (fabs(eta_2)<1.7) sf_MC *= 0.953*0.974;
                 else sf_MC *= 0.936*5.342;
             }
-            
         }
         
         float sf_embed = 1.0;
         
         //scale factors for embedded Z->tautau and corrections
         if (sample=="embedded"){
+            
+            if (l2_decayMode==0) sf_embed *= 0.975;
+            else if (l2_decayMode==1) sf_embed *= 0.975*1.051;
+            else if (l2_decayMode==10) sf_embed *= 0.975*0.975*0.975;
+            else sf_embed *= 0.975*0.975*0.975*1.051;
             
             if (gen_match_2==6) continue;
             
@@ -424,7 +471,7 @@ int main(int argc, char** argv){
         float dzeta=p_zeta_mis-0.85*pzeta_vis;
         
         TLorentzVector mytt;
-        mytt.SetPtEtaPhiM((myele+mytau).Pt(),(myele+mytau).Eta(),(myele+mytau).Phi(),m_sv);
+        mytt.SetPtEtaPhiM((myele+mytau+mymet).Pt(),(myele+mytau+mymet).Eta(),(myele+mytau+mymet).Phi(),m_sv);
         //filling histograms
         float m_tt = m_sv;
         float m_btt = (mytt + myb1).M();
@@ -432,7 +479,32 @@ int main(int argc, char** argv){
         
         //jet faking tau_h (to be failed in qcd)
         if (byMediumDeepVSjet_2){
-            //
+            //DNN
+            if (nbtag20==1){
+                hist_p_1b_OS->Fill(pred_1b,weight_corr*weight_btag_1b);
+                hist_p_1b_z_OS->Fill(pred_1b,weight_corr*weight_btag_1b);
+                if (pred_1b>0.9995) hist_m_tt_1_OS->Fill(m_tt,weight_corr*weight_btag_1b);
+                if (pred_1b>0.995 && pred_1b<0.9995) hist_m_tt_2_OS->Fill(m_tt,weight_corr*weight_btag_1b);
+                if (pred_1b>0.99 && pred_1b<0.995) hist_m_tt_3_OS->Fill(m_tt,weight_corr*weight_btag_1b);
+                if (pred_1b<0.99) hist_m_tt_4_OS->Fill(m_tt,weight_corr*weight_btag_1b);
+            }
+            if (nbtag20==2){
+                hist_p_2b_OS->Fill(pred_2b,weight_corr*weight_btag_2b);
+                hist_p_2b_z_OS->Fill(pred_2b,weight_corr*weight_btag_2b);
+                if (pred_2b>0.99995) hist_m_tt_5_OS->Fill(m_tt,weight_corr*weight_btag_2b);
+                if (pred_2b>0.9997 && pred_2b<0.99995) hist_m_tt_6_OS->Fill(m_tt,weight_corr*weight_btag_2b);
+                if (pred_2b<0.9997) hist_m_tt_7_OS->Fill(m_tt,weight_corr*weight_btag_2b);
+            }
+            //CB
+            if (nbtag20==1 && mt_tau1<50 && mt_tau2<60){
+                if (m_btt<90) hist_m_tt_1_CB_OS->Fill(m_tt,weight_corr*weight_btag_1b);
+                if (m_btt>90 && m_btt<105) hist_m_tt_2_CB_OS->Fill(m_tt,weight_corr*weight_btag_1b);
+                if (m_btt>105) hist_m_tt_3_CB_OS->Fill(m_tt,weight_corr*weight_btag_1b);
+            }
+            if (nbtag20==2 && mt_tau1<50 && mt_tau2<60){
+                if (m_bbtt<160) hist_m_tt_4_CB_OS->Fill(m_tt,weight_corr*weight_btag_2b);
+                if (m_bbtt>160) hist_m_tt_5_CB_OS->Fill(m_tt,weight_corr*weight_btag_2b);
+            }
         }
         
         //for qcd background
@@ -452,17 +524,152 @@ int main(int argc, char** argv){
             //for nonzero b cat
             float weight_corr_bjet = weight_corr * weight_qcd_bjet;
             
-           //
+            //DNN
+            if (nbtag20==1){
+                hist_p_1b_SS->Fill(pred_1b,weight_corr_bjet*weight_btag_1b);
+                hist_p_1b_z_SS->Fill(pred_1b,weight_corr_bjet*weight_btag_1b);
+                if (pred_1b>0.9995) hist_m_tt_1_SS->Fill(m_tt,weight_corr_bjet*weight_btag_1b);
+                if (pred_1b>0.995 && pred_1b<0.9995) hist_m_tt_2_SS->Fill(m_tt,weight_corr_bjet*weight_btag_1b);
+                if (pred_1b>0.99 && pred_1b<0.995) hist_m_tt_3_SS->Fill(m_tt,weight_corr_bjet*weight_btag_1b);
+                if (pred_1b<0.99) hist_m_tt_4_SS->Fill(m_tt,weight_corr_bjet*weight_btag_1b);
+            }
+            if (nbtag20==2){
+                hist_p_2b_SS->Fill(pred_2b,weight_corr_bjet*weight_btag_2b);
+                hist_p_2b_z_SS->Fill(pred_2b,weight_corr_bjet*weight_btag_2b);
+                if (pred_2b>0.99995) hist_m_tt_5_SS->Fill(m_tt,weight_corr_bjet*weight_btag_2b);
+                if (pred_2b>0.9997 && pred_2b<0.99995) hist_m_tt_6_SS->Fill(m_tt,weight_corr_bjet*weight_btag_2b);
+                if (pred_2b<0.9997) hist_m_tt_7_SS->Fill(m_tt,weight_corr_bjet*weight_btag_2b);
+            }
+            //CB
+            if (nbtag20==1 && mt_tau1<50 && mt_tau2<60){
+                if (m_btt<90) hist_m_tt_1_CB_SS->Fill(m_tt,weight_corr_bjet*weight_btag_1b);
+                if (m_btt>90 && m_btt<105) hist_m_tt_2_CB_SS->Fill(m_tt,weight_corr_bjet*weight_btag_1b);
+                if (m_btt>105) hist_m_tt_3_CB_SS->Fill(m_tt,weight_corr_bjet*weight_btag_1b);
+            }
+            if (nbtag20==2 && mt_tau1<50 && mt_tau2<60){
+                if (m_bbtt<160) hist_m_tt_4_CB_SS->Fill(m_tt,weight_corr_bjet*weight_btag_2b);
+                if (m_bbtt>160) hist_m_tt_5_CB_SS->Fill(m_tt,weight_corr_bjet*weight_btag_2b);
+            }
         }
     }
     
     TFile * fout = TFile::Open(output.c_str(), "RECREATE");
     
+    TDirectory * t1 = fout->mkdir("p_1b");
+    TDirectory * t2 = fout->mkdir("p_2b");
+    TDirectory * t3 = fout->mkdir("p_1b_z");
+    TDirectory * t4 = fout->mkdir("p_2b_z");
+    TDirectory * t5 = fout->mkdir("m_tt_1");
+    TDirectory * t6 = fout->mkdir("m_tt_2");
+    TDirectory * t7 = fout->mkdir("m_tt_3");
+    TDirectory * t8 = fout->mkdir("m_tt_4");
+    TDirectory * t9 = fout->mkdir("m_tt_5");
+    TDirectory * t10 = fout->mkdir("m_tt_6");
+    TDirectory * t11 = fout->mkdir("m_tt_7");
     
+    TDirectory * t12 = fout->mkdir("m_tt_CB_1");
+    TDirectory * t13 = fout->mkdir("m_tt_CB_2");
+    TDirectory * t14 = fout->mkdir("m_tt_CB_3");
+    TDirectory * t15 = fout->mkdir("m_tt_CB_4");
+    TDirectory * t16 = fout->mkdir("m_tt_CB_5");
     
     TString SS="_SS";
     
+    t1->cd();
+    hist_p_1b_OS->SetName(name.c_str());
+    hist_p_1b_OS->Write();
+    hist_p_1b_SS->SetName(name.c_str()+SS);
+    hist_p_1b_SS->Write();
     
+    t2->cd();
+    hist_p_2b_OS->SetName(name.c_str());
+    hist_p_2b_OS->Write();
+    hist_p_2b_SS->SetName(name.c_str()+SS);
+    hist_p_2b_SS->Write();
+    
+    t3->cd();
+    hist_p_1b_z_OS->SetName(name.c_str());
+    hist_p_1b_z_OS->Write();
+    hist_p_1b_z_SS->SetName(name.c_str()+SS);
+    hist_p_1b_z_SS->Write();
+    
+    t4->cd();
+    hist_p_2b_z_OS->SetName(name.c_str());
+    hist_p_2b_z_OS->Write();
+    hist_p_2b_z_SS->SetName(name.c_str()+SS);
+    hist_p_2b_z_SS->Write();
+    
+    t5->cd();
+    hist_m_tt_1_OS->SetName(name.c_str());
+    hist_m_tt_1_OS->Write();
+    hist_m_tt_1_SS->SetName(name.c_str()+SS);
+    hist_m_tt_1_SS->Write();
+    
+    t6->cd();
+    hist_m_tt_2_OS->SetName(name.c_str());
+    hist_m_tt_2_OS->Write();
+    hist_m_tt_2_SS->SetName(name.c_str()+SS);
+    hist_m_tt_2_SS->Write();
+    
+    t7->cd();
+    hist_m_tt_3_OS->SetName(name.c_str());
+    hist_m_tt_3_OS->Write();
+    hist_m_tt_3_SS->SetName(name.c_str()+SS);
+    hist_m_tt_3_SS->Write();
+    
+    t8->cd();
+    hist_m_tt_4_OS->SetName(name.c_str());
+    hist_m_tt_4_OS->Write();
+    hist_m_tt_4_SS->SetName(name.c_str()+SS);
+    hist_m_tt_4_SS->Write();
+    
+    t9->cd();
+    hist_m_tt_5_OS->SetName(name.c_str());
+    hist_m_tt_5_OS->Write();
+    hist_m_tt_5_SS->SetName(name.c_str()+SS);
+    hist_m_tt_5_SS->Write();
+    
+    t10->cd();
+    hist_m_tt_6_OS->SetName(name.c_str());
+    hist_m_tt_6_OS->Write();
+    hist_m_tt_6_SS->SetName(name.c_str()+SS);
+    hist_m_tt_6_SS->Write();
+    
+    t11->cd();
+    hist_m_tt_7_OS->SetName(name.c_str());
+    hist_m_tt_7_OS->Write();
+    hist_m_tt_7_SS->SetName(name.c_str()+SS);
+    hist_m_tt_7_SS->Write();
+    
+    t12->cd();
+    hist_m_tt_1_CB_OS->SetName(name.c_str());
+    hist_m_tt_1_CB_OS->Write();
+    hist_m_tt_1_CB_SS->SetName(name.c_str()+SS);
+    hist_m_tt_1_CB_SS->Write();
+    
+    t13->cd();
+    hist_m_tt_2_CB_OS->SetName(name.c_str());
+    hist_m_tt_2_CB_OS->Write();
+    hist_m_tt_2_CB_SS->SetName(name.c_str()+SS);
+    hist_m_tt_2_CB_SS->Write();
+    
+    t14->cd();
+    hist_m_tt_3_CB_OS->SetName(name.c_str());
+    hist_m_tt_3_CB_OS->Write();
+    hist_m_tt_3_CB_SS->SetName(name.c_str()+SS);
+    hist_m_tt_3_CB_SS->Write();
+    
+    t15->cd();
+    hist_m_tt_4_CB_OS->SetName(name.c_str());
+    hist_m_tt_4_CB_OS->Write();
+    hist_m_tt_4_CB_SS->SetName(name.c_str()+SS);
+    hist_m_tt_4_CB_SS->Write();
+    
+    t16->cd();
+    hist_m_tt_5_CB_OS->SetName(name.c_str());
+    hist_m_tt_5_CB_OS->Write();
+    hist_m_tt_5_CB_SS->SetName(name.c_str()+SS);
+    hist_m_tt_5_CB_SS->Write();
     
     fout->Close();
     
