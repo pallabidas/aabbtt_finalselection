@@ -1,10 +1,10 @@
 import ROOT
 
-file=ROOT.TFile("final_et_2018.root","update")
+file=ROOT.TFile("final_mt_2018.root","update")
 
-dir=["p_1b","p_2b","p_1b_z","p_2b_z","m_tt_1","m_tt_2","m_tt_3","m_tt_4","m_tt_5","m_tt_6","m_tt_7","m_tt_CB_1","m_tt_CB_2","m_tt_CB_3","m_tt_CB_4","m_tt_CB_5"]
+dir=["pt_t1_1b","pt_t2_1b","m_btt_1b","m_bt1_1b","m_bt2_1b","dr_tt_1b","dr_bt1_1b","dr_bt2_1b","dr_btt_1b","pt_tt_1b","eta_tt_1b","mt_t1_1b","mt_t2_1b","mt_b_1b","normzeta_1b","dzeta_1b","pt_b_1b","met_1b","njets_1b","pt_t1_2b","pt_t2_2b","m_b1tt_2b","m_b1t1_2b","m_b1t2_2b","dr_tt_2b","dr_b1t1_2b","dr_b1t2_2b","dr_b1tt_2b","pt_tt_2b","eta_tt_2b","mt_t1_2b","mt_t2_2b","mt_b1_2b","normzeta_2b","dzeta_2b","pt_b1_2b","met_2b","njets_2b","m_b2tt_2b","m_bbt1_2b","m_bbt2_2b","m_bbtt_2b","m_bb_2b","m_b2t1_2b","m_b2t2_2b","dr_b2t1_2b","dr_b2t2_2b","dr_bb_2b","dr_b2tt_2b","dr_bbtt_2b","dr_bbt1_2b","dr_bbt2_2b","mt_b2_2b","pt_b2_2b","dma_2b"]
 
-for i in range (0,16):
+for i in range (0,55):
     Data_SS=file.Get(dir[i]).Get("data_obs_SS")
     HTT_SS=file.Get(dir[i]).Get("HTT_SS")
     HWW_SS=file.Get(dir[i]).Get("HWW_SS")
@@ -37,6 +37,7 @@ for i in range (0,16):
     
     blinded.SetName("blinded")
     blinded.Write()
+
 
 
 

@@ -78,17 +78,15 @@ adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
 trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",0.5)
 
-#categories=["m_btt_1b","m_bbtt_2b","mt_tau1","mt_tau2","dz"]
 
-categories=["m_tt_c1","m_tt_c2","m_tt_c3","m_tt_c4","m_tt_c5"]
+categories=["p_1b","p_2b","p_1b_z","p_2b_z","m_tt_1","m_tt_2","m_tt_3","m_tt_4","m_tt_5","m_tt_6","m_tt_7","m_tt_CB_1","m_tt_CB_2","m_tt_CB_3","m_tt_CB_4","m_tt_CB_5"]
 
-#xaxis=["m^{vis}_{b#tau#tau} (GeV)","m^{vis}_{bb#tau#tau} (GeV)","m_{T}(#mu,#vec{p}^{miss}_{T}) (GeV)","m_{T}(#tau_{h},#vec{p}^{miss}_{T}) (GeV)","D_{#zeta} (GeV)"]
+xaxis=["Signal probability","Signal probability","Signal probability","Signal probability","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)"]
 
-xaxis=["m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)","m^{vis}_{#tau#tau} (GeV)"]
-
-ncat=5
+ncat=16
 
 for i in range (0,ncat):
+   #Data=file.Get(categories[i]).Get("data_obs")
    Data=file.Get(categories[i]).Get("blinded")
    HTT=file.Get(categories[i]).Get("HTT")
    HWW=file.Get(categories[i]).Get("HWW")
@@ -100,13 +98,27 @@ for i in range (0,ncat):
    ST=file.Get(categories[i]).Get("ST")
    ttHnonbb=file.Get(categories[i]).Get("ttHnonbb")
    QCD=file.Get(categories[i]).Get("QCD")
-   bbtt12=file.Get(categories[i]).Get("bbtt12")
-   bbtt20=file.Get(categories[i]).Get("bbtt20")
-   bbtt40=file.Get(categories[i]).Get("bbtt40")
-   bbtt60=file.Get(categories[i]).Get("bbtt60")
-   
+   #gghbbtt12=file.Get(categories[i]).Get("gghbbtt12")
+   gghbbtt20=file.Get(categories[i]).Get("gghbbtt20")
+   gghbbtt40=file.Get(categories[i]).Get("gghbbtt40")
+   gghbbtt60=file.Get(categories[i]).Get("gghbbtt60")
+   #vbfbbtt12=file.Get(categories[i]).Get("vbfbbtt12")
+   vbfbbtt20=file.Get(categories[i]).Get("vbfbbtt20")
+   vbfbbtt40=file.Get(categories[i]).Get("vbfbbtt40")
+   vbfbbtt60=file.Get(categories[i]).Get("vbfbbtt60")
+
+   #bbtt12=gghbbtt12
+   #bbtt12.Add(vbfbbtt12)
+   bbtt20=gghbbtt20
+   bbtt20.Add(vbfbbtt20)
+   bbtt40=gghbbtt40
+   bbtt40.Add(vbfbbtt40)
+   bbtt60=gghbbtt60
+   bbtt60.Add(vbfbbtt60)
+
    Other=HTT
    Other.Add(HWW)
+#   Other.Add(W)
    Other.Add(VV)
    Other.Add(ST)
    Other.Add(ttHnonbb)
@@ -149,8 +161,8 @@ for i in range (0,ncat):
    Other.SetLineColor(1)
    Data.SetLineColor(1)
    Data.SetLineWidth(2)
-   bbtt12.SetLineColor(6)
-   bbtt12.SetLineWidth(3)
+   #bbtt12.SetLineColor(6)
+   #bbtt12.SetLineWidth(3)
    bbtt20.SetLineColor(3)
    bbtt20.SetLineWidth(3)
    bbtt40.SetLineColor(2)
@@ -180,8 +192,8 @@ for i in range (0,ncat):
    errorBand.Add(ZTT)
 #   errorBand.Add(ST)
 #   errorBand.Add(ttHnonbb)
-   errorBand.Add(QCD)
    errorBand.Add(Other)
+   errorBand.Add(QCD)
    errorBand.SetMarkerSize(0)
    errorBand.SetFillColor(new_idx)
    errorBand.SetFillStyle(3001)
@@ -211,8 +223,8 @@ for i in range (0,ncat):
    print Data.GetMaximum(),Data.GetMinimum()
    Data.Draw("e")
    stack.Draw("histsame")
-   bbtt12.Scale(10)
-   bbtt12.Draw("histsame")
+   #bbtt12.Scale(10)
+   #bbtt12.Draw("histsame")
    bbtt20.Scale(10)
    bbtt20.Draw("histsame")
    bbtt40.Scale(10)
@@ -224,26 +236,22 @@ for i in range (0,ncat):
    Data.Draw("esame")
 
    legende=make_legend()
-   legende.AddEntry(Data,"Blinded","elp")#Observed
+   legende.AddEntry(Data,"Observed","elp")#Observed
 #   legende.AddEntry(HTT,"H#rightarrow#tau#tau","f")
 #   legende.AddEntry(HWW,"HWW","f")
    legende.AddEntry(Z,"Z#rightarrowee/#mu#mu","f")
 #   legende.AddEntry(W,"W+jets","f")
-   legende.AddEntry(TT,"t#bar{t}","f")
+   legende.AddEntry(TT,"t#bar{t}+jets","f")
 #   legende.AddEntry(VV,"VV","f")
-   legende.AddEntry(ZTT,"Embedded Z#rightarrow#tau#tau","f")
+   legende.AddEntry(ZTT,"Z#rightarrow#tau#tau","f")
 #   legende.AddEntry(ST,"Single t","f")
 #   legende.AddEntry(ttHnonbb,"ttH (no H#rightarrowbb)","f")
-   legende.AddEntry(QCD,"jet#rightarrow#tau_{h}","f")
+   legende.AddEntry(QCD,"jet#rightarrow#tau_{h} fakes","f")
    legende.AddEntry(Other,"Other","f")
-   legende.AddEntry(bbtt12,"m_{a}=12GeV,B=10%","l")
+   #legende.AddEntry(bbtt12,"m_{a}=12GeV,B=10%","l")
    legende.AddEntry(bbtt20,"m_{a}=20GeV,B=10%","l")
    legende.AddEntry(bbtt40,"m_{a}=40GeV,B=10%","l")
    legende.AddEntry(bbtt60,"m_{a}=60GeV,B=10%","l")
-#   legende.AddEntry(bbtt12,"m_{a}=12GeV,x30","l")
-#   legende.AddEntry(bbtt20,"m_{a}=20GeV,x30","l")
-#   legende.AddEntry(bbtt40,"m_{a}=40GeV,x30","l")
-#   legende.AddEntry(bbtt60,"m_{a}=60GeV,x30","l")
    legende.AddEntry(errorBand,"Uncertainty","f")
    legende.Draw()
 
@@ -308,8 +316,28 @@ for i in range (0,ncat):
    pad1.Draw()
 
    ROOT.gPad.RedrawAxis()
-   
+    
    c.Modified()
+   ''' 
+   mmin = 0.1
+   mmax = 1e6
+   Data.SetMinimum(mmin)
+   Data.SetMaximum(mmax)
+   stack.SetMinimum(mmin)
+   stack.SetMaximum(mmax)
+   #bbtt12.SetMinimum(mmin)
+   #bbtt12.SetMaximum(mmax)
+   bbtt20.SetMinimum(mmin)
+   bbtt20.SetMaximum(mmax)
+   bbtt40.SetMinimum(mmin)
+   bbtt40.SetMaximum(mmax)
+   bbtt60.SetMinimum(mmin)
+   bbtt60.SetMaximum(mmax)
+   errorBand.SetMinimum(mmin)
+   errorBand.SetMaximum(mmax)
+   pad1.SetLogy()
+   '''
+
    c.SaveAs(categories[i]+".png")
 
 

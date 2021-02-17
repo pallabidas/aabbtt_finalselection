@@ -13,7 +13,7 @@ def add_channel():
     lumi.SetTextColor(    1 )
     lumi.SetTextSize(0.072)
     lumi.SetTextFont (   42 )
-    lumi.AddText("e#mu")
+    lumi.AddText("#mu#tau")
     return lumi
 
 def add_lumi():
@@ -72,26 +72,26 @@ ROOT.gStyle.SetOptStat(0)
 c=ROOT.TCanvas("canvas","",0,0,900,600)
 c.cd()
 
-file=ROOT.TFile("final_em_2018.root","r")
+file=ROOT.TFile("final_mt_2018.root","r")
 
 adapt=ROOT.gROOT.GetColor(12)
 new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
 trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",0.5)
 
 
-categories=["p_1b","p_2b","p_1b_z","p_2b_z","m_tt_1","m_tt_2","m_tt_3","m_tt_4","m_tt_5","m_tt_6","m_tt_7","m_tt_CB_1","m_tt_CB_2","m_tt_CB_3","m_tt_CB_4","m_tt_CB_5"]
+categories=["pt_t1_1b","pt_t2_1b","m_btt_1b","m_bt1_1b","m_bt2_1b","dr_tt_1b","dr_bt1_1b","dr_bt2_1b","dr_btt_1b","pt_tt_1b","eta_tt_1b","mt_t1_1b","mt_t2_1b","mt_b_1b","normzeta_1b","dzeta_1b","pt_b_1b","met_1b","njets_1b","pt_t1_2b","pt_t2_2b","m_b1tt_2b","m_b1t1_2b","m_b1t2_2b","dr_tt_2b","dr_b1t1_2b","dr_b1t2_2b","dr_b1tt_2b","pt_tt_2b","eta_tt_2b","mt_t1_2b","mt_t2_2b","mt_b1_2b","normzeta_2b","dzeta_2b","pt_b1_2b","met_2b","njets_2b","m_b2tt_2b","m_bbt1_2b","m_bbt2_2b","m_bbtt_2b","m_bb_2b","m_b2t1_2b","m_b2t2_2b","dr_b2t1_2b","dr_b2t2_2b","dr_bb_2b","dr_b2tt_2b","dr_bbtt_2b","dr_bbt1_2b","dr_bbt2_2b","mt_b2_2b","pt_b2_2b","dma_2b"]
 
-xaxis=["Signal probability","Signal probability","Signal probability","Signal probability","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)"]
+xaxis=["#mu pT (GeV)","#tau_{h} pT (GeV)","m_{b#tau#tau} (GeV)","m^{vis}_{b#mu} (GeV)","m^{vis}_{b#tau_{h}} (GeV)","dR(#mu,#tau_{h})","dR(b,#mu)","dR(b,#tau_{h})","dR(b,#tau#tau)","#tau#tau pT (GeV)","#tau#tau #eta","mT(#mu,MET) (GeV)","mT(#tau_{h},MET) (GeV)","mT(b,MET) (GeV)","norm_zeta","D_{#zeta} (GeV)","Leading b pT (GeV)","MET (GeV)", "njets","#mu pT (GeV)","#tau_{h} pT (GeV)","m_{b1#tau#tau} (GeV)","m^{vis}_{b1#mu} (GeV)","m^{vis}_{b1#tau_{h}} (GeV)","dR(#mu,#tau_{h})","dR(b1,#mu)","dR(b1,#tau_{h})","dR(b1,#tau#tau)","#tau#tau pT (GeV)","#tau#tau #eta","mT(#mu,MET) (GeV)","mT(#tau_{h},MET) (GeV)","mT(b1,MET) (GeV)","norm_zeta","D_{#zeta} (GeV)","Leading b pT (GeV)","MET (GeV)", "njets","m_{b2#tau#tau} (GeV)","m^{vis}_{bb#mu} (GeV)","m^{vis}_{bb#tau_{h}} (GeV)","m_{bb#tau#tau} (GeV)","m_{bb} (GeV)","m^{vis}_{b2#mu} (GeV)","m^{vis}_{b2#tau_{h}} (GeV)","dR(b2,#mu)","dR(b2,#tau_{h})","dR(b1,b2)","dR(b2,#tau#tau)","dR(bb,#tau#tau)","dR(bb,#mu)","dR(bb,#tau_{h})","mT(b2,MET) (GeV)","Sub-leading b pT (GeV)","(m_{bb}-m_{#tau#tau})/m_{#tau#tau}"]
 
-ncat=16
+ncat=55
 
 for i in range (0,ncat):
-   #Data=file.Get(categories[i]).Get("data_obs")
-   Data=file.Get(categories[i]).Get("blinded")
+   Data=file.Get(categories[i]).Get("data_obs")
+   #Data=file.Get(categories[i]).Get("blinded")
    HTT=file.Get(categories[i]).Get("HTT")
    HWW=file.Get(categories[i]).Get("HWW")
    Z=file.Get(categories[i]).Get("Z")
-   W=file.Get(categories[i]).Get("W")
+#   W=file.Get(categories[i]).Get("W")
    TT=file.Get(categories[i]).Get("TT")
    VV=file.Get(categories[i]).Get("VV")
    ZTT=file.Get(categories[i]).Get("ZTT")
@@ -118,7 +118,7 @@ for i in range (0,ncat):
 
    Other=HTT
    Other.Add(HWW)
-   Other.Add(W)
+#   Other.Add(W)
    Other.Add(VV)
    Other.Add(ST)
    Other.Add(ttHnonbb)
@@ -225,11 +225,11 @@ for i in range (0,ncat):
    stack.Draw("histsame")
    #bbtt12.Scale(10)
    #bbtt12.Draw("histsame")
-   bbtt20.Scale(10)
+   bbtt20.Scale(10000)
    bbtt20.Draw("histsame")
-   bbtt40.Scale(10)
+   bbtt40.Scale(10000)
    bbtt40.Draw("histsame")
-   bbtt60.Scale(10)
+   bbtt60.Scale(10000)
    bbtt60.Draw("histsame")
 
    errorBand.Draw("e2same")
@@ -241,17 +241,17 @@ for i in range (0,ncat):
 #   legende.AddEntry(HWW,"HWW","f")
    legende.AddEntry(Z,"Z#rightarrowee/#mu#mu","f")
 #   legende.AddEntry(W,"W+jets","f")
-   legende.AddEntry(TT,"t#bar{t}","f")
+   legende.AddEntry(TT,"t#bar{t}+jets","f")
 #   legende.AddEntry(VV,"VV","f")
-   legende.AddEntry(ZTT,"Embedded Z#rightarrow#tau#tau","f")
+   legende.AddEntry(ZTT,"Z#rightarrow#tau#tau","f")
 #   legende.AddEntry(ST,"Single t","f")
 #   legende.AddEntry(ttHnonbb,"ttH (no H#rightarrowbb)","f")
-   legende.AddEntry(QCD,"QCD multijet","f")
+   legende.AddEntry(QCD,"jet#rightarrow#tau_{h} fakes","f")
    legende.AddEntry(Other,"Other","f")
    #legende.AddEntry(bbtt12,"m_{a}=12GeV,B=10%","l")
-   legende.AddEntry(bbtt20,"m_{a}=20GeV,B=10%","l")
-   legende.AddEntry(bbtt40,"m_{a}=40GeV,B=10%","l")
-   legende.AddEntry(bbtt60,"m_{a}=60GeV,B=10%","l")
+   legende.AddEntry(bbtt20,"m_{a}=20GeV,x100","l")
+   legende.AddEntry(bbtt40,"m_{a}=40GeV,x100","l")
+   legende.AddEntry(bbtt60,"m_{a}=60GeV,x100","l")
    legende.AddEntry(errorBand,"Uncertainty","f")
    legende.Draw()
 
@@ -316,9 +316,9 @@ for i in range (0,ncat):
    pad1.Draw()
 
    ROOT.gPad.RedrawAxis()
-   
+    
    c.Modified()
-   '''
+   ''' 
    mmin = 0.1
    mmax = 1e6
    Data.SetMinimum(mmin)
@@ -337,7 +337,9 @@ for i in range (0,ncat):
    errorBand.SetMaximum(mmax)
    pad1.SetLogy()
    '''
+
    c.SaveAs(categories[i]+".png")
+
 
 
 

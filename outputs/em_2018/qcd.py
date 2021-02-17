@@ -2,9 +2,9 @@ import ROOT
 
 file=ROOT.TFile("final_em_2018.root","update")
 
-dir=["m_tt_0b","pt_t1_0b","pt_t2_0b","m_tt_1b","m_btt_1b","pt_t1_1b","pt_t2_1b","m_tt_2b","m_btt_2b","m_bbtt_2b","pt_t1_2b","pt_t2_2b"]
+dir=["p_1b","p_2b","p_1b_z","p_2b_z","m_tt_1","m_tt_2","m_tt_3","m_tt_4","m_tt_5","m_tt_6","m_tt_7","m_tt_CB_1","m_tt_CB_2","m_tt_CB_3","m_tt_CB_4","m_tt_CB_5"]
 
-for i in range (0,12):
+for i in range (0,16):
     Data_SS=file.Get(dir[i]).Get("data_obs_SS")
     HTT_SS=file.Get(dir[i]).Get("HTT_SS")
     HWW_SS=file.Get(dir[i]).Get("HWW_SS")
@@ -15,8 +15,19 @@ for i in range (0,12):
     ZTT_SS=file.Get(dir[i]).Get("ZTT_SS")
     ST_SS=file.Get(dir[i]).Get("ST_SS")
     ttHnonbb_SS=file.Get(dir[i]).Get("ttHnonbb_SS")
+    
+    Data_loose_SS=file.Get(dir[i]).Get("data_obs_loose_SS")
+    HTT_loose_SS=file.Get(dir[i]).Get("HTT_loose_SS")
+    HWW_loose_SS=file.Get(dir[i]).Get("HWW_loose_SS")
+    Z_loose_SS=file.Get(dir[i]).Get("Z_loose_SS")
+    W_loose_SS=file.Get(dir[i]).Get("W_loose_SS")
+    TT_loose_SS=file.Get(dir[i]).Get("TT_loose_SS")
+    VV_loose_SS=file.Get(dir[i]).Get("VV_loose_SS")
+    ZTT_loose_SS=file.Get(dir[i]).Get("ZTT_loose_SS")
+    ST_loose_SS=file.Get(dir[i]).Get("ST_loose_SS")
+    ttHnonbb_loose_SS=file.Get(dir[i]).Get("ttHnonbb_loose_SS")
 
-    blinded=file.Get(dir[i]).Get("bbtt40_SS")
+    blinded=file.Get(dir[i]).Get("gghbbtt40_SS")
     blinded.Scale(0)
 
     qcd=Data_SS
@@ -30,13 +41,25 @@ for i in range (0,12):
     qcd.Add(ST_SS,-1)
     qcd.Add(ttHnonbb_SS,-1)
     
+    qcd_loose=Data_loose_SS
+    qcd_loose.Add(HTT_loose_SS,-1)
+    qcd_loose.Add(HWW_loose_SS,-1)
+    qcd_loose.Add(Z_loose_SS,-1)
+    qcd_loose.Add(W_loose_SS,-1)
+    qcd_loose.Add(TT_loose_SS,-1)
+    qcd_loose.Add(VV_loose_SS,-1)
+    qcd_loose.Add(ZTT_loose_SS,-1)
+    qcd_loose.Add(ST_loose_SS,-1)
+    qcd_loose.Add(ttHnonbb_loose_SS,-1)
     
+    scale=qcd.Integral()/qcd_loose.Integral()
+    qcd_loose.Scale(scale)
+
     file.cd(dir[i])
-    qcd.SetName("QCD")
-    qcd.Write()
-    
+    qcd_loose.SetName("QCD")
+    qcd_loose.Write()
+
     blinded.SetName("blinded")
     blinded.Write()
-
 
 

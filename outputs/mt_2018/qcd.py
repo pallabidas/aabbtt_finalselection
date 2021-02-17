@@ -2,11 +2,9 @@ import ROOT
 
 file=ROOT.TFile("final_mt_2018.root","update")
 
-#dir=["m_btt_1b","m_bbtt_2b","mt_tau1","mt_tau2","dz"]
+dir=["p_1b","p_2b","p_1b_z","p_2b_z","m_tt_1","m_tt_2","m_tt_3","m_tt_4","m_tt_5","m_tt_6","m_tt_7","m_tt_CB_1","m_tt_CB_2","m_tt_CB_3","m_tt_CB_4","m_tt_CB_5"]
 
-dir=["m_tt_c1","m_tt_c2","m_tt_c3","m_tt_c4","m_tt_c5"]
-
-for i in range (0,5):
+for i in range (0,16):
     Data_SS=file.Get(dir[i]).Get("data_obs_SS")
     HTT_SS=file.Get(dir[i]).Get("HTT_SS")
     HWW_SS=file.Get(dir[i]).Get("HWW_SS")
@@ -18,7 +16,7 @@ for i in range (0,5):
     ST_SS=file.Get(dir[i]).Get("ST_SS")
     ttHnonbb_SS=file.Get(dir[i]).Get("ttHnonbb_SS")
 
-    blinded=file.Get(dir[i]).Get("bbtt40_SS")
+    blinded=file.Get(dir[i]).Get("gghbbtt40_SS")
     blinded.Scale(0)
 
     qcd=Data_SS
@@ -39,5 +37,7 @@ for i in range (0,5):
     
     blinded.SetName("blinded")
     blinded.Write()
+
+
 
 
