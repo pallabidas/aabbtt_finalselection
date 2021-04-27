@@ -168,6 +168,8 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("met", &met);
     tree->SetBranchAddress("met_UESUp", &met_UESUp);
     tree->SetBranchAddress("met_UESDown", &met_UESDown);
+    tree->SetBranchAddress("met_JERUp", &met_JERUp);
+    tree->SetBranchAddress("met_JERDown", &met_JERDown);
     tree->SetBranchAddress("met_JetAbsoluteUp", &met_JetAbsoluteUp);
     tree->SetBranchAddress("met_JetAbsoluteDown", &met_JetAbsoluteDown);
     tree->SetBranchAddress("met_JetAbsoluteyearUp", &met_JetAbsoluteyearUp);
@@ -197,6 +199,8 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("metphi", &metphi);
     tree->SetBranchAddress("metphi_UESUp", &metphi_UESUp);
     tree->SetBranchAddress("metphi_UESDown", &metphi_UESDown);
+    tree->SetBranchAddress("metphi_JERUp", &metphi_JERUp);
+    tree->SetBranchAddress("metphi_JERDown", &metphi_JERDown);
     tree->SetBranchAddress("metphi_JetAbsoluteUp", &metphi_JetAbsoluteUp);
     tree->SetBranchAddress("metphi_JetAbsoluteDown", &metphi_JetAbsoluteDown);
     tree->SetBranchAddress("metphi_JetAbsoluteyearUp", &metphi_JetAbsoluteyearUp);
@@ -257,6 +261,8 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("m_sv", &m_sv);
     tree->SetBranchAddress("m_sv_UESUp", &m_sv_UESUp);
     tree->SetBranchAddress("m_sv_UESDown", &m_sv_UESDown);
+    tree->SetBranchAddress("m_sv_JERUp", &m_sv_JERUp);
+    tree->SetBranchAddress("m_sv_JERDown", &m_sv_JERDown);
     tree->SetBranchAddress("m_sv_UP", &m_sv_UP);
     tree->SetBranchAddress("m_sv_DOWN", &m_sv_DOWN);
     tree->SetBranchAddress("m_sv_muonESUp", &m_sv_muonESUp);
@@ -300,7 +306,6 @@ int main(int argc, char** argv){
     TString shape_elefaketauES[8] = {"_CMS_elefaketauES_dm0_barrel_2018Up","_CMS_elefaketauES_dm0_barrel_2018Down","_CMS_elefaketauES_dm0_endcap_2018Up","_CMS_elefaketauES_dm0_endcap_2018Down","_CMS_elefaketauES_dm1_barrel_2018Up","_CMS_elefaketauES_dm1_barrel_2018Down","_CMS_elefaketauES_dm1_endcap_2018Up","_CMS_elefaketauES_dm1_endcap_2018Down"};
     TString shape_trgeff[4] = {"_CMS_trgeff_singleMu_2018Up","_CMS_trgeff_singleMu_2018Down","_CMS_trgeff_crossMuTau_2018Up","_CMS_trgeff_crossMuTau_2018Down"};
     TString shape_muonES[6] = {"_CMS_muonES_eta0to1p4_2018Up","_CMS_muonES_eta0to1p4_2018Down","_CMS_muonES_eta1p4to2p1_2018Up","_CMS_muonES_eta1p4to2p1_2018Down","_CMS_muonES_eta2p1to2p4_2018Up","_CMS_muonES_eta2p1to2p4_2018Down"};
-    TString shape_tautracking[6] = {"_CMS_tautrack_dm0dm10_2018Up","_CMS_tautrack_dm0dm10_2018Down","_CMS_tautrack_dm1_2018Up","_CMS_tautrack_dm1_2018Down","_CMS_tautrack_dm11_2018Up","_CMS_tautrack_dm11_2018Down"};
     //for DY MC only
     TString shape_DY_zpt[2] = {"_CMS_Zpt_reweight_2018Up","_CMS_Zpt_reweight_2018Down"};
     //for ttbar only
@@ -308,7 +313,13 @@ int main(int argc, char** argv){
     //for all MC except diboson, ttbar, single top
     TString shape_recoil[12] = {"_CMS_0jet_resolution_2018Up","_CMS_0jet_resolution_2018Down","_CMS_0jet_response_2018Up","_CMS_0jet_response_2018Down","_CMS_1jet_resolution_2018Up","_CMS_1jet_resolution_2018Down","_CMS_1jet_response_2018Up","_CMS_1jet_response_2018Down","_CMS_gt1jet_resolution_2018Up","_CMS_gt1jet_resolution_2018Down","_CMS_gt1jet_response_2018Up","_CMS_gt1jet_response_2018Down"};
     //only diboson, ttbar, single top
-    TString shape_unclusteredES[6] = {"_CMS_0jet_unclusteredES_2018Up","_CMS_0jet_unclusteredES_2018Down","_CMS_1jet_unclusteredES_2018Up","_CMS_1jet_unclusteredES_2018Down","_CMS_gt1jet_unclusteredES_2018Up","_CMS_gt1jet_unclusteredES_2018Down"};
+    TString shape_unclusteredES[2] = {"_CMS_unclusteredES_2018Up","_CMS_unclusteredES_2018Down"};
+    //jet resolution
+    TString shape_jer[2] = {"_CMS_res_j_2018Up","_CMS_res_j_2018Down"};
+    //fake cross trigger factor uncertainties
+    TString shape_fake_crosstrg[2] = {"_CMS_crosstrg_fakefactor_2018Up","_CMS_crosstrg_fakefactor_2018Down"};
+    //fake rate uncertainties
+    TString shape_fakerate[14] = {"_CMS_fakerate_alldm_pt0to25_2018Up","_CMS_fakerate_alldm_pt0to25_2018Down","_CMS_fakerate_alldm_pt25to30_2018Up","_CMS_fakerate_alldm_pt25to30_2018Down","_CMS_fakerate_alldm_pt30to35_2018Up","_CMS_fakerate_alldm_pt30to35_2018Down","_CMS_fakerate_alldm_pt35to40_2018Up","_CMS_fakerate_alldm_pt35to40_2018Down","_CMS_fakerate_alldm_pt40to50_2018Up","_CMS_fakerate_alldm_pt40to50_2018Down","_CMS_fakerate_alldm_pt50to60_2018Up","_CMS_fakerate_alldm_pt50to60_2018Down","_CMS_fakerate_alldm_ptgt60_2018Up","_CMS_fakerate_alldm_ptgt60_2018Down"};
     
     //for emb only
     TString embshape_tauideff[14] = {"_CMS_embedding_tauideff_pt20to25_2018Up","_CMS_embedding_tauideff_pt20to25_2018Down","_CMS_embedding_tauideff_pt25to30_2018Up","_CMS_embedding_tauideff_pt25to30_2018Down","_CMS_embedding_tauideff_pt30to35_2018Up","_CMS_embedding_tauideff_pt30to35_2018Down","_CMS_embedding_tauideff_pt35to40_2018Up","_CMS_embedding_tauideff_pt35to40_2018Down","_CMS_embedding_tauideff_pt40to500_2018Up","_CMS_embedding_tauideff_pt40to500_2018Down","_CMS_embedding_tauideff_pt500to1000_2018Up","_CMS_embedding_tauideff_pt500to1000_2018Down","_CMS_embedding_tauideff_ptgt1000_2018Up","_CMS_embedding_tauideff_ptgt1000_2018Down"};
@@ -321,7 +332,6 @@ int main(int argc, char** argv){
         for (int i = 0; i < 8; i++) shape_tauES[i] = embshape_tauES[i];
         for (int i = 0; i < 4; i++) shape_trgeff[i] = embshape_trgeff[i];
         for (int i = 0; i < 6; i++) shape_muonES[i] = embshape_muonES[i];
-        for (int i = 0; i < 6; i++) shape_tautracking[i] = embshape_tautracking[i];
     }
     //comtamination to emb: all non-DY MC with gen tautau
     TString shape_nonDY[1] = {"_nonDY"};
@@ -332,13 +342,13 @@ int main(int argc, char** argv){
         h_iso.push_back(std::vector<TH1F*>());
         h_anti.push_back(std::vector<TH1F*>());
     }
-    for (int i = 0; i < 94; i++){//i=0 for nominal, 1-14 tauIDeff, 15-22 tauES, 23-44 jet, 45-46 muon->tauhES, 47-54 ele->tauhES, 55-58 trgeff, 59-64 muonES, 65-70 tau tracking, 71-72 (only DY MC) zpt, 73-74 (only ttbar) toppt, 75-86 recoil, 87-92 met unclustered ES, 93 nonDY
+    for (int i = 0; i < 92; i++){//i=0 for nominal, 1-14 tauIDeff, 15-22 tauES, 23-44 jet, 45-46 muon->tauhES, 47-54 ele->tauhES, 55-58 trgeff, 59-64 muonES, 65-70 tau tracking, 71-72 (only DY MC) zpt, 73-74 (only ttbar) toppt, 75-86 recoil, 87-88 met unclustered ES, 89 nonDY, 90-91 jer
         h_iso[0].push_back(new TH1F("","",70,10,150));//pt_1
         h_iso[1].push_back(new TH1F("","",45,10,100));//pt_2
         h_iso[2].push_back(new TH1F("","",40,0,400));//m_tt
         h_iso[3].push_back(new TH1F("","",40,60,460));//m_btt
     }
-    for (int i = 0; i < 55; i++){//anti-isolated region, no tau related shifts, no ele/mu->tau shifts since tau is mostly jet //i=0 for nominal, 1-22 jet, 23-26 trgeff, 27-32 muonES, 33-34 (only DY MC) zpt, 35-36 (only ttbar) toppt, 37-48 recoil, 49-54 met unclustered ES
+    for (int i = 0; i < 69; i++){//anti-isolated region, no tau related shifts, no ele/mu->tau shifts since tau is mostly jet //i=0 for nominal, 1-22 jet, 23-26 trgeff, 27-32 muonES, 33-34 (only DY MC) zpt, 35-36 (only ttbar) toppt, 37-48 recoil, 49-50 met unclustered ES, 51-52 jer, 53-54 fake cross trg factor, 55-68 fake rate dmall by pt
         h_anti[0].push_back(new TH1F("","",70,10,150));//pt_1
         h_anti[1].push_back(new TH1F("","",45,10,100));//pt_2
         h_anti[2].push_back(new TH1F("","",40,0,400));//m_tt
@@ -398,17 +408,31 @@ int main(int argc, char** argv){
         myb2.SetPtEtaPhiM(bpt_deepcsv_2,beta_deepcsv_2,bphi_deepcsv_2,bm_deepcsv_2);
         
         //mutau selection
+        /*
         bool trigger24OR27 = ((passMu24 && matchMu24_1 && filterMu24_1) or (passMu27 && matchMu27_1 && filterMu27_1));//keep 25 not 28
         bool trigger2027 = (passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && matchMu20Tau27_2 && filterMu20Tau27_2 && fabs(eta_2)<2.1);
         bool trigger2027HPS = (passMu20HPSTau27 && matchMu20HPSTau27_1 && filterMu20HPSTau27_1 && matchMu20HPSTau27_2 && filterMu20HPSTau27_2 && fabs(eta_2)<2.1);
         if (sample=="embedded"){
             trigger2027HPS = (matchEmbFilter_Mu20Tau27_1 && matchEmbFilter_Mu20HPSTau27_2 && fabs(eta_2)<2.1);
             trigger24OR27 = ((passMu24 && matchMu24_1) or (passMu27 && matchMu27_1));
+        }*/
+        
+        bool isSingleTrigger = (passMu24 && matchMu24_1 && filterMu24_1) or (passMu27 && matchMu27_1 && filterMu27_1);
+        bool isCrossTrigger = (passMu20HPSTau27 && matchMu20HPSTau27_1 && filterMu20HPSTau27_1 && matchMu20HPSTau27_2 && filterMu20HPSTau27_2 && fabs(eta_2)<2.1);
+        if (sample=="data_obs" && run<317509){
+            isCrossTrigger = (passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && matchMu20Tau27_2 && filterMu20Tau27_2 && fabs(eta_2)<2.1);
         }
-        if (sample=="data_obs" && run<317509 && !trigger2027 && !trigger24OR27) continue;
-        if (sample=="data_obs" && run>=317509 && !trigger2027HPS && !trigger24OR27) continue;
-        if (sample!="data_obs" && sample!="embedded" && !trigger24OR27 && !trigger2027HPS) continue;
-        if (sample=="embedded" && !trigger24OR27 && !trigger2027HPS) continue;
+        if (sample=="embedded"){
+            isSingleTrigger = (passMu24 && matchMu24_1) or (passMu27 && matchMu27_1);
+            isCrossTrigger = (matchEmbFilter_Mu20Tau27_1 && matchEmbFilter_Mu20HPSTau27_2 && fabs(eta_2)<2.1);
+        }
+        
+        if (!isSingleTrigger && !isCrossTrigger) continue;
+        
+        //if (sample=="data_obs" && run<317509 && !trigger2027 && !trigger24OR27) continue;
+        //if (sample=="data_obs" && run>=317509 && !trigger2027HPS && !trigger24OR27) continue;
+        //if (sample!="data_obs" && sample!="embedded" && !trigger24OR27 && !trigger2027HPS) continue;
+        //if (sample=="embedded" && !trigger24OR27 && !trigger2027HPS) continue;
         //trigger var only, add pt requirements later when doing systematics
         //if (!(pt_2>20)) continue;
         if (!(fabs(eta_1)<2.1 && fabs(eta_2)<2.3)) continue;
@@ -447,14 +471,14 @@ int main(int argc, char** argv){
             
             //reject MC with 2 taus as duplicated in embedded sample except for signal/Higgs
             //if (sample!="data_obs" && sample!="embedded" && sample!="gghbbtt12" && sample!="gghbbtt20" && sample!="gghbbtt30" && sample!="gghbbtt40" && sample!="gghbbtt50" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt20" && sample!="vbfbbtt30" && sample!="vbfbbtt40" && sample!="vbfbbtt50" && sample!="vbfbbtt60" && name!="HTT" && name!="ttHnonbb" && gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue;
-            
+            /*
             //trigger scale factor
-            if (pt_1>25){//this cut is valid only when mu is nominal, need re-apply mu pt cut later when shifting mu ES
+            if (isSingleTrigger && pt_1>25){//this cut is valid only when mu is nominal, need re-apply mu pt cut later when shifting mu ES
                 sf_MC *= m_trg_ic_ratio;
             }
             else{
                 sf_MC *= m_trg_20_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
-            }
+            }*/
             
             //muon ID/iso/tracking scale factors
             sf_MC *= m_trk_ratio * m_idiso_ic_ratio;
@@ -508,15 +532,15 @@ int main(int argc, char** argv){
             
             //rejecting buggy events
             if (genweight>1.0) continue;
-            
+            /*
             //trigger scale factor
-            if (pt_1>25){//this cut is valid only when mu is nominal, need re-apply mu pt cut later when shifting mu ES
+            if (isSingleTrigger && pt_1>25){//this cut is valid only when mu is nominal, need re-apply mu pt cut later when shifting mu ES
                 sf_MC *= m_trg_ic_embed_ratio;
             }
             else{
                 sf_MC *= m_trg_20_ic_embed_ratio * t_trg_mediumDeepTau_mutau_embed_ratio;
             }//t_trg_pog_deeptau_medium_mutau_ratio
-            
+            */
             //muon ID/iso/tracking scale factors
             sf_embed *= m_trk_ratio * m_idiso_ic_embed_ratio;
             
@@ -765,41 +789,28 @@ int main(int argc, char** argv){
         }
         
         //###################re-apply trigger scale factor for re-defined single/cross trigger regions due to shifted muon####################
-        std::vector<float> weight_corr_trgsfforshiftedmu;
+        //define trigger sf with nominal muon ES (the usual weights)
+        float trgsf = 1.0;
+        if (sample!="data_obs" && sample!="embedded"){
+            if (isSingleTrigger && pt_1>25) trgsf = m_trg_ic_ratio;
+            if (isCrossTrigger && pt_1<25 && pt_1>21) trgsf = m_trg_20_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
+        }
+        if (sample=="embedded"){
+            if (isSingleTrigger && pt_1>25) trgsf = m_trg_ic_embed_ratio;
+            if (isCrossTrigger && pt_1<25 && pt_1>21) trgsf = m_trg_20_ic_embed_ratio * t_trg_mediumDeepTau_mutau_embed_ratio;
+        }
+        //for shifted trigger regions due to shifted muon ES
+        std::vector<float> trgsf_shiftedmu;
         for (int j = 0; j < 6; j++){
-            weight_corr_trgsfforshiftedmu.push_back(weight_corr);
+            trgsf_shiftedmu.push_back(1.0);
             
             if (sample!="data_obs" && sample!="embedded"){
-                //undo trigger sf with nominal muon
-                if (pt_1>25){
-                    weight_corr_trgsfforshiftedmu[j] = weight_corr/m_trg_ic_ratio;
-                }
-                else {
-                    weight_corr_trgsfforshiftedmu[j] = weight_corr/(m_trg_20_ratio * t_trg_pog_deeptau_medium_mutau_ratio);
-                }
-                //re-apply trigger sf with shifted muon
-                if (myshiftedmu[j].Pt()>25){
-                    weight_corr_trgsfforshiftedmu[j] *= m_trg_ic_ratio;
-                }
-                else {
-                    weight_corr_trgsfforshiftedmu[j] *= m_trg_20_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
-                }
+                if (isSingleTrigger && myshiftedmu[j].Pt()>25) trgsf_shiftedmu[j] = m_trg_ic_ratio;
+                if (isCrossTrigger && myshiftedmu[j].Pt()<25 && myshiftedmu[j].Pt()>21) trgsf_shiftedmu[j] = m_trg_20_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
             }
             if (sample=="embedded"){
-                //undo trigger sf with nominal muon
-                if (pt_1>25){
-                    weight_corr_trgsfforshiftedmu[j] = weight_corr/m_trg_ic_embed_ratio;
-                }
-                else {
-                    weight_corr_trgsfforshiftedmu[j] = weight_corr/(m_trg_20_ic_embed_ratio * t_trg_mediumDeepTau_mutau_embed_ratio);
-                }
-                //re-apply trigger sf with shifted muon
-                if (myshiftedmu[j].Pt()>25){
-                    weight_corr_trgsfforshiftedmu[j] *= m_trg_ic_embed_ratio;
-                }
-                else {
-                    weight_corr_trgsfforshiftedmu[j] *= m_trg_20_ic_embed_ratio * t_trg_mediumDeepTau_mutau_embed_ratio;
-                }
+                if (isSingleTrigger && myshiftedmu[j].Pt()>25) trgsf_shiftedmu[j] = m_trg_ic_embed_ratio;
+                if (isCrossTrigger && myshiftedmu[j].Pt()<25 && myshiftedmu[j].Pt()>21) trgsf_shiftedmu[j] = m_trg_20_ic_embed_ratio * t_trg_mediumDeepTau_mutau_embed_ratio;
             }
         }
         
@@ -823,7 +834,7 @@ int main(int argc, char** argv){
         for (int j = 0; j < 6; j++){//ordered by: dm0dm10up, dm0dm10down, dm1up, dm1down, dm11up, dm11down
             tau_tracking_shifting.push_back(1);
         }
-        if (gen_match_2==5){//need MC?
+        if (gen_match_2==5){
             if (l2_decayMode==0){//+/-1%
                 tau_tracking_shifting[0] = 1.01;
                 tau_tracking_shifting[1] = 0.99;
@@ -898,47 +909,57 @@ int main(int argc, char** argv){
         std::vector<TLorentzVector> mymet_UES;
         std::vector<TLorentzVector> mytt_UES;
         std::vector<float> m_btt_UES;
-        for (int j = 0; j < 6; j++){//ordered by: 0jet UES Up/Down, 1jet UES Up/Down, 2jetsmore UES Up/Down
+        for (int j = 0; j < 2; j++){//ordered by: UES Up/Down
             mymet_UES.push_back(mymet);
             mytt_UES.push_back(mytt);
             m_btt_UES.push_back(m_btt);
+            
+            mymet_UES[j].SetPtEtaPhiM(met_UESvar[j],0,metphi_UESvar[j],0);
+            mytt_UES[j].SetPtEtaPhiM((mymu+mytau+mymet_UES[j]).Pt(),(mymu+mytau+mymet_UES[j]).Eta(),(mymu+mytau+mymet_UES[j]).Phi(),m_sv_UESvar[j]);
+            m_btt_UES[j] = (mytt_UES[j]+myb1).M();
         }
-        for (int j = 0; j < 3; j++){
-            if (njets>=njetsbins[j] && njets<njetsbins[j+1]){
-                for (int k = 0; k < 2; k++){
-                    mymet_UES[2*j+k].SetPtEtaPhiM(met_UESvar[k],0,metphi_UESvar[k],0);
-                    mytt_UES[2*j+k].SetPtEtaPhiM((mymu+mytau+mymet_UES[2*j+k]).Pt(),(mymu+mytau+mymet_UES[2*j+k]).Eta(),(mymu+mytau+mymet_UES[2*j+k]).Phi(),m_sv_UESvar[k]);
-                    m_btt_UES[2*j+k] = (mytt_UES[2*j+k]+myb1).M();
-                }
-            }
+        
+        //#######################jer uncertainties########################
+        float met_jervar[2] = {met_JERUp,met_JERDown};
+        float metphi_jervar[2] = {metphi_JERUp,metphi_JERDown};
+        float m_sv_jervar[2] = {m_sv_JERUp,m_sv_JERDown};
+        std::vector<TLorentzVector> mymet_jer;
+        std::vector<TLorentzVector> mytt_jer;
+        std::vector<float> m_btt_jer;
+        for (int j = 0; j < 2; j++){
+            mymet_jer.push_back(mymet);
+            mytt_jer.push_back(mytt);
+            mymet_jer[j].SetPtEtaPhiM(met_jervar[j],0,metphi_jervar[j],0);
+            mytt_jer[j].SetPtEtaPhiM((mymu+mytau+mymet_jer[j]).Pt(),(mymu+mytau+mymet_jer[j]).Eta(),(mymu+mytau+mymet_jer[j]).Phi(),m_sv_jervar[j]);
+            m_btt_jer.push_back((mytt_jer[j]+myb1).M());
         }
         
         //##########################trigger regions with nominal/shifted ES###########################
         //nominal
-        bool trigger_region_nominal = (trigger24OR27 && pt_1>25 && pt_2>20) or ((trigger2027 or trigger2027HPS) && pt_1<25 && pt_1>21 && pt_2>32);
+        bool trigger_region_nominal = (isSingleTrigger && pt_1>25 && pt_2>20) or (isCrossTrigger && pt_1<25 && pt_1>21 && pt_2>32);
         //shifted tau ES
         std::vector<bool> trigger_region_shiftedtau;
         for (int j = 0; j < 8; j++){
             trigger_region_shiftedtau.push_back(0);
-            trigger_region_shiftedtau[j] = (trigger24OR27 && pt_1>25 && myshiftedtau[j].Pt()>20) or ((trigger2027 or trigger2027HPS) && pt_1<25 && pt_1>21 && myshiftedtau[j].Pt()>32);
+            trigger_region_shiftedtau[j] = (isSingleTrigger && pt_1>25 && myshiftedtau[j].Pt()>20) or (isCrossTrigger && pt_1<25 && pt_1>21 && myshiftedtau[j].Pt()>32);
         }
         //muon->tauh fake ES
         std::vector<bool> trigger_region_tauisgenmu;
         for (int j = 0; j < 2; j++){
             trigger_region_tauisgenmu.push_back(0);
-            trigger_region_tauisgenmu[j] = (trigger24OR27 && pt_1>25 && mytau_isgenmu[j].Pt()>20) or ((trigger2027 or trigger2027HPS) && pt_1<25 && pt_1>21 && mytau_isgenmu[j].Pt()>32);
+            trigger_region_tauisgenmu[j] = (isSingleTrigger && pt_1>25 && mytau_isgenmu[j].Pt()>20) or (isCrossTrigger && pt_1<25 && pt_1>21 && mytau_isgenmu[j].Pt()>32);
         }
         //electron->tauh fake ES
         std::vector<bool> trigger_region_tauisgenele;
         for (int j = 0; j < 8; j++){
             trigger_region_tauisgenele.push_back(0);
-            trigger_region_tauisgenele[j] = (trigger24OR27 && pt_1>25 && mytau_isgenele[j].Pt()>20) or ((trigger2027 or trigger2027HPS) && pt_1<25 && pt_1>21 && mytau_isgenele[j].Pt()>32);
+            trigger_region_tauisgenele[j] = (isSingleTrigger && pt_1>25 && mytau_isgenele[j].Pt()>20) or (isCrossTrigger && pt_1<25 && pt_1>21 && mytau_isgenele[j].Pt()>32);
         }
         //shifted muon ES
         std::vector<bool> trigger_region_shiftedmu;
         for (int j = 0; j < 6; j++){
             trigger_region_shiftedmu.push_back(0);
-            trigger_region_shiftedmu[j] = (trigger24OR27 && myshiftedmu[j].Pt()>25 && pt_2>20) or ((trigger2027 or trigger2027HPS) && myshiftedmu[j].Pt()<25 && myshiftedmu[j].Pt()>21 && pt_2>32);
+            trigger_region_shiftedmu[j] = (isSingleTrigger && myshiftedmu[j].Pt()>25 && pt_2>20) or (isCrossTrigger && myshiftedmu[j].Pt()<25 && myshiftedmu[j].Pt()>21 && pt_2>32);
         }
         
         //############################trigger sf shifting################################
@@ -947,11 +968,11 @@ int main(int argc, char** argv){
             trigger_shiftedsf.push_back(1.0);//=1.0 do not shift by default
         }//[0]:single_up, [1]:single_down, [2]:cross_up, [3]:cross_down
         if (sample!="data_obs"){
-            if (trigger24OR27 && pt_1>25 && pt_2>20){//single lepton, same updown 2% for both MC and emb
+            if (isSingleTrigger && pt_1>25){//single lepton, same updown 2% for both MC and emb
                 trigger_shiftedsf[0] = 1.02;
                 trigger_shiftedsf[1] = 0.98;
             }
-            if ((trigger2027 or trigger2027HPS) && pt_1<25 && pt_1>21 && pt_2>32){
+            if (isCrossTrigger && pt_1<25 && pt_1>21){
                 if (sample!="embedded"){//MC
                     trigger_shiftedsf[2] = t_trg_pog_deeptau_medium_mutau_ratio_up/t_trg_pog_deeptau_medium_mutau_ratio;
                     trigger_shiftedsf[3] = t_trg_pog_deeptau_medium_mutau_ratio_down/t_trg_pog_deeptau_medium_mutau_ratio;
@@ -963,7 +984,8 @@ int main(int argc, char** argv){
             }
         }
         //##############################histograms filling###################################
-        bool isnonHiggsMC = (sample!="data_obs" && sample!="embedded" && sample!="gghbbtt12" && sample!="gghbbtt20" && sample!="gghbbtt30" && sample!="gghbbtt40" && sample!="gghbbtt50" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt20" && sample!="vbfbbtt30" && sample!="vbfbbtt40" && sample!="vbfbbtt50" && sample!="vbfbbtt60" && name!="HTT" && name!="ttHnonbb");
+        bool isnonSignal = (sample!="gghbbtt12" && sample!="gghbbtt20" && sample!="gghbbtt30" && sample!="gghbbtt40" && sample!="gghbbtt50" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt20" && sample!="vbfbbtt30" && sample!="vbfbbtt40" && sample!="vbfbbtt50" && sample!="vbfbbtt60");
+        bool isnonHiggsMC = (sample!="data_obs" && sample!="embedded" && isnonSignal && name!="HTT" && name!="ttHnonbb");
         //do not fill for MC tautau events (duplicating emb) as normal
         if (!isnonHiggsMC or (isnonHiggsMC && !(gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6))){
             //tau isolated region (to be failed in fake)
@@ -971,195 +993,238 @@ int main(int argc, char** argv){
                 if (nbtag20==1){//1 bjet category
                     if (trigger_region_nominal){//nominal trigger region
                         for (int k = 0; k < 15; k++){//[0] all nominal, [1-14] tauID shifted
-                            h_iso[0][k]->Fill(pt_1,weight_corr*sf_tauid[k]);
-                            h_iso[1][k]->Fill(pt_2,weight_corr*sf_tauid[k]);
-                            h_iso[2][k]->Fill(m_sv,weight_corr*sf_tauid[k]);
-                            h_iso[3][k]->Fill(m_btt,weight_corr*sf_tauid[k]);
+                            h_iso[0][k]->Fill(pt_1,weight_corr*trgsf*sf_tauid[k]);
+                            h_iso[1][k]->Fill(pt_2,weight_corr*trgsf*sf_tauid[k]);
+                            h_iso[2][k]->Fill(m_sv,weight_corr*trgsf*sf_tauid[k]);
+                            h_iso[3][k]->Fill(m_btt,weight_corr*trgsf*sf_tauid[k]);
                         }
                         for (int k = 0; k < 22; k++){//[23-44] jet uncertainties
-                            h_iso[0][k+23]->Fill(pt_1,weight_corr*sf_tauid[0]);
-                            h_iso[1][k+23]->Fill(pt_2,weight_corr*sf_tauid[0]);
-                            h_iso[2][k+23]->Fill(mytt_jet[k].M(),weight_corr*sf_tauid[0]);
-                            h_iso[3][k+23]->Fill(m_btt_jet[k],weight_corr*sf_tauid[0]);
+                            h_iso[0][k+23]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]);
+                            h_iso[1][k+23]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]);
+                            h_iso[2][k+23]->Fill(mytt_jet[k].M(),weight_corr*trgsf*sf_tauid[0]);
+                            h_iso[3][k+23]->Fill(m_btt_jet[k],weight_corr*trgsf*sf_tauid[0]);
                         }
                         //trigger sf shifting
                         for (int k = 0; k < 4; k++){
-                            h_iso[0][k+55]->Fill(pt_1,weight_corr*sf_tauid[0]*trigger_shiftedsf[k]);
-                            h_iso[1][k+55]->Fill(pt_2,weight_corr*sf_tauid[0]*trigger_shiftedsf[k]);
-                            h_iso[2][k+55]->Fill(m_sv,weight_corr*sf_tauid[0]*trigger_shiftedsf[k]);
-                            h_iso[3][k+55]->Fill(m_btt,weight_corr*sf_tauid[0]*trigger_shiftedsf[k]);
+                            h_iso[0][k+55]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
+                            h_iso[1][k+55]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
+                            h_iso[2][k+55]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
+                            h_iso[3][k+55]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
                         }
-                        //tau tracking uncertainties
-                        for (int k = 0; k < 6; k++){
-                            h_iso[0][k+65]->Fill(pt_1,weight_corr*sf_tauid[0]*tau_tracking_shifting[k]);
-                            h_iso[1][k+65]->Fill(pt_2,weight_corr*sf_tauid[0]*tau_tracking_shifting[k]);
-                            h_iso[2][k+65]->Fill(m_sv,weight_corr*sf_tauid[0]*tau_tracking_shifting[k]);
-                            h_iso[3][k+65]->Fill(m_btt,weight_corr*sf_tauid[0]*tau_tracking_shifting[k]);
+                        //tau tracking uncertainties, emb only
+                        if (sample=="embedded"){
+                            for (int k = 0; k < 6; k++){
+                                h_iso[0][k+65]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]*tau_tracking_shifting[k]);
+                                h_iso[1][k+65]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]*tau_tracking_shifting[k]);
+                                h_iso[2][k+65]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]*tau_tracking_shifting[k]);
+                                h_iso[3][k+65]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]*tau_tracking_shifting[k]);
+                            }
                         }
                         //Zpt reweight uncertainties for DY MC only
                         if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
                             for (int k = 0; k < 2; k++){
-                                h_iso[0][k+71]->Fill(pt_1,weight_corr*sf_tauid[0]*zptmass_weight_shifting[k]);
-                                h_iso[1][k+71]->Fill(pt_2,weight_corr*sf_tauid[0]*zptmass_weight_shifting[k]);
-                                h_iso[2][k+71]->Fill(m_sv,weight_corr*sf_tauid[0]*zptmass_weight_shifting[k]);
-                                h_iso[3][k+71]->Fill(m_btt,weight_corr*sf_tauid[0]*zptmass_weight_shifting[k]);
+                                h_iso[0][k+71]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]*zptmass_weight_shifting[k]);
+                                h_iso[1][k+71]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]*zptmass_weight_shifting[k]);
+                                h_iso[2][k+71]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]*zptmass_weight_shifting[k]);
+                                h_iso[3][k+71]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]*zptmass_weight_shifting[k]);
                             }
                         }
                         //top pt reweight uncertainties for ttbar only
                         if (name=="TT"){
                             for (int k = 0; k < 2; k++){
-                                h_iso[0][k+73]->Fill(pt_1,weight_corr*sf_tauid[0]*topfactor_shifting[k]);
-                                h_iso[1][k+73]->Fill(pt_2,weight_corr*sf_tauid[0]*topfactor_shifting[k]);
-                                h_iso[2][k+73]->Fill(m_sv,weight_corr*sf_tauid[0]*topfactor_shifting[k]);
-                                h_iso[3][k+73]->Fill(m_btt,weight_corr*sf_tauid[0]*topfactor_shifting[k]);
+                                h_iso[0][k+73]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
+                                h_iso[1][k+73]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
+                                h_iso[2][k+73]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
+                                h_iso[3][k+73]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
                             }
                         }
                         //recoil uncertainties
                         if (sample!="data_obs" && sample!="embedded" && name!="TT" && name!="VV" && name!="ST"){
                             for (int k = 0; k < 12; k++){
-                                h_iso[0][k+75]->Fill(pt_1,weight_corr*sf_tauid[0]);
-                                h_iso[1][k+75]->Fill(pt_2,weight_corr*sf_tauid[0]);
-                                h_iso[2][k+75]->Fill(mytt_recoil[k].M(),weight_corr*sf_tauid[0]);
-                                h_iso[3][k+75]->Fill(m_btt_recoil[k],weight_corr*sf_tauid[0]);
+                                h_iso[0][k+75]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]);
+                                h_iso[1][k+75]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]);
+                                h_iso[2][k+75]->Fill(mytt_recoil[k].M(),weight_corr*trgsf*sf_tauid[0]);
+                                h_iso[3][k+75]->Fill(m_btt_recoil[k],weight_corr*trgsf*sf_tauid[0]);
                             }
                         }
                         //met unclustered ES
                         if (name=="TT" or name=="VV" or name=="ST"){
-                            for (int k = 0; k < 6; k++){
-                                h_iso[0][k+87]->Fill(pt_1,weight_corr*sf_tauid[0]);
-                                h_iso[1][k+87]->Fill(pt_2,weight_corr*sf_tauid[0]);
-                                h_iso[2][k+87]->Fill(mytt_UES[k].M(),weight_corr*sf_tauid[0]);
-                                h_iso[3][k+87]->Fill(m_btt_UES[k],weight_corr*sf_tauid[0]);
+                            for (int k = 0; k < 2; k++){
+                                h_iso[0][k+87]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]);
+                                h_iso[1][k+87]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]);
+                                h_iso[2][k+87]->Fill(mytt_UES[k].M(),weight_corr*trgsf*sf_tauid[0]);
+                                h_iso[3][k+87]->Fill(m_btt_UES[k],weight_corr*trgsf*sf_tauid[0]);
                             }
+                        }
+                        for (int k = 0; k < 2; k++){//[90-91] JER uncertainties
+                            h_iso[0][k+90]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]);
+                            h_iso[1][k+90]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]);
+                            h_iso[2][k+90]->Fill(mytt_jer[k].M(),weight_corr*trgsf*sf_tauid[0]);
+                            h_iso[3][k+90]->Fill(m_btt_jer[k],weight_corr*trgsf*sf_tauid[0]);
                         }
                     }
                     //loop over trigger regions with shifted tau
                     for (int k = 0; k < 8; k++){//h_OS[15-22] tau energy scale
                         if (trigger_region_shiftedtau[k]){
-                            h_iso[0][k+15]->Fill(pt_1,weight_corr*sf_tauid[k+15]);
-                            h_iso[1][k+15]->Fill(myshiftedtau[k].Pt(),weight_corr*sf_tauid[k+15]);
-                            h_iso[2][k+15]->Fill(mytt_shiftedtau[k].M(),weight_corr*sf_tauid[k+15]);
-                            h_iso[3][k+15]->Fill(m_btt_shiftedtau[k],weight_corr*sf_tauid[k+15]);//nominal tauID sf evaluated at shifted tau pt
+                            h_iso[0][k+15]->Fill(pt_1,weight_corr*trgsf*sf_tauid[k+15]);
+                            h_iso[1][k+15]->Fill(myshiftedtau[k].Pt(),weight_corr*trgsf*sf_tauid[k+15]);
+                            h_iso[2][k+15]->Fill(mytt_shiftedtau[k].M(),weight_corr*trgsf*sf_tauid[k+15]);
+                            h_iso[3][k+15]->Fill(m_btt_shiftedtau[k],weight_corr*trgsf*sf_tauid[k+15]);//nominal tauID sf evaluated at shifted tau pt
                         }
                     }
                     //loop over trigger regions with muon->tau fake shifted
                     for (int k = 0; k < 2; k++){
                         if (trigger_region_tauisgenmu[k]){
-                            h_iso[0][k+45]->Fill(pt_1,weight_corr);
-                            h_iso[1][k+45]->Fill(mytau_isgenmu[k].Pt(),weight_corr*sf_tauid[0]);
-                            h_iso[2][k+45]->Fill(mytt_isgenmu[k].M(),weight_corr*sf_tauid[0]);
-                            h_iso[3][k+45]->Fill(m_btt_isgenmu[k],weight_corr*sf_tauid[0]);
+                            h_iso[0][k+45]->Fill(pt_1,weight_corr*trgsf);
+                            h_iso[1][k+45]->Fill(mytau_isgenmu[k].Pt(),weight_corr*trgsf*sf_tauid[0]);
+                            h_iso[2][k+45]->Fill(mytt_isgenmu[k].M(),weight_corr*trgsf*sf_tauid[0]);
+                            h_iso[3][k+45]->Fill(m_btt_isgenmu[k],weight_corr*trgsf*sf_tauid[0]);
                         }
                     }
                     //loop over trigger regions with electron->tau fake shifted
                     for (int k = 0; k < 8; k++){
                         if (trigger_region_tauisgenele[k]){
-                            h_iso[0][k+47]->Fill(pt_1,weight_corr);
-                            h_iso[1][k+47]->Fill(mytau_isgenele[k].Pt(),weight_corr*sf_tauid[0]);
-                            h_iso[2][k+47]->Fill(mytt_isgenele[k].M(),weight_corr*sf_tauid[0]);
-                            h_iso[3][k+47]->Fill(m_btt_isgenele[k],weight_corr*sf_tauid[0]);
+                            h_iso[0][k+47]->Fill(pt_1,weight_corr*trgsf);
+                            h_iso[1][k+47]->Fill(mytau_isgenele[k].Pt(),weight_corr*trgsf*sf_tauid[0]);
+                            h_iso[2][k+47]->Fill(mytt_isgenele[k].M(),weight_corr*trgsf*sf_tauid[0]);
+                            h_iso[3][k+47]->Fill(m_btt_isgenele[k],weight_corr*trgsf*sf_tauid[0]);
                         }
                     }
                     //loop over trigger regions with shifted muon
                     for (int k = 0; k < 6; k++){
                         if (trigger_region_shiftedmu[k]){
-                            h_iso[0][k+59]->Fill(myshiftedmu[k].Pt(),weight_corr_trgsfforshiftedmu[k]*sf_tauid[0]);
-                            h_iso[1][k+59]->Fill(pt_2,weight_corr_trgsfforshiftedmu[k]*sf_tauid[0]);
-                            h_iso[2][k+59]->Fill(mytt_shiftedmu[k].M(),weight_corr_trgsfforshiftedmu[k]*sf_tauid[0]);
-                            h_iso[3][k+59]->Fill(m_btt_shiftedmu[k],weight_corr_trgsfforshiftedmu[k]*sf_tauid[0]);
+                            h_iso[0][k+59]->Fill(myshiftedmu[k].Pt(),weight_corr*trgsf_shiftedmu[k]*sf_tauid[0]);
+                            h_iso[1][k+59]->Fill(pt_2,weight_corr*trgsf_shiftedmu[k]*sf_tauid[0]);
+                            h_iso[2][k+59]->Fill(mytt_shiftedmu[k].M(),weight_corr*trgsf_shiftedmu[k]*sf_tauid[0]);
+                            h_iso[3][k+59]->Fill(m_btt_shiftedmu[k],weight_corr*trgsf_shiftedmu[k]*sf_tauid[0]);
                         }
                     }
                 }
             }
             
             //anti-isolated tau region for fake background
-            if (byVVVLooseDeepVSjet_2 && !byMediumDeepVSjet_2){//fake taus, do not need tau energy scale shifting, or tauid sf
+            if (isnonSignal && byVVVLooseDeepVSjet_2 && !byMediumDeepVSjet_2){//fake taus, do not need tau energy scale shifting, or tauid sf
                 //fake rates
                 float fr = GetTauFR(mytau.Pt(),l2_decayMode,g_taufr_dm0M,g_taufr_dm1M,g_taufr_dm10M,g_taufr_dm11M,0);
                 //calculated with bjet
                 float fr_bjet = GetTauFR(mytau.Pt(),l2_decayMode,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,0);
-                float weight_qcd_0b = fr/(1-fr);
-                float weight_qcd_bjet = fr_bjet/(1-fr_bjet);
                 
-                if (nbtag20==0) weight_corr *= weight_qcd_0b;
-                else weight_corr *= weight_qcd_bjet;
-                if (pt_1<25) weight_corr *= 1.5;//tigher cuts applied at cross trigger level -> less yields -> scale up to compensate
+                float weight_fake = 1.0;
+                if (nbtag20==0) weight_fake = fr/(1-fr);
+                else weight_fake = fr_bjet/(1-fr_bjet);
                 
+                float xtrgfakefactor = 1.0;//tigher cuts applied at cross trigger level -> less yields -> scale up to compensate
+                float xtrgfakefactor_updown[2] = {1.0,1.0};
+                if (isCrossTrigger && pt_1<25 && pt_1>21){
+                    xtrgfakefactor = 1.5;//nominal
+                    xtrgfakefactor_updown[0] = 1.6;//+/-20%
+                    xtrgfakefactor_updown[1] = 1.4;
+                }
+                
+                std::vector<float> xtrgfakefactor_shiftedmu;
                 //for shifted mu (re-defined single/cross)
                 for (int k = 0; k < 6; k++){
-                    if (nbtag20==0) weight_corr_trgsfforshiftedmu[k] *= weight_qcd_0b;
-                    else weight_corr_trgsfforshiftedmu[k] *= weight_qcd_bjet;
-                    if (myshiftedmu[k].Pt()<25) weight_corr_trgsfforshiftedmu[k] *= 1.5;
+                    xtrgfakefactor_shiftedmu.push_back(1.0);
+                    if (isCrossTrigger && myshiftedmu[k].Pt()<25 && myshiftedmu[k].Pt()>21) xtrgfakefactor_shiftedmu[k] = 1.5;
                 }
                 
                 if (nbtag20==1){
                     if (trigger_region_nominal){
                         //nominal
-                        h_anti[0][0]->Fill(pt_1,weight_corr);
-                        h_anti[1][0]->Fill(pt_2,weight_corr);
-                        h_anti[2][0]->Fill(m_sv,weight_corr);
-                        h_anti[3][0]->Fill(m_btt,weight_corr);
+                        h_anti[0][0]->Fill(pt_1,weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                        h_anti[1][0]->Fill(pt_2,weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                        h_anti[2][0]->Fill(m_sv,weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                        h_anti[3][0]->Fill(m_btt,weight_corr*weight_fake*trgsf*xtrgfakefactor);
                         //jet uncertainties
                         for (int k = 0; k < 22; k++){
-                            h_anti[0][k+1]->Fill(pt_1,weight_corr);
-                            h_anti[1][k+1]->Fill(pt_2,weight_corr);
-                            h_anti[2][k+1]->Fill(mytt_jet[k].M(),weight_corr);
-                            h_anti[3][k+1]->Fill(m_btt_jet[k],weight_corr);
+                            h_anti[0][k+1]->Fill(pt_1,weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                            h_anti[1][k+1]->Fill(pt_2,weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                            h_anti[2][k+1]->Fill(mytt_jet[k].M(),weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                            h_anti[3][k+1]->Fill(m_btt_jet[k],weight_corr*weight_fake*trgsf*xtrgfakefactor);
                         }
                         //trigger sf shifting
                         for (int k = 0; k < 4; k++){
-                            h_anti[0][k+23]->Fill(pt_1,weight_corr*trigger_shiftedsf[k]);
-                            h_anti[1][k+23]->Fill(pt_2,weight_corr*trigger_shiftedsf[k]);
-                            h_anti[2][k+23]->Fill(m_sv,weight_corr*trigger_shiftedsf[k]);
-                            h_anti[3][k+23]->Fill(m_btt,weight_corr*trigger_shiftedsf[k]);
+                            h_anti[0][k+23]->Fill(pt_1,weight_corr*weight_fake*trgsf*trigger_shiftedsf[k]*xtrgfakefactor);
+                            h_anti[1][k+23]->Fill(pt_2,weight_corr*weight_fake*trgsf*trigger_shiftedsf[k]*xtrgfakefactor);
+                            h_anti[2][k+23]->Fill(m_sv,weight_corr*weight_fake*trgsf*trigger_shiftedsf[k]*xtrgfakefactor);
+                            h_anti[3][k+23]->Fill(m_btt,weight_corr*weight_fake*trgsf*trigger_shiftedsf[k]*xtrgfakefactor);
                         }
                         //Zpt reweight uncertainties for DY MC only
                         if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
                             for (int k = 0; k < 2; k++){
-                                h_anti[0][k+33]->Fill(pt_1,weight_corr*zptmass_weight_shifting[k]);
-                                h_anti[1][k+33]->Fill(pt_2,weight_corr*zptmass_weight_shifting[k]);
-                                h_anti[2][k+33]->Fill(m_sv,weight_corr*zptmass_weight_shifting[k]);
-                                h_anti[3][k+33]->Fill(m_btt,weight_corr*zptmass_weight_shifting[k]);
+                                h_anti[0][k+33]->Fill(pt_1,weight_corr*weight_fake*trgsf*zptmass_weight_shifting[k]*xtrgfakefactor);
+                                h_anti[1][k+33]->Fill(pt_2,weight_corr*weight_fake*trgsf*zptmass_weight_shifting[k]*xtrgfakefactor);
+                                h_anti[2][k+33]->Fill(m_sv,weight_corr*weight_fake*trgsf*zptmass_weight_shifting[k]*xtrgfakefactor);
+                                h_anti[3][k+33]->Fill(m_btt,weight_corr*weight_fake*trgsf*zptmass_weight_shifting[k]*xtrgfakefactor);
                             }
                         }
                         //top pt reweight uncertainties for ttbar only
                         if (sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic" or name=="TT"){
                             for (int k = 0; k < 2; k++){
-                                h_anti[0][k+35]->Fill(pt_1,weight_corr*topfactor_shifting[k]);
-                                h_anti[1][k+35]->Fill(pt_2,weight_corr*topfactor_shifting[k]);
-                                h_anti[2][k+35]->Fill(m_sv,weight_corr*topfactor_shifting[k]);
-                                h_anti[3][k+35]->Fill(m_btt,weight_corr*topfactor_shifting[k]);
+                                h_anti[0][k+35]->Fill(pt_1,weight_corr*weight_fake*trgsf*topfactor_shifting[k]*xtrgfakefactor);
+                                h_anti[1][k+35]->Fill(pt_2,weight_corr*weight_fake*trgsf*topfactor_shifting[k]*xtrgfakefactor);
+                                h_anti[2][k+35]->Fill(m_sv,weight_corr*weight_fake*trgsf*topfactor_shifting[k]*xtrgfakefactor);
+                                h_anti[3][k+35]->Fill(m_btt,weight_corr*weight_fake*trgsf*topfactor_shifting[k]*xtrgfakefactor);
                             }
                         }
                         //recoil uncertainties
                         if (sample!="data_obs" && sample!="embedded" && name!="TT" && name!="VV" && name!="ST"){
                             for (int k = 0; k < 12; k++){
-                                h_anti[0][k+37]->Fill(pt_1,weight_corr);
-                                h_anti[1][k+37]->Fill(pt_2,weight_corr);
-                                h_anti[2][k+37]->Fill(mytt_recoil[k].M(),weight_corr);
-                                h_anti[3][k+37]->Fill(m_btt_recoil[k],weight_corr);
+                                h_anti[0][k+37]->Fill(pt_1,weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                                h_anti[1][k+37]->Fill(pt_2,weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                                h_anti[2][k+37]->Fill(mytt_recoil[k].M(),weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                                h_anti[3][k+37]->Fill(m_btt_recoil[k],weight_corr*weight_fake*trgsf*xtrgfakefactor);
                             }
                         }
                         //met unclustered ES
                         if (name=="TT" or name=="VV" or name=="ST"){
-                            for (int k = 0; k < 6; k++){
-                                h_anti[0][k+49]->Fill(pt_1,weight_corr);
-                                h_anti[1][k+49]->Fill(pt_2,weight_corr);
-                                h_anti[2][k+49]->Fill(mytt_UES[k].M(),weight_corr);
-                                h_anti[3][k+49]->Fill(m_btt_UES[k],weight_corr);
+                            for (int k = 0; k < 2; k++){
+                                h_anti[0][k+49]->Fill(pt_1,weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                                h_anti[1][k+49]->Fill(pt_2,weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                                h_anti[2][k+49]->Fill(mytt_UES[k].M(),weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                                h_anti[3][k+49]->Fill(m_btt_UES[k],weight_corr*weight_fake*trgsf*xtrgfakefactor);
                             }
+                        }
+                        //JER uncertainties
+                        for (int k = 0; k < 2; k++){
+                            h_anti[0][k+51]->Fill(pt_1,weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                            h_anti[1][k+51]->Fill(pt_2,weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                            h_anti[2][k+51]->Fill(mytt_jer[k].M(),weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                            h_anti[3][k+51]->Fill(m_btt_jer[k],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                        }
+                        //uncertainties in xtrgup factor
+                        for (int k = 0; k < 2; k++){
+                            h_anti[0][k+53]->Fill(pt_1,weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
+                            h_anti[1][k+53]->Fill(pt_2,weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
+                            h_anti[2][k+53]->Fill(m_sv,weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
+                            h_anti[3][k+53]->Fill(m_btt,weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
                         }
                     }
                     //loop over trigger regions with shifted muon
                     for (int k = 0; k < 6; k++){
                         if (trigger_region_shiftedmu[k]){
-                            h_anti[0][k+27]->Fill(myshiftedmu[k].Pt(),weight_corr_trgsfforshiftedmu[k]);
-                            h_anti[1][k+27]->Fill(pt_2,weight_corr_trgsfforshiftedmu[k]);
-                            h_anti[2][k+27]->Fill(mytt_shiftedmu[k].M(),weight_corr_trgsfforshiftedmu[k]);
-                            h_anti[3][k+27]->Fill(m_btt_shiftedmu[k],weight_corr_trgsfforshiftedmu[k]);
+                            h_anti[0][k+27]->Fill(myshiftedmu[k].Pt(),weight_corr*weight_fake*trgsf_shiftedmu[k]*xtrgfakefactor_shiftedmu[k]);
+                            h_anti[1][k+27]->Fill(pt_2,weight_corr*weight_fake*trgsf_shiftedmu[k]*xtrgfakefactor_shiftedmu[k]);
+                            h_anti[2][k+27]->Fill(mytt_shiftedmu[k].M(),weight_corr*weight_fake*trgsf_shiftedmu[k]*xtrgfakefactor_shiftedmu[k]);
+                            h_anti[3][k+27]->Fill(m_btt_shiftedmu[k],weight_corr*weight_fake*trgsf_shiftedmu[k]*xtrgfakefactor_shiftedmu[k]);
                         }
                     }
                 }
+                //############################fake rate uncertainties for alldm by pt bins###########################
+                std::vector<float> fr_bjet_shifted;//only for nbjet>0; when nbjet==0 it is split by DM also..
+                std::vector<float> weight_fake_shifted;
+                for (int k = 0; k < 14; k++){
+                    fr_bjet_shifted.push_back(0);
+                    fr_bjet_shifted[k] = GetTauFR(mytau.Pt(),0,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,k+1);//see GetTauFR.h
+                    weight_fake_shifted.push_back(0);
+                    weight_fake_shifted[k] = fr_bjet_shifted[k]/(1-fr_bjet_shifted[k]);
+                    
+                    h_anti[0][k+55]->Fill(pt_1,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
+                    h_anti[1][k+55]->Fill(pt_2,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
+                    h_anti[2][k+55]->Fill(m_sv,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
+                    h_anti[3][k+55]->Fill(m_btt,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
+                }//ordered by: pt0to25up/down, pt25to30up/down,...
+                
             }
         }
         //nonDY MC contamination to embedded (all nonHiggs MC events with two taus previously rejected)
@@ -1167,10 +1232,10 @@ int main(int argc, char** argv){
             if (byMediumDeepVSjet_2){
                 if (nbtag20==1){
                     if (trigger_region_nominal){
-                        h_iso[0][93]->Fill(pt_1,weight_corr*sf_tauid[0]*0.1);//+/-10% on top of emb
-                        h_iso[1][93]->Fill(pt_2,weight_corr*sf_tauid[0]*0.1);
-                        h_iso[2][93]->Fill(m_sv,weight_corr*sf_tauid[0]*0.1);
-                        h_iso[3][93]->Fill(m_btt,weight_corr*sf_tauid[0]*0.1);
+                        h_iso[0][89]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]*0.1);//+/-10% on top of emb
+                        h_iso[1][89]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]*0.1);
+                        h_iso[2][89]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]*0.1);
+                        h_iso[3][89]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]*0.1);
                     }
                 }
             }
@@ -1181,6 +1246,10 @@ int main(int argc, char** argv){
     
     TString dir[4] = {"pt_1","pt_2","m_tt","m_btt"};
     TString fake = "_fake";
+    TString MC = "MC";
+    
+    bool isnonSignal = (sample!="gghbbtt12" && sample!="gghbbtt20" && sample!="gghbbtt30" && sample!="gghbbtt40" && sample!="gghbbtt50" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt20" && sample!="vbfbbtt30" && sample!="vbfbbtt40" && sample!="vbfbbtt50" && sample!="vbfbbtt60");
+    bool isnonHiggsMC = (sample!="data_obs" && sample!="embedded" && isnonSignal && name!="HTT" && name!="ttHnonbb");
     
     std::vector<TDirectory*> td;
     for (int j = 0; j < 4; j++){
@@ -1191,8 +1260,10 @@ int main(int argc, char** argv){
             //nominal
             h_iso[j][0]->SetName(name.c_str());
             h_iso[j][0]->Write();
-            h_anti[j][0]->SetName(name.c_str()+fake);
-            h_anti[j][0]->Write();
+            if (isnonSignal){
+                h_anti[j][0]->SetName(name.c_str()+fake);
+                h_anti[j][0]->Write();
+            }
             //shifted
             for (int i = 0; i < 14; ++i){
                 h_iso[j][i+1]->SetName(name.c_str()+shape_tauideff[i]);
@@ -1206,8 +1277,10 @@ int main(int argc, char** argv){
                 for (int i = 0; i < 22; ++i){
                     h_iso[j][i+23]->SetName(name.c_str()+shape_jet[i]);
                     h_iso[j][i+23]->Write();
-                    h_anti[j][i+1]->SetName(name.c_str()+fake+shape_jet[i]);
-                    h_anti[j][i+1]->Write();
+                    if (isnonSignal){
+                        h_anti[j][i+1]->SetName(name.c_str()+fake+shape_jet[i]);
+                        h_anti[j][i+1]->Write();
+                    }
                 }
                 for (int i = 0; i < 2; ++i){
                     h_iso[j][i+45]->SetName(name.c_str()+shape_mufaketauES[i]);
@@ -1221,18 +1294,25 @@ int main(int argc, char** argv){
             for (int i = 0; i < 4; ++i){
                 h_iso[j][i+55]->SetName(name.c_str()+shape_trgeff[i]);
                 h_iso[j][i+55]->Write();
-                h_anti[j][i+23]->SetName(name.c_str()+fake+shape_trgeff[i]);
-                h_anti[j][i+23]->Write();
+                if (isnonSignal){
+                    h_anti[j][i+23]->SetName(name.c_str()+fake+shape_trgeff[i]);
+                    h_anti[j][i+23]->Write();
+                }
             }
             for (int i = 0; i < 6; ++i){
                 h_iso[j][i+59]->SetName(name.c_str()+shape_muonES[i]);
                 h_iso[j][i+59]->Write();
-                h_anti[j][i+27]->SetName(name.c_str()+fake+shape_muonES[i]);
-                h_anti[j][i+27]->Write();
+                if (isnonSignal){
+                    h_anti[j][i+27]->SetName(name.c_str()+fake+shape_muonES[i]);
+                    h_anti[j][i+27]->Write();
+                }
             }
-            for (int i = 0; i < 6; ++i){
-                h_iso[j][i+65]->SetName(name.c_str()+shape_tautracking[i]);
-                h_iso[j][i+65]->Write();
+            //emb only
+            if (sample=="embedded"){
+                for (int i = 0; i < 6; ++i){
+                    h_iso[j][i+65]->SetName(name.c_str()+embshape_tautracking[i]);
+                    h_iso[j][i+65]->Write();
+                }
             }
             //DY MC only
             if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
@@ -1257,13 +1337,15 @@ int main(int argc, char** argv){
                 for (int i = 0; i < 12; ++i){
                     h_iso[j][i+75]->SetName(name.c_str()+shape_recoil[i]);
                     h_iso[j][i+75]->Write();
-                    h_anti[j][i+37]->SetName(name.c_str()+fake+shape_recoil[i]);
-                    h_anti[j][i+37]->Write();
+                    if (isnonSignal){
+                        h_anti[j][i+37]->SetName(name.c_str()+fake+shape_recoil[i]);
+                        h_anti[j][i+37]->Write();
+                    }
                 }
             }
             //met unclustered ES: only on ttbar diboson singletop
             if (name=="TT" or name=="VV" or name=="ST"){
-                for (int i = 0; i < 6; ++i){
+                for (int i = 0; i < 2; ++i){
                     h_iso[j][i+87]->SetName(name.c_str()+shape_unclusteredES[i]);
                     h_iso[j][i+87]->Write();
                     h_anti[j][i+49]->SetName(name.c_str()+fake+shape_unclusteredES[i]);
@@ -1271,9 +1353,33 @@ int main(int argc, char** argv){
                 }
             }
             //nonDY
-            if (sample!="data_obs" && sample!="embedded" && sample!="gghbbtt12" && sample!="gghbbtt20" && sample!="gghbbtt30" && sample!="gghbbtt40" && sample!="gghbbtt50" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt20" && sample!="vbfbbtt30" && sample!="vbfbbtt40" && sample!="vbfbbtt50" && sample!="vbfbbtt60" && name!="HTT" && name!="ttHnonbb" && name!="Z"){
-                h_iso[j][93]->SetName(name.c_str()+shape_nonDY[0]);
-                h_iso[j][93]->Write();
+            if (isnonHiggsMC && name!="Z"){
+                TString nonDYMC = "nonDYMC";
+                h_iso[j][89]->SetName(nonDYMC+shape_nonDY[0]);
+                h_iso[j][89]->Write();
+            }
+            //JER
+            for (int i = 0; i < 2; ++i){
+                h_iso[j][i+90]->SetName(name.c_str()+shape_jer[i]);
+                h_iso[j][i+90]->Write();
+                if (isnonSignal){
+                    h_anti[j][i+51]->SetName(name.c_str()+fake+shape_jer[i]);
+                    h_anti[j][i+51]->Write();
+                }
+            }
+            //fake cross trg scale up uncertainties
+            if (isnonSignal){
+                for (int i = 0; i < 2; ++i){
+                    h_anti[j][i+53]->SetName(MC+fake+shape_fake_crosstrg[i]);
+                    h_anti[j][i+53]->Write();
+                }
+            }
+            //fake rate uncertainties by pt bins
+            if (isnonSignal){
+                for (int i = 0; i < 14; ++i){
+                    h_anti[j][i+55]->SetName(MC+fake+shape_fakerate[i]);
+                    h_anti[j][i+55]->Write();
+                }
             }
         }
         if (sample=="data_obs"){
@@ -1281,6 +1387,16 @@ int main(int argc, char** argv){
             h_iso[j][0]->Write();
             h_anti[j][0]->SetName(name.c_str()+fake);
             h_anti[j][0]->Write();
+            //fake cross trg scale up uncertainties
+            for (int i = 0; i < 2; ++i){
+                h_anti[j][i+53]->SetName(name.c_str()+fake+shape_fake_crosstrg[i]);
+                h_anti[j][i+53]->Write();
+            }
+            //fake rate uncertainties by pt bins
+            for (int i = 0; i < 14; ++i){
+                h_anti[j][i+55]->SetName(name.c_str()+fake+shape_fakerate[i]);
+                h_anti[j][i+55]->Write();
+            }
         }
     }
     
