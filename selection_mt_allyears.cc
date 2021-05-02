@@ -28,6 +28,8 @@
 #include "ZmmSF.h"
 #include "LumiReweightingStandAlone.h"
 #include "btagSF_2018.h"
+#include "btagSF_2017.h"
+#include "btagSF_2016.h"
 #include "RooWorkspace.h"
 #include "RooRealVar.h"
 #include "RooFunctor.h"
@@ -41,6 +43,7 @@ int main(int argc, char** argv){
     std::string output = *(argv + 2);
     std::string sample = *(argv + 3);
     std::string name = *(argv + 4);
+    std::string year = *(argv + 5);
     
     cout << "************* input: " << input.c_str() << " *************" << endl;
     
@@ -49,26 +52,41 @@ int main(int argc, char** argv){
     TH1F * nevents = (TH1F*) skimmed->Get("nevents");
     float N = nevents->GetBinContent(2); //no. of generated events (before skimming) with genweight
     
-    std::string dnnfile = sample.c_str();
-    dnnfile = "/hdfs/store/user/htsoi/dnn/mt18/" + dnnfile + ".root";
+    std::string sample_name = sample.c_str();
+    std::string dnnfile = "/hdfs/store/user/htsoi/dnn/mt18/" + sample_name + ".root";
+    if (year=="2017") dnnfile = "/hdfs/store/user/htsoi/dnn/mt17/" + sample_name + ".root";
+    if (year=="2016") dnnfile = "/hdfs/store/user/htsoi/dnn/mt16/" + sample_name + ".root";
     TFile * dnn = new TFile(dnnfile.c_str());
     TTree * tree_dnn = (TTree*) dnn->Get("mutau_tree_dnn");
     
     //sample weights
-    float xs, weight, luminosity = 59740.0;
+    float xs, weight;
+    float luminosity = 59740.0;
+    if (year=="2017") luminosity = 41530.0;
+    if (year=="2016") luminosity = 35920.0;
     
     if (sample == "data_obs"){weight = 1.0;}
     else if(sample == "gghbbtt12"){xs = 0.01*48.58*0.0380; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt15"){xs = 0.01*48.58*0.0367; weight = luminosity*xs/N;}
     else if(sample == "gghbbtt20"){xs = 0.01*48.58*0.0355; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt25"){xs = 0.01*48.58*0.0346; weight = luminosity*xs/N;}
     else if(sample == "gghbbtt30"){xs = 0.01*48.58*0.0336; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt35"){xs = 0.01*48.58*0.0327; weight = luminosity*xs/N;}
     else if(sample == "gghbbtt40"){xs = 0.01*48.58*0.0321; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt45"){xs = 0.01*48.58*0.0319; weight = luminosity*xs/N;}
     else if(sample == "gghbbtt50"){xs = 0.01*48.58*0.0329; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt55"){xs = 0.01*48.58*0.0352; weight = luminosity*xs/N;}
     else if(sample == "gghbbtt60"){xs = 0.01*48.58*0.0403; weight = luminosity*xs/N;}
     else if(sample == "vbfbbtt12"){xs = 0.01*3.782*0.0785; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt15"){xs = 0.01*3.782*0.0769; weight = luminosity*xs/N;}
     else if(sample == "vbfbbtt20"){xs = 0.01*3.782*0.0749; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt25"){xs = 0.01*3.782*0.0735; weight = luminosity*xs/N;}
     else if(sample == "vbfbbtt30"){xs = 0.01*3.782*0.0717; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt35"){xs = 0.01*3.782*0.0702; weight = luminosity*xs/N;}
     else if(sample == "vbfbbtt40"){xs = 0.01*3.782*0.0682; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt45"){xs = 0.01*3.782*0.0670; weight = luminosity*xs/N;}
     else if(sample == "vbfbbtt50"){xs = 0.01*3.782*0.0661; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt55"){xs = 0.01*3.782*0.0662; weight = luminosity*xs/N;}
     else if(sample == "vbfbbtt60"){xs = 0.01*3.782*0.0676; weight = luminosity*xs/N;}
     else if(sample == "embedded"){weight = 1.0;}
     else if(sample == "DY"){weight = 1.0;}
@@ -82,23 +100,25 @@ int main(int argc, char** argv){
     else if(sample == "GGZHNNTT"){xs = 0.1227*0.0627*0.2000; weight = luminosity*xs/N;}
     else if(sample == "GGZHQQTT"){xs = 0.1227*0.0627*0.6991; weight = luminosity*xs/N;}
     else if(sample == "GGZHWW"){xs = 0.1227*0.2137; weight = luminosity*xs/N;}
-    else if(sample == "ST_tW_antitop"){xs = 35.85; weight = luminosity*xs/N;}
-    else if(sample == "ST_tW_top"){xs = 35.85; weight = luminosity*xs/N;}
-    else if(sample == "ST_t_antitop"){xs = 80.94; weight = luminosity*xs/N;}
-    else if(sample == "ST_t_top"){xs = 136.02; weight = luminosity*xs/N;}
+    else if(sample == "ST_tW_antitop"){xs = 35.85; if(year=="2016") xs = 35.6; weight = luminosity*xs/N;}
+    else if(sample == "ST_tW_top"){xs = 35.85; if(year=="2016") xs = 35.6; weight = luminosity*xs/N;}
+    else if(sample == "ST_t_antitop"){xs = 80.94; if(year=="2016") xs = 26.23; weight = luminosity*xs/N;}
+    else if(sample == "ST_t_top"){xs = 136.02; if(year=="2016") xs = 44.07; weight = luminosity*xs/N;}
     else if(sample == "TTTo2L2Nu"){xs = 88.29; weight = luminosity*xs/N;}
     else if(sample == "TTToHadronic"){xs = 377.96; weight = luminosity*xs/N;}
     else if(sample == "TTToSemiLeptonic"){xs = 365.35; weight = luminosity*xs/N;}
+    else if(sample == "TT"){xs = 831.76; weight = luminosity*xs/N;}//for 2016 only
     else if(sample == "VBFHTT"){xs = 3.782*0.0627; weight = luminosity*xs/N;}
     else if(sample == "VBFHWW"){xs = 3.782*0.2137*0.3258*0.3258; weight = luminosity*xs/N;}
     else if(sample == "VV2L2Nu"){xs = 13.84; weight = luminosity*xs/N;}//11.95
-    else if(sample == "W"){weight = 1.0;}
-    else if(sample == "W1"){weight = 1.0;}
-    else if(sample == "W2"){weight = 1.0;}
-    else if(sample == "W3"){weight = 1.0;}
-    else if(sample == "W4"){weight = 1.0;}
+    //else if(sample == "W"){weight = 1.0;}
+    //else if(sample == "W1"){weight = 1.0;}
+    //else if(sample == "W2"){weight = 1.0;}
+    //else if(sample == "W3"){weight = 1.0;}
+    //else if(sample == "W4"){weight = 1.0;}
     else if(sample == "WZ2L2Q"){xs = 5.52; weight = luminosity*xs/N;}//5.595
     else if(sample == "WZ3LNu"){xs = 4.43; weight = luminosity*xs/N;}//4.708
+    else if(sample == "WZ3L1Nu"){xs = 4.43; weight = luminosity*xs/N;}
     else if(sample == "WminusHTT"){xs = 0.5328*0.0627; weight = luminosity*xs/N;}
     else if(sample == "WminusHWW"){xs = 0.5328*0.2137; weight = luminosity*xs/N;}
     else if(sample == "WplusHTT"){xs = 0.840*0.0627; weight = luminosity*xs/N;}
@@ -136,6 +156,8 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("filterMu20Tau27_1", &filterMu20Tau27_1);
     tree->SetBranchAddress("matchMu20Tau27_2", &matchMu20Tau27_2);
     tree->SetBranchAddress("filterMu20Tau27_2", &filterMu20Tau27_2);
+    tree->SetBranchAddress("matchEmbFilter_Mu20Tau27_2017_1", &matchEmbFilter_Mu20Tau27_2017_1);
+    tree->SetBranchAddress("matchEmbFilter_Mu20Tau27_2", &matchEmbFilter_Mu20Tau27_2);
     tree->SetBranchAddress("passMu20HPSTau27", &passMu20HPSTau27);
     tree->SetBranchAddress("matchMu20HPSTau27_1", &matchMu20HPSTau27_1);
     tree->SetBranchAddress("filterMu20HPSTau27_1", &filterMu20HPSTau27_1);
@@ -144,6 +166,28 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("matchEmbFilter_Mu20Tau27_1", &matchEmbFilter_Mu20Tau27_1);
     tree->SetBranchAddress("matchEmbFilter_Mu20Tau27_2", &matchEmbFilter_Mu20Tau27_2);
     tree->SetBranchAddress("matchEmbFilter_Mu20HPSTau27_2", &matchEmbFilter_Mu20HPSTau27_2);
+    tree->SetBranchAddress("passMu22eta2p1", &passMu22eta2p1);
+    tree->SetBranchAddress("matchMu22eta2p1_1", &matchMu22eta2p1_1);
+    tree->SetBranchAddress("filterMu22eta2p1_1", &filterMu22eta2p1_1);
+    tree->SetBranchAddress("passTkMu22eta2p1", &passTkMu22eta2p1);
+    tree->SetBranchAddress("matchTkMu22eta2p1_1", &matchTkMu22eta2p1_1);
+    tree->SetBranchAddress("filterTkMu22eta2p1_1", &filterTkMu22eta2p1_1);
+    tree->SetBranchAddress("passMu22", &passMu22);
+    tree->SetBranchAddress("matchMu22_1", &matchMu22_1);
+    tree->SetBranchAddress("filterMu22_1", &filterMu22_1);
+    tree->SetBranchAddress("passTkMu22", &passTkMu22);
+    tree->SetBranchAddress("matchTkMu22_1", &matchTkMu22_1);
+    tree->SetBranchAddress("filterTkMu22_1", &filterTkMu22_1);
+    tree->SetBranchAddress("passMu19Tau20", &passMu19Tau20);
+    tree->SetBranchAddress("matchMu19Tau20_1", &matchMu19Tau20_1);
+    tree->SetBranchAddress("matchMu19Tau20_2", &matchMu19Tau20_2);
+    tree->SetBranchAddress("filterMu19Tau20_1", &filterMu19Tau20_1);
+    tree->SetBranchAddress("filterMu19Tau20_2", &filterMu19Tau20_2);
+    tree->SetBranchAddress("passMu19Tau20SingleL1", &passMu19Tau20SingleL1);
+    tree->SetBranchAddress("matchMu19Tau20SingleL1_1", &matchMu19Tau20SingleL1_1);
+    tree->SetBranchAddress("matchMu19Tau20SingleL1_2", &matchMu19Tau20SingleL1_2);
+    tree->SetBranchAddress("filterMu19Tau20SingleL1_1", &filterMu19Tau20SingleL1_1);
+    tree->SetBranchAddress("filterMu19Tau20SingleL1_2", &filterMu19Tau20SingleL1_2);
     tree->SetBranchAddress("bpt_deepcsv_1", &bpt_deepcsv_1);
     tree->SetBranchAddress("beta_deepcsv_1", &beta_deepcsv_1);
     tree->SetBranchAddress("bphi_deepcsv_1", &bphi_deepcsv_1);
@@ -246,11 +290,14 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("t_trg_pog_deeptau_medium_mutau_ratio", &t_trg_pog_deeptau_medium_mutau_ratio);
     tree->SetBranchAddress("t_trg_pog_deeptau_medium_mutau_ratio_up", &t_trg_pog_deeptau_medium_mutau_ratio_up);
     tree->SetBranchAddress("t_trg_pog_deeptau_medium_mutau_ratio_down", &t_trg_pog_deeptau_medium_mutau_ratio_down);
+    tree->SetBranchAddress("m_trg_MuTau_Mu20Leg_desy_ratio", &m_trg_MuTau_Mu20Leg_desy_ratio);
+    tree->SetBranchAddress("m_trg_19_ic_ratio", &m_trg_19_ic_ratio);
     tree->SetBranchAddress("m_trk_ratio", &m_trk_ratio);
     tree->SetBranchAddress("m_idiso_ic_ratio", &m_idiso_ic_ratio);
     tree->SetBranchAddress("zptmass_weight_nom", &zptmass_weight_nom);
     tree->SetBranchAddress("m_trg_ic_embed_ratio", &m_trg_ic_embed_ratio);
     tree->SetBranchAddress("m_trg_20_ic_embed_ratio", &m_trg_20_ic_embed_ratio);
+    tree->SetBranchAddress("m_trg_19_ic_embed_ratio", &m_trg_19_ic_embed_ratio);
     tree->SetBranchAddress("t_trg_mediumDeepTau_mutau_embed_ratio", &t_trg_mediumDeepTau_mutau_embed_ratio);
     tree->SetBranchAddress("t_trg_mediumDeepTau_mutau_embed_ratio_up", &t_trg_mediumDeepTau_mutau_embed_ratio_up);
     tree->SetBranchAddress("t_trg_mediumDeepTau_mutau_embed_ratio_down", &t_trg_mediumDeepTau_mutau_embed_ratio_down);
@@ -258,6 +305,7 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("m_sel_trg_ic_ratio", &m_sel_trg_ic_ratio);
     tree->SetBranchAddress("m_sel_id_ic_ratio_1", &m_sel_id_ic_ratio_1);
     tree->SetBranchAddress("m_sel_id_ic_ratio_2", &m_sel_id_ic_ratio_2);
+    tree->SetBranchAddress("prefiring_weight", &prefiring_weight);
     tree->SetBranchAddress("m_sv", &m_sv);
     tree->SetBranchAddress("m_sv_UESUp", &m_sv_UESUp);
     tree->SetBranchAddress("m_sv_UESDown", &m_sv_UESDown);
@@ -294,39 +342,109 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("m_sv_ResolutionUp", &m_sv_ResolutionUp);
     tree->SetBranchAddress("m_sv_ResolutionDown", &m_sv_ResolutionDown);
     
+    tree_dnn->SetBranchAddress("dnn_1b", &dnn_1b);//wider binning in intermediate region, narrower in low and high regions//blind signal for data
+    /*
+    tree_dnn->SetBranchAddress("dnn_1b_Up", &dnn_1b_Up);
+    tree_dnn->SetBranchAddress("dnn_1b_Down", &dnn_1b_Down);
+    tree_dnn->SetBranchAddress("dnn_1b_UESUp", &dnn_1b_UESUp);
+    tree_dnn->SetBranchAddress("dnn_1b_UESDown", &dnn_1b_UESDown);
+    tree_dnn->SetBranchAddress("dnn_1b_JERUp", &dnn_1b_JERUp);
+    tree_dnn->SetBranchAddress("dnn_1b_JERDown", &dnn_1b_JERDown);
+    tree_dnn->SetBranchAddress("dnn_1b_muonESUp", &dnn_1b_muonESUp);
+    tree_dnn->SetBranchAddress("dnn_1b_muonESDown", &dnn_1b_muonESDown);
+    tree_dnn->SetBranchAddress("dnn_1b_JetAbsoluteUp", &dnn_1b_JetAbsoluteUp);
+    tree_dnn->SetBranchAddress("dnn_1b_JetAbsoluteDown", &dnn_1b_JetAbsoluteDown);
+    tree_dnn->SetBranchAddress("dnn_1b_JetAbsoluteyearUp", &dnn_1b_JetAbsoluteyearUp);
+    tree_dnn->SetBranchAddress("dnn_1b_JetAbsoluteyearDown", &dnn_1b_JetAbsoluteyearDown);
+    tree_dnn->SetBranchAddress("dnn_1b_JetBBEC1Up", &dnn_1b_JetBBEC1Up);
+    tree_dnn->SetBranchAddress("dnn_1b_JetBBEC1Down", &dnn_1b_JetBBEC1Down);
+    tree_dnn->SetBranchAddress("dnn_1b_JetBBEC1yearUp", &dnn_1b_JetBBEC1yearUp);
+    tree_dnn->SetBranchAddress("dnn_1b_JetBBEC1yearDown", &dnn_1b_JetBBEC1yearDown);
+    tree_dnn->SetBranchAddress("dnn_1b_JetEC2Up", &dnn_1b_JetEC2Up);
+    tree_dnn->SetBranchAddress("dnn_1b_JetEC2Down", &dnn_1b_JetEC2Down);
+    tree_dnn->SetBranchAddress("dnn_1b_JetEC2yearUp", &dnn_1b_JetEC2yearUp);
+    tree_dnn->SetBranchAddress("dnn_1b_JetEC2yearDown", &dnn_1b_JetEC2yearDown);
+    tree_dnn->SetBranchAddress("dnn_1b_JetFlavorQCDUp", &dnn_1b_JetFlavorQCDUp);
+    tree_dnn->SetBranchAddress("dnn_1b_JetFlavorQCDDown", &dnn_1b_JetFlavorQCDDown);
+    tree_dnn->SetBranchAddress("dnn_1b_JetHFUp", &dnn_1b_JetHFUp);
+    tree_dnn->SetBranchAddress("dnn_1b_JetHFDown", &dnn_1b_JetHFDown);
+    tree_dnn->SetBranchAddress("dnn_1b_JetHFyearUp", &dnn_1b_JetHFyearUp);
+    tree_dnn->SetBranchAddress("dnn_1b_JetHFyearDown", &dnn_1b_JetHFyearDown);
+    tree_dnn->SetBranchAddress("dnn_1b_JetRelativeBalUp", &dnn_1b_JetRelativeBalUp);
+    tree_dnn->SetBranchAddress("dnn_1b_JetRelativeBalDown", &dnn_1b_JetRelativeBalDown);
+    tree_dnn->SetBranchAddress("dnn_1b_JetRelativeSampleUp", &dnn_1b_JetRelativeSampleUp);
+    tree_dnn->SetBranchAddress("dnn_1b_JetRelativeSampleDown", &dnn_1b_JetRelativeSampleDown);
+    tree_dnn->SetBranchAddress("dnn_1b_ResponseUp", &dnn_1b_ResponseUp);
+    tree_dnn->SetBranchAddress("dnn_1b_ResponseDown", &dnn_1b_ResponseDown);
+    tree_dnn->SetBranchAddress("dnn_1b_ResolutionUp", &dnn_1b_ResolutionUp);
+    tree_dnn->SetBranchAddress("dnn_1b_ResolutionDown", &dnn_1b_ResolutionDown);*/
+    tree_dnn->SetBranchAddress("dnn_2b", &dnn_2b);
+    /*
+    tree_dnn->SetBranchAddress("dnn_2b_Up", &dnn_2b_Up);
+    tree_dnn->SetBranchAddress("dnn_2b_Down", &dnn_2b_Down);
+    tree_dnn->SetBranchAddress("dnn_2b_UESUp", &dnn_2b_UESUp);
+    tree_dnn->SetBranchAddress("dnn_2b_UESDown", &dnn_2b_UESDown);
+    tree_dnn->SetBranchAddress("dnn_2b_JERUp", &dnn_2b_JERUp);
+    tree_dnn->SetBranchAddress("dnn_2b_JERDown", &dnn_2b_JERDown);
+    tree_dnn->SetBranchAddress("dnn_2b_muonESUp", &dnn_2b_muonESUp);
+    tree_dnn->SetBranchAddress("dnn_2b_muonESDown", &dnn_2b_muonESDown);
+    tree_dnn->SetBranchAddress("dnn_2b_JetAbsoluteUp", &dnn_2b_JetAbsoluteUp);
+    tree_dnn->SetBranchAddress("dnn_2b_JetAbsoluteDown", &dnn_2b_JetAbsoluteDown);
+    tree_dnn->SetBranchAddress("dnn_2b_JetAbsoluteyearUp", &dnn_2b_JetAbsoluteyearUp);
+    tree_dnn->SetBranchAddress("dnn_2b_JetAbsoluteyearDown", &dnn_2b_JetAbsoluteyearDown);
+    tree_dnn->SetBranchAddress("dnn_2b_JetBBEC1Up", &dnn_2b_JetBBEC1Up);
+    tree_dnn->SetBranchAddress("dnn_2b_JetBBEC1Down", &dnn_2b_JetBBEC1Down);
+    tree_dnn->SetBranchAddress("dnn_2b_JetBBEC1yearUp", &dnn_2b_JetBBEC1yearUp);
+    tree_dnn->SetBranchAddress("dnn_2b_JetBBEC1yearDown", &dnn_2b_JetBBEC1yearDown);
+    tree_dnn->SetBranchAddress("dnn_2b_JetEC2Up", &dnn_2b_JetEC2Up);
+    tree_dnn->SetBranchAddress("dnn_2b_JetEC2Down", &dnn_2b_JetEC2Down);
+    tree_dnn->SetBranchAddress("dnn_2b_JetEC2yearUp", &dnn_2b_JetEC2yearUp);
+    tree_dnn->SetBranchAddress("dnn_2b_JetEC2yearDown", &dnn_2b_JetEC2yearDown);
+    tree_dnn->SetBranchAddress("dnn_2b_JetFlavorQCDUp", &dnn_2b_JetFlavorQCDUp);
+    tree_dnn->SetBranchAddress("dnn_2b_JetFlavorQCDDown", &dnn_2b_JetFlavorQCDDown);
+    tree_dnn->SetBranchAddress("dnn_2b_JetHFUp", &dnn_2b_JetHFUp);
+    tree_dnn->SetBranchAddress("dnn_2b_JetHFDown", &dnn_2b_JetHFDown);
+    tree_dnn->SetBranchAddress("dnn_2b_JetHFyearUp", &dnn_2b_JetHFyearUp);
+    tree_dnn->SetBranchAddress("dnn_2b_JetHFyearDown", &dnn_2b_JetHFyearDown);
+    tree_dnn->SetBranchAddress("dnn_2b_JetRelativeBalUp", &dnn_2b_JetRelativeBalUp);
+    tree_dnn->SetBranchAddress("dnn_2b_JetRelativeBalDown", &dnn_2b_JetRelativeBalDown);
+    tree_dnn->SetBranchAddress("dnn_2b_JetRelativeSampleUp", &dnn_2b_JetRelativeSampleUp);
+    tree_dnn->SetBranchAddress("dnn_2b_JetRelativeSampleDown", &dnn_2b_JetRelativeSampleDown);
+    tree_dnn->SetBranchAddress("dnn_2b_ResponseUp", &dnn_2b_ResponseUp);
+    tree_dnn->SetBranchAddress("dnn_2b_ResponseDown", &dnn_2b_ResponseDown);
+    tree_dnn->SetBranchAddress("dnn_2b_ResolutionUp", &dnn_2b_ResolutionUp);
+    tree_dnn->SetBranchAddress("dnn_2b_ResolutionDown", &dnn_2b_ResolutionDown);*/
     
-    tree_dnn->SetBranchAddress("dnn_1b", &dnn_1b);//wider binning in intermediate region, narrower in low and high regions
-    tree_dnn->SetBranchAddress("dnn_2b", &dnn_2b);//blind signal for data
-    
+    std::string shape_year = year.c_str();
     //for MC but not emb (still done on emb but without "emb" tag, these will not be used at all)
-    TString shape_tauideff[14] = {"_CMS_tauideff_pt20to25_2018Up","_CMS_tauideff_pt20to25_2018Down","_CMS_tauideff_pt25to30_2018Up","_CMS_tauideff_pt25to30_2018Down","_CMS_tauideff_pt30to35_2018Up","_CMS_tauideff_pt30to35_2018Down","_CMS_tauideff_pt35to40_2018Up","_CMS_tauideff_pt35to40_2018Down","_CMS_tauideff_pt40to500_2018Up","_CMS_tauideff_pt40to500_2018Down","_CMS_tauideff_pt500to1000_2018Up","_CMS_tauideff_pt500to1000_2018Down","_CMS_tauideff_ptgt1000_2018Up","_CMS_tauideff_ptgt1000_2018Down"};
-    TString shape_tauES[8] = {"_CMS_tauES_dm0_2018Up","_CMS_tauES_dm0_2018Down","_CMS_tauES_dm1_2018Up","_CMS_tauES_dm1_2018Down","_CMS_tauES_dm10_2018Up","_CMS_tauES_dm10_2018Down","_CMS_tauES_dm11_2018Up","_CMS_tauES_dm11_2018Down"};
-    TString shape_jet[22] = {"_CMS_JetAbsolute_2018Up","_CMS_JetAbsolute_2018Down","_CMS_JetAbsoluteyear_2018Up","_CMS_JetAbsoluteyear_2018Down","_CMS_JetBBEC1_2018Up","_CMS_JetBBEC1_2018Down","_CMS_JetBBEC1year_2018Up","_CMS_JetBBEC1year_2018Down","_CMS_JetEC2_2018Up","_CMS_JetEC2_2018Down","_CMS_JetEC2year_2018Up","_CMS_JetEC2year_2018Down","_CMS_JetFlavorQCD_2018Up","_CMS_JetFlavorQCD_2018Down","_CMS_JetHF_2018Up","_CMS_JetHF_2018Down","_CMS_JetHFyear_2018Up","_CMS_JetHFyear_2018Down","_CMS_JetRelativeBal_2018Up","_CMS_JetRelativeBal_2018Down","_CMS_JetRelativeSample_2018Up","_CMS_JetRelativeSample_2018Down"};
-    TString shape_mufaketauES[2] = {"_CMS_muonfaketauES_2018Up","_CMS_muonfaketauES_2018Down"};
-    TString shape_elefaketauES[8] = {"_CMS_elefaketauES_dm0_barrel_2018Up","_CMS_elefaketauES_dm0_barrel_2018Down","_CMS_elefaketauES_dm0_endcap_2018Up","_CMS_elefaketauES_dm0_endcap_2018Down","_CMS_elefaketauES_dm1_barrel_2018Up","_CMS_elefaketauES_dm1_barrel_2018Down","_CMS_elefaketauES_dm1_endcap_2018Up","_CMS_elefaketauES_dm1_endcap_2018Down"};
-    TString shape_trgeff[4] = {"_CMS_trgeff_singleMu_2018Up","_CMS_trgeff_singleMu_2018Down","_CMS_trgeff_crossMuTau_2018Up","_CMS_trgeff_crossMuTau_2018Down"};
-    TString shape_muonES[6] = {"_CMS_muonES_eta0to1p4_2018Up","_CMS_muonES_eta0to1p4_2018Down","_CMS_muonES_eta1p4to2p1_2018Up","_CMS_muonES_eta1p4to2p1_2018Down","_CMS_muonES_eta2p1to2p4_2018Up","_CMS_muonES_eta2p1to2p4_2018Down"};
+    TString shape_tauideff[14] = {"_CMS_tauideff_pt20to25_"+shape_year+"Up","_CMS_tauideff_pt20to25_"+shape_year+"Down","_CMS_tauideff_pt25to30_"+shape_year+"Up","_CMS_tauideff_pt25to30_"+shape_year+"Down","_CMS_tauideff_pt30to35_"+shape_year+"Up","_CMS_tauideff_pt30to35_"+shape_year+"Down","_CMS_tauideff_pt35to40_"+shape_year+"Up","_CMS_tauideff_pt35to40_"+shape_year+"Down","_CMS_tauideff_pt40to500_"+shape_year+"Up","_CMS_tauideff_pt40to500_"+shape_year+"Down","_CMS_tauideff_pt500to1000_"+shape_year+"Up","_CMS_tauideff_pt500to1000_"+shape_year+"Down","_CMS_tauideff_ptgt1000_"+shape_year+"Up","_CMS_tauideff_ptgt1000_"+shape_year+"Down"};
+    TString shape_tauES[8] = {"_CMS_tauES_dm0_"+shape_year+"Up","_CMS_tauES_dm0_"+shape_year+"Down","_CMS_tauES_dm1_"+shape_year+"Up","_CMS_tauES_dm1_"+shape_year+"Down","_CMS_tauES_dm10_"+shape_year+"Up","_CMS_tauES_dm10_"+shape_year+"Down","_CMS_tauES_dm11_"+shape_year+"Up","_CMS_tauES_dm11_"+shape_year+"Down"};
+    TString shape_jet[22] = {"_CMS_JetAbsolute_"+shape_year+"Up","_CMS_JetAbsolute_"+shape_year+"Down","_CMS_JetAbsoluteyear_"+shape_year+"Up","_CMS_JetAbsoluteyear_"+shape_year+"Down","_CMS_JetBBEC1_"+shape_year+"Up","_CMS_JetBBEC1_"+shape_year+"Down","_CMS_JetBBEC1year_"+shape_year+"Up","_CMS_JetBBEC1year_"+shape_year+"Down","_CMS_JetEC2_"+shape_year+"Up","_CMS_JetEC2_"+shape_year+"Down","_CMS_JetEC2year_"+shape_year+"Up","_CMS_JetEC2year_"+shape_year+"Down","_CMS_JetFlavorQCD_"+shape_year+"Up","_CMS_JetFlavorQCD_"+shape_year+"Down","_CMS_JetHF_"+shape_year+"Up","_CMS_JetHF_"+shape_year+"Down","_CMS_JetHFyear_"+shape_year+"Up","_CMS_JetHFyear_"+shape_year+"Down","_CMS_JetRelativeBal_"+shape_year+"Up","_CMS_JetRelativeBal_"+shape_year+"Down","_CMS_JetRelativeSample_"+shape_year+"Up","_CMS_JetRelativeSample_"+shape_year+"Down"};
+    TString shape_mufaketauES[2] = {"_CMS_muonfaketauES_"+shape_year+"Up","_CMS_muonfaketauES_"+shape_year+"Down"};
+    TString shape_elefaketauES[8] = {"_CMS_elefaketauES_dm0_barrel_"+shape_year+"Up","_CMS_elefaketauES_dm0_barrel_"+shape_year+"Down","_CMS_elefaketauES_dm0_endcap_"+shape_year+"Up","_CMS_elefaketauES_dm0_endcap_"+shape_year+"Down","_CMS_elefaketauES_dm1_barrel_"+shape_year+"Up","_CMS_elefaketauES_dm1_barrel_"+shape_year+"Down","_CMS_elefaketauES_dm1_endcap_"+shape_year+"Up","_CMS_elefaketauES_dm1_endcap_"+shape_year+"Down"};
+    TString shape_trgeff[4] = {"_CMS_trgeff_singleMu_"+shape_year+"Up","_CMS_trgeff_singleMu_"+shape_year+"Down","_CMS_trgeff_crossMuTau_"+shape_year+"Up","_CMS_trgeff_crossMuTau_"+shape_year+"Down"};
+    TString shape_muonES[6] = {"_CMS_muonES_eta0to1p4_"+shape_year+"Up","_CMS_muonES_eta0to1p4_"+shape_year+"Down","_CMS_muonES_eta1p4to2p1_"+shape_year+"Up","_CMS_muonES_eta1p4to2p1_"+shape_year+"Down","_CMS_muonES_eta2p1to2p4_"+shape_year+"Up","_CMS_muonES_eta2p1to2p4_"+shape_year+"Down"};
     //for DY MC only
-    TString shape_DY_zpt[2] = {"_CMS_Zpt_reweight_2018Up","_CMS_Zpt_reweight_2018Down"};
+    TString shape_DY_zpt[2] = {"_CMS_Zpt_reweight_"+shape_year+"Up","_CMS_Zpt_reweight_"+shape_year+"Down"};
     //for ttbar only
-    TString shape_ttbar_toppt[2] = {"_CMS_ttbar_toppt_reweight_2018Up","_CMS_ttbar_toppt_reweight_2018Down"};
+    TString shape_ttbar_toppt[2] = {"_CMS_ttbar_toppt_reweight_"+shape_year+"Up","_CMS_ttbar_toppt_reweight_"+shape_year+"Down"};
     //for all MC except diboson, ttbar, single top
-    TString shape_recoil[12] = {"_CMS_0jet_resolution_2018Up","_CMS_0jet_resolution_2018Down","_CMS_0jet_response_2018Up","_CMS_0jet_response_2018Down","_CMS_1jet_resolution_2018Up","_CMS_1jet_resolution_2018Down","_CMS_1jet_response_2018Up","_CMS_1jet_response_2018Down","_CMS_gt1jet_resolution_2018Up","_CMS_gt1jet_resolution_2018Down","_CMS_gt1jet_response_2018Up","_CMS_gt1jet_response_2018Down"};
+    TString shape_recoil[12] = {"_CMS_0jet_resolution_"+shape_year+"Up","_CMS_0jet_resolution_"+shape_year+"Down","_CMS_0jet_response_"+shape_year+"Up","_CMS_0jet_response_"+shape_year+"Down","_CMS_1jet_resolution_"+shape_year+"Up","_CMS_1jet_resolution_"+shape_year+"Down","_CMS_1jet_response_"+shape_year+"Up","_CMS_1jet_response_"+shape_year+"Down","_CMS_gt1jet_resolution_"+shape_year+"Up","_CMS_gt1jet_resolution_"+shape_year+"Down","_CMS_gt1jet_response_"+shape_year+"Up","_CMS_gt1jet_response_"+shape_year+"Down"};
     //only diboson, ttbar, single top
-    TString shape_unclusteredES[2] = {"_CMS_unclusteredES_2018Up","_CMS_unclusteredES_2018Down"};
+    TString shape_unclusteredES[2] = {"_CMS_unclusteredES_"+shape_year+"Up","_CMS_unclusteredES_"+shape_year+"Down"};
     //jet resolution
-    TString shape_jer[2] = {"_CMS_res_j_2018Up","_CMS_res_j_2018Down"};
+    TString shape_jer[2] = {"_CMS_res_j_"+shape_year+"Up","_CMS_res_j_"+shape_year+"Down"};
     //fake cross trigger factor uncertainties
-    TString shape_fake_crosstrg[2] = {"_CMS_crosstrg_fakefactor_2018Up","_CMS_crosstrg_fakefactor_2018Down"};
+    TString shape_fake_crosstrg[2] = {"_CMS_crosstrg_fakefactor_"+shape_year+"Up","_CMS_crosstrg_fakefactor_"+shape_year+"Down"};
     //fake rate uncertainties
-    TString shape_fakerate[14] = {"_CMS_fakerate_alldm_pt0to25_2018Up","_CMS_fakerate_alldm_pt0to25_2018Down","_CMS_fakerate_alldm_pt25to30_2018Up","_CMS_fakerate_alldm_pt25to30_2018Down","_CMS_fakerate_alldm_pt30to35_2018Up","_CMS_fakerate_alldm_pt30to35_2018Down","_CMS_fakerate_alldm_pt35to40_2018Up","_CMS_fakerate_alldm_pt35to40_2018Down","_CMS_fakerate_alldm_pt40to50_2018Up","_CMS_fakerate_alldm_pt40to50_2018Down","_CMS_fakerate_alldm_pt50to60_2018Up","_CMS_fakerate_alldm_pt50to60_2018Down","_CMS_fakerate_alldm_ptgt60_2018Up","_CMS_fakerate_alldm_ptgt60_2018Down"};
+    TString shape_fakerate[14] = {"_CMS_fakerate_alldm_pt0to25_"+shape_year+"Up","_CMS_fakerate_alldm_pt0to25_"+shape_year+"Down","_CMS_fakerate_alldm_pt25to30_"+shape_year+"Up","_CMS_fakerate_alldm_pt25to30_"+shape_year+"Down","_CMS_fakerate_alldm_pt30to35_"+shape_year+"Up","_CMS_fakerate_alldm_pt30to35_"+shape_year+"Down","_CMS_fakerate_alldm_pt35to40_"+shape_year+"Up","_CMS_fakerate_alldm_pt35to40_"+shape_year+"Down","_CMS_fakerate_alldm_pt40to50_"+shape_year+"Up","_CMS_fakerate_alldm_pt40to50_"+shape_year+"Down","_CMS_fakerate_alldm_pt50to60_"+shape_year+"Up","_CMS_fakerate_alldm_pt50to60_"+shape_year+"Down","_CMS_fakerate_alldm_ptgt60_"+shape_year+"Up","_CMS_fakerate_alldm_ptgt60_"+shape_year+"Down"};
     
     //for emb only
-    TString embshape_tauideff[14] = {"_CMS_embedding_tauideff_pt20to25_2018Up","_CMS_embedding_tauideff_pt20to25_2018Down","_CMS_embedding_tauideff_pt25to30_2018Up","_CMS_embedding_tauideff_pt25to30_2018Down","_CMS_embedding_tauideff_pt30to35_2018Up","_CMS_embedding_tauideff_pt30to35_2018Down","_CMS_embedding_tauideff_pt35to40_2018Up","_CMS_embedding_tauideff_pt35to40_2018Down","_CMS_embedding_tauideff_pt40to500_2018Up","_CMS_embedding_tauideff_pt40to500_2018Down","_CMS_embedding_tauideff_pt500to1000_2018Up","_CMS_embedding_tauideff_pt500to1000_2018Down","_CMS_embedding_tauideff_ptgt1000_2018Up","_CMS_embedding_tauideff_ptgt1000_2018Down"};
-    TString embshape_tauES[8] = {"_CMS_embedding_tauES_dm0_2018Up","_CMS_embedding_tauES_dm0_2018Down","_CMS_embedding_tauES_dm1_2018Up","_CMS_embedding_tauES_dm1_2018Down","_CMS_embedding_tauES_dm10_2018Up","_CMS_embedding_tauES_dm10_2018Down","_CMS_embedding_tauES_dm11_2018Up","_CMS_embedding_tauES_dm11_2018Down"};
-    TString embshape_trgeff[4] = {"_CMS_embedding_trgeff_singleMu_2018Up","_CMS_embedding_trgeff_singleMu_2018Down","_CMS_embedding_trgeff_crossMuTau_2018Up","_CMS_embedding_trgeff_crossMuTau_2018Down"};
-    TString embshape_muonES[6] = {"_CMS_embedding_muonES_eta0to1p4_2018Up","_CMS_embedding_muonES_eta0to1p4_2018Down","_CMS_embedding_muonES_eta1p4to2p1_2018Up","_CMS_embedding_muonES_eta1p4to2p1_2018Down","_CMS_embedding_muonES_eta2p1to2p4_2018Up","_CMS_embedding_muonES_eta2p1to2p4_2018Down"};
-    TString embshape_tautracking[6] = {"_CMS_embedding_tautrack_dm0dm10_2018Up","_CMS_embedding_tautrack_dm0dm10_2018Down","_CMS_embedding_tautrack_dm1_2018Up","_CMS_embedding_tautrack_dm1_2018Down","_CMS_embedding_tautrack_dm11_2018Up","_CMS_embedding_tautrack_dm11_2018Down"};
+    TString embshape_tauideff[14] = {"_CMS_embedding_tauideff_pt20to25_"+shape_year+"Up","_CMS_embedding_tauideff_pt20to25_"+shape_year+"Down","_CMS_embedding_tauideff_pt25to30_"+shape_year+"Up","_CMS_embedding_tauideff_pt25to30_"+shape_year+"Down","_CMS_embedding_tauideff_pt30to35_"+shape_year+"Up","_CMS_embedding_tauideff_pt30to35_"+shape_year+"Down","_CMS_embedding_tauideff_pt35to40_"+shape_year+"Up","_CMS_embedding_tauideff_pt35to40_"+shape_year+"Down","_CMS_embedding_tauideff_pt40to500_"+shape_year+"Up","_CMS_embedding_tauideff_pt40to500_"+shape_year+"Down","_CMS_embedding_tauideff_pt500to1000_"+shape_year+"Up","_CMS_embedding_tauideff_pt500to1000_"+shape_year+"Down","_CMS_embedding_tauideff_ptgt1000_"+shape_year+"Up","_CMS_embedding_tauideff_ptgt1000_"+shape_year+"Down"};
+    TString embshape_tauES[8] = {"_CMS_embedding_tauES_dm0_"+shape_year+"Up","_CMS_embedding_tauES_dm0_"+shape_year+"Down","_CMS_embedding_tauES_dm1_"+shape_year+"Up","_CMS_embedding_tauES_dm1_"+shape_year+"Down","_CMS_embedding_tauES_dm10_"+shape_year+"Up","_CMS_embedding_tauES_dm10_"+shape_year+"Down","_CMS_embedding_tauES_dm11_"+shape_year+"Up","_CMS_embedding_tauES_dm11_"+shape_year+"Down"};
+    TString embshape_trgeff[4] = {"_CMS_embedding_trgeff_singleMu_"+shape_year+"Up","_CMS_embedding_trgeff_singleMu_"+shape_year+"Down","_CMS_embedding_trgeff_crossMuTau_"+shape_year+"Up","_CMS_embedding_trgeff_crossMuTau_"+shape_year+"Down"};
+    TString embshape_muonES[6] = {"_CMS_embedding_muonES_eta0to1p4_"+shape_year+"Up","_CMS_embedding_muonES_eta0to1p4_"+shape_year+"Down","_CMS_embedding_muonES_eta1p4to2p1_"+shape_year+"Up","_CMS_embedding_muonES_eta1p4to2p1_"+shape_year+"Down","_CMS_embedding_muonES_eta2p1to2p4_"+shape_year+"Up","_CMS_embedding_muonES_eta2p1to2p4_"+shape_year+"Down"};
+    TString embshape_tautracking[6] = {"_CMS_embedding_tautrack_dm0dm10_"+shape_year+"Up","_CMS_embedding_tautrack_dm0dm10_"+shape_year+"Down","_CMS_embedding_tautrack_dm1_"+shape_year+"Up","_CMS_embedding_tautrack_dm1_"+shape_year+"Down","_CMS_embedding_tautrack_dm11_"+shape_year+"Up","_CMS_embedding_tautrack_dm11_"+shape_year+"Down"};
     if (sample=="embedded"){
         for (int i = 0; i < 14; i++) shape_tauideff[i] = embshape_tauideff[i];
         for (int i = 0; i < 8; i++) shape_tauES[i] = embshape_tauES[i];
@@ -358,15 +476,39 @@ int main(int argc, char** argv){
     //access pileup distributions in data/MC
     reweight::LumiReWeighting* LumiWeights_12;
     LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2018.root", "pu_distributions_data_2018.root", "pileup", "pileup");
+    if (year=="2017"){
+        LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#VBFHToTauTau_M125_13TeV_powheg_pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+        if (sample=="W1") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#W1JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3#MINIAODSIM", "pileup");
+        else if (sample=="W2") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#W2JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v5#MINIAODSIM", "pileup");
+        else if (sample=="ST_t_antitop") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+        else if (sample=="DY4" or sample=="Z4") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_v2_94X_mc2017_realistic_v14-v2#MINIAODSIM", "pileup");
+        else if (sample=="W") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3#MINIAODSIM", "pileup");
+        else if (sample=="DY" or sample=="Z") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8#RunIIFall17MiniAODv2-PU2017RECOSIMstep_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+        else if (sample=="WW") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#WW_TuneCP5_13TeV-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+        else if (sample=="WplusH125") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#WplusHToTauTau_M125_13TeV_powheg_pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+        else if (sample=="WZ") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#WZ_TuneCP5_13TeV-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+        else if (sample=="DY4" or sample=="Z4") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#DY4JetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+        else if (sample=="ST_tW_top") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2#MINIAODSIM", "pileup");
+        else if (sample=="WminusH125") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#WminusHToTauTau_M125_13TeV_powheg_pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+        else if (sample=="ST_tW_antitop") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2#MINIAODSIM", "pileup");
+        else if (sample=="W3") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+        else if (sample=="ZH125") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#ZHToTauTau_M125_13TeV_powheg_pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+        else if (sample=="TTToSemiLeptonic")  LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+        else if (sample=="TTTo2L2Nu") LumiWeights_12 = new reweight::LumiReWeighting("pu_distributions_mc_2017.root", "pu_distributions_data_2017.root", "pua/#TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8#RunIIFall17MiniAODv2-PU2017_12Apr2018_new_pmx_94X_mc2017_realistic_v14-v1#MINIAODSIM", "pileup");
+    }
+    if (year=="2016") LumiWeights_12 = new reweight::LumiReWeighting("MC_Moriond17_PU25ns_V1.root", "Data_Pileup_2016_271036-284044_80bins.root", "pileup", "pileup");
     
     //Tau id sf files for MC and embedded
     TFile *ftauid = new TFile("TauID_SF_pt_DeepTau2017v2p1VSjet_2018ReReco.root");
+    if (year=="2017") ftauid = new TFile("TauID_SF_pt_DeepTau2017v2p1VSjet_2017ReReco.root");
+    if (year=="2016") ftauid = new TFile("TauID_SF_pt_DeepTau2017v2p1VSjet_2016Legacy.root");
     TF1 *fct_tauid_nominal = (TF1*) ftauid->Get("Medium_cent");
     TF1 *fct_tauid_up = (TF1*) ftauid->Get("Medium_up");
     TF1 *fct_tauid_down = (TF1*) ftauid->Get("Medium_down");
-    
     if (sample=="embedded"){
         ftauid = new TFile("TauID_SF_pt_DeepTau2017v2p1VSjet_2018ReReco_EMB.root");
+        if (year=="2017") ftauid = new TFile("TauID_SF_pt_DeepTau2017v2p1VSjet_2017ReReco_EMB.root");
+        if (year=="2016") ftauid = new TFile("TauID_SF_pt_DeepTau2017v2p1VSjet_2016Legacy_EMB.root");
         fct_tauid_nominal = (TF1*) ftauid->Get("Medium_cent");
         fct_tauid_up = (TF1*) ftauid->Get("Medium_up");
         fct_tauid_down = (TF1*) ftauid->Get("Medium_down");
@@ -374,6 +516,8 @@ int main(int argc, char** argv){
     
     //access graphs for the tau fake rates
     TFile *f_taufr = new TFile("FitHistograms_tauFR_2018.root");
+    if (year=="2017") f_taufr = new TFile("FitHistograms_tauFR_2017.root");
+    if (year=="2016") f_taufr = new TFile("FitHistograms_tauFR_2016.root");
     TGraphAsymmErrors *g_taufr_dm0M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm0_VLe_Tmu_deepmedium_hpt_dm0_VLe_Tmu_deepveryveryveryloose");
     TGraphAsymmErrors *g_taufr_dm1M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm1_VLe_Tmu_deepmedium_hpt_dm1_VLe_Tmu_deepveryveryveryloose");
     TGraphAsymmErrors *g_taufr_dm10M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm10_VLe_Tmu_deepmedium_hpt_dm10_VLe_Tmu_deepveryveryveryloose");
@@ -417,14 +561,30 @@ int main(int argc, char** argv){
             trigger24OR27 = ((passMu24 && matchMu24_1) or (passMu27 && matchMu27_1));
         }*/
         
-        bool isSingleTrigger = (passMu24 && matchMu24_1 && filterMu24_1) or (passMu27 && matchMu27_1 && filterMu27_1);
-        bool isCrossTrigger = (passMu20HPSTau27 && matchMu20HPSTau27_1 && filterMu20HPSTau27_1 && matchMu20HPSTau27_2 && filterMu20HPSTau27_2 && fabs(eta_2)<2.1);
-        if (sample=="data_obs" && run<317509){
-            isCrossTrigger = (passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && matchMu20Tau27_2 && filterMu20Tau27_2 && fabs(eta_2)<2.1);
+        bool isSingleTrigger = false;
+        bool isCrossTrigger = false;
+        if (year=="2018"){
+            isSingleTrigger = (passMu24 && matchMu24_1 && filterMu24_1) or (passMu27 && matchMu27_1 && filterMu27_1);
+            isCrossTrigger = (passMu20HPSTau27 && matchMu20HPSTau27_1 && filterMu20HPSTau27_1 && matchMu20HPSTau27_2 && filterMu20HPSTau27_2 && fabs(eta_2)<2.1);
+            if (sample=="data_obs" && run<317509){
+                isCrossTrigger = (passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && matchMu20Tau27_2 && filterMu20Tau27_2 && fabs(eta_2)<2.1);
+            }
+            if (sample=="embedded"){
+                isSingleTrigger = (passMu24 && matchMu24_1) or (passMu27 && matchMu27_1);
+                isCrossTrigger = (matchEmbFilter_Mu20Tau27_1 && matchEmbFilter_Mu20HPSTau27_2 && fabs(eta_2)<2.1);
+            }
         }
-        if (sample=="embedded"){
-            isSingleTrigger = (passMu24 && matchMu24_1) or (passMu27 && matchMu27_1);
-            isCrossTrigger = (matchEmbFilter_Mu20Tau27_1 && matchEmbFilter_Mu20HPSTau27_2 && fabs(eta_2)<2.1);
+        if (year=="2017"){
+            isSingleTrigger = (passMu24 && matchMu24_1 && filterMu24_1) or (passMu27 && matchMu27_1 && filterMu27_1);
+            isCrossTrigger = (passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && matchMu20Tau27_2 && filterMu20Tau27_2 && fabs(eta_2)<2.1);
+            if (sample=="embedded"){
+                isSingleTrigger = (passMu24 && matchMu24_1) or (passMu27 && matchMu27_1);
+                isCrossTrigger = (matchEmbFilter_Mu20Tau27_2017_1 && matchEmbFilter_Mu20Tau27_2 && fabs(eta_2)<2.1);
+            }
+        }
+        if (year=="2016"){
+            isSingleTrigger = (passMu22eta2p1 && matchMu22eta2p1_1 && filterMu22eta2p1_1) or (passTkMu22eta2p1 && matchTkMu22eta2p1_1 && filterTkMu22eta2p1_1) or (passMu22 && matchMu22_1 && filterMu22_1) or (passTkMu22 && matchTkMu22_1 && filterTkMu22_1);
+            isCrossTrigger = (passMu19Tau20 && matchMu19Tau20_1 && matchMu19Tau20_2 && filterMu19Tau20_1 && filterMu19Tau20_2 && fabs(eta_2)<2.1) or (passMu19Tau20SingleL1 && matchMu19Tau20SingleL1_1 && matchMu19Tau20SingleL1_2 && filterMu19Tau20SingleL1_1 && filterMu19Tau20SingleL1_2 && fabs(eta_2)<2.1);
         }
         
         if (!isSingleTrigger && !isCrossTrigger) continue;
@@ -445,19 +605,59 @@ int main(int argc, char** argv){
         if (!(mymu.DeltaR(mytau)>0.4)) continue;
         
         if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
-            if (numGenJets==0) weight = 3.630;
-            else if (numGenJets==1) weight = 0.6304;
-            else if (numGenJets==2) weight = 0.5528;
-            else if (numGenJets==3) weight = 0.6009;
-            else if (numGenJets==4) weight = 0.8314;
+            if (numGenJets==0){
+                weight = 3.630;
+                if (year=="2017") weight = 2.575;
+                if (year=="2016") weight = 1.491;
+            }
+            else if (numGenJets==1){
+                weight = 0.6304;
+                if (year=="2017") weight = 0.7084;
+                if (year=="2016") weight = 0.4757;
+            }
+            else if (numGenJets==2){
+                weight = 0.5528;
+                if (year=="2017") weight = 0.9192;
+                if (year=="2016") weight = 0.4952;
+            }
+            else if (numGenJets==3){
+                weight = 0.6009;
+                if (year=="2017") weight = 1.648;
+                if (year=="2016") weight = 0.5052;
+            }
+            else if (numGenJets==4){
+                weight = 0.8314;
+                if (year=="2017") weight = 0.2192;
+                if (year=="2016") weight = 0.4144;
+            }
         }
         
         if (sample=="W" or sample=="W1" or sample=="W2" or sample=="W3" or sample=="W4"){
-            if (numGenJets==0) weight = 25.46;
-            else if (numGenJets==1) weight = 5.773;
-            else if (numGenJets==2) weight = 1.792;
-            else if (numGenJets==3) weight = 0.6829;
-            else if (numGenJets==4) weight = 0.7365;
+            if (numGenJets==0){
+                weight = 51.81;
+                if (year=="2017") weight = 23.67;
+                if (year=="2016") weight = 25.46;
+            }
+            else if (numGenJets==1){
+                weight = 9.091;
+                if (year=="2017") weight = 3.106;
+                if (year=="2016") weight = 5.773;
+            }
+            else if (numGenJets==2){
+                weight = 4.516;
+                if (year=="2017") weight = 3.014;
+                if (year=="2016") weight = 1.792;
+            }
+            else if (numGenJets==3){
+                weight = 3.090;
+                if (year=="2017") weight = 2.202;
+                if (year=="2016") weight = 0.6829;
+            }
+            else if (numGenJets==4){
+                weight = 3.227;
+                if (year=="2017") weight = 2.150;
+                if (year=="2016") weight = 0.7365;
+            }
         }
         
         float sf_MC = 1.0;
@@ -504,18 +704,48 @@ int main(int argc, char** argv){
             //generator weight
             sf_MC *= genweight;
             
+            float taufakesf = 1.0;
             //ele->tauh and muon->tauh sf
             if (gen_match_2==1 or gen_match_2==3){
-                if (fabs(eta_2)<1.448) sf_MC *= 0.95;
-                else sf_MC *= 0.86;
+                if (fabs(eta_2)<1.448){
+                    taufakesf = 0.95;
+                    if (year=="2017") taufakesf = 0.93;
+                    if (year=="2016") taufakesf = 1.22;
+                }
+                else {
+                    taufakesf = 0.86;
+                    if (year=="2017") taufakesf = 1.00;
+                    if (year=="2016") taufakesf = 1.13;
+                }
             }
             if (gen_match_2==2 or gen_match_2==4){
-                if (fabs(eta_2)<0.4) sf_MC *= 0.936*0.820;
-                else if (fabs(eta_2)<0.8) sf_MC *= 0.874*1.436;
-                else if (fabs(eta_2)<1.2) sf_MC *= 0.912*0.989;
-                else if (fabs(eta_2)<1.7) sf_MC *= 0.953*0.875;
-                else sf_MC *= 0.936*4.739;
+                if (fabs(eta_2)<0.4){
+                    taufakesf = 0.936*0.820;
+                    if (year=="2017") taufakesf = 0.979*0.991;
+                    if (year=="2016") taufakesf = 0.978*1.463;
+                }
+                else if (fabs(eta_2)<0.8){
+                    taufakesf = 0.874*1.436;
+                    if (year=="2017") taufakesf = 0.953*0.675;
+                    if (year=="2016") taufakesf = 1.003*0.722;
+                }
+                else if (fabs(eta_2)<1.2){
+                    taufakesf = 0.912*0.989;
+                    if (year=="2017") taufakesf = 0.983*0.675;
+                    if (year=="2016") taufakesf = 0.992*1.337;
+                }
+                else if (fabs(eta_2)<1.7){
+                    taufakesf = 0.953*0.875;
+                    if (year=="2017") taufakesf = 0.988*1.098;
+                    if (year=="2016") taufakesf = 1.003*0.966;
+                }
+                else {
+                    taufakesf = 0.936*4.739;
+                    if (year=="2017") taufakesf = 1.004*4.175;
+                    if (year=="2016") taufakesf = 0.966*5.451;
+                }
             }
+            sf_MC *= taufakesf;
         }
         
         float sf_embed = 1.0;
@@ -559,12 +789,15 @@ int main(int argc, char** argv){
         float bMflavor_1 = 0;
         float bMpt_2 = 0;
         float bMflavor_2 = 0;
-        if (bpt_deepcsv_1>20 && bscore_deepcsv_1>0.4184 && fabs(beta_deepcsv_1)<2.4){
+        float bscore_thres = 0.4184;
+        if (year=="2017") bscore_thres = 0.4941;
+        if (year=="2016") bscore_thres = 0.6321;
+        if (bpt_deepcsv_1>20 && bscore_deepcsv_1>bscore_thres && fabs(beta_deepcsv_1)<2.4){
             bMpt_1 = bpt_deepcsv_1;
             bMflavor_1 = bflavour_deepcsv_1;
             nbtag20++;
         }
-        if (bpt_deepcsv_2>20 && bscore_deepcsv_2>0.4184 && fabs(beta_deepcsv_2)<2.4){
+        if (bpt_deepcsv_2>20 && bscore_deepcsv_2>bscore_thres && fabs(beta_deepcsv_2)<2.4){
             bMpt_2 = bpt_deepcsv_2;
             bMflavor_2 = bflavour_deepcsv_2;
             nbtag20++;
@@ -575,17 +808,18 @@ int main(int argc, char** argv){
         float weight_btag_2b = 1.0;
         float weight_btag_atleast1b = 1.0;
         if (sample!="data_obs" && sample!="embedded"){
-            //0 bjet (apply to events with any no. of b jet)
-            weight_btag_0b = bTagEventWeight(nbtag20,bMpt_1,bMflavor_1,bMpt_2,bMflavor_2,1,0,0);
-            if (nbtag20>2) weight_btag_0b = 0;
-            //1 bjet (apply to 1b events only)
-            weight_btag_1b = GetSF(1, bMpt_1, bMflavor_1, 0);
-            //2 bjets (apply to 2b events only)
-            weight_btag_2b = GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
-            //at least 1 bjet (apply to 1b and 2b events)
-            //            if (nbtag20==1) weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0);
-            //            if (nbtag20==2) weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0)+GetSF(1, bMpt_2, bMflavor_2, 0)-GetSF(1, bMpt_1, bMflavor_1, 0)*GetSF(1, bMpt_2, bMflavor_2, 0);
-            weight_btag_atleast1b = GetSF(1, bMpt_1, bMflavor_1, 0);
+            //0 bjet
+            weight_btag_0b = bTagEventWeight2018(nbtag20,bMpt_1,bMflavor_1,bMpt_2,bMflavor_2,1,0,0);
+            if (year=="2017") weight_btag_0b = bTagEventWeight2017(nbtag20,bMpt_1,bMflavor_1,bMpt_2,bMflavor_2,1,0,0);
+            if (year=="2016") weight_btag_0b = bTagEventWeight2016(nbtag20,bMpt_1,bMflavor_1,bMpt_2,bMflavor_2,1,0,0);
+            //1 bjet
+            weight_btag_1b = GetSF2018(1, bMpt_1, bMflavor_1, 0);
+            if (year=="2017") weight_btag_1b = GetSF2017(1, bMpt_1, bMflavor_1, 0);
+            if (year=="2016") weight_btag_1b = GetSF2016(1, bMpt_1, bMflavor_1, 0);
+            //2 bjets
+            weight_btag_2b = GetSF2018(1, bMpt_1, bMflavor_1, 0)*GetSF2018(1, bMpt_2, bMflavor_2, 0);
+            if (year=="2017") weight_btag_2b = GetSF2017(1, bMpt_1, bMflavor_1, 0)*GetSF2017(1, bMpt_2, bMflavor_2, 0);
+            if (year=="2016") weight_btag_2b = GetSF2016(1, bMpt_1, bMflavor_1, 0)*GetSF2016(1, bMpt_2, bMflavor_2, 0);
         }
         if (nbtag20==0) weight_corr *= weight_btag_0b;
         else if (nbtag20==1) weight_corr *= weight_btag_1b;
@@ -623,6 +857,14 @@ int main(int argc, char** argv){
         }
         float taudecaymode[4] = {0,1,10,11};
         float tauES_updowntonom_bymode[8] = {(0.984+0.009)/0.984,(0.984-0.009)/0.984,(0.996+0.006)/0.996,(0.996-0.006)/0.996,(0.988+0.007)/0.988,(0.988-0.007)/0.988,(0.996+0.012)/0.996,(0.996-0.012)/0.996};//=(ES_nom+/-uncert)/ES_nom, mytau already had nominal tes correction applied at skimming levle; ordered by: mode0up, mode0down, mode1up, mode1down,...
+        float tauES_updowntonom_bymode2017[8] = {(0.984+0.009)/0.984,(0.984-0.009)/0.984,(0.996+0.006)/0.996,(0.996-0.006)/0.996,(0.988+0.007)/0.988,(0.988-0.007)/0.988,(0.996+0.012)/0.996,(0.996-0.012)/0.996};
+        float tauES_updowntonom_bymode2016[8] = {(0.984+0.009)/0.984,(0.984-0.009)/0.984,(0.996+0.006)/0.996,(0.996-0.006)/0.996,(0.988+0.007)/0.988,(0.988-0.007)/0.988,(0.996+0.012)/0.996,(0.996-0.012)/0.996};
+        if (year=="2017"){
+            for (int j = 0; j < 8; j++) tauES_updowntonom_bymode[j] = tauES_updowntonom_bymode2017[j];
+        }
+        if (year=="2016"){
+            for (int j = 0; j < 8; j++) tauES_updowntonom_bymode[j] = tauES_updowntonom_bymode2016[j];
+        }
         float tauES_updowntonom_bymode_emb[8] = {1.0039,0.9961,1.0037,0.9969,1.0032,0.9968,1.0032,0.9968};
         if (sample=="embedded"){
             for (int j = 0; j < 8; j++){
@@ -635,8 +877,8 @@ int main(int argc, char** argv){
                 myshiftedtau[2*j] *= tauES_updowntonom_bymode[2*j];
                 myshiftedtau[2*j+1] *= tauES_updowntonom_bymode[2*j+1];
                 //after tau is shifted, shift the met
-                mymet_shiftedtau[2*j] -= myshiftedtau[2*j]*(1-1/tauES_updowntonom_bymode[2*j]);//mymetUp=mymet-mytauUp(1-ES_nom/ES_up)
-                mymet_shiftedtau[2*j+1] -= myshiftedtau[2*j+1]*(1-1/tauES_updowntonom_bymode[2*j+1]);//mymetDown=mymet+mytauDown(-1+ES_nom/ES_down)
+                mymet_shiftedtau[2*j] = mymet + mytau - myshiftedtau[2*j];
+                mymet_shiftedtau[2*j+1] = mymet + mytau - myshiftedtau[2*j+1];
                 //after tau and met are shifted, shift the ditau system
                 mytt_shiftedtau[2*j].SetPtEtaPhiM((mymu+myshiftedtau[2*j]+mymet_shiftedtau[2*j]).Pt(),(mymu+myshiftedtau[2*j]+mymet_shiftedtau[2*j]).Eta(),(mymu+myshiftedtau[2*j]+mymet_shiftedtau[2*j]).Phi(),m_sv_UP);
                 mytt_shiftedtau[2*j+1].SetPtEtaPhiM((mymu+myshiftedtau[2*j+1]+mymet_shiftedtau[2*j+1]).Pt(),(mymu+myshiftedtau[2*j+1]+mymet_shiftedtau[2*j+1]).Eta(),(mymu+myshiftedtau[2*j+1]+mymet_shiftedtau[2*j+1]).Phi(),m_sv_DOWN);
@@ -699,8 +941,8 @@ int main(int argc, char** argv){
                 mytau_isgenmu[2*j] *= tauES_mufake[2*j];
                 mytau_isgenmu[2*j+1] *= tauES_mufake[2*j+1];
                 //mymet
-                mymet_isgenmu[2*j] -= mytau_isgenmu[2*j]*(1-1/tauES_mufake[2*j]);
-                mymet_isgenmu[2*j+1] -= mytau_isgenmu[2*j+1]*(1-1/tauES_mufake[2*j+1]);
+                mymet_isgenmu[2*j] = mymet + mytau - mytau_isgenmu[2*j];
+                mymet_isgenmu[2*j+1] = mymet + mytau - mytau_isgenmu[2*j+1];
                 //mytt
                 mytt_isgenmu[2*j].SetPtEtaPhiM((mymu+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Pt(),(mymu+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Eta(),(mymu+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Phi(),m_sv_UP);
                 mytt_isgenmu[2*j+1].SetPtEtaPhiM((mymu+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Pt(),(mymu+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Eta(),(mymu+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Phi(),m_sv_DOWN);
@@ -721,6 +963,14 @@ int main(int argc, char** argv){
             m_btt_isgenele.push_back(m_btt);
         }//ordering: dm0barup, dm0bardown, dm0endup, dm0enddown, dm1barup, dm1bardown, dm1endup, dm1enddown
         float tauES_elefake[8] = {1.02266/1.01362,1.00888/1.01362,1.00307/0.96903,0.95653/0.96903,1.03171/1.01945,1.00347/1.01945,1.03999/0.985,0.94191/0.985};
+        float tauES_elefake2017[8] = {1.02266/1.01362,1.00888/1.01362,1.00307/0.96903,0.95653/0.96903,1.03171/1.01945,1.00347/1.01945,1.03999/0.985,0.94191/0.985};
+        float tauES_elefake2016[8] = {1.02266/1.01362,1.00888/1.01362,1.00307/0.96903,0.95653/0.96903,1.03171/1.01945,1.00347/1.01945,1.03999/0.985,0.94191/0.985};
+        if (year=="2017"){
+            for (int j = 0; j < 8; j++) tauES_elefake[j] = tauES_elefake2017[j];
+        }
+        if (year=="2016"){
+            for (int j = 0; j < 8; j++) tauES_elefake[j] = tauES_elefake2016[j];
+        }
         if (gen_match_2==1 or gen_match_2==3){
             for (int j = 0; j < 2; j++){
                 if (l2_decayMode==taudecaymode[j]){//j=0 DM=0, j=1 DM=1
@@ -730,8 +980,8 @@ int main(int argc, char** argv){
                         mytau_isgenele[4*j] *= tauES_elefake[4*j];
                         mytau_isgenele[4*j+1] *= tauES_elefake[4*j+1];
                         //mymet
-                        mymet_isgenele[4*j] -= mytau_isgenele[4*j]*(1-1/tauES_elefake[4*j]);
-                        mymet_isgenele[4*j+1] -= mytau_isgenele[4*j+1]*(1-1/tauES_elefake[4*j+1]);
+                        mymet_isgenele[4*j] = mymet + mytau - mytau_isgenele[4*j];
+                        mymet_isgenele[4*j+1] = mymet + mytau - mytau_isgenele[4*j+1];
                         //mytt
                         mytt_isgenele[4*j].SetPtEtaPhiM((mymu+mytau_isgenele[4*j]+mymet_isgenele[4*j]).Pt(),(mymu+mytau_isgenele[4*j]+mymet_isgenele[4*j]).Eta(),(mymu+mytau_isgenele[4*j]+mymet_isgenele[4*j]).Phi(),m_sv_UP);
                         mytt_isgenele[4*j+1].SetPtEtaPhiM((mymu+mytau_isgenele[4*j+1]+mymet_isgenele[4*j+1]).Pt(),(mymu+mytau_isgenele[4*j+1]+mymet_isgenele[4*j+1]).Eta(),(mymu+mytau_isgenele[4*j+1]+mymet_isgenele[4*j+1]).Phi(),m_sv_DOWN);
@@ -745,8 +995,8 @@ int main(int argc, char** argv){
                         mytau_isgenele[4*j+2] *= tauES_elefake[4*j+2];
                         mytau_isgenele[4*j+3] *= tauES_elefake[4*j+3];
                         //mymet
-                        mymet_isgenele[4*j+2] -= mytau_isgenele[4*j+2]*(1-1/tauES_elefake[4*j+2]);
-                        mymet_isgenele[4*j+3] -= mytau_isgenele[4*j+3]*(1-1/tauES_elefake[4*j+3]);
+                        mymet_isgenele[4*j+2] = mymet + mytau - mytau_isgenele[4*j+2];
+                        mymet_isgenele[4*j+3] = mymet + mytau - mytau_isgenele[4*j+3];
                         //mytt
                         mytt_isgenele[4*j+2].SetPtEtaPhiM((mymu+mytau_isgenele[4*j+2]+mymet_isgenele[4*j+2]).Pt(),(mymu+mytau_isgenele[4*j+2]+mymet_isgenele[4*j+2]).Eta(),(mymu+mytau_isgenele[4*j+2]+mymet_isgenele[4*j+2]).Phi(),m_sv_UP);
                         mytt_isgenele[4*j+3].SetPtEtaPhiM((mymu+mytau_isgenele[4*j+3]+mymet_isgenele[4*j+3]).Pt(),(mymu+mytau_isgenele[4*j+3]+mymet_isgenele[4*j+3]).Eta(),(mymu+mytau_isgenele[4*j+3]+mymet_isgenele[4*j+3]).Phi(),m_sv_DOWN);
@@ -777,8 +1027,8 @@ int main(int argc, char** argv){
                 myshiftedmu[2*j] *= muonES_updowntonom_byeta[2*j];
                 myshiftedmu[2*j+1] *= muonES_updowntonom_byeta[2*j+1];
                 //mymet
-                mymet_shiftedmu[2*j] -= myshiftedmu[2*j]*(1-1/muonES_updowntonom_byeta[2*j]);
-                mymet_shiftedmu[2*j+1] -= myshiftedmu[2*j+1]*(1-1/muonES_updowntonom_byeta[2*j+1]);
+                mymet_shiftedmu[2*j] = mymet + mymu - myshiftedmu[2*j];
+                mymet_shiftedmu[2*j+1] = mymet + mymu - myshiftedmu[2*j+1];;
                 //mytt
                 mytt_shiftedmu[2*j].SetPtEtaPhiM((myshiftedmu[2*j]+mytau+mymet_shiftedmu[2*j]).Pt(),(myshiftedmu[2*j]+mytau+mymet_shiftedmu[2*j]).Eta(),(myshiftedmu[2*j]+mytau+mymet_shiftedmu[2*j]).Phi(),m_sv_muonESUp);
                 mytt_shiftedmu[2*j+1].SetPtEtaPhiM((myshiftedmu[2*j+1]+mytau+mymet_shiftedmu[2*j+1]).Pt(),(myshiftedmu[2*j+1]+mytau+mymet_shiftedmu[2*j+1]).Eta(),(myshiftedmu[2*j+1]+mytau+mymet_shiftedmu[2*j+1]).Phi(),m_sv_muonESDown);
@@ -788,30 +1038,63 @@ int main(int argc, char** argv){
             }
         }
         
+        //define trigger pt thresholds for different years
+        float single_mupt_thres = 25;
+        float single_taupt_thres = 20;
+        float cross_mupt_thres = 21;
+        float cross_taupt_thres = 32;
+        if (year=="2016"){
+            single_mupt_thres = 23;
+            single_taupt_thres = 20;
+            cross_mupt_thres = 20;
+            cross_taupt_thres = 25;
+        }
         //###################re-apply trigger scale factor for re-defined single/cross trigger regions due to shifted muon####################
         //define trigger sf with nominal muon ES (the usual weights)
         float trgsf = 1.0;
-        if (sample!="data_obs" && sample!="embedded"){
-            if (isSingleTrigger && pt_1>25) trgsf = m_trg_ic_ratio;
-            if (isCrossTrigger && pt_1<25 && pt_1>21) trgsf = m_trg_20_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
+        float trgsf_single = 1.0;
+        float trgsf_cross = 1.0;
+        if (sample!="data_obs"){
+            if (year=="2018"){
+                if (sample!="embedded"){
+                    trgsf_single = m_trg_ic_ratio;
+                    trgsf_cross = m_trg_20_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
+                }
+                if (sample=="embedded"){
+                    trgsf_single = m_trg_ic_embed_ratio;
+                    trgsf_cross = m_trg_20_ic_embed_ratio * t_trg_mediumDeepTau_mutau_embed_ratio;
+                }
+            }
+            if (year=="2017"){
+                if (sample!="embedded"){
+                    trgsf_single = m_trg_ic_ratio;
+                    trgsf_cross = m_trg_MuTau_Mu20Leg_desy_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
+                }
+                if (sample=="embedded"){
+                    trgsf_single = m_trg_ic_embed_ratio;
+                    trgsf_cross = m_trg_20_ic_embed_ratio * t_trg_mediumDeepTau_mutau_embed_ratio;
+                }
+            }
+            if (year=="2016"){
+                if (sample!="embedded"){
+                    trgsf_single = m_trg_ic_ratio;
+                    trgsf_cross = m_trg_19_ic_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
+                }
+                if (sample=="embedded"){
+                    trgsf_single = m_trg_ic_embed_ratio;
+                    trgsf_cross = m_trg_19_ic_embed_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
+                }
+            }
         }
-        if (sample=="embedded"){
-            if (isSingleTrigger && pt_1>25) trgsf = m_trg_ic_embed_ratio;
-            if (isCrossTrigger && pt_1<25 && pt_1>21) trgsf = m_trg_20_ic_embed_ratio * t_trg_mediumDeepTau_mutau_embed_ratio;
-        }
+        if (isSingleTrigger && pt_1>single_mupt_thres) trgsf = trgsf_single;
+        if (isCrossTrigger && pt_1<single_mupt_thres && pt_1>cross_mupt_thres) trgsf = trgsf_cross;
+        
         //for shifted trigger regions due to shifted muon ES
         std::vector<float> trgsf_shiftedmu;
         for (int j = 0; j < 6; j++){
             trgsf_shiftedmu.push_back(1.0);
-            
-            if (sample!="data_obs" && sample!="embedded"){
-                if (isSingleTrigger && myshiftedmu[j].Pt()>25) trgsf_shiftedmu[j] = m_trg_ic_ratio;
-                if (isCrossTrigger && myshiftedmu[j].Pt()<25 && myshiftedmu[j].Pt()>21) trgsf_shiftedmu[j] = m_trg_20_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
-            }
-            if (sample=="embedded"){
-                if (isSingleTrigger && myshiftedmu[j].Pt()>25) trgsf_shiftedmu[j] = m_trg_ic_embed_ratio;
-                if (isCrossTrigger && myshiftedmu[j].Pt()<25 && myshiftedmu[j].Pt()>21) trgsf_shiftedmu[j] = m_trg_20_ic_embed_ratio * t_trg_mediumDeepTau_mutau_embed_ratio;
-            }
+            if (isSingleTrigger && myshiftedmu[j].Pt()>single_mupt_thres) trgsf_shiftedmu[j] = trgsf_single;
+            if (isCrossTrigger && myshiftedmu[j].Pt()<single_mupt_thres && myshiftedmu[j].Pt()>cross_mupt_thres) trgsf_shiftedmu[j] = trgsf_cross;
         }
         
         //#######################jet uncertainties shifting########################
@@ -936,30 +1219,30 @@ int main(int argc, char** argv){
         
         //##########################trigger regions with nominal/shifted ES###########################
         //nominal
-        bool trigger_region_nominal = (isSingleTrigger && pt_1>25 && pt_2>20) or (isCrossTrigger && pt_1<25 && pt_1>21 && pt_2>32);
+        bool trigger_region_nominal = (isSingleTrigger && pt_1>single_mupt_thres && pt_2>single_taupt_thres) or (isCrossTrigger && pt_1<single_mupt_thres && pt_1>cross_mupt_thres && pt_2>cross_taupt_thres);
         //shifted tau ES
         std::vector<bool> trigger_region_shiftedtau;
         for (int j = 0; j < 8; j++){
             trigger_region_shiftedtau.push_back(0);
-            trigger_region_shiftedtau[j] = (isSingleTrigger && pt_1>25 && myshiftedtau[j].Pt()>20) or (isCrossTrigger && pt_1<25 && pt_1>21 && myshiftedtau[j].Pt()>32);
+            trigger_region_shiftedtau[j] = (isSingleTrigger && pt_1>single_mupt_thres && myshiftedtau[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_mupt_thres && pt_1>cross_mupt_thres && myshiftedtau[j].Pt()>cross_taupt_thres);
         }
         //muon->tauh fake ES
         std::vector<bool> trigger_region_tauisgenmu;
         for (int j = 0; j < 2; j++){
             trigger_region_tauisgenmu.push_back(0);
-            trigger_region_tauisgenmu[j] = (isSingleTrigger && pt_1>25 && mytau_isgenmu[j].Pt()>20) or (isCrossTrigger && pt_1<25 && pt_1>21 && mytau_isgenmu[j].Pt()>32);
+            trigger_region_tauisgenmu[j] = (isSingleTrigger && pt_1>single_mupt_thres && mytau_isgenmu[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_mupt_thres && pt_1>cross_mupt_thres && mytau_isgenmu[j].Pt()>cross_taupt_thres);
         }
         //electron->tauh fake ES
         std::vector<bool> trigger_region_tauisgenele;
         for (int j = 0; j < 8; j++){
             trigger_region_tauisgenele.push_back(0);
-            trigger_region_tauisgenele[j] = (isSingleTrigger && pt_1>25 && mytau_isgenele[j].Pt()>20) or (isCrossTrigger && pt_1<25 && pt_1>21 && mytau_isgenele[j].Pt()>32);
+            trigger_region_tauisgenele[j] = (isSingleTrigger && pt_1>single_mupt_thres && mytau_isgenele[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_mupt_thres && pt_1>cross_mupt_thres && mytau_isgenele[j].Pt()>cross_taupt_thres);
         }
         //shifted muon ES
         std::vector<bool> trigger_region_shiftedmu;
         for (int j = 0; j < 6; j++){
             trigger_region_shiftedmu.push_back(0);
-            trigger_region_shiftedmu[j] = (isSingleTrigger && myshiftedmu[j].Pt()>25 && pt_2>20) or (isCrossTrigger && myshiftedmu[j].Pt()<25 && myshiftedmu[j].Pt()>21 && pt_2>32);
+            trigger_region_shiftedmu[j] = (isSingleTrigger && myshiftedmu[j].Pt()>single_mupt_thres && pt_2>single_taupt_thres) or (isCrossTrigger && myshiftedmu[j].Pt()<single_mupt_thres && myshiftedmu[j].Pt()>cross_mupt_thres && pt_2>cross_taupt_thres);
         }
         
         //############################trigger sf shifting################################
@@ -968,11 +1251,11 @@ int main(int argc, char** argv){
             trigger_shiftedsf.push_back(1.0);//=1.0 do not shift by default
         }//[0]:single_up, [1]:single_down, [2]:cross_up, [3]:cross_down
         if (sample!="data_obs"){
-            if (isSingleTrigger && pt_1>25){//single lepton, same updown 2% for both MC and emb
+            if (isSingleTrigger && pt_1>single_mupt_thres){//single lepton, same updown 2% for both MC and emb
                 trigger_shiftedsf[0] = 1.02;
                 trigger_shiftedsf[1] = 0.98;
             }
-            if (isCrossTrigger && pt_1<25 && pt_1>21){
+            if (isCrossTrigger && pt_1<single_mupt_thres && pt_1>cross_mupt_thres){
                 if (sample!="embedded"){//MC
                     trigger_shiftedsf[2] = t_trg_pog_deeptau_medium_mutau_ratio_up/t_trg_pog_deeptau_medium_mutau_ratio;
                     trigger_shiftedsf[3] = t_trg_pog_deeptau_medium_mutau_ratio_down/t_trg_pog_deeptau_medium_mutau_ratio;
@@ -980,11 +1263,15 @@ int main(int argc, char** argv){
                 else {//embedded
                     trigger_shiftedsf[2] = t_trg_mediumDeepTau_mutau_embed_ratio_up/t_trg_mediumDeepTau_mutau_embed_ratio;
                     trigger_shiftedsf[3] = t_trg_mediumDeepTau_mutau_embed_ratio_down/t_trg_mediumDeepTau_mutau_embed_ratio;
+                    if (year=="2016"){
+                        trigger_shiftedsf[2] = t_trg_pog_deeptau_medium_mutau_ratio_up/t_trg_pog_deeptau_medium_mutau_ratio;
+                        trigger_shiftedsf[3] = t_trg_pog_deeptau_medium_mutau_ratio_down/t_trg_pog_deeptau_medium_mutau_ratio;
+                    }
                 }
             }
         }
         //##############################histograms filling###################################
-        bool isnonSignal = (sample!="gghbbtt12" && sample!="gghbbtt20" && sample!="gghbbtt30" && sample!="gghbbtt40" && sample!="gghbbtt50" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt20" && sample!="vbfbbtt30" && sample!="vbfbbtt40" && sample!="vbfbbtt50" && sample!="vbfbbtt60");
+        bool isnonSignal = (sample!="gghbbtt12" && sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt15" && sample!="vbfbbtt20" && sample!="vbfbbtt25" && sample!="vbfbbtt30" && sample!="vbfbbtt35" && sample!="vbfbbtt40" && sample!="vbfbbtt45" && sample!="vbfbbtt50" && sample!="vbfbbtt55" && sample!="vbfbbtt60");
         bool isnonHiggsMC = (sample!="data_obs" && sample!="embedded" && isnonSignal && name!="HTT" && name!="ttHnonbb");
         //do not fill for MC tautau events (duplicating emb) as normal
         if (!isnonHiggsMC or (isnonHiggsMC && !(gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6))){
@@ -1113,9 +1400,9 @@ int main(int argc, char** argv){
                 if (nbtag20==0) weight_fake = fr/(1-fr);
                 else weight_fake = fr_bjet/(1-fr_bjet);
                 
-                float xtrgfakefactor = 1.0;//tigher cuts applied at cross trigger level -> less yields -> scale up to compensate
+                float xtrgfakefactor = 1.0;//tighter cuts applied at cross trigger level -> less yields -> scale up to compensate
                 float xtrgfakefactor_updown[2] = {1.0,1.0};
-                if (isCrossTrigger && pt_1<25 && pt_1>21){
+                if (isCrossTrigger && pt_1<single_mupt_thres && pt_1>cross_mupt_thres){
                     xtrgfakefactor = 1.5;//nominal
                     xtrgfakefactor_updown[0] = 1.6;//+/-20%
                     xtrgfakefactor_updown[1] = 1.4;
@@ -1125,8 +1412,18 @@ int main(int argc, char** argv){
                 //for shifted mu (re-defined single/cross)
                 for (int k = 0; k < 6; k++){
                     xtrgfakefactor_shiftedmu.push_back(1.0);
-                    if (isCrossTrigger && myshiftedmu[k].Pt()<25 && myshiftedmu[k].Pt()>21) xtrgfakefactor_shiftedmu[k] = 1.5;
+                    if (isCrossTrigger && myshiftedmu[k].Pt()<single_mupt_thres && myshiftedmu[k].Pt()>cross_mupt_thres) xtrgfakefactor_shiftedmu[k] = 1.5;
                 }
+                
+                //############################fake rate uncertainties for alldm by pt bins###########################
+                std::vector<float> fr_bjet_shifted;//only for nbjet>0; when nbjet==0 it is split by DM also..
+                std::vector<float> weight_fake_shifted;
+                for (int k = 0; k < 14; k++){
+                    fr_bjet_shifted.push_back(0);
+                    fr_bjet_shifted[k] = GetTauFR(mytau.Pt(),0,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,k+1);//see GetTauFR.h
+                    weight_fake_shifted.push_back(0);
+                    weight_fake_shifted[k] = fr_bjet_shifted[k]/(1-fr_bjet_shifted[k]);
+                }//ordered by: pt0to25up/down, pt25to30up/down,...
                 
                 if (nbtag20==1){
                     if (trigger_region_nominal){
@@ -1199,7 +1496,14 @@ int main(int argc, char** argv){
                             h_anti[2][k+53]->Fill(m_sv,weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
                             h_anti[3][k+53]->Fill(m_btt,weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
                         }
-                    }
+                        //fake rate uncertainties for alldm by pt bins
+                        for (int k = 0; k < 14; k++){
+                            h_anti[0][k+55]->Fill(pt_1,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
+                            h_anti[1][k+55]->Fill(pt_2,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
+                            h_anti[2][k+55]->Fill(m_sv,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
+                            h_anti[3][k+55]->Fill(m_btt,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
+                        }
+                    }//end of trigger_region_nominal
                     //loop over trigger regions with shifted muon
                     for (int k = 0; k < 6; k++){
                         if (trigger_region_shiftedmu[k]){
@@ -1209,24 +1513,10 @@ int main(int argc, char** argv){
                             h_anti[3][k+27]->Fill(m_btt_shiftedmu[k],weight_corr*weight_fake*trgsf_shiftedmu[k]*xtrgfakefactor_shiftedmu[k]);
                         }
                     }
-                }
-                //############################fake rate uncertainties for alldm by pt bins###########################
-                std::vector<float> fr_bjet_shifted;//only for nbjet>0; when nbjet==0 it is split by DM also..
-                std::vector<float> weight_fake_shifted;
-                for (int k = 0; k < 14; k++){
-                    fr_bjet_shifted.push_back(0);
-                    fr_bjet_shifted[k] = GetTauFR(mytau.Pt(),0,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,k+1);//see GetTauFR.h
-                    weight_fake_shifted.push_back(0);
-                    weight_fake_shifted[k] = fr_bjet_shifted[k]/(1-fr_bjet_shifted[k]);
-                    
-                    h_anti[0][k+55]->Fill(pt_1,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
-                    h_anti[1][k+55]->Fill(pt_2,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
-                    h_anti[2][k+55]->Fill(m_sv,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
-                    h_anti[3][k+55]->Fill(m_btt,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
-                }//ordered by: pt0to25up/down, pt25to30up/down,...
-                
-            }
-        }
+                }//end of nbtag==1
+            }//end of anti-isolated region
+        }//end of (!isnonHiggsMC or (isnonHiggsMC && !(gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6)))
+        
         //nonDY MC contamination to embedded (all nonHiggs MC events with two taus previously rejected)
         if (isnonHiggsMC && name!="Z" && gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6){
             if (byMediumDeepVSjet_2){
@@ -1248,11 +1538,11 @@ int main(int argc, char** argv){
     TString fake = "_fake";
     TString MC = "MC";
     
-    bool isnonSignal = (sample!="gghbbtt12" && sample!="gghbbtt20" && sample!="gghbbtt30" && sample!="gghbbtt40" && sample!="gghbbtt50" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt20" && sample!="vbfbbtt30" && sample!="vbfbbtt40" && sample!="vbfbbtt50" && sample!="vbfbbtt60");
+    bool isnonSignal = (sample!="gghbbtt12" && sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt15" && sample!="vbfbbtt20" && sample!="vbfbbtt25" && sample!="vbfbbtt30" && sample!="vbfbbtt35" && sample!="vbfbbtt40" && sample!="vbfbbtt45" && sample!="vbfbbtt50" && sample!="vbfbbtt55" && sample!="vbfbbtt60");
     bool isnonHiggsMC = (sample!="data_obs" && sample!="embedded" && isnonSignal && name!="HTT" && name!="ttHnonbb");
     
     std::vector<TDirectory*> td;
-    for (int j = 0; j < 4; j++){
+    for (int j = 0; j < 4; j++){//loop over histogram variables
         td.push_back(fout->mkdir(dir[j]));
         td[j]->cd();
         
@@ -1381,7 +1671,7 @@ int main(int argc, char** argv){
                     h_anti[j][i+55]->Write();
                 }
             }
-        }
+        }//end of (sample!="data_obs)
         if (sample=="data_obs"){
             h_iso[j][0]->SetName(name.c_str());
             h_iso[j][0]->Write();

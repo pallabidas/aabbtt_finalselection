@@ -1,4 +1,4 @@
-double GetSF(int WP, float x, int flavour, int syst){
+double GetSF2018(int WP, float x, int flavour, int syst){
 
    if (WP==1){
       if (fabs(flavour)==4 or fabs(flavour)==5){
@@ -14,7 +14,7 @@ double GetSF(int WP, float x, int flavour, int syst){
 }
 
 
-double bTagEventWeight(int nBtaggedJets, float bjetpt_1, int bjetflavour_1, float bjetpt_2, int bjetflavour_2, int WP, int syst, int nBTags)
+double bTagEventWeight2018(int nBtaggedJets, float bjetpt_1, int bjetflavour_1, float bjetpt_2, int bjetflavour_2, int WP, int syst, int nBTags)
 {
   if (nBtaggedJets > 2) return -10000;
   if( nBTags > 2 ) return -10000;
@@ -38,15 +38,15 @@ double bTagEventWeight(int nBtaggedJets, float bjetpt_1, int bjetflavour_1, floa
 
   double weight = 0;
   if(nBtaggedJets==1){
-    double SF = GetSF(WP,bjetpt_1,bjetflavour_1,syst);
+    double SF = GetSF2018(WP,bjetpt_1,bjetflavour_1,syst);
     for( unsigned int i=0; i<=1; ++i ){
       if( i != nBTags ) continue;
       weight += pow(SF,i)*pow(1-SF,1-i);
     }
   }
   else if(nBtaggedJets==2 ){
-    double SF1 = GetSF(WP,bjetpt_1,bjetflavour_1,syst);
-    double SF2 = GetSF(WP,bjetpt_2,bjetflavour_2,syst);
+    double SF1 = GetSF2018(WP,bjetpt_1,bjetflavour_1,syst);
+    double SF2 = GetSF2018(WP,bjetpt_2,bjetflavour_2,syst);
     
     for( unsigned int i=0; i<=1; ++i ){
       for( unsigned int j=0; j<=1; ++j ){
