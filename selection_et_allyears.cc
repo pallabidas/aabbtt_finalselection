@@ -48,16 +48,16 @@ int main(int argc, char** argv){
     cout << "************* input: " << input.c_str() << " *************" << endl;
     
     TFile * skimmed = new TFile(input.c_str());
-    TTree * tree = (TTree*) skimmed->Get("mutau_tree");
+    TTree * tree = (TTree*) skimmed->Get("etau_tree");
     TH1F * nevents = (TH1F*) skimmed->Get("nevents");
     float N = nevents->GetBinContent(2); //no. of generated events (before skimming) with genweight
     
     std::string sample_name = sample.c_str();
-    std::string dnnfile = "/hdfs/store/user/htsoi/dnn/mt18/" + sample_name + ".root";
-    if (year=="2017") dnnfile = "/hdfs/store/user/htsoi/dnn/mt17/" + sample_name + ".root";
-    if (year=="2016") dnnfile = "/hdfs/store/user/htsoi/dnn/mt16/" + sample_name + ".root";
+    std::string dnnfile = "/hdfs/store/user/htsoi/dnn/et18/" + sample_name + ".root";
+    if (year=="2017") dnnfile = "/hdfs/store/user/htsoi/dnn/et17/" + sample_name + ".root";
+    if (year=="2016") dnnfile = "/hdfs/store/user/htsoi/dnn/et16/" + sample_name + ".root";
     TFile * dnn = new TFile(dnnfile.c_str());
-    TTree * tree_dnn = (TTree*) dnn->Get("mutau_tree_dnn");
+    TTree * tree_dnn = (TTree*) dnn->Get("etau_tree_dnn");
     
     //sample weights
     float xs, weight;
@@ -145,49 +145,30 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("e_2", &e_2);
     tree->SetBranchAddress("q_2", &q_2);
     tree->SetBranchAddress("l2_decayMode", &l2_decayMode);
-    tree->SetBranchAddress("passMu24", &passMu24);
-    tree->SetBranchAddress("matchMu24_1", &matchMu24_1);
-    tree->SetBranchAddress("filterMu24_1", &filterMu24_1);
-    tree->SetBranchAddress("passMu27", &passMu27);
-    tree->SetBranchAddress("matchMu27_1", &matchMu27_1);
-    tree->SetBranchAddress("filterMu27_1", &filterMu27_1);
-    tree->SetBranchAddress("passMu20Tau27", &passMu20Tau27);
-    tree->SetBranchAddress("matchMu20Tau27_1", &matchMu20Tau27_1);
-    tree->SetBranchAddress("filterMu20Tau27_1", &filterMu20Tau27_1);
-    tree->SetBranchAddress("matchMu20Tau27_2", &matchMu20Tau27_2);
-    tree->SetBranchAddress("filterMu20Tau27_2", &filterMu20Tau27_2);
-    tree->SetBranchAddress("matchEmbFilter_Mu20Tau27_2017_1", &matchEmbFilter_Mu20Tau27_2017_1);
-    tree->SetBranchAddress("matchEmbFilter_Mu20Tau27_2", &matchEmbFilter_Mu20Tau27_2);
-    tree->SetBranchAddress("passMu20HPSTau27", &passMu20HPSTau27);
-    tree->SetBranchAddress("matchMu20HPSTau27_1", &matchMu20HPSTau27_1);
-    tree->SetBranchAddress("filterMu20HPSTau27_1", &filterMu20HPSTau27_1);
-    tree->SetBranchAddress("matchMu20HPSTau27_2", &matchMu20HPSTau27_2);
-    tree->SetBranchAddress("filterMu20HPSTau27_2", &filterMu20HPSTau27_2);
-    tree->SetBranchAddress("matchEmbFilter_Mu20Tau27_1", &matchEmbFilter_Mu20Tau27_1);
-    tree->SetBranchAddress("matchEmbFilter_Mu20Tau27_2", &matchEmbFilter_Mu20Tau27_2);
-    tree->SetBranchAddress("matchEmbFilter_Mu20HPSTau27_2", &matchEmbFilter_Mu20HPSTau27_2);
-    tree->SetBranchAddress("passMu22eta2p1", &passMu22eta2p1);
-    tree->SetBranchAddress("matchMu22eta2p1_1", &matchMu22eta2p1_1);
-    tree->SetBranchAddress("filterMu22eta2p1_1", &filterMu22eta2p1_1);
-    tree->SetBranchAddress("passTkMu22eta2p1", &passTkMu22eta2p1);
-    tree->SetBranchAddress("matchTkMu22eta2p1_1", &matchTkMu22eta2p1_1);
-    tree->SetBranchAddress("filterTkMu22eta2p1_1", &filterTkMu22eta2p1_1);
-    tree->SetBranchAddress("passMu22", &passMu22);
-    tree->SetBranchAddress("matchMu22_1", &matchMu22_1);
-    tree->SetBranchAddress("filterMu22_1", &filterMu22_1);
-    tree->SetBranchAddress("passTkMu22", &passTkMu22);
-    tree->SetBranchAddress("matchTkMu22_1", &matchTkMu22_1);
-    tree->SetBranchAddress("filterTkMu22_1", &filterTkMu22_1);
-    tree->SetBranchAddress("passMu19Tau20", &passMu19Tau20);
-    tree->SetBranchAddress("matchMu19Tau20_1", &matchMu19Tau20_1);
-    tree->SetBranchAddress("matchMu19Tau20_2", &matchMu19Tau20_2);
-    tree->SetBranchAddress("filterMu19Tau20_1", &filterMu19Tau20_1);
-    tree->SetBranchAddress("filterMu19Tau20_2", &filterMu19Tau20_2);
-    tree->SetBranchAddress("passMu19Tau20SingleL1", &passMu19Tau20SingleL1);
-    tree->SetBranchAddress("matchMu19Tau20SingleL1_1", &matchMu19Tau20SingleL1_1);
-    tree->SetBranchAddress("matchMu19Tau20SingleL1_2", &matchMu19Tau20SingleL1_2);
-    tree->SetBranchAddress("filterMu19Tau20SingleL1_1", &filterMu19Tau20SingleL1_1);
-    tree->SetBranchAddress("filterMu19Tau20SingleL1_2", &filterMu19Tau20SingleL1_2);
+    tree->SetBranchAddress("passEle35", &passEle35);
+    tree->SetBranchAddress("matchEle35_1", &matchEle35_1);
+    tree->SetBranchAddress("filterEle35_1", &filterEle35_1);
+    tree->SetBranchAddress("passEle32", &passEle32);
+    tree->SetBranchAddress("matchEle32_1", &matchEle32_1);
+    tree->SetBranchAddress("filterEle32_1", &filterEle32_1);
+    tree->SetBranchAddress("passEle24Tau30", &passEle24Tau30);
+    tree->SetBranchAddress("matchEle24Tau30_1", &matchEle24Tau30_1);
+    tree->SetBranchAddress("filterEle24Tau30_1", &filterEle24Tau30_1);
+    tree->SetBranchAddress("matchEle24Tau30_2", &matchEle24Tau30_2);
+    tree->SetBranchAddress("filterEle24Tau30_2", &filterEle24Tau30_2);
+    tree->SetBranchAddress("passEle24HPSTau30", &passEle24HPSTau30);
+    tree->SetBranchAddress("matchEle24HPSTau30_1", &matchEle24HPSTau30_1);
+    tree->SetBranchAddress("filterEle24HPSTau30_1", &filterEle24HPSTau30_1);
+    tree->SetBranchAddress("matchEle24HPSTau30_2", &matchEle24HPSTau30_2);
+    tree->SetBranchAddress("filterEle24HPSTau30_2", &filterEle24HPSTau30_2);
+    tree->SetBranchAddress("matchEmbFilter_Ele24Tau30_1", &matchEmbFilter_Ele24Tau30_1);
+    tree->SetBranchAddress("matchEmbFilter_Ele24Tau30_2", &matchEmbFilter_Ele24Tau30_2);
+    tree->SetBranchAddress("passEle27", &passEle27);
+    tree->SetBranchAddress("matchEle27_1", &matchEle27_1);
+    tree->SetBranchAddress("filterEle27_1", &filterEle27_1);
+    tree->SetBranchAddress("passEle25", &passEle25);
+    tree->SetBranchAddress("matchEle25_1", &matchEle25_1);
+    tree->SetBranchAddress("filterEle25_1", &filterEle25_1);
     tree->SetBranchAddress("bpt_deepcsv_1", &bpt_deepcsv_1);
     tree->SetBranchAddress("beta_deepcsv_1", &beta_deepcsv_1);
     tree->SetBranchAddress("bphi_deepcsv_1", &bphi_deepcsv_1);
@@ -285,23 +266,25 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("byVVVLooseDeepVSjet_2", &byVVVLooseDeepVSjet_2);
     tree->SetBranchAddress("byVLooseDeepVSe_2", &byVLooseDeepVSe_2);
     tree->SetBranchAddress("byTightDeepVSmu_2", &byTightDeepVSmu_2);
-    tree->SetBranchAddress("m_trg_ic_ratio", &m_trg_ic_ratio);
-    tree->SetBranchAddress("m_trg_20_ratio", &m_trg_20_ratio);
-    tree->SetBranchAddress("t_trg_pog_deeptau_medium_mutau_ratio", &t_trg_pog_deeptau_medium_mutau_ratio);
-    tree->SetBranchAddress("t_trg_pog_deeptau_medium_mutau_ratio_up", &t_trg_pog_deeptau_medium_mutau_ratio_up);
-    tree->SetBranchAddress("t_trg_pog_deeptau_medium_mutau_ratio_down", &t_trg_pog_deeptau_medium_mutau_ratio_down);
-    tree->SetBranchAddress("m_trg_MuTau_Mu20Leg_desy_ratio", &m_trg_MuTau_Mu20Leg_desy_ratio);
-    tree->SetBranchAddress("m_trg_19_ic_ratio", &m_trg_19_ic_ratio);
-    tree->SetBranchAddress("m_trk_ratio", &m_trk_ratio);
-    tree->SetBranchAddress("m_idiso_ic_ratio", &m_idiso_ic_ratio);
     tree->SetBranchAddress("zptmass_weight_nom", &zptmass_weight_nom);
-    tree->SetBranchAddress("m_trg_ic_embed_ratio", &m_trg_ic_embed_ratio);
-    tree->SetBranchAddress("m_trg_20_ic_embed_ratio", &m_trg_20_ic_embed_ratio);
-    tree->SetBranchAddress("m_trg_19_ic_embed_ratio", &m_trg_19_ic_embed_ratio);
-    tree->SetBranchAddress("t_trg_mediumDeepTau_mutau_embed_ratio", &t_trg_mediumDeepTau_mutau_embed_ratio);
-    tree->SetBranchAddress("t_trg_mediumDeepTau_mutau_embed_ratio_up", &t_trg_mediumDeepTau_mutau_embed_ratio_up);
-    tree->SetBranchAddress("t_trg_mediumDeepTau_mutau_embed_ratio_down", &t_trg_mediumDeepTau_mutau_embed_ratio_down);
-    tree->SetBranchAddress("m_idiso_ic_embed_ratio", &m_idiso_ic_embed_ratio);
+    tree->SetBranchAddress("e_trg_ic_ratio", &e_trg_ic_ratio);
+    tree->SetBranchAddress("e_trg_24_ic_ratio", &e_trg_24_ic_ratio);
+    tree->SetBranchAddress("t_trg_pog_deeptau_medium_etau_ratio", &t_trg_pog_deeptau_medium_etau_ratio);
+    tree->SetBranchAddress("t_trg_pog_deeptau_medium_etau_ratio_up", &t_trg_pog_deeptau_medium_etau_ratio_up);
+    tree->SetBranchAddress("t_trg_pog_deeptau_medium_etau_ratio_down", &t_trg_pog_deeptau_medium_etau_ratio_down);
+    tree->SetBranchAddress("e_trk_ratio", &e_trk_ratio);
+    tree->SetBranchAddress("e_idiso_ic_ratio", &e_idiso_ic_ratio);
+    tree->SetBranchAddress("e_trg_24_ic_embed_ratio", &e_trg_24_ic_embed_ratio);
+    tree->SetBranchAddress("t_trg_mediumDeepTau_etau_embed_ratio", &t_trg_mediumDeepTau_etau_embed_ratio);
+    tree->SetBranchAddress("t_trg_mediumDeepTau_etau_embed_ratio_up", &t_trg_mediumDeepTau_etau_embed_ratio_up);
+    tree->SetBranchAddress("t_trg_mediumDeepTau_etau_embed_ratio_down", &t_trg_mediumDeepTau_etau_embed_ratio_down);
+    tree->SetBranchAddress("e_trg_ic_embed_ratio", &e_trg_ic_embed_ratio);
+    tree->SetBranchAddress("e_trk_embed_ratio", &e_trk_embed_ratio);
+    tree->SetBranchAddress("e_idiso_ic_embed_ratio", &e_idiso_ic_embed_ratio);
+    tree->SetBranchAddress("et_emb_LooseChargedIsoPFTau30_kit_ratio", &et_emb_LooseChargedIsoPFTau30_kit_ratio);
+    tree->SetBranchAddress("e_trg_ic_data", &e_trg_ic_data);
+    tree->SetBranchAddress("e_trg_24_ic_data", &e_trg_24_ic_data);
+    tree->SetBranchAddress("t_trg_mediumDeepTau_etau_data", &t_trg_mediumDeepTau_etau_data);
     tree->SetBranchAddress("m_sel_trg_ic_ratio", &m_sel_trg_ic_ratio);
     tree->SetBranchAddress("m_sel_id_ic_ratio_1", &m_sel_id_ic_ratio_1);
     tree->SetBranchAddress("m_sel_id_ic_ratio_2", &m_sel_id_ic_ratio_2);
@@ -313,8 +296,8 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("m_sv_JERDown", &m_sv_JERDown);
     tree->SetBranchAddress("m_sv_UP", &m_sv_UP);
     tree->SetBranchAddress("m_sv_DOWN", &m_sv_DOWN);
-    tree->SetBranchAddress("m_sv_muonESUp", &m_sv_muonESUp);
-    tree->SetBranchAddress("m_sv_muonESDown", &m_sv_muonESDown);
+    tree->SetBranchAddress("m_sv_ESCALEUP", &m_sv_ESCALEUP);
+    tree->SetBranchAddress("m_sv_ESCALEDOWN", &m_sv_ESCALEDOWN);
     tree->SetBranchAddress("m_sv_JetAbsoluteUp", &m_sv_JetAbsoluteUp);
     tree->SetBranchAddress("m_sv_JetAbsoluteDown", &m_sv_JetAbsoluteDown);
     tree->SetBranchAddress("m_sv_JetAbsoluteyearUp", &m_sv_JetAbsoluteyearUp);
@@ -350,8 +333,8 @@ int main(int argc, char** argv){
     tree_dnn->SetBranchAddress("dnn_1b_UESDown", &dnn_1b_UESDown);
     tree_dnn->SetBranchAddress("dnn_1b_JERUp", &dnn_1b_JERUp);
     tree_dnn->SetBranchAddress("dnn_1b_JERDown", &dnn_1b_JERDown);
-    tree_dnn->SetBranchAddress("dnn_1b_muonESUp", &dnn_1b_muonESUp);
-    tree_dnn->SetBranchAddress("dnn_1b_muonESDown", &dnn_1b_muonESDown);
+    tree_dnn->SetBranchAddress("dnn_1b_ESCALEUP", &dnn_1b_ESCALEUP);
+    tree_dnn->SetBranchAddress("dnn_1b_ESCALEDOWN", &dnn_1b_ESCALEDOWN);
     tree_dnn->SetBranchAddress("dnn_1b_JetAbsoluteUp", &dnn_1b_JetAbsoluteUp);
     tree_dnn->SetBranchAddress("dnn_1b_JetAbsoluteDown", &dnn_1b_JetAbsoluteDown);
     tree_dnn->SetBranchAddress("dnn_1b_JetAbsoluteyearUp", &dnn_1b_JetAbsoluteyearUp);
@@ -386,8 +369,8 @@ int main(int argc, char** argv){
     tree_dnn->SetBranchAddress("dnn_2b_UESDown", &dnn_2b_UESDown);
     tree_dnn->SetBranchAddress("dnn_2b_JERUp", &dnn_2b_JERUp);
     tree_dnn->SetBranchAddress("dnn_2b_JERDown", &dnn_2b_JERDown);
-    tree_dnn->SetBranchAddress("dnn_2b_muonESUp", &dnn_2b_muonESUp);
-    tree_dnn->SetBranchAddress("dnn_2b_muonESDown", &dnn_2b_muonESDown);
+    tree_dnn->SetBranchAddress("dnn_2b_ESCALEUP", &dnn_2b_ESCALEUP);
+    tree_dnn->SetBranchAddress("dnn_2b_ESCALEDOWN", &dnn_2b_ESCALEDOWN);
     tree_dnn->SetBranchAddress("dnn_2b_JetAbsoluteUp", &dnn_2b_JetAbsoluteUp);
     tree_dnn->SetBranchAddress("dnn_2b_JetAbsoluteDown", &dnn_2b_JetAbsoluteDown);
     tree_dnn->SetBranchAddress("dnn_2b_JetAbsoluteyearUp", &dnn_2b_JetAbsoluteyearUp);
@@ -422,12 +405,12 @@ int main(int argc, char** argv){
     TString shape_jet[22] = {"_CMS_JetAbsolute_"+shape_year+"Up","_CMS_JetAbsolute_"+shape_year+"Down","_CMS_JetAbsoluteyear_"+shape_year+"Up","_CMS_JetAbsoluteyear_"+shape_year+"Down","_CMS_JetBBEC1_"+shape_year+"Up","_CMS_JetBBEC1_"+shape_year+"Down","_CMS_JetBBEC1year_"+shape_year+"Up","_CMS_JetBBEC1year_"+shape_year+"Down","_CMS_JetEC2_"+shape_year+"Up","_CMS_JetEC2_"+shape_year+"Down","_CMS_JetEC2year_"+shape_year+"Up","_CMS_JetEC2year_"+shape_year+"Down","_CMS_JetFlavorQCD_"+shape_year+"Up","_CMS_JetFlavorQCD_"+shape_year+"Down","_CMS_JetHF_"+shape_year+"Up","_CMS_JetHF_"+shape_year+"Down","_CMS_JetHFyear_"+shape_year+"Up","_CMS_JetHFyear_"+shape_year+"Down","_CMS_JetRelativeBal_"+shape_year+"Up","_CMS_JetRelativeBal_"+shape_year+"Down","_CMS_JetRelativeSample_"+shape_year+"Up","_CMS_JetRelativeSample_"+shape_year+"Down"};
     TString shape_mufaketauES[2] = {"_CMS_muonfaketauES_"+shape_year+"Up","_CMS_muonfaketauES_"+shape_year+"Down"};
     TString shape_elefaketauES[8] = {"_CMS_elefaketauES_dm0_barrel_"+shape_year+"Up","_CMS_elefaketauES_dm0_barrel_"+shape_year+"Down","_CMS_elefaketauES_dm0_endcap_"+shape_year+"Up","_CMS_elefaketauES_dm0_endcap_"+shape_year+"Down","_CMS_elefaketauES_dm1_barrel_"+shape_year+"Up","_CMS_elefaketauES_dm1_barrel_"+shape_year+"Down","_CMS_elefaketauES_dm1_endcap_"+shape_year+"Up","_CMS_elefaketauES_dm1_endcap_"+shape_year+"Down"};
-    TString shape_trgeff[4] = {"_CMS_trgeff_singleMu_"+shape_year+"Up","_CMS_trgeff_singleMu_"+shape_year+"Down","_CMS_trgeff_crossMuTau_"+shape_year+"Up","_CMS_trgeff_crossMuTau_"+shape_year+"Down"};
-    TString shape_muonES[6] = {"_CMS_muonES_eta0to1p4_"+shape_year+"Up","_CMS_muonES_eta0to1p4_"+shape_year+"Down","_CMS_muonES_eta1p4to2p1_"+shape_year+"Up","_CMS_muonES_eta1p4to2p1_"+shape_year+"Down","_CMS_muonES_eta2p1to2p4_"+shape_year+"Up","_CMS_muonES_eta2p1to2p4_"+shape_year+"Down"};
+    TString shape_trgeff[4] = {"_CMS_trgeff_single_"+shape_year+"Up","_CMS_trgeff_single_"+shape_year+"Down","_CMS_trgeff_cross_"+shape_year+"Up","_CMS_trgeff_cross_"+shape_year+"Down"};
+    TString shape_eleES[4] = {"_CMS_eleES_barrel_"+shape_year+"Up","_CMS_eleES_barrel_"+shape_year+"Down","_CMS_eleES_endcap_"+shape_year+"Up","_CMS_eleES_endcap_"+shape_year+"Down"};
     //for DY MC only
     TString shape_DY_zpt[2] = {"_CMS_Zpt_reweight_"+shape_year+"Up","_CMS_Zpt_reweight_"+shape_year+"Down"};
     //for ttbar only
-    TString shape_ttbar_toppt[2] = {"_CMS_toppt_reweight_"+shape_year+"Up","_CMS_ttbar_reweight_"+shape_year+"Down"};
+    TString shape_ttbar_toppt[2] = {"_CMS_toppt_reweight_"+shape_year+"Up","_CMS_toppt_reweight_"+shape_year+"Down"};
     //for all MC except diboson, ttbar, single top
     TString shape_recoil[12] = {"_CMS_0jet_resolution_"+shape_year+"Up","_CMS_0jet_resolution_"+shape_year+"Down","_CMS_0jet_response_"+shape_year+"Up","_CMS_0jet_response_"+shape_year+"Down","_CMS_1jet_resolution_"+shape_year+"Up","_CMS_1jet_resolution_"+shape_year+"Down","_CMS_1jet_response_"+shape_year+"Up","_CMS_1jet_response_"+shape_year+"Down","_CMS_gt1jet_resolution_"+shape_year+"Up","_CMS_gt1jet_resolution_"+shape_year+"Down","_CMS_gt1jet_response_"+shape_year+"Up","_CMS_gt1jet_response_"+shape_year+"Down"};
     //only diboson, ttbar, single top
@@ -442,14 +425,14 @@ int main(int argc, char** argv){
     //for emb only
     TString embshape_tauideff[14] = {"_CMS_emb_tauideff_pt20to25_"+shape_year+"Up","_CMS_emb_tauideff_pt20to25_"+shape_year+"Down","_CMS_emb_tauideff_pt25to30_"+shape_year+"Up","_CMS_emb_tauideff_pt25to30_"+shape_year+"Down","_CMS_emb_tauideff_pt30to35_"+shape_year+"Up","_CMS_emb_tauideff_pt30to35_"+shape_year+"Down","_CMS_emb_tauideff_pt35to40_"+shape_year+"Up","_CMS_emb_tauideff_pt35to40_"+shape_year+"Down","_CMS_emb_tauideff_pt40to500_"+shape_year+"Up","_CMS_emb_tauideff_pt40to500_"+shape_year+"Down","_CMS_emb_tauideff_pt500to1000_"+shape_year+"Up","_CMS_emb_tauideff_pt500to1000_"+shape_year+"Down","_CMS_emb_tauideff_ptgt1000_"+shape_year+"Up","_CMS_emb_tauideff_ptgt1000_"+shape_year+"Down"};
     TString embshape_tauES[8] = {"_CMS_emb_tauES_dm0_"+shape_year+"Up","_CMS_emb_tauES_dm0_"+shape_year+"Down","_CMS_emb_tauES_dm1_"+shape_year+"Up","_CMS_emb_tauES_dm1_"+shape_year+"Down","_CMS_emb_tauES_dm10_"+shape_year+"Up","_CMS_emb_tauES_dm10_"+shape_year+"Down","_CMS_emb_tauES_dm11_"+shape_year+"Up","_CMS_emb_tauES_dm11_"+shape_year+"Down"};
-    TString embshape_trgeff[4] = {"_CMS_emb_trgeff_single_"+shape_year+"Up","_CMS_emb_trgeff_single_"+shape_year+"Down","_CMS_emb_trgeff_cross_"+shape_year+"Up","_CMS_emb_trgeff_cross_"+shape_year+"Down"};
-    TString embshape_muonES[6] = {"_CMS_emb_muonES_eta0to1p4_"+shape_year+"Up","_CMS_emb_muonES_eta0to1p4_"+shape_year+"Down","_CMS_emb_muonES_eta1p4to2p1_"+shape_year+"Up","_CMS_emb_muonES_eta1p4to2p1_"+shape_year+"Down","_CMS_emb_muonES_eta2p1to2p4_"+shape_year+"Up","_CMS_emb_muonES_eta2p1to2p4_"+shape_year+"Down"};
+    TString embshape_trgeff[4] = {"_CMS_emb_trgeff_singleEle_"+shape_year+"Up","_CMS_emb_trgeff_singleEle_"+shape_year+"Down","_CMS_emb_trgeff_crossEleTau_"+shape_year+"Up","_CMS_emb_trgeff_crossEleTau_"+shape_year+"Down"};
+    TString embshape_eleES[4] = {"_CMS_emb_eleES_barrel_"+shape_year+"Up","_CMS_emb_eleES_barrel_"+shape_year+"Down","_CMS_emb_eleES_endcap_"+shape_year+"Up","_CMS_emb_eleES_endcap_"+shape_year+"Down"};
     TString embshape_tautracking[6] = {"_CMS_emb_tautrack_dm0dm10_"+shape_year+"Up","_CMS_emb_tautrack_dm0dm10_"+shape_year+"Down","_CMS_emb_tautrack_dm1_"+shape_year+"Up","_CMS_emb_tautrack_dm1_"+shape_year+"Down","_CMS_emb_tautrack_dm11_"+shape_year+"Up","_CMS_emb_tautrack_dm11_"+shape_year+"Down"};
     if (sample=="embedded"){
         for (int i = 0; i < 14; i++) shape_tauideff[i] = embshape_tauideff[i];
         for (int i = 0; i < 8; i++) shape_tauES[i] = embshape_tauES[i];
         for (int i = 0; i < 4; i++) shape_trgeff[i] = embshape_trgeff[i];
-        for (int i = 0; i < 6; i++) shape_muonES[i] = embshape_muonES[i];
+        for (int i = 0; i < 4; i++) shape_eleES[i] = embshape_eleES[i];
     }
     //comtamination to emb: all non-DY MC with gen tautau
     TString shape_nonDY[1] = {"_nonDY"};
@@ -460,13 +443,13 @@ int main(int argc, char** argv){
         h_iso.push_back(std::vector<TH1F*>());
         h_anti.push_back(std::vector<TH1F*>());
     }
-    for (int i = 0; i < 92; i++){//i=0 for nominal, 1-14 tauIDeff, 15-22 tauES, 23-44 jet, 45-46 muon->tauhES, 47-54 ele->tauhES, 55-58 trgeff, 59-64 muonES, 65-70 tau tracking, 71-72 (only DY MC) zpt, 73-74 (only ttbar) toppt, 75-86 recoil, 87-88 met unclustered ES, 89 nonDY, 90-91 jer
+    for (int i = 0; i < 92; i++){//i=0 for nominal, 1-14 tauIDeff, 15-22 tauES, 23-44 jet, 45-46 muon->tauhES, 47-54 ele->tauhES, 55-58 trgeff, 59-62 eleES, 65-70 tau tracking, 71-72 (only DY MC) zpt, 73-74 (only ttbar) toppt, 75-86 recoil, 87-88 met unclustered ES, 89 nonDY, 90-91 jer
         h_iso[0].push_back(new TH1F("","",70,10,150));//pt_1
         h_iso[1].push_back(new TH1F("","",45,10,100));//pt_2
         h_iso[2].push_back(new TH1F("","",40,0,400));//m_tt
         h_iso[3].push_back(new TH1F("","",40,60,460));//m_btt
     }
-    for (int i = 0; i < 69; i++){//anti-isolated region, no tau related shifts, no ele/mu->tau shifts since tau is mostly jet //i=0 for nominal, 1-22 jet, 23-26 trgeff, 27-32 muonES, 33-34 (only DY MC) zpt, 35-36 (only ttbar) toppt, 37-48 recoil, 49-50 met unclustered ES, 51-52 jer, 53-54 fake cross trg factor, 55-68 fake rate dmall by pt
+    for (int i = 0; i < 69; i++){//anti-isolated region, no tau related shifts, no ele/mu->tau shifts since tau is mostly jet //i=0 for nominal, 1-22 jet, 23-26 trgeff, 27-30 eleES, 33-34 (only DY MC) zpt, 35-36 (only ttbar) toppt, 37-48 recoil, 49-50 met unclustered ES, 51-52 jer, 53-54 fake cross trg factor, 55-68 fake rate dmall by pt
         h_anti[0].push_back(new TH1F("","",70,10,150));//pt_1
         h_anti[1].push_back(new TH1F("","",45,10,100));//pt_2
         h_anti[2].push_back(new TH1F("","",40,0,400));//m_tt
@@ -518,12 +501,12 @@ int main(int argc, char** argv){
     TFile *f_taufr = new TFile("FitHistograms_tauFR_2018.root");
     if (year=="2017") f_taufr = new TFile("FitHistograms_tauFR_2017.root");
     if (year=="2016") f_taufr = new TFile("FitHistograms_tauFR_2016.root");
-    TGraphAsymmErrors *g_taufr_dm0M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm0_VLe_Tmu_deepmedium_hpt_dm0_VLe_Tmu_deepveryveryveryloose");
-    TGraphAsymmErrors *g_taufr_dm1M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm1_VLe_Tmu_deepmedium_hpt_dm1_VLe_Tmu_deepveryveryveryloose");
-    TGraphAsymmErrors *g_taufr_dm10M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm10_VLe_Tmu_deepmedium_hpt_dm10_VLe_Tmu_deepveryveryveryloose");
-    TGraphAsymmErrors *g_taufr_dm11M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm11_VLe_Tmu_deepmedium_hpt_dm11_VLe_Tmu_deepveryveryveryloose");
+    TGraphAsymmErrors *g_taufr_dm0M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm0_Te_VLmu_deepmedium_hpt_dm0_Te_VLmu_deepveryveryveryloose");
+    TGraphAsymmErrors *g_taufr_dm1M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm1_Te_VLmu_deepmedium_hpt_dm1_Te_VLmu_deepveryveryveryloose");
+    TGraphAsymmErrors *g_taufr_dm10M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm10_Te_VLmu_deepmedium_hpt_dm10_Te_VLmu_deepveryveryveryloose");
+    TGraphAsymmErrors *g_taufr_dm11M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm11_Te_VLmu_deepmedium_hpt_dm11_Te_VLmu_deepveryveryveryloose");
     
-    TGraphAsymmErrors *g_taufr_dmall = (TGraphAsymmErrors*) f_taufr->Get("hpt_dmall_VLe_Tmu_1jet_deepmedium_hpt_dmall_VLe_Tmu_1jet_deepveryveryveryloose");
+    TGraphAsymmErrors *g_taufr_dmall = (TGraphAsymmErrors*) f_taufr->Get("hpt_dmall_Te_VLmu_1jet_deepmedium_hpt_dmall_Te_VLmu_1jet_deepveryveryveryloose");
     
     //loop over events
     int n = tree->GetEntries(); //no. of events after skimming
@@ -542,8 +525,8 @@ int main(int argc, char** argv){
         if ((sample=="data_obs" or sample=="embedded") && Flag_eeBadScFilter) continue;
         if (Flag_ecalBadCalibReducedMINIAODFilter) continue;
         
-        TLorentzVector mymu;
-        mymu.SetPtEtaPhiM(pt_1,eta_1,phi_1,m_1);
+        TLorentzVector myele;
+        myele.SetPtEtaPhiM(pt_1,eta_1,phi_1,m_1);
         TLorentzVector mytau;
         mytau.SetPtEtaPhiM(pt_2,eta_2,phi_2,m_2);
         TLorentzVector myb1;
@@ -551,58 +534,39 @@ int main(int argc, char** argv){
         TLorentzVector myb2;
         myb2.SetPtEtaPhiM(bpt_deepcsv_2,beta_deepcsv_2,bphi_deepcsv_2,bm_deepcsv_2);
         
-        //mutau selection
-        /*
-        bool trigger24OR27 = ((passMu24 && matchMu24_1 && filterMu24_1) or (passMu27 && matchMu27_1 && filterMu27_1));//keep 25 not 28
-        bool trigger2027 = (passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && matchMu20Tau27_2 && filterMu20Tau27_2 && fabs(eta_2)<2.1);
-        bool trigger2027HPS = (passMu20HPSTau27 && matchMu20HPSTau27_1 && filterMu20HPSTau27_1 && matchMu20HPSTau27_2 && filterMu20HPSTau27_2 && fabs(eta_2)<2.1);
-        if (sample=="embedded"){
-            trigger2027HPS = (matchEmbFilter_Mu20Tau27_1 && matchEmbFilter_Mu20HPSTau27_2 && fabs(eta_2)<2.1);
-            trigger24OR27 = ((passMu24 && matchMu24_1) or (passMu27 && matchMu27_1));
-        }*/
-        
         bool isSingleTrigger = false;
         bool isCrossTrigger = false;
         if (year=="2018"){
-            isSingleTrigger = (passMu24 && matchMu24_1 && filterMu24_1) or (passMu27 && matchMu27_1 && filterMu27_1);
-            isCrossTrigger = (passMu20HPSTau27 && matchMu20HPSTau27_1 && filterMu20HPSTau27_1 && matchMu20HPSTau27_2 && filterMu20HPSTau27_2 && fabs(eta_2)<2.1);
-            if (sample=="data_obs" && run<317509){
-                isCrossTrigger = (passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && matchMu20Tau27_2 && filterMu20Tau27_2 && fabs(eta_2)<2.1);
-            }
-            if (sample=="embedded"){
-                isSingleTrigger = (passMu24 && matchMu24_1) or (passMu27 && matchMu27_1);
-                isCrossTrigger = (matchEmbFilter_Mu20Tau27_1 && matchEmbFilter_Mu20HPSTau27_2 && fabs(eta_2)<2.1);
-            }
+            isSingleTrigger = (passEle32 && matchEle32_1 && filterEle32_1) or (passEle35 && matchEle35_1 && filterEle35_1);
+            isCrossTrigger = (passEle24HPSTau30 && matchEle24HPSTau30_1 && filterEle24HPSTau30_1 && matchEle24HPSTau30_2 && filterEle24HPSTau30_2 && fabs(eta_2)<2.1);
+            if (sample=="embedded") isCrossTrigger = (matchEmbFilter_Ele24Tau30_1 && matchEmbFilter_Ele24Tau30_2 && fabs(eta_2)<2.1);
+            if (sample=="data_obs" && run<317509) isCrossTrigger = (passEle24Tau30 && matchEle24Tau30_1 && filterEle24Tau30_1 && matchEle24Tau30_2 && filterEle24Tau30_2 && fabs(eta_2)<2.1);
         }
         if (year=="2017"){
-            isSingleTrigger = (passMu24 && matchMu24_1 && filterMu24_1) or (passMu27 && matchMu27_1 && filterMu27_1);
-            isCrossTrigger = (passMu20Tau27 && matchMu20Tau27_1 && filterMu20Tau27_1 && matchMu20Tau27_2 && filterMu20Tau27_2 && fabs(eta_2)<2.1);
-            if (sample=="embedded"){
-                isSingleTrigger = (passMu24 && matchMu24_1) or (passMu27 && matchMu27_1);
-                isCrossTrigger = (matchEmbFilter_Mu20Tau27_2017_1 && matchEmbFilter_Mu20Tau27_2 && fabs(eta_2)<2.1);
+            isSingleTrigger = (passEle32 && matchEle32_1 && filterEle32_1) or (passEle27 && matchEle27_1 && filterEle27_1);
+            isCrossTrigger = (passEle24Tau30 && matchEle24Tau30_1 && filterEle24Tau30_1 && matchEle24Tau30_2 && filterEle24Tau30_2 && fabs(eta_2)<2.1);
+            if (sample=="embedded" && fabs(eta_1)<1.479) isCrossTrigger = (passEle24Tau30 && fabs(eta_2)<2.1);
+            if (sample=="embedded" && fabs(eta_1)>1.479 && pt_1<40){//for emb with fabs(eta_1)>1.479 && pt_1<40, there are only pt reqirements w/o trigger variables to pass
+                isSingleTrigger = true;
+                isCrossTrigger = fabs(eta_2)<2.1;
             }
         }
         if (year=="2016"){
-            isSingleTrigger = (passMu22eta2p1 && matchMu22eta2p1_1 && filterMu22eta2p1_1) or (passTkMu22eta2p1 && matchTkMu22eta2p1_1 && filterTkMu22eta2p1_1) or (passMu22 && matchMu22_1 && filterMu22_1) or (passTkMu22 && matchTkMu22_1 && filterTkMu22_1);
-            isCrossTrigger = (passMu19Tau20 && matchMu19Tau20_1 && matchMu19Tau20_2 && filterMu19Tau20_1 && filterMu19Tau20_2 && fabs(eta_2)<2.1) or (passMu19Tau20SingleL1 && matchMu19Tau20SingleL1_1 && matchMu19Tau20SingleL1_2 && filterMu19Tau20SingleL1_1 && filterMu19Tau20SingleL1_2 && fabs(eta_2)<2.1);
+            isSingleTrigger = (passEle25 && matchEle25_1 && filterEle25_1);//no cross trigger in 2016
         }
         
         if (!isSingleTrigger && !isCrossTrigger) continue;
         
-        //if (sample=="data_obs" && run<317509 && !trigger2027 && !trigger24OR27) continue;
-        //if (sample=="data_obs" && run>=317509 && !trigger2027HPS && !trigger24OR27) continue;
-        //if (sample!="data_obs" && sample!="embedded" && !trigger24OR27 && !trigger2027HPS) continue;
-        //if (sample=="embedded" && !trigger24OR27 && !trigger2027HPS) continue;
         //trigger var only, add pt requirements later when doing systematics
         //if (!(pt_2>20)) continue;
         if (!(fabs(eta_1)<2.1 && fabs(eta_2)<2.3)) continue;
         if (!(iso_1<0.15)) continue;
         if (q_1*q_2>0) continue;
         
-        //discriminators for e/mu faking tau_h (many Z->mumu so tight for mu; rare e+mu so loose for e)
-        if (!(byVLooseDeepVSe_2 && byTightDeepVSmu_2)) continue;
+        //discriminators for e/mu faking tau_h (many Z->ee so tight for e; rare e+mu so loose for mu)
+        if (!(byTightDeepVSe_2 && byVLooseDeepVSmu_2)) continue;
         
-        if (!(mymu.DeltaR(mytau)>0.4)) continue;
+        if (!(myele.DeltaR(mytau)>0.4)) continue;
         
         if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
             if (numGenJets==0){
@@ -671,17 +635,9 @@ int main(int argc, char** argv){
             
             //reject MC with 2 taus as duplicated in embedded sample except for signal/Higgs
             //if (sample!="data_obs" && sample!="embedded" && sample!="gghbbtt12" && sample!="gghbbtt20" && sample!="gghbbtt30" && sample!="gghbbtt40" && sample!="gghbbtt50" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt20" && sample!="vbfbbtt30" && sample!="vbfbbtt40" && sample!="vbfbbtt50" && sample!="vbfbbtt60" && name!="HTT" && name!="ttHnonbb" && gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue;
-            /*
-            //trigger scale factor
-            if (isSingleTrigger && pt_1>25){//this cut is valid only when mu is nominal, need re-apply mu pt cut later when shifting mu ES
-                sf_MC *= m_trg_ic_ratio;
-            }
-            else{
-                sf_MC *= m_trg_20_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
-            }*/
             
-            //muon ID/iso/tracking scale factors
-            sf_MC *= m_trk_ratio * m_idiso_ic_ratio;
+            //electron ID/iso/tracking scale factors
+            sf_MC *= e_trk_ratio * e_idiso_ic_ratio;
             
             //re-weigh Z pT spectrum for DY samples
             if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
@@ -762,17 +718,9 @@ int main(int argc, char** argv){
             
             //rejecting buggy events
             if (genweight>1.0) continue;
-            /*
-            //trigger scale factor
-            if (isSingleTrigger && pt_1>25){//this cut is valid only when mu is nominal, need re-apply mu pt cut later when shifting mu ES
-                sf_MC *= m_trg_ic_embed_ratio;
-            }
-            else{
-                sf_MC *= m_trg_20_ic_embed_ratio * t_trg_mediumDeepTau_mutau_embed_ratio;
-            }//t_trg_pog_deeptau_medium_mutau_ratio
-            */
-            //muon ID/iso/tracking scale factors
-            sf_embed *= m_trk_ratio * m_idiso_ic_embed_ratio;
+            
+            //electron ID/iso/tracking scale factors
+            sf_embed *= e_trk_embed_ratio * e_idiso_ic_embed_ratio;
             
             //efficiency of selecting Z->mumu data
             sf_embed *= m_sel_trg_ic_ratio * m_sel_id_ic_ratio_1 * m_sel_id_ic_ratio_2;
@@ -829,19 +777,19 @@ int main(int argc, char** argv){
         TLorentzVector mymet;
         mymet.SetPtEtaPhiM(met,0,metphi,0);
         TLorentzVector mytt;
-        mytt.SetPtEtaPhiM((mymu+mytau+mymet).Pt(),(mymu+mytau+mymet).Eta(),(mymu+mytau+mymet).Phi(),m_sv);
+        mytt.SetPtEtaPhiM((myele+mytau+mymet).Pt(),(myele+mytau+mymet).Eta(),(myele+mytau+mymet).Phi(),m_sv);
         
         float m_btt = (mytt + myb1).M();
         float m_bbtt = (mytt + myb1 + myb2).M();
         
-        float mt_tau1=TMass_F((mymu).Pt(),mymet.Pt(),(mymu).Px(),mymet.Px(),(mymu).Py(),mymet.Py());
+        float mt_tau1=TMass_F((myele).Pt(),mymet.Pt(),(myele).Px(),mymet.Px(),(myele).Py(),mymet.Py());
         float mt_tau2=TMass_F((mytau).Pt(),mymet.Pt(),(mytau).Px(),mymet.Px(),(mytau).Py(),mymet.Py());
         
-        float norm_zeta=norm_F(mymu.Px()/mymu.Pt()+mytau.Px()/mytau.Pt(),mymu.Py()/mymu.Pt()+mytau.Py()/mytau.Pt());
-        float x_zeta= (mymu.Px()/mymu.Pt()+mytau.Px()/mytau.Pt())/norm_zeta;
-        float y_zeta= (mymu.Py()/mymu.Pt()+mytau.Py()/mytau.Pt())/norm_zeta;
+        float norm_zeta=norm_F(myele.Px()/myele.Pt()+mytau.Px()/mytau.Pt(),myele.Py()/myele.Pt()+mytau.Py()/mytau.Pt());
+        float x_zeta= (myele.Px()/myele.Pt()+mytau.Px()/mytau.Pt())/norm_zeta;
+        float y_zeta= (myele.Py()/myele.Pt()+mytau.Py()/mytau.Pt())/norm_zeta;
         float p_zeta_mis=mymet.Px()*x_zeta+mymet.Py()*y_zeta;
-        float pzeta_vis=(mymu.Px()+mytau.Px())*x_zeta+(mymu.Py()+mytau.Py())*y_zeta;
+        float pzeta_vis=(myele.Px()+mytau.Px())*x_zeta+(myele.Py()+mytau.Py())*y_zeta;
         float dzeta=p_zeta_mis-0.85*pzeta_vis;
         
         //#####################tau ES shifting: mytau, mymet, mytt###########################
@@ -880,8 +828,8 @@ int main(int argc, char** argv){
                 mymet_shiftedtau[2*j] = mymet + mytau - myshiftedtau[2*j];
                 mymet_shiftedtau[2*j+1] = mymet + mytau - myshiftedtau[2*j+1];
                 //after tau and met are shifted, shift the ditau system
-                mytt_shiftedtau[2*j].SetPtEtaPhiM((mymu+myshiftedtau[2*j]+mymet_shiftedtau[2*j]).Pt(),(mymu+myshiftedtau[2*j]+mymet_shiftedtau[2*j]).Eta(),(mymu+myshiftedtau[2*j]+mymet_shiftedtau[2*j]).Phi(),m_sv_UP);
-                mytt_shiftedtau[2*j+1].SetPtEtaPhiM((mymu+myshiftedtau[2*j+1]+mymet_shiftedtau[2*j+1]).Pt(),(mymu+myshiftedtau[2*j+1]+mymet_shiftedtau[2*j+1]).Eta(),(mymu+myshiftedtau[2*j+1]+mymet_shiftedtau[2*j+1]).Phi(),m_sv_DOWN);
+                mytt_shiftedtau[2*j].SetPtEtaPhiM((myele+myshiftedtau[2*j]+mymet_shiftedtau[2*j]).Pt(),(myele+myshiftedtau[2*j]+mymet_shiftedtau[2*j]).Eta(),(myele+myshiftedtau[2*j]+mymet_shiftedtau[2*j]).Phi(),m_sv_UP);
+                mytt_shiftedtau[2*j+1].SetPtEtaPhiM((myele+myshiftedtau[2*j+1]+mymet_shiftedtau[2*j+1]).Pt(),(myele+myshiftedtau[2*j+1]+mymet_shiftedtau[2*j+1]).Eta(),(myele+myshiftedtau[2*j+1]+mymet_shiftedtau[2*j+1]).Phi(),m_sv_DOWN);
                 //after mytt is shifted, shift the mass m_btt
                 m_btt_shiftedtau[2*j] = (mytt_shiftedtau[2*j]+myb1).M();
                 m_btt_shiftedtau[2*j+1] = (mytt_shiftedtau[2*j+1]+myb1).M();
@@ -944,8 +892,8 @@ int main(int argc, char** argv){
                 mymet_isgenmu[2*j] = mymet + mytau - mytau_isgenmu[2*j];
                 mymet_isgenmu[2*j+1] = mymet + mytau - mytau_isgenmu[2*j+1];
                 //mytt
-                mytt_isgenmu[2*j].SetPtEtaPhiM((mymu+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Pt(),(mymu+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Eta(),(mymu+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Phi(),m_sv_UP);
-                mytt_isgenmu[2*j+1].SetPtEtaPhiM((mymu+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Pt(),(mymu+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Eta(),(mymu+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Phi(),m_sv_DOWN);
+                mytt_isgenmu[2*j].SetPtEtaPhiM((myele+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Pt(),(myele+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Eta(),(myele+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Phi(),m_sv_UP);
+                mytt_isgenmu[2*j+1].SetPtEtaPhiM((myele+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Pt(),(myele+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Eta(),(myele+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Phi(),m_sv_DOWN);
                 m_btt_isgenmu[2*j] = (mytt_isgenmu[2*j]+myb1).M();
                 m_btt_isgenmu[2*j+1] = (mytt_isgenmu[2*j+1]+myb1).M();
             }
@@ -983,8 +931,8 @@ int main(int argc, char** argv){
                         mymet_isgenele[4*j] = mymet + mytau - mytau_isgenele[4*j];
                         mymet_isgenele[4*j+1] = mymet + mytau - mytau_isgenele[4*j+1];
                         //mytt
-                        mytt_isgenele[4*j].SetPtEtaPhiM((mymu+mytau_isgenele[4*j]+mymet_isgenele[4*j]).Pt(),(mymu+mytau_isgenele[4*j]+mymet_isgenele[4*j]).Eta(),(mymu+mytau_isgenele[4*j]+mymet_isgenele[4*j]).Phi(),m_sv_UP);
-                        mytt_isgenele[4*j+1].SetPtEtaPhiM((mymu+mytau_isgenele[4*j+1]+mymet_isgenele[4*j+1]).Pt(),(mymu+mytau_isgenele[4*j+1]+mymet_isgenele[4*j+1]).Eta(),(mymu+mytau_isgenele[4*j+1]+mymet_isgenele[4*j+1]).Phi(),m_sv_DOWN);
+                        mytt_isgenele[4*j].SetPtEtaPhiM((myele+mytau_isgenele[4*j]+mymet_isgenele[4*j]).Pt(),(myele+mytau_isgenele[4*j]+mymet_isgenele[4*j]).Eta(),(myele+mytau_isgenele[4*j]+mymet_isgenele[4*j]).Phi(),m_sv_UP);
+                        mytt_isgenele[4*j+1].SetPtEtaPhiM((myele+mytau_isgenele[4*j+1]+mymet_isgenele[4*j+1]).Pt(),(myele+mytau_isgenele[4*j+1]+mymet_isgenele[4*j+1]).Eta(),(myele+mytau_isgenele[4*j+1]+mymet_isgenele[4*j+1]).Phi(),m_sv_DOWN);
                         //m_btt
                         m_btt_isgenele[4*j] = (mytt_isgenele[4*j]+myb1).M();
                         m_btt_isgenele[4*j+1] = (mytt_isgenele[4*j+1]+myb1).M();
@@ -998,8 +946,8 @@ int main(int argc, char** argv){
                         mymet_isgenele[4*j+2] = mymet + mytau - mytau_isgenele[4*j+2];
                         mymet_isgenele[4*j+3] = mymet + mytau - mytau_isgenele[4*j+3];
                         //mytt
-                        mytt_isgenele[4*j+2].SetPtEtaPhiM((mymu+mytau_isgenele[4*j+2]+mymet_isgenele[4*j+2]).Pt(),(mymu+mytau_isgenele[4*j+2]+mymet_isgenele[4*j+2]).Eta(),(mymu+mytau_isgenele[4*j+2]+mymet_isgenele[4*j+2]).Phi(),m_sv_UP);
-                        mytt_isgenele[4*j+3].SetPtEtaPhiM((mymu+mytau_isgenele[4*j+3]+mymet_isgenele[4*j+3]).Pt(),(mymu+mytau_isgenele[4*j+3]+mymet_isgenele[4*j+3]).Eta(),(mymu+mytau_isgenele[4*j+3]+mymet_isgenele[4*j+3]).Phi(),m_sv_DOWN);
+                        mytt_isgenele[4*j+2].SetPtEtaPhiM((myele+mytau_isgenele[4*j+2]+mymet_isgenele[4*j+2]).Pt(),(myele+mytau_isgenele[4*j+2]+mymet_isgenele[4*j+2]).Eta(),(myele+mytau_isgenele[4*j+2]+mymet_isgenele[4*j+2]).Phi(),m_sv_UP);
+                        mytt_isgenele[4*j+3].SetPtEtaPhiM((myele+mytau_isgenele[4*j+3]+mymet_isgenele[4*j+3]).Pt(),(myele+mytau_isgenele[4*j+3]+mymet_isgenele[4*j+3]).Eta(),(myele+mytau_isgenele[4*j+3]+mymet_isgenele[4*j+3]).Phi(),m_sv_DOWN);
                         //m_btt
                         m_btt_isgenele[4*j+2] = (mytt_isgenele[4*j+2]+myb1).M();
                         m_btt_isgenele[4*j+3] = (mytt_isgenele[4*j+3]+myb1).M();
@@ -1008,93 +956,121 @@ int main(int argc, char** argv){
             }
         }
         
-        //#####################muon ES shifting##############################
-        std::vector<TLorentzVector> myshiftedmu;
-        std::vector<TLorentzVector> mymet_shiftedmu;
-        std::vector<TLorentzVector> mytt_shiftedmu;
-        std::vector<float> m_btt_shiftedmu;
-        for (int j = 0; j < 6; j++){
-            myshiftedmu.push_back(mymu);
-            mymet_shiftedmu.push_back(mymet);
-            mytt_shiftedmu.push_back(mytt);
-            m_btt_shiftedmu.push_back(m_btt);
+        //#####################electron ES shifting##############################
+        std::vector<TLorentzVector> myshiftedele;
+        std::vector<TLorentzVector> mymet_shiftedele;
+        std::vector<TLorentzVector> mytt_shiftedele;
+        std::vector<float> m_btt_shiftedele;
+        for (int j = 0; j < 4; j++){
+            myshiftedele.push_back(myele);
+            mymet_shiftedele.push_back(mymet);
+            mytt_shiftedele.push_back(mytt);
+            m_btt_shiftedele.push_back(m_btt);
         }
-        float muonESetabins[4] = {0,1.4,2.1,2.4};
-        float muonES_updowntonom_byeta[6] = {1.004,0.996,1.009,0.991,1.027,0.973};//correction on top of nominal already applied; ordered by: eta1.4updown, 1.4eta2.1updown, 2.1eta2.4updown; same for both MC and emb
-        for (int j = 0; j < 3; j++){
-            if ((gen_match_1==2 or gen_match_1==4) && fabs(eta_1)>muonESetabins[j] && fabs(eta_1)<muonESetabins[j+1]){
-                //mymu
-                myshiftedmu[2*j] *= muonES_updowntonom_byeta[2*j];
-                myshiftedmu[2*j+1] *= muonES_updowntonom_byeta[2*j+1];
+        float eleESetabins[3] = {0,1.5,2.4};
+        float eleES_updowntonom_byeta[4] = {1.005,0.995,1.0125,0.9875};//correction on top of nominal already applied; ordered by: barrel up/down, endcap up/down
+        for (int j = 0; j < 2; j++){
+            if (fabs(eta_1)>eleESetabins[j] && fabs(eta_1)<eleESetabins[j+1]){//don't need to check gen match, can shift anything that is reco ele
+                //myele
+                myshiftedele[2*j] *= eleES_updowntonom_byeta[2*j];
+                myshiftedele[2*j+1] *= eleES_updowntonom_byeta[2*j+1];
                 //mymet
-                mymet_shiftedmu[2*j] = mymet + mymu - myshiftedmu[2*j];
-                mymet_shiftedmu[2*j+1] = mymet + mymu - myshiftedmu[2*j+1];;
+                mymet_shiftedele[2*j] = mymet + myele - myshiftedele[2*j];
+                mymet_shiftedele[2*j+1] = mymet + myele - myshiftedele[2*j+1];;
                 //mytt
-                mytt_shiftedmu[2*j].SetPtEtaPhiM((myshiftedmu[2*j]+mytau+mymet_shiftedmu[2*j]).Pt(),(myshiftedmu[2*j]+mytau+mymet_shiftedmu[2*j]).Eta(),(myshiftedmu[2*j]+mytau+mymet_shiftedmu[2*j]).Phi(),m_sv_muonESUp);
-                mytt_shiftedmu[2*j+1].SetPtEtaPhiM((myshiftedmu[2*j+1]+mytau+mymet_shiftedmu[2*j+1]).Pt(),(myshiftedmu[2*j+1]+mytau+mymet_shiftedmu[2*j+1]).Eta(),(myshiftedmu[2*j+1]+mytau+mymet_shiftedmu[2*j+1]).Phi(),m_sv_muonESDown);
+                mytt_shiftedele[2*j].SetPtEtaPhiM((myshiftedele[2*j]+mytau+mymet_shiftedele[2*j]).Pt(),(myshiftedele[2*j]+mytau+mymet_shiftedele[2*j]).Eta(),(myshiftedele[2*j]+mytau+mymet_shiftedele[2*j]).Phi(),m_sv_ESCALEUP);
+                mytt_shiftedele[2*j+1].SetPtEtaPhiM((myshiftedele[2*j+1]+mytau+mymet_shiftedele[2*j+1]).Pt(),(myshiftedele[2*j+1]+mytau+mymet_shiftedele[2*j+1]).Eta(),(myshiftedele[2*j+1]+mytau+mymet_shiftedele[2*j+1]).Phi(),m_sv_ESCALEDOWN);
                 //m_btt
-                m_btt_shiftedmu[2*j] = (mytt_shiftedmu[2*j]+myb1).M();
-                m_btt_shiftedmu[2*j+1] = (mytt_shiftedmu[2*j+1]+myb1).M();
+                m_btt_shiftedele[2*j] = (mytt_shiftedele[2*j]+myb1).M();
+                m_btt_shiftedele[2*j+1] = (mytt_shiftedele[2*j+1]+myb1).M();
             }
         }
         
         //define trigger pt thresholds for different years
-        float single_mupt_thres = 25;
+        float single_elept_thres = 33;
         float single_taupt_thres = 20;
-        float cross_mupt_thres = 21;
-        float cross_taupt_thres = 32;
-        if (year=="2016"){
-            single_mupt_thres = 23;
+        float cross_elept_thres = 25;
+        float cross_taupt_thres = 35;
+        if (year=="2017"){
+            single_elept_thres = 28;
             single_taupt_thres = 20;
-            cross_mupt_thres = 20;
-            cross_taupt_thres = 25;
+            cross_elept_thres = 25;
+            cross_taupt_thres = 35;
+        }
+        if (year=="2016"){//no cross trigger in 2016
+            single_elept_thres = 26;
+            single_taupt_thres = 20;
         }
         //###################re-apply trigger scale factor for re-defined single/cross trigger regions due to shifted muon####################
-        //define trigger sf with nominal muon ES (the usual weights)
+        //define trigger sf with nominal ele ES (the usual weights)
         float trgsf = 1.0;
         float trgsf_single = 1.0;
         float trgsf_cross = 1.0;
+        float trgsf_17emb_single1 = 1.0;
+        float trgsf_17emb_single2 = 1.0;
+        float trgsf_17emb_cross1 = 1.0;
+        float trgsf_17emb_cross2 = 1.0;
         if (sample!="data_obs"){
             if (year=="2018"){
                 if (sample!="embedded"){
-                    trgsf_single = m_trg_ic_ratio;
-                    trgsf_cross = m_trg_20_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
+                    trgsf_single = e_trg_ic_ratio;
+                    trgsf_cross = e_trg_24_ic_ratio * t_trg_pog_deeptau_medium_etau_ratio;
                 }
                 if (sample=="embedded"){
-                    trgsf_single = m_trg_ic_embed_ratio;
-                    trgsf_cross = m_trg_20_ic_embed_ratio * t_trg_mediumDeepTau_mutau_embed_ratio;
+                    trgsf_single = e_trg_ic_embed_ratio;
+                    trgsf_cross = e_trg_24_ic_embed_ratio * t_trg_mediumDeepTau_etau_embed_ratio;
                 }
             }
             if (year=="2017"){
                 if (sample!="embedded"){
-                    trgsf_single = m_trg_ic_ratio;
-                    trgsf_cross = m_trg_MuTau_Mu20Leg_desy_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
+                    trgsf_single = e_trg_ic_ratio;
+                    trgsf_cross = e_trg_24_ic_ratio * t_trg_pog_deeptau_medium_etau_ratio;
                 }
                 if (sample=="embedded"){
-                    trgsf_single = m_trg_ic_embed_ratio;
-                    trgsf_cross = m_trg_20_ic_embed_ratio * t_trg_mediumDeepTau_mutau_embed_ratio;
+                    trgsf_17emb_single1 = e_trg_ic_embed_ratio;
+                    trgsf_17emb_single2 = e_trg_ic_data;
+                    trgsf_17emb_cross1 = e_trg_24_ic_embed_ratio * et_emb_LooseChargedIsoPFTau30_kit_ratio;
+                    trgsf_17emb_cross2 = e_trg_24_ic_data * t_trg_mediumDeepTau_etau_data;
                 }
             }
             if (year=="2016"){
                 if (sample!="embedded"){
-                    trgsf_single = m_trg_ic_ratio;
-                    trgsf_cross = m_trg_19_ic_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
+                    trgsf_single = e_trg_ic_ratio;
                 }
                 if (sample=="embedded"){
-                    trgsf_single = m_trg_ic_embed_ratio;
-                    trgsf_cross = m_trg_19_ic_embed_ratio * t_trg_pog_deeptau_medium_mutau_ratio;
+                    trgsf_single = e_trg_ic_embed_ratio;
                 }
             }
+        }//nominal
+        if (isSingleTrigger && pt_1>single_elept_thres) trgsf = trgsf_single;
+        if (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres) trgsf = trgsf_cross;
+        if (year=="2017" && sample=="embedded"){
+            if (fabs(eta_1)<1.479 or (fabs(eta_1)>1.479 && pt_1>40)){
+                if (isSingleTrigger && pt_1>single_elept_thres) trgsf = trgsf_17emb_single1;
+                if (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres) trgsf = trgsf_17emb_cross1;
+            }
+            if (fabs(eta_1)>1.479 && pt_1<40){
+                if (isSingleTrigger && pt_1>single_elept_thres) trgsf = trgsf_17emb_single2;
+                if (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres) trgsf = trgsf_17emb_cross2;
+            }
         }
-        if (isSingleTrigger && pt_1>single_mupt_thres) trgsf = trgsf_single;
-        if (isCrossTrigger && pt_1<single_mupt_thres && pt_1>cross_mupt_thres) trgsf = trgsf_cross;
         
-        //for shifted trigger regions due to shifted muon ES
-        std::vector<float> trgsf_shiftedmu;
-        for (int j = 0; j < 6; j++){
-            trgsf_shiftedmu.push_back(1.0);
-            if (isSingleTrigger && myshiftedmu[j].Pt()>single_mupt_thres) trgsf_shiftedmu[j] = trgsf_single;
-            if (isCrossTrigger && myshiftedmu[j].Pt()<single_mupt_thres && myshiftedmu[j].Pt()>cross_mupt_thres) trgsf_shiftedmu[j] = trgsf_cross;
+        //for shifted trigger regions due to shifted electron ES
+        std::vector<float> trgsf_shiftedele;
+        for (int j = 0; j < 4; j++){
+            trgsf_shiftedele.push_back(1.0);
+            if (isSingleTrigger && myshiftedele[j].Pt()>single_elept_thres) trgsf_shiftedele[j] = trgsf_single;
+            if (isCrossTrigger && myshiftedele[j].Pt()<single_elept_thres && myshiftedele[j].Pt()>cross_elept_thres) trgsf_shiftedele[j] = trgsf_cross;
+            if (year=="2017" && sample=="embedded"){
+                if (fabs(eta_1)<1.479 or (fabs(eta_1)>1.479 && myshiftedele[j].Pt()>40)){
+                    if (isSingleTrigger && myshiftedele[j].Pt()>single_elept_thres) trgsf_shiftedele[j] = trgsf_17emb_single1;
+                    if (isCrossTrigger && myshiftedele[j].Pt()<single_elept_thres && myshiftedele[j].Pt()>cross_elept_thres) trgsf_shiftedele[j] = trgsf_17emb_cross1;
+                }
+                if (fabs(eta_1)>1.479 && myshiftedele[j].Pt()<40){
+                    if (isSingleTrigger && myshiftedele[j].Pt()>single_elept_thres) trgsf_shiftedele[j] = trgsf_17emb_single2;
+                    if (isCrossTrigger && myshiftedele[j].Pt()<single_elept_thres && myshiftedele[j].Pt()>cross_elept_thres) trgsf_shiftedele[j] = trgsf_17emb_cross2;
+                }
+            }
         }
         
         //#######################jet uncertainties shifting########################
@@ -1108,7 +1084,7 @@ int main(int argc, char** argv){
             mymet_jet.push_back(mymet);
             mytt_jet.push_back(mytt);
             mymet_jet[j].SetPtEtaPhiM(met_jetvar[j],0,metphi_jetvar[j],0);
-            mytt_jet[j].SetPtEtaPhiM((mymu+mytau+mymet_jet[j]).Pt(),(mymu+mytau+mymet_jet[j]).Eta(),(mymu+mytau+mymet_jet[j]).Phi(),m_sv_jetvar[j]);
+            mytt_jet[j].SetPtEtaPhiM((myele+mytau+mymet_jet[j]).Pt(),(myele+mytau+mymet_jet[j]).Eta(),(myele+mytau+mymet_jet[j]).Phi(),m_sv_jetvar[j]);
             m_btt_jet.push_back((mytt_jet[j]+myb1).M());
         }
         
@@ -1179,7 +1155,7 @@ int main(int argc, char** argv){
             if (njets>=njetsbins[j] && njets<njetsbins[j+1]){
                 for (int k = 0; k < 4; k++){
                     mymet_recoil[4*j+k].SetPtEtaPhiM(met_recoilvar[k],0,metphi_recoilvar[k],0);
-                    mytt_recoil[4*j+k].SetPtEtaPhiM((mymu+mytau+mymet_recoil[4*j+k]).Pt(),(mymu+mytau+mymet_recoil[4*j+k]).Eta(),(mymu+mytau+mymet_recoil[4*j+k]).Phi(),m_sv_recoilvar[k]);
+                    mytt_recoil[4*j+k].SetPtEtaPhiM((myele+mytau+mymet_recoil[4*j+k]).Pt(),(myele+mytau+mymet_recoil[4*j+k]).Eta(),(myele+mytau+mymet_recoil[4*j+k]).Phi(),m_sv_recoilvar[k]);
                     m_btt_recoil[4*j+k] = (mytt_recoil[4*j+k]+myb1).M();
                 }
             }
@@ -1198,7 +1174,7 @@ int main(int argc, char** argv){
             m_btt_UES.push_back(m_btt);
             
             mymet_UES[j].SetPtEtaPhiM(met_UESvar[j],0,metphi_UESvar[j],0);
-            mytt_UES[j].SetPtEtaPhiM((mymu+mytau+mymet_UES[j]).Pt(),(mymu+mytau+mymet_UES[j]).Eta(),(mymu+mytau+mymet_UES[j]).Phi(),m_sv_UESvar[j]);
+            mytt_UES[j].SetPtEtaPhiM((myele+mytau+mymet_UES[j]).Pt(),(myele+mytau+mymet_UES[j]).Eta(),(myele+mytau+mymet_UES[j]).Phi(),m_sv_UESvar[j]);
             m_btt_UES[j] = (mytt_UES[j]+myb1).M();
         }
         
@@ -1213,36 +1189,36 @@ int main(int argc, char** argv){
             mymet_jer.push_back(mymet);
             mytt_jer.push_back(mytt);
             mymet_jer[j].SetPtEtaPhiM(met_jervar[j],0,metphi_jervar[j],0);
-            mytt_jer[j].SetPtEtaPhiM((mymu+mytau+mymet_jer[j]).Pt(),(mymu+mytau+mymet_jer[j]).Eta(),(mymu+mytau+mymet_jer[j]).Phi(),m_sv_jervar[j]);
+            mytt_jer[j].SetPtEtaPhiM((myele+mytau+mymet_jer[j]).Pt(),(myele+mytau+mymet_jer[j]).Eta(),(myele+mytau+mymet_jer[j]).Phi(),m_sv_jervar[j]);
             m_btt_jer.push_back((mytt_jer[j]+myb1).M());
         }
         
         //##########################trigger regions with nominal/shifted ES###########################
         //nominal
-        bool trigger_region_nominal = (isSingleTrigger && pt_1>single_mupt_thres && pt_2>single_taupt_thres) or (isCrossTrigger && pt_1<single_mupt_thres && pt_1>cross_mupt_thres && pt_2>cross_taupt_thres);
+        bool trigger_region_nominal = (isSingleTrigger && pt_1>single_elept_thres && pt_2>single_taupt_thres) or (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres && pt_2>cross_taupt_thres);
         //shifted tau ES
         std::vector<bool> trigger_region_shiftedtau;
         for (int j = 0; j < 8; j++){
             trigger_region_shiftedtau.push_back(0);
-            trigger_region_shiftedtau[j] = (isSingleTrigger && pt_1>single_mupt_thres && myshiftedtau[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_mupt_thres && pt_1>cross_mupt_thres && myshiftedtau[j].Pt()>cross_taupt_thres);
+            trigger_region_shiftedtau[j] = (isSingleTrigger && pt_1>single_elept_thres && myshiftedtau[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres && myshiftedtau[j].Pt()>cross_taupt_thres);
         }
         //muon->tauh fake ES
         std::vector<bool> trigger_region_tauisgenmu;
         for (int j = 0; j < 2; j++){
             trigger_region_tauisgenmu.push_back(0);
-            trigger_region_tauisgenmu[j] = (isSingleTrigger && pt_1>single_mupt_thres && mytau_isgenmu[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_mupt_thres && pt_1>cross_mupt_thres && mytau_isgenmu[j].Pt()>cross_taupt_thres);
+            trigger_region_tauisgenmu[j] = (isSingleTrigger && pt_1>single_elept_thres && mytau_isgenmu[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres && mytau_isgenmu[j].Pt()>cross_taupt_thres);
         }
         //electron->tauh fake ES
         std::vector<bool> trigger_region_tauisgenele;
         for (int j = 0; j < 8; j++){
             trigger_region_tauisgenele.push_back(0);
-            trigger_region_tauisgenele[j] = (isSingleTrigger && pt_1>single_mupt_thres && mytau_isgenele[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_mupt_thres && pt_1>cross_mupt_thres && mytau_isgenele[j].Pt()>cross_taupt_thres);
+            trigger_region_tauisgenele[j] = (isSingleTrigger && pt_1>single_elept_thres && mytau_isgenele[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres && mytau_isgenele[j].Pt()>cross_taupt_thres);
         }
-        //shifted muon ES
-        std::vector<bool> trigger_region_shiftedmu;
-        for (int j = 0; j < 6; j++){
-            trigger_region_shiftedmu.push_back(0);
-            trigger_region_shiftedmu[j] = (isSingleTrigger && myshiftedmu[j].Pt()>single_mupt_thres && pt_2>single_taupt_thres) or (isCrossTrigger && myshiftedmu[j].Pt()<single_mupt_thres && myshiftedmu[j].Pt()>cross_mupt_thres && pt_2>cross_taupt_thres);
+        //shifted electron ES
+        std::vector<bool> trigger_region_shiftedele;
+        for (int j = 0; j < 4; j++){
+            trigger_region_shiftedele.push_back(0);
+            trigger_region_shiftedele[j] = (isSingleTrigger && myshiftedele[j].Pt()>single_elept_thres && pt_2>single_taupt_thres) or (isCrossTrigger && myshiftedele[j].Pt()<single_elept_thres && myshiftedele[j].Pt()>cross_elept_thres && pt_2>cross_taupt_thres);
         }
         
         //############################trigger sf shifting################################
@@ -1251,21 +1227,29 @@ int main(int argc, char** argv){
             trigger_shiftedsf.push_back(1.0);//=1.0 do not shift by default
         }//[0]:single_up, [1]:single_down, [2]:cross_up, [3]:cross_down
         if (sample!="data_obs"){
-            if (isSingleTrigger && pt_1>single_mupt_thres){//single lepton, same updown 2% for both MC and emb
+            if (isSingleTrigger && pt_1>single_elept_thres){//single lepton, same updown 2% for both MC and emb
                 trigger_shiftedsf[0] = 1.02;
                 trigger_shiftedsf[1] = 0.98;
             }
-            if (isCrossTrigger && pt_1<single_mupt_thres && pt_1>cross_mupt_thres){
+            if (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres){
                 if (sample!="embedded"){//MC
-                    trigger_shiftedsf[2] = t_trg_pog_deeptau_medium_mutau_ratio_up/t_trg_pog_deeptau_medium_mutau_ratio;
-                    trigger_shiftedsf[3] = t_trg_pog_deeptau_medium_mutau_ratio_down/t_trg_pog_deeptau_medium_mutau_ratio;
+                    trigger_shiftedsf[2] = t_trg_pog_deeptau_medium_etau_ratio_up/t_trg_pog_deeptau_medium_etau_ratio;
+                    trigger_shiftedsf[3] = t_trg_pog_deeptau_medium_etau_ratio_down/t_trg_pog_deeptau_medium_etau_ratio;
                 }
-                else {//embedded
-                    trigger_shiftedsf[2] = t_trg_mediumDeepTau_mutau_embed_ratio_up/t_trg_mediumDeepTau_mutau_embed_ratio;
-                    trigger_shiftedsf[3] = t_trg_mediumDeepTau_mutau_embed_ratio_down/t_trg_mediumDeepTau_mutau_embed_ratio;
-                    if (year=="2016"){
-                        trigger_shiftedsf[2] = t_trg_pog_deeptau_medium_mutau_ratio_up/t_trg_pog_deeptau_medium_mutau_ratio;
-                        trigger_shiftedsf[3] = t_trg_pog_deeptau_medium_mutau_ratio_down/t_trg_pog_deeptau_medium_mutau_ratio;
+                if (sample=="embedded"){
+                    if (year!="2017"){
+                        trigger_shiftedsf[2] = t_trg_mediumDeepTau_etau_embed_ratio_up/t_trg_mediumDeepTau_etau_embed_ratio;
+                        trigger_shiftedsf[3] = t_trg_mediumDeepTau_etau_embed_ratio_down/t_trg_mediumDeepTau_etau_embed_ratio;
+                    }
+                    if (year=="2017"){
+                        if (fabs(eta_1)<1.479){
+                            trigger_shiftedsf[2] = 1;
+                            trigger_shiftedsf[3] = 1;
+                        }
+                        else {
+                            trigger_shiftedsf[2] = 1;
+                            trigger_shiftedsf[3] = 1;
+                        }
                     }
                 }
             }
@@ -1279,20 +1263,19 @@ int main(int argc, char** argv){
             if (byMediumDeepVSjet_2){
                 if (nbtag20==1){//1 bjet category
                     if (trigger_region_nominal){//nominal trigger region
-                        //nominal
                         h_iso[0][0]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]);
                         h_iso[1][0]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]);
                         h_iso[2][0]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]);
                         h_iso[3][0]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]);
-                        //fill shifted histograms for non data
+                        
                         if (sample!="data_obs"){
-                            for (int k = 0; k < 14; k++){
+                            for (int k = 0; k < 14; k++){//[0] all nominal, [1-14] tauID shifted
                                 h_iso[0][k+1]->Fill(pt_1,weight_corr*trgsf*sf_tauid[k]);
                                 h_iso[1][k+1]->Fill(pt_2,weight_corr*trgsf*sf_tauid[k]);
                                 h_iso[2][k+1]->Fill(m_sv,weight_corr*trgsf*sf_tauid[k]);
                                 h_iso[3][k+1]->Fill(m_btt,weight_corr*trgsf*sf_tauid[k]);
                             }
-                            for (int k = 0; k < 22; k++){
+                            for (int k = 0; k < 22; k++){//[23-44] jet uncertainties
                                 h_iso[0][k+23]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]);
                                 h_iso[1][k+23]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]);
                                 h_iso[2][k+23]->Fill(mytt_jet[k].M(),weight_corr*trgsf*sf_tauid[0]);
@@ -1357,7 +1340,7 @@ int main(int argc, char** argv){
                                 h_iso[3][k+90]->Fill(m_btt_jer[k],weight_corr*trgsf*sf_tauid[0]);
                             }
                         }//end of sample!="data_obs"
-                    }//end of nominal trigger region
+                    }//end of nominal trgger region
                     if (sample!="data_obs"){
                         //loop over trigger regions with shifted tau
                         for (int k = 0; k < 8; k++){//h_OS[15-22] tau energy scale
@@ -1386,17 +1369,17 @@ int main(int argc, char** argv){
                                 h_iso[3][k+47]->Fill(m_btt_isgenele[k],weight_corr*trgsf*sf_tauid[0]);
                             }
                         }
-                        //loop over trigger regions with shifted muon
-                        for (int k = 0; k < 6; k++){
-                            if (trigger_region_shiftedmu[k]){
-                                h_iso[0][k+59]->Fill(myshiftedmu[k].Pt(),weight_corr*trgsf_shiftedmu[k]*sf_tauid[0]);
-                                h_iso[1][k+59]->Fill(pt_2,weight_corr*trgsf_shiftedmu[k]*sf_tauid[0]);
-                                h_iso[2][k+59]->Fill(mytt_shiftedmu[k].M(),weight_corr*trgsf_shiftedmu[k]*sf_tauid[0]);
-                                h_iso[3][k+59]->Fill(m_btt_shiftedmu[k],weight_corr*trgsf_shiftedmu[k]*sf_tauid[0]);
+                        //loop over trigger regions with shifted electron
+                        for (int k = 0; k < 4; k++){
+                            if (trigger_region_shiftedele[k]){
+                                h_iso[0][k+59]->Fill(myshiftedele[k].Pt(),weight_corr*trgsf_shiftedele[k]*sf_tauid[0]);
+                                h_iso[1][k+59]->Fill(pt_2,weight_corr*trgsf_shiftedele[k]*sf_tauid[0]);
+                                h_iso[2][k+59]->Fill(mytt_shiftedele[k].M(),weight_corr*trgsf_shiftedele[k]*sf_tauid[0]);
+                                h_iso[3][k+59]->Fill(m_btt_shiftedele[k],weight_corr*trgsf_shiftedele[k]*sf_tauid[0]);
                             }
                         }
                     }//end of sample!="data_obs"
-                }//end of 1 bjet
+                }//end of nbtag==1
             }//end of isolated region
             
             //anti-isolated tau region for fake background
@@ -1412,17 +1395,17 @@ int main(int argc, char** argv){
                 
                 float xtrgfakefactor = 1.0;//tighter cuts applied at cross trigger level -> less yields -> scale up to compensate
                 float xtrgfakefactor_updown[2] = {1.0,1.0};
-                if (isCrossTrigger && pt_1<single_mupt_thres && pt_1>cross_mupt_thres){
+                if (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres){
                     xtrgfakefactor = 1.5;//nominal
                     xtrgfakefactor_updown[0] = 1.6;//+/-20%
                     xtrgfakefactor_updown[1] = 1.4;
                 }
                 
-                std::vector<float> xtrgfakefactor_shiftedmu;
-                //for shifted mu (re-defined single/cross)
+                std::vector<float> xtrgfakefactor_shiftedele;
+                //for shifted electron (re-defined single/cross)
                 for (int k = 0; k < 6; k++){
-                    xtrgfakefactor_shiftedmu.push_back(1.0);
-                    if (isCrossTrigger && myshiftedmu[k].Pt()<single_mupt_thres && myshiftedmu[k].Pt()>cross_mupt_thres) xtrgfakefactor_shiftedmu[k] = 1.5;
+                    xtrgfakefactor_shiftedele.push_back(1.0);
+                    if (isCrossTrigger && myshiftedele[k].Pt()<single_elept_thres && myshiftedele[k].Pt()>cross_elept_thres) xtrgfakefactor_shiftedele[k] = 1.5;
                 }
                 
                 //############################fake rate uncertainties for alldm by pt bins###########################
@@ -1517,13 +1500,13 @@ int main(int argc, char** argv){
                         }
                     }//end of trigger_region_nominal
                     if (sample!="data_obs"){
-                        //loop over trigger regions with shifted muon
-                        for (int k = 0; k < 6; k++){
-                            if (trigger_region_shiftedmu[k]){
-                                h_anti[0][k+27]->Fill(myshiftedmu[k].Pt(),weight_corr*weight_fake*trgsf_shiftedmu[k]*xtrgfakefactor_shiftedmu[k]);
-                                h_anti[1][k+27]->Fill(pt_2,weight_corr*weight_fake*trgsf_shiftedmu[k]*xtrgfakefactor_shiftedmu[k]);
-                                h_anti[2][k+27]->Fill(mytt_shiftedmu[k].M(),weight_corr*weight_fake*trgsf_shiftedmu[k]*xtrgfakefactor_shiftedmu[k]);
-                                h_anti[3][k+27]->Fill(m_btt_shiftedmu[k],weight_corr*weight_fake*trgsf_shiftedmu[k]*xtrgfakefactor_shiftedmu[k]);
+                        //loop over trigger regions with shifted electron
+                        for (int k = 0; k < 4; k++){
+                            if (trigger_region_shiftedele[k]){
+                                h_anti[0][k+27]->Fill(myshiftedele[k].Pt(),weight_corr*weight_fake*trgsf_shiftedele[k]*xtrgfakefactor_shiftedele[k]);
+                                h_anti[1][k+27]->Fill(pt_2,weight_corr*weight_fake*trgsf_shiftedele[k]*xtrgfakefactor_shiftedele[k]);
+                                h_anti[2][k+27]->Fill(mytt_shiftedele[k].M(),weight_corr*weight_fake*trgsf_shiftedele[k]*xtrgfakefactor_shiftedele[k]);
+                                h_anti[3][k+27]->Fill(m_btt_shiftedele[k],weight_corr*weight_fake*trgsf_shiftedele[k]*xtrgfakefactor_shiftedele[k]);
                             }
                         }
                     }
@@ -1603,11 +1586,11 @@ int main(int argc, char** argv){
                     h_anti[j][i+23]->Write();
                 }
             }
-            for (int i = 0; i < 6; ++i){
-                h_iso[j][i+59]->SetName(name.c_str()+shape_muonES[i]);
+            for (int i = 0; i < 4; ++i){
+                h_iso[j][i+59]->SetName(name.c_str()+shape_eleES[i]);
                 h_iso[j][i+59]->Write();
                 if (isnonSignal){
-                    h_anti[j][i+27]->SetName(name.c_str()+fake+shape_muonES[i]);
+                    h_anti[j][i+27]->SetName(name.c_str()+fake+shape_eleES[i]);
                     h_anti[j][i+27]->Write();
                 }
             }
