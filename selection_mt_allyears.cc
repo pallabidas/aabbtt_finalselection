@@ -438,6 +438,10 @@ int main(int argc, char** argv){
     TString shape_fake_crosstrg[2] = {"_CMS_crosstrg_fakefactor_"+shape_year+"Up","_CMS_crosstrg_fakefactor_"+shape_year+"Down"};
     //fake rate uncertainties
     TString shape_fakerate[14] = {"_CMS_fakerate_alldm_pt0to25_"+shape_year+"Up","_CMS_fakerate_alldm_pt0to25_"+shape_year+"Down","_CMS_fakerate_alldm_pt25to30_"+shape_year+"Up","_CMS_fakerate_alldm_pt25to30_"+shape_year+"Down","_CMS_fakerate_alldm_pt30to35_"+shape_year+"Up","_CMS_fakerate_alldm_pt30to35_"+shape_year+"Down","_CMS_fakerate_alldm_pt35to40_"+shape_year+"Up","_CMS_fakerate_alldm_pt35to40_"+shape_year+"Down","_CMS_fakerate_alldm_pt40to50_"+shape_year+"Up","_CMS_fakerate_alldm_pt40to50_"+shape_year+"Down","_CMS_fakerate_alldm_pt50to60_"+shape_year+"Up","_CMS_fakerate_alldm_pt50to60_"+shape_year+"Down","_CMS_fakerate_alldm_ptgt60_"+shape_year+"Up","_CMS_fakerate_alldm_ptgt60_"+shape_year+"Down"};
+    //TauID sf for ele->tauh fake
+    TString shape_tauideff_efake[4] = {"_CMS_tauideff_VSe_barrel_"+shape_year+"Up","_CMS_tauideff_VSe_barrel_"+shape_year+"Down","_CMS_tauideff_VSe_endcap_"+shape_year+"Up","_CMS_tauideff_VSe_endcap_"+shape_year+"Down"};
+    //TauID sf for mu->tauh fake
+    TString shape_tauideff_mufake[10] = {"_CMS_tauideff_VSmu_eta0to0p4_"+shape_year+"Up","_CMS_tauideff_VSmu_eta0to0p4_"+shape_year+"Down","_CMS_tauideff_VSmu_eta0p4to0p8_"+shape_year+"Up","_CMS_tauideff_VSmu_eta0p4to0p8_"+shape_year+"Down","_CMS_tauideff_VSmu_eta0p8to1p2_"+shape_year+"Up","_CMS_tauideff_VSmu_eta0p8to1p2_"+shape_year+"Down","_CMS_tauideff_VSmu_eta1p2to1p7_"+shape_year+"Up","_CMS_tauideff_VSmu_eta1p2to1p7_"+shape_year+"Down","_CMS_tauideff_VSmu_eta1p7to2p3_"+shape_year+"Up","_CMS_tauideff_VSmu_eta1p7to2p3_"+shape_year+"Down"};
     
     //for emb only
     TString embshape_tauideff[14] = {"_CMS_emb_tauideff_pt20to25_"+shape_year+"Up","_CMS_emb_tauideff_pt20to25_"+shape_year+"Down","_CMS_emb_tauideff_pt25to30_"+shape_year+"Up","_CMS_emb_tauideff_pt25to30_"+shape_year+"Down","_CMS_emb_tauideff_pt30to35_"+shape_year+"Up","_CMS_emb_tauideff_pt30to35_"+shape_year+"Down","_CMS_emb_tauideff_pt35to40_"+shape_year+"Up","_CMS_emb_tauideff_pt35to40_"+shape_year+"Down","_CMS_emb_tauideff_pt40to500_"+shape_year+"Up","_CMS_emb_tauideff_pt40to500_"+shape_year+"Down","_CMS_emb_tauideff_pt500to1000_"+shape_year+"Up","_CMS_emb_tauideff_pt500to1000_"+shape_year+"Down","_CMS_emb_tauideff_ptgt1000_"+shape_year+"Up","_CMS_emb_tauideff_ptgt1000_"+shape_year+"Down"};
@@ -460,7 +464,7 @@ int main(int argc, char** argv){
         h_iso.push_back(std::vector<TH1F*>());
         h_anti.push_back(std::vector<TH1F*>());
     }
-    for (int i = 0; i < 92; i++){//i=0 for nominal, 1-14 tauIDeff, 15-22 tauES, 23-44 jet, 45-46 muon->tauhES, 47-54 ele->tauhES, 55-58 trgeff, 59-64 muonES, 65-70 tau tracking, 71-72 (only DY MC) zpt, 73-74 (only ttbar) toppt, 75-86 recoil, 87-88 met unclustered ES, 89 nonDY, 90-91 jer
+    for (int i = 0; i < 106; i++){//i=0 for nominal, 1-14 tauIDeff, 15-22 tauES, 23-44 jet, 45-46 muon->tauhES, 47-54 ele->tauhES, 55-58 trgeff, 59-64 muonES, 65-70 tau tracking, 71-72 (only DY MC) zpt, 73-74 (only ttbar) toppt, 75-86 recoil, 87-88 met unclustered ES, 89 nonDY, 90-91 jer, 92-95 efaketau sf, 96-105 mufaketau sf
         h_iso[0].push_back(new TH1F("","",70,10,150));//pt_1
         h_iso[1].push_back(new TH1F("","",45,10,100));//pt_2
         h_iso[2].push_back(new TH1F("","",40,0,400));//m_tt
@@ -662,6 +666,7 @@ int main(int argc, char** argv){
         
         float sf_MC = 1.0;
         float topfactor = 1.0;
+        float taufakesf = 1.0;
         
         //scale factors for MC and corrections
         if (sample!="data_obs" && sample!="embedded"){
@@ -704,45 +709,44 @@ int main(int argc, char** argv){
             //generator weight
             sf_MC *= genweight;
             
-            float taufakesf = 1.0;
             //ele->tauh and muon->tauh sf
             if (gen_match_2==1 or gen_match_2==3){
-                if (fabs(eta_2)<1.448){
-                    taufakesf = 0.95;
-                    if (year=="2017") taufakesf = 0.93;
-                    if (year=="2016") taufakesf = 1.22;
+                if (fabs(eta_2)<1.46){
+                    taufakesf = 0.950;
+                    if (year=="2017") taufakesf = 0.930;
+                    if (year=="2016") taufakesf = 1.220;
                 }
-                else {
-                    taufakesf = 0.86;
-                    if (year=="2017") taufakesf = 1.00;
-                    if (year=="2016") taufakesf = 1.13;
+                if (fabs(eta_2)>1.56) {
+                    taufakesf = 0.860;
+                    if (year=="2017") taufakesf = 1.000;
+                    if (year=="2016") taufakesf = 1.130;
                 }
             }
             if (gen_match_2==2 or gen_match_2==4){
                 if (fabs(eta_2)<0.4){
-                    taufakesf = 0.936*0.820;
-                    if (year=="2017") taufakesf = 0.979*0.991;
-                    if (year=="2016") taufakesf = 0.978*1.463;
+                    taufakesf = 0.768;
+                    if (year=="2017") taufakesf = 0.970;
+                    if (year=="2016") taufakesf = 1.431;
                 }
                 else if (fabs(eta_2)<0.8){
-                    taufakesf = 0.874*1.436;
-                    if (year=="2017") taufakesf = 0.953*0.675;
-                    if (year=="2016") taufakesf = 1.003*0.722;
+                    taufakesf = 1.255;
+                    if (year=="2017") taufakesf = 0.643;
+                    if (year=="2016") taufakesf = 0.724;
                 }
                 else if (fabs(eta_2)<1.2){
-                    taufakesf = 0.912*0.989;
-                    if (year=="2017") taufakesf = 0.983*0.675;
-                    if (year=="2016") taufakesf = 0.992*1.337;
+                    taufakesf = 0.902;
+                    if (year=="2017") taufakesf = 0.664;
+                    if (year=="2016") taufakesf = 1.326;
                 }
                 else if (fabs(eta_2)<1.7){
-                    taufakesf = 0.953*0.875;
-                    if (year=="2017") taufakesf = 0.988*1.098;
-                    if (year=="2016") taufakesf = 1.003*0.966;
+                    taufakesf = 0.834;
+                    if (year=="2017") taufakesf = 1.085;
+                    if (year=="2016") taufakesf = 0.969;
                 }
                 else {
-                    taufakesf = 0.936*4.739;
-                    if (year=="2017") taufakesf = 1.004*4.175;
-                    if (year=="2016") taufakesf = 0.966*5.451;
+                    taufakesf = 4.436;
+                    if (year=="2017") taufakesf = 4.192;
+                    if (year=="2016") taufakesf = 5.266;
                 }
             }
             sf_MC *= taufakesf;
@@ -781,7 +785,7 @@ int main(int argc, char** argv){
             sf_embed *= genweight;
         }
         
-        float weight_corr = weight * sf_MC * sf_embed;//end of applying fixed (no shifted systematics) scale factors to MC
+        float weight_corr = weight * sf_MC * sf_embed;
         
         //counting reconstructed btagged jets
         int nbtag20 = 0;
@@ -855,22 +859,140 @@ int main(int argc, char** argv){
             mytt_shiftedtau.push_back(mytt);
             m_btt_shiftedtau.push_back(m_btt);
         }
-        float taudecaymode[4] = {0,1,10,11};
-        float tauES_updowntonom_bymode[8] = {(0.984+0.009)/0.984,(0.984-0.009)/0.984,(0.996+0.006)/0.996,(0.996-0.006)/0.996,(0.988+0.007)/0.988,(0.988-0.007)/0.988,(0.996+0.012)/0.996,(0.996-0.012)/0.996};//=(ES_nom+/-uncert)/ES_nom, mytau already had nominal tes correction applied at skimming levle; ordered by: mode0up, mode0down, mode1up, mode1down,...
-        float tauES_updowntonom_bymode2017[8] = {(0.984+0.009)/0.984,(0.984-0.009)/0.984,(0.996+0.006)/0.996,(0.996-0.006)/0.996,(0.988+0.007)/0.988,(0.988-0.007)/0.988,(0.996+0.012)/0.996,(0.996-0.012)/0.996};
-        float tauES_updowntonom_bymode2016[8] = {(0.984+0.009)/0.984,(0.984-0.009)/0.984,(0.996+0.006)/0.996,(0.996-0.006)/0.996,(0.988+0.007)/0.988,(0.988-0.007)/0.988,(0.996+0.012)/0.996,(0.996-0.012)/0.996};
+        
+        //define TES central and uncert values by DM and low/high pt
+        float tes_dm0_cent = 0.984;
+        float tes_dm1_cent = 0.996;
+        float tes_dm10_cent = 0.988;
+        float tes_dm11_cent = 0.996;
+        float tes_dm0_lowpt_uncer = 0.009;
+        float tes_dm1_lowpt_uncer = 0.006;
+        float tes_dm10_lowpt_uncer = 0.007;
+        float tes_dm11_lowpt_uncer = 0.012;
+        float tes_dm0_highpt_uncer = 0.03;
+        float tes_dm1_highpt_uncer = 0.02;
+        float tes_dm10_highpt_uncer = 0.011;
+        float tes_dm11_highpt_uncer = 0.039;
         if (year=="2017"){
-            for (int j = 0; j < 8; j++) tauES_updowntonom_bymode[j] = tauES_updowntonom_bymode2017[j];
+            tes_dm0_cent = 1.004;
+            tes_dm1_cent = 1.002;
+            tes_dm10_cent = 1.001;
+            tes_dm11_cent = 0.987;
+            tes_dm0_lowpt_uncer = 0.01;
+            tes_dm1_lowpt_uncer = 0.006;
+            tes_dm10_lowpt_uncer = 0.007;
+            tes_dm11_lowpt_uncer = 0.014;
+            tes_dm0_highpt_uncer = 0.03;
+            tes_dm1_highpt_uncer = 0.027;
+            tes_dm10_highpt_uncer = 0.017;
+            tes_dm11_highpt_uncer = 0.04;
         }
         if (year=="2016"){
-            for (int j = 0; j < 8; j++) tauES_updowntonom_bymode[j] = tauES_updowntonom_bymode2016[j];
+            tes_dm0_cent = 0.991;
+            tes_dm1_cent = 0.999;
+            tes_dm10_cent = 1.003;
+            tes_dm11_cent = 0.998;
+            tes_dm0_lowpt_uncer = 0.008;
+            tes_dm1_lowpt_uncer = 0.006;
+            tes_dm10_lowpt_uncer = 0.008;
+            tes_dm11_lowpt_uncer = 0.011;
+            tes_dm0_highpt_uncer = 0.03;
+            tes_dm1_highpt_uncer = 0.02;
+            tes_dm10_highpt_uncer = 0.012;
+            tes_dm11_highpt_uncer = 0.027;
         }
-        float tauES_updowntonom_bymode_emb[8] = {1.0039,0.9961,1.0037,0.9969,1.0032,0.9968,1.0032,0.9968};
-        if (sample=="embedded"){
-            for (int j = 0; j < 8; j++){
-                tauES_updowntonom_bymode[j] = tauES_updowntonom_bymode_emb[j];
-            }
+        //define TES factors to apply, which uncorrect central and recorrect with shifted tes, split by DM and 3 pt bins
+        //dm0
+        float tes_dm0_lowpt_up = 1.0 + tes_dm0_lowpt_uncer/tes_dm0_cent;//for pt_2<34
+        float tes_dm0_highpt_up = 1.0 + tes_dm0_highpt_uncer/tes_dm0_cent;//for pt_2>170
+        float tes_dm0_midpt_up = 1.0 + (tes_dm0_lowpt_uncer+(tes_dm0_highpt_uncer-tes_dm0_lowpt_uncer)*(pt_2-34.0)/(170.0-34.0))/tes_dm0_cent;//interpolated in between
+        float tes_dm0_lowpt_down = 1.0 - tes_dm0_lowpt_uncer/tes_dm0_cent;
+        float tes_dm0_highpt_down = 1.0 - tes_dm0_highpt_uncer/tes_dm0_cent;
+        float tes_dm0_midpt_down = 1.0 - (tes_dm0_lowpt_uncer+(tes_dm0_highpt_uncer-tes_dm0_lowpt_uncer)*(pt_2-34.0)/(170.0-34.0))/tes_dm0_cent;
+        //dm1
+        float tes_dm1_lowpt_up = 1.0 + tes_dm1_lowpt_uncer/tes_dm1_cent;//for pt_2<34
+        float tes_dm1_highpt_up = 1.0 + tes_dm1_highpt_uncer/tes_dm1_cent;//for pt_2>170
+        float tes_dm1_midpt_up = 1.0 + (tes_dm1_lowpt_uncer+(tes_dm1_highpt_uncer-tes_dm1_lowpt_uncer)*(pt_2-34.0)/(170.0-34.0))/tes_dm1_cent;//interpolated in between
+        float tes_dm1_lowpt_down = 1.0 - tes_dm1_lowpt_uncer/tes_dm1_cent;
+        float tes_dm1_highpt_down = 1.0 - tes_dm1_highpt_uncer/tes_dm1_cent;
+        float tes_dm1_midpt_down = 1.0 - (tes_dm1_lowpt_uncer+(tes_dm1_highpt_uncer-tes_dm1_lowpt_uncer)*(pt_2-34.0)/(170.0-34.0))/tes_dm1_cent;
+        //dm10
+        float tes_dm10_lowpt_up = 1.0 + tes_dm10_lowpt_uncer/tes_dm10_cent;//for pt_2<34
+        float tes_dm10_highpt_up = 1.0 + tes_dm10_highpt_uncer/tes_dm10_cent;//for pt_2>170
+        float tes_dm10_midpt_up = 1.0 + (tes_dm10_lowpt_uncer+(tes_dm10_highpt_uncer-tes_dm10_lowpt_uncer)*(pt_2-34.0)/(170.0-34.0))/tes_dm10_cent;//interpolated in between
+        float tes_dm10_lowpt_down = 1.0 - tes_dm10_lowpt_uncer/tes_dm10_cent;
+        float tes_dm10_highpt_down = 1.0 - tes_dm10_highpt_uncer/tes_dm10_cent;
+        float tes_dm10_midpt_down = 1.0 - (tes_dm10_lowpt_uncer+(tes_dm10_highpt_uncer-tes_dm10_lowpt_uncer)*(pt_2-34.0)/(170.0-34.0))/tes_dm10_cent;
+        //dm11
+        float tes_dm11_lowpt_up = 1.0 + tes_dm11_lowpt_uncer/tes_dm11_cent;//for pt_2<34
+        float tes_dm11_highpt_up = 1.0 + tes_dm11_highpt_uncer/tes_dm11_cent;//for pt_2>170
+        float tes_dm11_midpt_up = 1.0 + (tes_dm11_lowpt_uncer+(tes_dm11_highpt_uncer-tes_dm11_lowpt_uncer)*(pt_2-34.0)/(170.0-34.0))/tes_dm11_cent;//interpolated in between
+        float tes_dm11_lowpt_down = 1.0 - tes_dm11_lowpt_uncer/tes_dm11_cent;
+        float tes_dm11_highpt_down = 1.0 - tes_dm11_highpt_uncer/tes_dm11_cent;
+        float tes_dm11_midpt_down = 1.0 - (tes_dm11_lowpt_uncer+(tes_dm11_highpt_uncer-tes_dm11_lowpt_uncer)*(pt_2-34.0)/(170.0-34.0))/tes_dm11_cent;
+        
+        float tes_dm0_up = tes_dm0_lowpt_up;
+        float tes_dm0_down = tes_dm0_lowpt_down;
+        float tes_dm1_up = tes_dm1_lowpt_up;
+        float tes_dm1_down = tes_dm1_lowpt_down;
+        float tes_dm10_up = tes_dm10_lowpt_up;
+        float tes_dm10_down = tes_dm10_lowpt_down;
+        float tes_dm11_up = tes_dm11_lowpt_up;
+        float tes_dm11_down = tes_dm11_lowpt_down;
+        if (pt_2>34.0 && pt_2<=170.0){
+            tes_dm0_up = tes_dm0_midpt_up;
+            tes_dm0_down = tes_dm0_midpt_down;
+            tes_dm1_up = tes_dm1_midpt_up;
+            tes_dm1_down = tes_dm1_midpt_down;
+            tes_dm10_up = tes_dm10_midpt_up;
+            tes_dm10_down = tes_dm10_midpt_down;
+            tes_dm11_up = tes_dm11_midpt_up;
+            tes_dm11_down = tes_dm11_midpt_down;
         }
+        if (pt_2>170.0){
+            tes_dm0_up = tes_dm0_highpt_up;
+            tes_dm0_down = tes_dm0_highpt_down;
+            tes_dm1_up = tes_dm1_highpt_up;
+            tes_dm1_down = tes_dm1_highpt_down;
+            tes_dm10_up = tes_dm10_highpt_up;
+            tes_dm10_down = tes_dm10_highpt_down;
+            tes_dm11_up = tes_dm11_highpt_up;
+            tes_dm11_down = tes_dm11_highpt_down;
+        }
+        
+        if (sample=="embedded" && year=="2018"){
+            tes_dm0_up = 1.0039;
+            tes_dm0_down = 0.9961;
+            tes_dm1_up = 1.0037;
+            tes_dm1_down = 0.9969;
+            tes_dm10_up = 1.0032;
+            tes_dm10_down = 0.9968;
+            tes_dm11_up = 1.0032;
+            tes_dm11_down = 0.9968;
+        }
+        if (sample=="embedded" && year=="2017"){
+            tes_dm0_up = 1.0041;
+            tes_dm0_down = 0.9958;
+            tes_dm1_up = 1.0052;
+            tes_dm1_down = 0.9979;
+            tes_dm10_up = 1.0044;
+            tes_dm10_down = 0.9954;
+            tes_dm11_up = 1.0044;
+            tes_dm11_down = 0.9954;
+        }
+        if (sample=="embedded" && year=="2016"){
+            tes_dm0_up = 1.0046;
+            tes_dm0_down = 0.9954;
+            tes_dm1_up = 1.0022;
+            tes_dm1_down = 0.9975;
+            tes_dm10_up = 1.0033;
+            tes_dm10_down = 0.9949;
+            tes_dm11_up = 1.0033;
+            tes_dm11_down = 0.9949;
+        }
+        
+        float tauES_updowntonom_bymode[8] = {tes_dm0_up,tes_dm0_down,tes_dm1_up,tes_dm1_down,tes_dm10_up,tes_dm10_down,tes_dm11_up,tes_dm11_down};//=(ES_nom+/-uncert)/ES_nom, mytau already had nominal tes correction applied at skimming levle
+        float taudecaymode[4] = {0,1,10,11};
         for (int j = 0; j < 4; j++){
             if (gen_match_2==5 && l2_decayMode==taudecaymode[j]){//shift only when tau is real and DM is matched
                 //[0]dm0up, [1]dm0down, [2]dm1up, [3]dm1down, [4]dm10up, [5]dm10down, [6]dm11up, [7]dm11down
@@ -923,6 +1045,92 @@ int main(int argc, char** argv){
             }
         }
         
+        //####################tauID SF anti-lepton#####################
+        //e faking tauh
+        std::vector<float> sf_tauid_efake;
+        for (int j = 0; j < 4; j++){
+            sf_tauid_efake.push_back(1.0);
+        }//[0/1]:fabs(eta_2)<1.46 up/down, [2,3]:fabs(eta_2)>1.56 up/down
+        if (sample!="data_obs" && sample!="embedded" && (gen_match_2==1 or gen_match_2==3)){
+            if (fabs(eta_2)<1.46){
+                //up
+                sf_tauid_efake[0] = 1.0 + 0.07/taufakesf;
+                if (year=="2017") sf_tauid_efake[0] = 1.0 + 0.08/taufakesf;
+                if (year=="2016") sf_tauid_efake[0] = 1.0 + 0.08/taufakesf;
+                //down
+                sf_tauid_efake[1] = 1.0 - 0.07/taufakesf;
+                if (year=="2017") sf_tauid_efake[1] = 1.0 - 0.08/taufakesf;
+                if (year=="2016") sf_tauid_efake[1] = 1.0 - 0.08/taufakesf;
+            }
+            if (fabs(eta_2)>1.56){
+                //up
+                sf_tauid_efake[2] = 1.0 + 0.1/taufakesf;
+                if (year=="2017") sf_tauid_efake[2] = 1.0 + 0.12/taufakesf;
+                if (year=="2016") sf_tauid_efake[2] = 1.0 + 0.09/taufakesf;
+                //down
+                sf_tauid_efake[3] = 1.0 - 0.1/taufakesf;
+                if (year=="2017") sf_tauid_efake[3] = 1.0 - 0.12/taufakesf;
+                if (year=="2016") sf_tauid_efake[3] = 1.0 - 0.09/taufakesf;
+            }
+        }
+        //mu faking tauh
+        std::vector<float> sf_tauid_mufake;
+        for (int j = 0; j < 10; j++){
+            sf_tauid_mufake.push_back(1.0);
+        }
+        if (sample!="data_obs" && sample!="embedded" && (gen_match_2==2 or gen_match_2==4)){
+            if (fabs(eta_2)<0.4){
+                //up
+                sf_tauid_mufake[0] = 1.0 + 0.126/taufakesf;
+                if (year=="2017") sf_tauid_mufake[0] = 1.0 + 0.152/taufakesf;
+                if (year=="2016") sf_tauid_mufake[0] = 1.0 + 0.104/taufakesf;
+                //down
+                sf_tauid_mufake[1] = 1.0 - 0.126/taufakesf;
+                if (year=="2017") sf_tauid_mufake[1] = 1.0 - 0.152/taufakesf;
+                if (year=="2016") sf_tauid_mufake[1] = 1.0 - 0.104/taufakesf;
+            }
+            else if (fabs(eta_2)<0.8){
+                //up
+                sf_tauid_mufake[2] = 1.0 + 0.258/taufakesf;
+                if (year=="2017") sf_tauid_mufake[2] = 1.0 + 0.248/taufakesf;
+                if (year=="2016") sf_tauid_mufake[2] = 1.0 + 0.291/taufakesf;
+                //down
+                sf_tauid_mufake[3] = 1.0 - 0.258/taufakesf;
+                if (year=="2017") sf_tauid_mufake[3] = 1.0 - 0.248/taufakesf;
+                if (year=="2016") sf_tauid_mufake[3] = 1.0 - 0.291/taufakesf;
+            }
+            else if (fabs(eta_2)<1.2){
+                //up
+                sf_tauid_mufake[4] = 1.0 + 0.203/taufakesf;
+                if (year=="2017") sf_tauid_mufake[4] = 1.0 + 0.256/taufakesf;
+                if (year=="2016") sf_tauid_mufake[4] = 1.0 + 0.247/taufakesf;
+                //down
+                sf_tauid_mufake[5] = 1.0 - 0.203/taufakesf;
+                if (year=="2017") sf_tauid_mufake[5] = 1.0 - 0.256/taufakesf;
+                if (year=="2016") sf_tauid_mufake[5] = 1.0 - 0.247/taufakesf;
+            }
+            else if (fabs(eta_2)<1.7){
+                //up
+                sf_tauid_mufake[6] = 1.0 + 0.415/taufakesf;
+                if (year=="2017") sf_tauid_mufake[6] = 1.0 + 0.453/taufakesf;
+                if (year=="2016") sf_tauid_mufake[6] = 1.0 + 0.653/taufakesf;
+                //down
+                sf_tauid_mufake[7] = 1.0 - 0.415/taufakesf;
+                if (year=="2017") sf_tauid_mufake[7] = 1.0 - 0.453/taufakesf;
+                if (year=="2016") sf_tauid_mufake[7] = 1.0 - 0.653/taufakesf;
+            }
+            else {
+                //up
+                sf_tauid_mufake[8] = 1.0 + 0.814/taufakesf;
+                if (year=="2017") sf_tauid_mufake[8] = 1.0 + 0.812/taufakesf;
+                if (year=="2016") sf_tauid_mufake[8] = 1.0 + 0.846/taufakesf;
+                //down
+                sf_tauid_mufake[9] = 1.0 - 0.814/taufakesf;
+                if (year=="2017") sf_tauid_mufake[9] = 1.0 - 0.812/taufakesf;
+                if (year=="2016") sf_tauid_mufake[9] = 1.0 - 0.846/taufakesf;
+            }
+        }
+        
         //########################muon faking tau ES shifting: mytau, mymet, mytt, m_btt##########################
         std::vector<TLorentzVector> mytau_isgenmu;
         std::vector<TLorentzVector> mymet_isgenmu;
@@ -963,8 +1171,8 @@ int main(int argc, char** argv){
             m_btt_isgenele.push_back(m_btt);
         }//ordering: dm0barup, dm0bardown, dm0endup, dm0enddown, dm1barup, dm1bardown, dm1endup, dm1enddown
         float tauES_elefake[8] = {1.02266/1.01362,1.00888/1.01362,1.00307/0.96903,0.95653/0.96903,1.03171/1.01945,1.00347/1.01945,1.03999/0.985,0.94191/0.985};
-        float tauES_elefake2017[8] = {1.02266/1.01362,1.00888/1.01362,1.00307/0.96903,0.95653/0.96903,1.03171/1.01945,1.00347/1.01945,1.03999/0.985,0.94191/0.985};
-        float tauES_elefake2016[8] = {1.02266/1.01362,1.00888/1.01362,1.00307/0.96903,0.95653/0.96903,1.03171/1.01945,1.00347/1.01945,1.03999/0.985,0.94191/0.985};
+        float tauES_elefake2017[8] = {1.02254/1.00911,1.00029/1.00911,0.99645/0.97396,0.95966/0.97396,1.03316/1.01154,1.00181/1.01154,1.07961/1.015,0.96531/1.015};
+        float tauES_elefake2016[8] = {1.01485/1.00679,0.99697/1.00679,0.98308/0.965,0.95398/0.965,1.04557/1.03389,1.00914/1.03389,1.1157/1.05,0.99306/1.05};
         if (year=="2017"){
             for (int j = 0; j < 8; j++) tauES_elefake[j] = tauES_elefake2017[j];
         }
@@ -1356,6 +1564,21 @@ int main(int argc, char** argv){
                                 h_iso[2][k+90]->Fill(mytt_jer[k].M(),weight_corr*trgsf*sf_tauid[0]);
                                 h_iso[3][k+90]->Fill(m_btt_jer[k],weight_corr*trgsf*sf_tauid[0]);
                             }
+                            //e,mu fake tau sf
+                            if (sample!="embedded"){
+                                for (int k = 0; k < 4; k++){
+                                    h_iso[0][k+92]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]*sf_tauid_efake[k]);
+                                    h_iso[1][k+92]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]*sf_tauid_efake[k]);
+                                    h_iso[2][k+92]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]*sf_tauid_efake[k]);
+                                    h_iso[3][k+92]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]*sf_tauid_efake[k]);
+                                }
+                                for (int k = 0; k < 10; k++){
+                                    h_iso[0][k+96]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
+                                    h_iso[1][k+96]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
+                                    h_iso[2][k+96]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
+                                    h_iso[3][k+96]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
+                                }
+                            }
                         }//end of sample!="data_obs"
                     }//end of nominal trigger region
                     if (sample!="data_obs"){
@@ -1594,6 +1817,14 @@ int main(int argc, char** argv){
                     h_iso[j][i+47]->SetName(name.c_str()+shape_elefaketauES[i]);
                     h_iso[j][i+47]->Write();
                 }
+                for (int i = 0; i < 4; ++i){
+                    h_iso[j][i+92]->SetName(name.c_str()+shape_tauideff_efake[i]);
+                    h_iso[j][i+92]->Write();
+                }
+                for (int i = 0; i < 10; ++i){
+                    h_iso[j][i+96]->SetName(name.c_str()+shape_tauideff_mufake[i]);
+                    h_iso[j][i+96]->Write();
+                }
             }
             for (int i = 0; i < 4; ++i){
                 h_iso[j][i+55]->SetName(name.c_str()+shape_trgeff[i]);
@@ -1637,7 +1868,7 @@ int main(int argc, char** argv){
                 }
             }
             //recoil: MC except ttbar diboson singletop
-            if (sample!="data_obs" && sample!="embedded" && name!="TT" && name!="VV" && name!="ST"){
+            if (sample!="embedded" && name!="TT" && name!="VV" && name!="ST"){
                 for (int i = 0; i < 12; ++i){
                     h_iso[j][i+75]->SetName(name.c_str()+shape_recoil[i]);
                     h_iso[j][i+75]->Write();
