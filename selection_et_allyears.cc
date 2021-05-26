@@ -24,16 +24,13 @@
 #include "TFile.h"
 #include "myHelper.h"
 #include "tr_Tree.h"
-#include "ScaleFactor.h"
-#include "ZmmSF.h"
 #include "LumiReweightingStandAlone.h"
-#include "btagSF_2018.h"
-#include "btagSF_2017.h"
-#include "btagSF_2016.h"
+#include "btagSF_deepflavour.h"
 #include "RooWorkspace.h"
 #include "RooRealVar.h"
 #include "RooFunctor.h"
 #include "GetTauFR.h"
+#include "NN_transform.h"
 
 using namespace std;
 
@@ -53,11 +50,11 @@ int main(int argc, char** argv){
     float N = nevents->GetBinContent(2); //no. of generated events (before skimming) with genweight
     
     std::string sample_name = sample.c_str();
-    std::string dnnfile = "/hdfs/store/user/htsoi/dnn/et18/" + sample_name + ".root";
-    if (year=="2017") dnnfile = "/hdfs/store/user/htsoi/dnn/et17/" + sample_name + ".root";
-    if (year=="2016") dnnfile = "/hdfs/store/user/htsoi/dnn/et16/" + sample_name + ".root";
-    TFile * dnn = new TFile(dnnfile.c_str());
-    TTree * tree_dnn = (TTree*) dnn->Get("etau_tree_dnn");
+    std::string NNfile = "/hdfs/store/user/htsoi/NN/et18/" + sample_name + ".root";
+    if (year=="2017") NNfile = "/hdfs/store/user/htsoi/NN/et17/" + sample_name + ".root";
+    if (year=="2016") NNfile = "/hdfs/store/user/htsoi/NN/et16/" + sample_name + ".root";
+    TFile * NN = new TFile(NNfile.c_str());
+    TTree * tree_NN = (TTree*) NN->Get("etau_tree_NN");
     
     //sample weights
     float xs, weight;
@@ -130,6 +127,9 @@ int main(int argc, char** argv){
     else if(sample == "ttHnonbb"){xs = 0.5071*(1-0.5824); weight = luminosity*xs/N;}
     else {cout << "Missing sample cross section!!!" << endl; return 0;}
     
+    bool isnonSignal = (sample!="gghbbtt12" && sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt15" && sample!="vbfbbtt20" && sample!="vbfbbtt25" && sample!="vbfbbtt30" && sample!="vbfbbtt35" && sample!="vbfbbtt40" && sample!="vbfbbtt45" && sample!="vbfbbtt50" && sample!="vbfbbtt55" && sample!="vbfbbtt60");
+    bool isnonHiggsMC = (sample!="data_obs" && sample!="embedded" && isnonSignal && name!="HTT" && name!="ttHnonbb");
+    
     tree->SetBranchAddress("run", &run);
     tree->SetBranchAddress("pt_1", &pt_1);
     tree->SetBranchAddress("phi_1", &phi_1);
@@ -169,18 +169,66 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("passEle25", &passEle25);
     tree->SetBranchAddress("matchEle25_1", &matchEle25_1);
     tree->SetBranchAddress("filterEle25_1", &filterEle25_1);
-    tree->SetBranchAddress("bpt_deepcsv_1", &bpt_deepcsv_1);
-    tree->SetBranchAddress("beta_deepcsv_1", &beta_deepcsv_1);
-    tree->SetBranchAddress("bphi_deepcsv_1", &bphi_deepcsv_1);
-    tree->SetBranchAddress("bm_deepcsv_1", &bm_deepcsv_1);
-    tree->SetBranchAddress("bflavour_deepcsv_1", &bflavour_deepcsv_1);
-    tree->SetBranchAddress("bscore_deepcsv_1", &bscore_deepcsv_1);
-    tree->SetBranchAddress("bpt_deepcsv_2", &bpt_deepcsv_2);
-    tree->SetBranchAddress("beta_deepcsv_2", &beta_deepcsv_2);
-    tree->SetBranchAddress("bphi_deepcsv_2", &bphi_deepcsv_2);
-    tree->SetBranchAddress("bm_deepcsv_2", &bm_deepcsv_2);
-    tree->SetBranchAddress("bflavour_deepcsv_2", &bflavour_deepcsv_2);
-    tree->SetBranchAddress("bscore_deepcsv_2", &bscore_deepcsv_2);
+    tree->SetBranchAddress("bpt_deepflavour_1", &bpt_deepflavour_1);
+    tree->SetBranchAddress("bflavour_deepflavour_1", &bflavour_deepflavour_1);
+    tree->SetBranchAddress("beta_deepflavour_1", &beta_deepflavour_1);
+    tree->SetBranchAddress("bphi_deepflavour_1", &bphi_deepflavour_1);
+    tree->SetBranchAddress("bm_deepflavour_1", &bm_deepflavour_1);
+    tree->SetBranchAddress("bscore_deepflavour_1", &bscore_deepflavour_1);
+    tree->SetBranchAddress("bpt_deepflavour_2", &bpt_deepflavour_2);
+    tree->SetBranchAddress("bflavour_deepflavour_2", &bflavour_deepflavour_2);
+    tree->SetBranchAddress("beta_deepflavour_2", &beta_deepflavour_2);
+    tree->SetBranchAddress("bphi_deepflavour_2", &bphi_deepflavour_2);
+    tree->SetBranchAddress("bm_deepflavour_2", &bm_deepflavour_2);
+    tree->SetBranchAddress("bscore_deepflavour_2", &bscore_deepflavour_2);
+    tree->SetBranchAddress("bpt_deepflavour_JERUp_1", &bpt_deepflavour_JERUp_1);
+    tree->SetBranchAddress("bpt_deepflavour_JERDown_1", &bpt_deepflavour_JERDown_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetAbsoluteUp_1", &bpt_deepflavour_JetAbsoluteUp_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetAbsoluteDown_1", &bpt_deepflavour_JetAbsoluteDown_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetAbsoluteyearUp_1", &bpt_deepflavour_JetAbsoluteyearUp_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetAbsoluteyearDown_1", &bpt_deepflavour_JetAbsoluteyearDown_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetBBEC1Up_1", &bpt_deepflavour_JetBBEC1Up_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetBBEC1Down_1", &bpt_deepflavour_JetBBEC1Down_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetBBEC1yearUp_1", &bpt_deepflavour_JetBBEC1yearUp_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetBBEC1yearDown_1", &bpt_deepflavour_JetBBEC1yearDown_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetEC2Up_1", &bpt_deepflavour_JetEC2Up_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetEC2Down_1", &bpt_deepflavour_JetEC2Down_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetEC2yearUp_1", &bpt_deepflavour_JetEC2yearUp_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetEC2yearDown_1", &bpt_deepflavour_JetEC2yearDown_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetFlavorQCDUp_1", &bpt_deepflavour_JetFlavorQCDUp_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetFlavorQCDDown_1", &bpt_deepflavour_JetFlavorQCDDown_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetHFUp_1", &bpt_deepflavour_JetHFUp_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetHFDown_1", &bpt_deepflavour_JetHFDown_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetHFyearUp_1", &bpt_deepflavour_JetHFyearUp_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetHFyearDown_1", &bpt_deepflavour_JetHFyearDown_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetRelativeBalUp_1", &bpt_deepflavour_JetRelativeBalUp_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetRelativeBalDown_1", &bpt_deepflavour_JetRelativeBalDown_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetRelativeSampleUp_1", &bpt_deepflavour_JetRelativeSampleUp_1);
+    tree->SetBranchAddress("bpt_deepflavour_JetRelativeSampleDown_1", &bpt_deepflavour_JetRelativeSampleDown_1);
+    tree->SetBranchAddress("bpt_deepflavour_JERUp_2", &bpt_deepflavour_JERUp_2);
+    tree->SetBranchAddress("bpt_deepflavour_JERDown_2", &bpt_deepflavour_JERDown_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetAbsoluteUp_2", &bpt_deepflavour_JetAbsoluteUp_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetAbsoluteDown_2", &bpt_deepflavour_JetAbsoluteDown_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetAbsoluteyearUp_2", &bpt_deepflavour_JetAbsoluteyearUp_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetAbsoluteyearDown_2", &bpt_deepflavour_JetAbsoluteyearDown_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetBBEC1Up_2", &bpt_deepflavour_JetBBEC1Up_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetBBEC1Down_2", &bpt_deepflavour_JetBBEC1Down_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetBBEC1yearUp_2", &bpt_deepflavour_JetBBEC1yearUp_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetBBEC1yearDown_2", &bpt_deepflavour_JetBBEC1yearDown_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetEC2Up_2", &bpt_deepflavour_JetEC2Up_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetEC2Down_2", &bpt_deepflavour_JetEC2Down_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetEC2yearUp_2", &bpt_deepflavour_JetEC2yearUp_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetEC2yearDown_2", &bpt_deepflavour_JetEC2yearDown_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetFlavorQCDUp_2", &bpt_deepflavour_JetFlavorQCDUp_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetFlavorQCDDown_2", &bpt_deepflavour_JetFlavorQCDDown_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetHFUp_2", &bpt_deepflavour_JetHFUp_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetHFDown_2", &bpt_deepflavour_JetHFDown_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetHFyearUp_2", &bpt_deepflavour_JetHFyearUp_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetHFyearDown_2", &bpt_deepflavour_JetHFyearDown_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetRelativeBalUp_2", &bpt_deepflavour_JetRelativeBalUp_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetRelativeBalDown_2", &bpt_deepflavour_JetRelativeBalDown_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetRelativeSampleUp_2", &bpt_deepflavour_JetRelativeSampleUp_2);
+    tree->SetBranchAddress("bpt_deepflavour_JetRelativeSampleDown_2", &bpt_deepflavour_JetRelativeSampleDown_2);
     tree->SetBranchAddress("numGenJets", &numGenJets);
     tree->SetBranchAddress("pt_top1", &pt_top1);
     tree->SetBranchAddress("pt_top2", &pt_top2);
@@ -325,112 +373,107 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("m_sv_ResolutionUp", &m_sv_ResolutionUp);
     tree->SetBranchAddress("m_sv_ResolutionDown", &m_sv_ResolutionDown);
     
-    tree_dnn->SetBranchAddress("dnn_1b", &dnn_1b);//wider binning in intermediate region, narrower in low and high regions//blind signal for data
-    /*
-    tree_dnn->SetBranchAddress("dnn_1b_Up", &dnn_1b_Up);
-    tree_dnn->SetBranchAddress("dnn_1b_Down", &dnn_1b_Down);
-    tree_dnn->SetBranchAddress("dnn_1b_UESUp", &dnn_1b_UESUp);
-    tree_dnn->SetBranchAddress("dnn_1b_UESDown", &dnn_1b_UESDown);
-    tree_dnn->SetBranchAddress("dnn_1b_JERUp", &dnn_1b_JERUp);
-    tree_dnn->SetBranchAddress("dnn_1b_JERDown", &dnn_1b_JERDown);
-    tree_dnn->SetBranchAddress("dnn_1b_ESCALEUP", &dnn_1b_ESCALEUP);
-    tree_dnn->SetBranchAddress("dnn_1b_ESCALEDOWN", &dnn_1b_ESCALEDOWN);
-    tree_dnn->SetBranchAddress("dnn_1b_JetAbsoluteUp", &dnn_1b_JetAbsoluteUp);
-    tree_dnn->SetBranchAddress("dnn_1b_JetAbsoluteDown", &dnn_1b_JetAbsoluteDown);
-    tree_dnn->SetBranchAddress("dnn_1b_JetAbsoluteyearUp", &dnn_1b_JetAbsoluteyearUp);
-    tree_dnn->SetBranchAddress("dnn_1b_JetAbsoluteyearDown", &dnn_1b_JetAbsoluteyearDown);
-    tree_dnn->SetBranchAddress("dnn_1b_JetBBEC1Up", &dnn_1b_JetBBEC1Up);
-    tree_dnn->SetBranchAddress("dnn_1b_JetBBEC1Down", &dnn_1b_JetBBEC1Down);
-    tree_dnn->SetBranchAddress("dnn_1b_JetBBEC1yearUp", &dnn_1b_JetBBEC1yearUp);
-    tree_dnn->SetBranchAddress("dnn_1b_JetBBEC1yearDown", &dnn_1b_JetBBEC1yearDown);
-    tree_dnn->SetBranchAddress("dnn_1b_JetEC2Up", &dnn_1b_JetEC2Up);
-    tree_dnn->SetBranchAddress("dnn_1b_JetEC2Down", &dnn_1b_JetEC2Down);
-    tree_dnn->SetBranchAddress("dnn_1b_JetEC2yearUp", &dnn_1b_JetEC2yearUp);
-    tree_dnn->SetBranchAddress("dnn_1b_JetEC2yearDown", &dnn_1b_JetEC2yearDown);
-    tree_dnn->SetBranchAddress("dnn_1b_JetFlavorQCDUp", &dnn_1b_JetFlavorQCDUp);
-    tree_dnn->SetBranchAddress("dnn_1b_JetFlavorQCDDown", &dnn_1b_JetFlavorQCDDown);
-    tree_dnn->SetBranchAddress("dnn_1b_JetHFUp", &dnn_1b_JetHFUp);
-    tree_dnn->SetBranchAddress("dnn_1b_JetHFDown", &dnn_1b_JetHFDown);
-    tree_dnn->SetBranchAddress("dnn_1b_JetHFyearUp", &dnn_1b_JetHFyearUp);
-    tree_dnn->SetBranchAddress("dnn_1b_JetHFyearDown", &dnn_1b_JetHFyearDown);
-    tree_dnn->SetBranchAddress("dnn_1b_JetRelativeBalUp", &dnn_1b_JetRelativeBalUp);
-    tree_dnn->SetBranchAddress("dnn_1b_JetRelativeBalDown", &dnn_1b_JetRelativeBalDown);
-    tree_dnn->SetBranchAddress("dnn_1b_JetRelativeSampleUp", &dnn_1b_JetRelativeSampleUp);
-    tree_dnn->SetBranchAddress("dnn_1b_JetRelativeSampleDown", &dnn_1b_JetRelativeSampleDown);
-    tree_dnn->SetBranchAddress("dnn_1b_ResponseUp", &dnn_1b_ResponseUp);
-    tree_dnn->SetBranchAddress("dnn_1b_ResponseDown", &dnn_1b_ResponseDown);
-    tree_dnn->SetBranchAddress("dnn_1b_ResolutionUp", &dnn_1b_ResolutionUp);
-    tree_dnn->SetBranchAddress("dnn_1b_ResolutionDown", &dnn_1b_ResolutionDown);*/
-    tree_dnn->SetBranchAddress("dnn_2b", &dnn_2b);
-    /*
-    tree_dnn->SetBranchAddress("dnn_2b_Up", &dnn_2b_Up);
-    tree_dnn->SetBranchAddress("dnn_2b_Down", &dnn_2b_Down);
-    tree_dnn->SetBranchAddress("dnn_2b_UESUp", &dnn_2b_UESUp);
-    tree_dnn->SetBranchAddress("dnn_2b_UESDown", &dnn_2b_UESDown);
-    tree_dnn->SetBranchAddress("dnn_2b_JERUp", &dnn_2b_JERUp);
-    tree_dnn->SetBranchAddress("dnn_2b_JERDown", &dnn_2b_JERDown);
-    tree_dnn->SetBranchAddress("dnn_2b_ESCALEUP", &dnn_2b_ESCALEUP);
-    tree_dnn->SetBranchAddress("dnn_2b_ESCALEDOWN", &dnn_2b_ESCALEDOWN);
-    tree_dnn->SetBranchAddress("dnn_2b_JetAbsoluteUp", &dnn_2b_JetAbsoluteUp);
-    tree_dnn->SetBranchAddress("dnn_2b_JetAbsoluteDown", &dnn_2b_JetAbsoluteDown);
-    tree_dnn->SetBranchAddress("dnn_2b_JetAbsoluteyearUp", &dnn_2b_JetAbsoluteyearUp);
-    tree_dnn->SetBranchAddress("dnn_2b_JetAbsoluteyearDown", &dnn_2b_JetAbsoluteyearDown);
-    tree_dnn->SetBranchAddress("dnn_2b_JetBBEC1Up", &dnn_2b_JetBBEC1Up);
-    tree_dnn->SetBranchAddress("dnn_2b_JetBBEC1Down", &dnn_2b_JetBBEC1Down);
-    tree_dnn->SetBranchAddress("dnn_2b_JetBBEC1yearUp", &dnn_2b_JetBBEC1yearUp);
-    tree_dnn->SetBranchAddress("dnn_2b_JetBBEC1yearDown", &dnn_2b_JetBBEC1yearDown);
-    tree_dnn->SetBranchAddress("dnn_2b_JetEC2Up", &dnn_2b_JetEC2Up);
-    tree_dnn->SetBranchAddress("dnn_2b_JetEC2Down", &dnn_2b_JetEC2Down);
-    tree_dnn->SetBranchAddress("dnn_2b_JetEC2yearUp", &dnn_2b_JetEC2yearUp);
-    tree_dnn->SetBranchAddress("dnn_2b_JetEC2yearDown", &dnn_2b_JetEC2yearDown);
-    tree_dnn->SetBranchAddress("dnn_2b_JetFlavorQCDUp", &dnn_2b_JetFlavorQCDUp);
-    tree_dnn->SetBranchAddress("dnn_2b_JetFlavorQCDDown", &dnn_2b_JetFlavorQCDDown);
-    tree_dnn->SetBranchAddress("dnn_2b_JetHFUp", &dnn_2b_JetHFUp);
-    tree_dnn->SetBranchAddress("dnn_2b_JetHFDown", &dnn_2b_JetHFDown);
-    tree_dnn->SetBranchAddress("dnn_2b_JetHFyearUp", &dnn_2b_JetHFyearUp);
-    tree_dnn->SetBranchAddress("dnn_2b_JetHFyearDown", &dnn_2b_JetHFyearDown);
-    tree_dnn->SetBranchAddress("dnn_2b_JetRelativeBalUp", &dnn_2b_JetRelativeBalUp);
-    tree_dnn->SetBranchAddress("dnn_2b_JetRelativeBalDown", &dnn_2b_JetRelativeBalDown);
-    tree_dnn->SetBranchAddress("dnn_2b_JetRelativeSampleUp", &dnn_2b_JetRelativeSampleUp);
-    tree_dnn->SetBranchAddress("dnn_2b_JetRelativeSampleDown", &dnn_2b_JetRelativeSampleDown);
-    tree_dnn->SetBranchAddress("dnn_2b_ResponseUp", &dnn_2b_ResponseUp);
-    tree_dnn->SetBranchAddress("dnn_2b_ResponseDown", &dnn_2b_ResponseDown);
-    tree_dnn->SetBranchAddress("dnn_2b_ResolutionUp", &dnn_2b_ResolutionUp);
-    tree_dnn->SetBranchAddress("dnn_2b_ResolutionDown", &dnn_2b_ResolutionDown);*/
+    tree_NN->SetBranchAddress("NN1b", &NN1b);
+    tree_NN->SetBranchAddress("NN1b_Up", &NN1b_Up);
+    tree_NN->SetBranchAddress("NN1b_Down", &NN1b_Down);
+    tree_NN->SetBranchAddress("NN1b_UESUp", &NN1b_UESUp);
+    tree_NN->SetBranchAddress("NN1b_UESDown", &NN1b_UESDown);
+    tree_NN->SetBranchAddress("NN1b_JERUp", &NN1b_JERUp);
+    tree_NN->SetBranchAddress("NN1b_JERDown", &NN1b_JERDown);
+    tree_NN->SetBranchAddress("NN1b_ESCALEUP", &NN1b_ESCALEUP);
+    tree_NN->SetBranchAddress("NN1b_ESCALEDOWN", &NN1b_ESCALEDOWN);
+    tree_NN->SetBranchAddress("NN1b_JetAbsoluteUp", &NN1b_JetAbsoluteUp);
+    tree_NN->SetBranchAddress("NN1b_JetAbsoluteDown", &NN1b_JetAbsoluteDown);
+    tree_NN->SetBranchAddress("NN1b_JetAbsoluteyearUp", &NN1b_JetAbsoluteyearUp);
+    tree_NN->SetBranchAddress("NN1b_JetAbsoluteyearDown", &NN1b_JetAbsoluteyearDown);
+    tree_NN->SetBranchAddress("NN1b_JetBBEC1Up", &NN1b_JetBBEC1Up);
+    tree_NN->SetBranchAddress("NN1b_JetBBEC1Down", &NN1b_JetBBEC1Down);
+    tree_NN->SetBranchAddress("NN1b_JetBBEC1yearUp", &NN1b_JetBBEC1yearUp);
+    tree_NN->SetBranchAddress("NN1b_JetBBEC1yearDown", &NN1b_JetBBEC1yearDown);
+    tree_NN->SetBranchAddress("NN1b_JetEC2Up", &NN1b_JetEC2Up);
+    tree_NN->SetBranchAddress("NN1b_JetEC2Down", &NN1b_JetEC2Down);
+    tree_NN->SetBranchAddress("NN1b_JetEC2yearUp", &NN1b_JetEC2yearUp);
+    tree_NN->SetBranchAddress("NN1b_JetEC2yearDown", &NN1b_JetEC2yearDown);
+    tree_NN->SetBranchAddress("NN1b_JetFlavorQCDUp", &NN1b_JetFlavorQCDUp);
+    tree_NN->SetBranchAddress("NN1b_JetFlavorQCDDown", &NN1b_JetFlavorQCDDown);
+    tree_NN->SetBranchAddress("NN1b_JetHFUp", &NN1b_JetHFUp);
+    tree_NN->SetBranchAddress("NN1b_JetHFDown", &NN1b_JetHFDown);
+    tree_NN->SetBranchAddress("NN1b_JetHFyearUp", &NN1b_JetHFyearUp);
+    tree_NN->SetBranchAddress("NN1b_JetHFyearDown", &NN1b_JetHFyearDown);
+    tree_NN->SetBranchAddress("NN1b_JetRelativeBalUp", &NN1b_JetRelativeBalUp);
+    tree_NN->SetBranchAddress("NN1b_JetRelativeBalDown", &NN1b_JetRelativeBalDown);
+    tree_NN->SetBranchAddress("NN1b_JetRelativeSampleUp", &NN1b_JetRelativeSampleUp);
+    tree_NN->SetBranchAddress("NN1b_JetRelativeSampleDown", &NN1b_JetRelativeSampleDown);
+    tree_NN->SetBranchAddress("NN1b_ResponseUp", &NN1b_ResponseUp);
+    tree_NN->SetBranchAddress("NN1b_ResponseDown", &NN1b_ResponseDown);
+    tree_NN->SetBranchAddress("NN1b_ResolutionUp", &NN1b_ResolutionUp);
+    tree_NN->SetBranchAddress("NN1b_ResolutionDown", &NN1b_ResolutionDown);
+    tree_NN->SetBranchAddress("NN2b", &NN2b);
+    tree_NN->SetBranchAddress("NN2b_Up", &NN2b_Up);
+    tree_NN->SetBranchAddress("NN2b_Down", &NN2b_Down);
+    tree_NN->SetBranchAddress("NN2b_UESUp", &NN2b_UESUp);
+    tree_NN->SetBranchAddress("NN2b_UESDown", &NN2b_UESDown);
+    tree_NN->SetBranchAddress("NN2b_JERUp", &NN2b_JERUp);
+    tree_NN->SetBranchAddress("NN2b_JERDown", &NN2b_JERDown);
+    tree_NN->SetBranchAddress("NN2b_ESCALEUP", &NN2b_ESCALEUP);
+    tree_NN->SetBranchAddress("NN2b_ESCALEDOWN", &NN2b_ESCALEDOWN);
+    tree_NN->SetBranchAddress("NN2b_JetAbsoluteUp", &NN2b_JetAbsoluteUp);
+    tree_NN->SetBranchAddress("NN2b_JetAbsoluteDown", &NN2b_JetAbsoluteDown);
+    tree_NN->SetBranchAddress("NN2b_JetAbsoluteyearUp", &NN2b_JetAbsoluteyearUp);
+    tree_NN->SetBranchAddress("NN2b_JetAbsoluteyearDown", &NN2b_JetAbsoluteyearDown);
+    tree_NN->SetBranchAddress("NN2b_JetBBEC1Up", &NN2b_JetBBEC1Up);
+    tree_NN->SetBranchAddress("NN2b_JetBBEC1Down", &NN2b_JetBBEC1Down);
+    tree_NN->SetBranchAddress("NN2b_JetBBEC1yearUp", &NN2b_JetBBEC1yearUp);
+    tree_NN->SetBranchAddress("NN2b_JetBBEC1yearDown", &NN2b_JetBBEC1yearDown);
+    tree_NN->SetBranchAddress("NN2b_JetEC2Up", &NN2b_JetEC2Up);
+    tree_NN->SetBranchAddress("NN2b_JetEC2Down", &NN2b_JetEC2Down);
+    tree_NN->SetBranchAddress("NN2b_JetEC2yearUp", &NN2b_JetEC2yearUp);
+    tree_NN->SetBranchAddress("NN2b_JetEC2yearDown", &NN2b_JetEC2yearDown);
+    tree_NN->SetBranchAddress("NN2b_JetFlavorQCDUp", &NN2b_JetFlavorQCDUp);
+    tree_NN->SetBranchAddress("NN2b_JetFlavorQCDDown", &NN2b_JetFlavorQCDDown);
+    tree_NN->SetBranchAddress("NN2b_JetHFUp", &NN2b_JetHFUp);
+    tree_NN->SetBranchAddress("NN2b_JetHFDown", &NN2b_JetHFDown);
+    tree_NN->SetBranchAddress("NN2b_JetHFyearUp", &NN2b_JetHFyearUp);
+    tree_NN->SetBranchAddress("NN2b_JetHFyearDown", &NN2b_JetHFyearDown);
+    tree_NN->SetBranchAddress("NN2b_JetRelativeBalUp", &NN2b_JetRelativeBalUp);
+    tree_NN->SetBranchAddress("NN2b_JetRelativeBalDown", &NN2b_JetRelativeBalDown);
+    tree_NN->SetBranchAddress("NN2b_JetRelativeSampleUp", &NN2b_JetRelativeSampleUp);
+    tree_NN->SetBranchAddress("NN2b_JetRelativeSampleDown", &NN2b_JetRelativeSampleDown);
+    tree_NN->SetBranchAddress("NN2b_ResponseUp", &NN2b_ResponseUp);
+    tree_NN->SetBranchAddress("NN2b_ResponseDown", &NN2b_ResponseDown);
+    tree_NN->SetBranchAddress("NN2b_ResolutionUp", &NN2b_ResolutionUp);
+    tree_NN->SetBranchAddress("NN2b_ResolutionDown", &NN2b_ResolutionDown);
     
     std::string shape_year = year.c_str();
     
     TString shape_tauideff[14] = {"_CMS_tauideff_pt20to25_"+shape_year+"Up","_CMS_tauideff_pt20to25_"+shape_year+"Down","_CMS_tauideff_pt25to30_"+shape_year+"Up","_CMS_tauideff_pt25to30_"+shape_year+"Down","_CMS_tauideff_pt30to35_"+shape_year+"Up","_CMS_tauideff_pt30to35_"+shape_year+"Down","_CMS_tauideff_pt35to40_"+shape_year+"Up","_CMS_tauideff_pt35to40_"+shape_year+"Down","_CMS_tauideff_pt40to500_"+shape_year+"Up","_CMS_tauideff_pt40to500_"+shape_year+"Down","_CMS_tauideff_pt500to1000_"+shape_year+"Up","_CMS_tauideff_pt500to1000_"+shape_year+"Down","_CMS_tauideff_ptgt1000_"+shape_year+"Up","_CMS_tauideff_ptgt1000_"+shape_year+"Down"};
-    TString shape_tauES[8] = {"_CMS_tauES_dm0_"+shape_year+"Up","_CMS_tauES_dm0_"+shape_year+"Down","_CMS_tauES_dm1_"+shape_year+"Up","_CMS_tauES_dm1_"+shape_year+"Down","_CMS_tauES_dm10_"+shape_year+"Up","_CMS_tauES_dm10_"+shape_year+"Down","_CMS_tauES_dm11_"+shape_year+"Up","_CMS_tauES_dm11_"+shape_year+"Down"};
-    TString shape_jet[22] = {"_CMS_JetAbsolute_"+shape_year+"Up","_CMS_JetAbsolute_"+shape_year+"Down","_CMS_JetAbsoluteyear_"+shape_year+"Up","_CMS_JetAbsoluteyear_"+shape_year+"Down","_CMS_JetBBEC1_"+shape_year+"Up","_CMS_JetBBEC1_"+shape_year+"Down","_CMS_JetBBEC1year_"+shape_year+"Up","_CMS_JetBBEC1year_"+shape_year+"Down","_CMS_JetEC2_"+shape_year+"Up","_CMS_JetEC2_"+shape_year+"Down","_CMS_JetEC2year_"+shape_year+"Up","_CMS_JetEC2year_"+shape_year+"Down","_CMS_JetFlavorQCD_"+shape_year+"Up","_CMS_JetFlavorQCD_"+shape_year+"Down","_CMS_JetHF_"+shape_year+"Up","_CMS_JetHF_"+shape_year+"Down","_CMS_JetHFyear_"+shape_year+"Up","_CMS_JetHFyear_"+shape_year+"Down","_CMS_JetRelativeBal_"+shape_year+"Up","_CMS_JetRelativeBal_"+shape_year+"Down","_CMS_JetRelativeSample_"+shape_year+"Up","_CMS_JetRelativeSample_"+shape_year+"Down"};
-    TString shape_mufaketauES[2] = {"_CMS_muonfaketauES_"+shape_year+"Up","_CMS_muonfaketauES_"+shape_year+"Down"};
-    TString shape_elefaketauES[8] = {"_CMS_elefaketauES_dm0_barrel_"+shape_year+"Up","_CMS_elefaketauES_dm0_barrel_"+shape_year+"Down","_CMS_elefaketauES_dm0_endcap_"+shape_year+"Up","_CMS_elefaketauES_dm0_endcap_"+shape_year+"Down","_CMS_elefaketauES_dm1_barrel_"+shape_year+"Up","_CMS_elefaketauES_dm1_barrel_"+shape_year+"Down","_CMS_elefaketauES_dm1_endcap_"+shape_year+"Up","_CMS_elefaketauES_dm1_endcap_"+shape_year+"Down"};
+    TString shape_tauideff_efake[4] = {"_CMS_tauideff_VSe_barrel_"+shape_year+"Up","_CMS_tauideff_VSe_barrel_"+shape_year+"Down","_CMS_tauideff_VSe_endcap_"+shape_year+"Up","_CMS_tauideff_VSe_endcap_"+shape_year+"Down"};
+    TString shape_tauideff_mufake[10] = {"_CMS_tauideff_VSmu_eta0to0p4_"+shape_year+"Up","_CMS_tauideff_VSmu_eta0to0p4_"+shape_year+"Down","_CMS_tauideff_VSmu_eta0p4to0p8_"+shape_year+"Up","_CMS_tauideff_VSmu_eta0p4to0p8_"+shape_year+"Down","_CMS_tauideff_VSmu_eta0p8to1p2_"+shape_year+"Up","_CMS_tauideff_VSmu_eta0p8to1p2_"+shape_year+"Down","_CMS_tauideff_VSmu_eta1p2to1p7_"+shape_year+"Up","_CMS_tauideff_VSmu_eta1p2to1p7_"+shape_year+"Down","_CMS_tauideff_VSmu_eta1p7to2p3_"+shape_year+"Up","_CMS_tauideff_VSmu_eta1p7to2p3_"+shape_year+"Down"};
     TString shape_trgeff[4] = {"_CMS_trgeff_single_"+shape_year+"Up","_CMS_trgeff_single_"+shape_year+"Down","_CMS_trgeff_cross_"+shape_year+"Up","_CMS_trgeff_cross_"+shape_year+"Down"};
-    TString shape_eleES[4] = {"_CMS_eleES_barrel_"+shape_year+"Up","_CMS_eleES_barrel_"+shape_year+"Down","_CMS_eleES_endcap_"+shape_year+"Up","_CMS_eleES_endcap_"+shape_year+"Down"};
-    //for DY MC only
-    TString shape_DY_zpt[2] = {"_CMS_Zpt_reweight_"+shape_year+"Up","_CMS_Zpt_reweight_"+shape_year+"Down"};
-    //for ttbar only
-    TString shape_ttbar_toppt[2] = {"_CMS_toppt_reweight_"+shape_year+"Up","_CMS_toppt_reweight_"+shape_year+"Down"};
-    //for all MC except diboson, ttbar, single top
+    TString shape_btagsf[4] = {"_CMS_btagsf_heavy_"+shape_year+"Up","_CMS_btagsf_heavy_"+shape_year+"Down","_CMS_btagsf_light_"+shape_year+"Up","_CMS_btagsf_light_"+shape_year+"Down"};
+    TString shape_tauES[8] = {"_CMS_TES_dm0_"+shape_year+"Up","_CMS_TES_dm0_"+shape_year+"Down","_CMS_TES_dm1_"+shape_year+"Up","_CMS_TES_dm1_"+shape_year+"Down","_CMS_TES_dm10_"+shape_year+"Up","_CMS_TES_dm10_"+shape_year+"Down","_CMS_TES_dm11_"+shape_year+"Up","_CMS_TES_dm11_"+shape_year+"Down"};
+    TString shape_mufaketauES[4] = {"_CMS_muTES_dm0_"+shape_year+"Up","_CMS_muTES_dm0_"+shape_year+"Down","_CMS_muTES_dm1_"+shape_year+"Up","_CMS_muTES_dm1_"+shape_year+"Down"};
+    TString shape_elefaketauES[4] = {"_CMS_eleTES_dm0_"+shape_year+"Up","_CMS_eleTES_dm0_"+shape_year+"Down","_CMS_eleTES_dm1_"+shape_year+"Up","_CMS_eleTES_dm1_"+shape_year+"Down"};
+    TString shape_eleES[4] = {"_CMS_eleES_bar_"+shape_year+"Up","_CMS_eleES_bar_"+shape_year+"Down","_CMS_eleES_end_"+shape_year+"Up","_CMS_eleES_end_"+shape_year+"Down"};
+    TString shape_jet[24] = {"_CMS_JetAbsolute_"+shape_year+"Up","_CMS_JetAbsolute_"+shape_year+"Down","_CMS_JetAbsoluteyear_"+shape_year+"Up","_CMS_JetAbsoluteyear_"+shape_year+"Down","_CMS_JetBBEC1_"+shape_year+"Up","_CMS_JetBBEC1_"+shape_year+"Down","_CMS_JetBBEC1year_"+shape_year+"Up","_CMS_JetBBEC1year_"+shape_year+"Down","_CMS_JetEC2_"+shape_year+"Up","_CMS_JetEC2_"+shape_year+"Down","_CMS_JetEC2year_"+shape_year+"Up","_CMS_JetEC2year_"+shape_year+"Down","_CMS_JetFlavorQCD_"+shape_year+"Up","_CMS_JetFlavorQCD_"+shape_year+"Down","_CMS_JetHF_"+shape_year+"Up","_CMS_JetHF_"+shape_year+"Down","_CMS_JetHFyear_"+shape_year+"Up","_CMS_JetHFyear_"+shape_year+"Down","_CMS_JetRelativeBal_"+shape_year+"Up","_CMS_JetRelativeBal_"+shape_year+"Down","_CMS_JetRelativeSample_"+shape_year+"Up","_CMS_JetRelativeSample_"+shape_year+"Down","_CMS_JER_"+shape_year+"Up","_CMS_JER_"+shape_year+"Down"};
+    //Z+jets, W+jets, ggH, qqH
     TString shape_recoil[12] = {"_CMS_0jet_resolution_"+shape_year+"Up","_CMS_0jet_resolution_"+shape_year+"Down","_CMS_0jet_response_"+shape_year+"Up","_CMS_0jet_response_"+shape_year+"Down","_CMS_1jet_resolution_"+shape_year+"Up","_CMS_1jet_resolution_"+shape_year+"Down","_CMS_1jet_response_"+shape_year+"Up","_CMS_1jet_response_"+shape_year+"Down","_CMS_gt1jet_resolution_"+shape_year+"Up","_CMS_gt1jet_resolution_"+shape_year+"Down","_CMS_gt1jet_response_"+shape_year+"Up","_CMS_gt1jet_response_"+shape_year+"Down"};
-    //only diboson, ttbar, single top
-    TString shape_unclusteredES[2] = {"_CMS_unclusteredES_"+shape_year+"Up","_CMS_unclusteredES_"+shape_year+"Down"};
-    //jet resolution
-    TString shape_jer[2] = {"_CMS_res_j_"+shape_year+"Up","_CMS_res_j_"+shape_year+"Down"};
+    //those without recoil
+    TString shape_UES[2] = {"_CMS_UES_"+shape_year+"Up","_CMS_UES_"+shape_year+"Down"};
+    //for DY MC only
+    TString shape_DY_zpt[2] = {"_CMS_Zpt_"+shape_year+"Up","_CMS_Zpt_"+shape_year+"Down"};
+    //for ttbar only
+    TString shape_ttbar_toppt[2] = {"_CMS_toppt_"+shape_year+"Up","_CMS_toppt_"+shape_year+"Down"};
     //fake cross trigger factor uncertainties
     TString shape_fake_crosstrg[2] = {"_CMS_crosstrg_fakefactor_"+shape_year+"Up","_CMS_crosstrg_fakefactor_"+shape_year+"Down"};
     //fake rate uncertainties
-    TString shape_fakerate[14] = {"_CMS_fakerate_alldm_pt0to25_"+shape_year+"Up","_CMS_fakerate_alldm_pt0to25_"+shape_year+"Down","_CMS_fakerate_alldm_pt25to30_"+shape_year+"Up","_CMS_fakerate_alldm_pt25to30_"+shape_year+"Down","_CMS_fakerate_alldm_pt30to35_"+shape_year+"Up","_CMS_fakerate_alldm_pt30to35_"+shape_year+"Down","_CMS_fakerate_alldm_pt35to40_"+shape_year+"Up","_CMS_fakerate_alldm_pt35to40_"+shape_year+"Down","_CMS_fakerate_alldm_pt40to50_"+shape_year+"Up","_CMS_fakerate_alldm_pt40to50_"+shape_year+"Down","_CMS_fakerate_alldm_pt50to60_"+shape_year+"Up","_CMS_fakerate_alldm_pt50to60_"+shape_year+"Down","_CMS_fakerate_alldm_ptgt60_"+shape_year+"Up","_CMS_fakerate_alldm_ptgt60_"+shape_year+"Down"};
-    //TauID sf for ele->tauh fake
-    TString shape_tauideff_efake[4] = {"_CMS_tauideff_VSe_barrel_"+shape_year+"Up","_CMS_tauideff_VSe_barrel_"+shape_year+"Down","_CMS_tauideff_VSe_endcap_"+shape_year+"Up","_CMS_tauideff_VSe_endcap_"+shape_year+"Down"};
-    //TauID sf for mu->tauh fake
-    TString shape_tauideff_mufake[10] = {"_CMS_tauideff_VSmu_eta0to0p4_"+shape_year+"Up","_CMS_tauideff_VSmu_eta0to0p4_"+shape_year+"Down","_CMS_tauideff_VSmu_eta0p4to0p8_"+shape_year+"Up","_CMS_tauideff_VSmu_eta0p4to0p8_"+shape_year+"Down","_CMS_tauideff_VSmu_eta0p8to1p2_"+shape_year+"Up","_CMS_tauideff_VSmu_eta0p8to1p2_"+shape_year+"Down","_CMS_tauideff_VSmu_eta1p2to1p7_"+shape_year+"Up","_CMS_tauideff_VSmu_eta1p2to1p7_"+shape_year+"Down","_CMS_tauideff_VSmu_eta1p7to2p3_"+shape_year+"Up","_CMS_tauideff_VSmu_eta1p7to2p3_"+shape_year+"Down"};
+    TString shape_fakerate[14] = {"_CMS_jetFR_pt0to25_"+shape_year+"Up","_CMS_jetFR_pt0to25_"+shape_year+"Down","_CMS_jetFR_pt25to30_"+shape_year+"Up","_CMS_jetFR_pt25to30_"+shape_year+"Down","_CMS_jetFR_pt30to35_"+shape_year+"Up","_CMS_jetFR_pt30to35_"+shape_year+"Down","_CMS_jetFR_pt35to40_"+shape_year+"Up","_CMS_jetFR_pt35to40_"+shape_year+"Down","_CMS_jetFR_pt40to50_"+shape_year+"Up","_CMS_jetFR_pt40to50_"+shape_year+"Down","_CMS_jetFR_pt50to60_"+shape_year+"Up","_CMS_jetFR_pt50to60_"+shape_year+"Down","_CMS_jetFR_ptgt60_"+shape_year+"Up","_CMS_jetFR_ptgt60_"+shape_year+"Down"};
     
     //for emb only
     TString embshape_tauideff[14] = {"_CMS_emb_tauideff_pt20to25_"+shape_year+"Up","_CMS_emb_tauideff_pt20to25_"+shape_year+"Down","_CMS_emb_tauideff_pt25to30_"+shape_year+"Up","_CMS_emb_tauideff_pt25to30_"+shape_year+"Down","_CMS_emb_tauideff_pt30to35_"+shape_year+"Up","_CMS_emb_tauideff_pt30to35_"+shape_year+"Down","_CMS_emb_tauideff_pt35to40_"+shape_year+"Up","_CMS_emb_tauideff_pt35to40_"+shape_year+"Down","_CMS_emb_tauideff_pt40to500_"+shape_year+"Up","_CMS_emb_tauideff_pt40to500_"+shape_year+"Down","_CMS_emb_tauideff_pt500to1000_"+shape_year+"Up","_CMS_emb_tauideff_pt500to1000_"+shape_year+"Down","_CMS_emb_tauideff_ptgt1000_"+shape_year+"Up","_CMS_emb_tauideff_ptgt1000_"+shape_year+"Down"};
-    TString embshape_tauES[8] = {"_CMS_emb_tauES_dm0_"+shape_year+"Up","_CMS_emb_tauES_dm0_"+shape_year+"Down","_CMS_emb_tauES_dm1_"+shape_year+"Up","_CMS_emb_tauES_dm1_"+shape_year+"Down","_CMS_emb_tauES_dm10_"+shape_year+"Up","_CMS_emb_tauES_dm10_"+shape_year+"Down","_CMS_emb_tauES_dm11_"+shape_year+"Up","_CMS_emb_tauES_dm11_"+shape_year+"Down"};
-    TString embshape_trgeff[4] = {"_CMS_emb_trgeff_singleEle_"+shape_year+"Up","_CMS_emb_trgeff_singleEle_"+shape_year+"Down","_CMS_emb_trgeff_crossEleTau_"+shape_year+"Up","_CMS_emb_trgeff_crossEleTau_"+shape_year+"Down"};
-    TString embshape_eleES[4] = {"_CMS_emb_eleES_barrel_"+shape_year+"Up","_CMS_emb_eleES_barrel_"+shape_year+"Down","_CMS_emb_eleES_endcap_"+shape_year+"Up","_CMS_emb_eleES_endcap_"+shape_year+"Down"};
+    TString embshape_trgeff[4] = {"_CMS_emb_trgeff_single_"+shape_year+"Up","_CMS_emb_trgeff_single_"+shape_year+"Down","_CMS_emb_trgeff_cross_"+shape_year+"Up","_CMS_emb_trgeff_cross_"+shape_year+"Down"};
+    TString embshape_tauES[8] = {"_CMS_emb_TES_dm0_"+shape_year+"Up","_CMS_emb_TES_dm0_"+shape_year+"Down","_CMS_emb_TES_dm1_"+shape_year+"Up","_CMS_emb_TES_dm1_"+shape_year+"Down","_CMS_emb_TES_dm10_"+shape_year+"Up","_CMS_emb_TES_dm10_"+shape_year+"Down","_CMS_emb_TES_dm11_"+shape_year+"Up","_CMS_emb_TES_dm11_"+shape_year+"Down"};
+    TString embshape_eleES[4] = {"_CMS_emb_eleES_bar_"+shape_year+"Up","_CMS_emb_eleES_bar_"+shape_year+"Down","_CMS_emb_eleES_end_"+shape_year+"Up","_CMS_emb_eleES_end_"+shape_year+"Down"};
     TString embshape_tautracking[6] = {"_CMS_emb_tautrack_dm0dm10_"+shape_year+"Up","_CMS_emb_tautrack_dm0dm10_"+shape_year+"Down","_CMS_emb_tautrack_dm1_"+shape_year+"Up","_CMS_emb_tautrack_dm1_"+shape_year+"Down","_CMS_emb_tautrack_dm11_"+shape_year+"Up","_CMS_emb_tautrack_dm11_"+shape_year+"Down"};
     if (sample=="embedded"){
         for (int i = 0; i < 14; i++) shape_tauideff[i] = embshape_tauideff[i];
@@ -441,23 +484,64 @@ int main(int argc, char** argv){
     //comtamination to emb: all non-DY MC with gen tautau
     TString shape_nonDY[1] = {"_nonDY"};
     
-    std::vector<std::vector<TH1F*>> h_iso;
-    std::vector<std::vector<TH1F*>> h_anti;
-    for (int i = 0; i < 4; i++){
-        h_iso.push_back(std::vector<TH1F*>());
-        h_anti.push_back(std::vector<TH1F*>());
+    //h[i][j][k]: (i=0: 1bjet, i=1: 2bjets), (j=filling variable), (k=systematics type)
+    std::vector<std::vector<std::vector<TH1F*>>> h_iso;
+    std::vector<std::vector<std::vector<TH1F*>>> h_anti;
+    for (int i = 0; i < 2; i++){
+        h_iso.push_back(std::vector<std::vector<TH1F*>>());
+        h_anti.push_back(std::vector<std::vector<TH1F*>>());
     }
-    for (int i = 0; i < 106; i++){//i=0 for nominal, 1-14 tauIDeff, 15-22 tauES, 23-44 jet, 45-46 muon->tauhES, 47-54 ele->tauhES, 55-58 trgeff, 59-62 eleES, 65-70 tau tracking, 71-72 (only DY MC) zpt, 73-74 (only ttbar) toppt, 75-86 recoil, 87-88 met unclustered ES, 89 nonDY, 90-91 jer, 92-95 efaketau sf, 96-105 mufaketau sf
-        h_iso[0].push_back(new TH1F("","",70,10,150));//pt_1
-        h_iso[1].push_back(new TH1F("","",45,10,100));//pt_2
-        h_iso[2].push_back(new TH1F("","",40,0,400));//m_tt
-        h_iso[3].push_back(new TH1F("","",40,60,460));//m_btt
+    for (int i = 0; i < 7; i++){//no. of variables for 1 bjet category
+        h_iso[0].push_back(std::vector<TH1F*>());
+        h_anti[0].push_back(std::vector<TH1F*>());
     }
-    for (int i = 0; i < 69; i++){//anti-isolated region, no tau related shifts, no ele/mu->tau shifts since tau is mostly jet //i=0 for nominal, 1-22 jet, 23-26 trgeff, 27-30 eleES, 33-34 (only DY MC) zpt, 35-36 (only ttbar) toppt, 37-48 recoil, 49-50 met unclustered ES, 51-52 jer, 53-54 fake cross trg factor, 55-68 fake rate dmall by pt
-        h_anti[0].push_back(new TH1F("","",70,10,150));//pt_1
-        h_anti[1].push_back(new TH1F("","",45,10,100));//pt_2
-        h_anti[2].push_back(new TH1F("","",40,0,400));//m_tt
-        h_anti[3].push_back(new TH1F("","",40,60,460));//m_btt
+    for (int i = 0; i < 8; i++){//no. of variables for 2 bjets category
+        h_iso[1].push_back(std::vector<TH1F*>());
+        h_anti[1].push_back(std::vector<TH1F*>());
+    }
+    float bins_p_1b[] = {0.,0.02,0.04,0.06,0.08,0.1,0.15,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.85,0.9,0.92,0.94,0.96,0.98,1.};
+    float bins_p_2b[] = {0.,0.05,0.1,0.15,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,0.95,1.};
+    int nbins_p_1b = sizeof(bins_p_1b)/sizeof(Float_t)-1;
+    int nbins_p_2b = sizeof(bins_p_2b)/sizeof(Float_t)-1;
+    for (int i = 0; i < 106; i++){
+        //i=0 nominal, 1-8 TES, 9-22 tauIDeff, 23-26 efaketauIDeff, 27-36 mufaketauIDeff, 37-40 muTES, 41-44 eleTES, 45-48 eleES, 49-52 trgsf, 53-56 btagsf, 57-80 jet, 81-92 recoil, 93-94 UES, 95-100 emb tautracking, 101-102 DY zpt, 103-104 ttbar toppt, 105 nonDY
+        //1 bjet
+        h_iso[0][0].push_back(new TH1F("","",nbins_p_1b,bins_p_1b));//p
+        h_iso[0][1].push_back(new TH1F("","",nbins_p_1b,bins_p_1b));//p2
+        h_iso[0][2].push_back(new TH1F("","",40,0.6,1.));//p2_z
+        h_iso[0][3].push_back(new TH1F("","",70,10,150));//pt_1
+        h_iso[0][4].push_back(new TH1F("","",45,10,100));//pt_2
+        h_iso[0][5].push_back(new TH1F("","",40,0,400));//m_tt
+        h_iso[0][6].push_back(new TH1F("","",40,60,460));//m_btt
+        //2 bjets
+        h_iso[1][0].push_back(new TH1F("","",nbins_p_2b,bins_p_2b));//p
+        h_iso[1][1].push_back(new TH1F("","",nbins_p_2b,bins_p_2b));//p2
+        h_iso[1][2].push_back(new TH1F("","",40,0.8,1.));//p2_z
+        h_iso[1][3].push_back(new TH1F("","",70,10,150));//pt_1
+        h_iso[1][4].push_back(new TH1F("","",45,10,100));//pt_2
+        h_iso[1][5].push_back(new TH1F("","",40,0,400));//m_tt
+        h_iso[1][6].push_back(new TH1F("","",40,60,460));//m_btt
+        h_iso[1][7].push_back(new TH1F("","",54,60,600));//m_bbtt
+    }
+    for (int i = 0; i < 71; i++){
+        //tau anti-isolated region; i=0 nominal, 1-4 eleES, 5-8 trgsf, 9-12 btagsf, 13-36 jet, 37-48 recoil, 49-50 UES, 51-52 DY zpt, 53-54 ttbar toppt, 55-56 crosstrg fakefactor, 57-70 fake rate
+        //1 bjet
+        h_anti[0][0].push_back(new TH1F("","",nbins_p_1b,bins_p_1b));//p
+        h_anti[0][1].push_back(new TH1F("","",nbins_p_1b,bins_p_1b));//p2
+        h_anti[0][2].push_back(new TH1F("","",40,0.6,1.));//p2_z
+        h_anti[0][3].push_back(new TH1F("","",70,10,150));//pt_1
+        h_anti[0][4].push_back(new TH1F("","",45,10,100));//pt_2
+        h_anti[0][5].push_back(new TH1F("","",40,0,400));//m_tt
+        h_anti[0][6].push_back(new TH1F("","",40,60,460));//m_btt
+        //2 bjets
+        h_anti[1][0].push_back(new TH1F("","",nbins_p_2b,bins_p_2b));//p
+        h_anti[1][1].push_back(new TH1F("","",nbins_p_2b,bins_p_2b));//p2
+        h_anti[1][2].push_back(new TH1F("","",40,0.8,1.));//p2_z
+        h_anti[1][3].push_back(new TH1F("","",70,10,150));//pt_1
+        h_anti[1][4].push_back(new TH1F("","",45,10,100));//pt_2
+        h_anti[1][5].push_back(new TH1F("","",40,0,400));//m_tt
+        h_anti[1][6].push_back(new TH1F("","",40,60,460));//m_btt
+        h_anti[1][7].push_back(new TH1F("","",54,60,600));//m_bbtt
     }
     
     //access pileup distributions in data/MC
@@ -505,10 +589,11 @@ int main(int argc, char** argv){
     TFile *f_taufr = new TFile("FitHistograms_tauFR_2018.root");
     if (year=="2017") f_taufr = new TFile("FitHistograms_tauFR_2017.root");
     if (year=="2016") f_taufr = new TFile("FitHistograms_tauFR_2016.root");
+    /*
     TGraphAsymmErrors *g_taufr_dm0M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm0_Te_VLmu_deepmedium_hpt_dm0_Te_VLmu_deepveryveryveryloose");
     TGraphAsymmErrors *g_taufr_dm1M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm1_Te_VLmu_deepmedium_hpt_dm1_Te_VLmu_deepveryveryveryloose");
     TGraphAsymmErrors *g_taufr_dm10M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm10_Te_VLmu_deepmedium_hpt_dm10_Te_VLmu_deepveryveryveryloose");
-    TGraphAsymmErrors *g_taufr_dm11M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm11_Te_VLmu_deepmedium_hpt_dm11_Te_VLmu_deepveryveryveryloose");
+    TGraphAsymmErrors *g_taufr_dm11M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm11_Te_VLmu_deepmedium_hpt_dm11_Te_VLmu_deepveryveryveryloose");*/
     
     TGraphAsymmErrors *g_taufr_dmall = (TGraphAsymmErrors*) f_taufr->Get("hpt_dmall_Te_VLmu_1jet_deepmedium_hpt_dmall_Te_VLmu_1jet_deepveryveryveryloose");
     
@@ -517,7 +602,7 @@ int main(int argc, char** argv){
     for(int i = 0; i < n; i++){
         if(i % 10000 == 0) printf("event %d of %d...\n", i, n);
         tree->GetEntry(i);
-        tree_dnn->GetEntry(i);
+        tree_NN->GetEntry(i);
         
         //MET filters
         if (Flag_goodVertices) continue;
@@ -534,9 +619,9 @@ int main(int argc, char** argv){
         TLorentzVector mytau;
         mytau.SetPtEtaPhiM(pt_2,eta_2,phi_2,m_2);
         TLorentzVector myb1;
-        myb1.SetPtEtaPhiM(bpt_deepcsv_1,beta_deepcsv_1,bphi_deepcsv_1,bm_deepcsv_1);
+        myb1.SetPtEtaPhiM(bpt_deepflavour_1,beta_deepflavour_1,bphi_deepflavour_1,bm_deepflavour_1);
         TLorentzVector myb2;
-        myb2.SetPtEtaPhiM(bpt_deepcsv_2,beta_deepcsv_2,bphi_deepcsv_2,bm_deepcsv_2);
+        myb2.SetPtEtaPhiM(bpt_deepflavour_2,beta_deepflavour_2,bphi_deepflavour_2,bm_deepflavour_2);
         
         bool isSingleTrigger = false;
         bool isCrossTrigger = false;
@@ -558,11 +643,23 @@ int main(int argc, char** argv){
         if (year=="2016"){
             isSingleTrigger = (passEle25 && matchEle25_1 && filterEle25_1);//no cross trigger in 2016
         }
+        float single_elept_thres = 33;
+        float single_taupt_thres = 20;
+        float cross_elept_thres = 25;
+        float cross_taupt_thres = 35;
+        if (year=="2017"){
+            single_elept_thres = 28;
+            single_taupt_thres = 20;
+            cross_elept_thres = 25;
+            cross_taupt_thres = 35;
+        }
+        if (year=="2016"){//no cross trigger in 2016
+            single_elept_thres = 26;
+            single_taupt_thres = 20;
+        }
         
         if (!isSingleTrigger && !isCrossTrigger) continue;
         
-        //trigger var only, add pt requirements later when doing systematics
-        //if (!(pt_2>20)) continue;
         if (!(fabs(eta_1)<2.1 && fabs(eta_2)<2.3)) continue;
         if (!(iso_1<0.15)) continue;
         if (q_1*q_2>0) continue;
@@ -572,7 +669,7 @@ int main(int argc, char** argv){
         
         if (!(myele.DeltaR(mytau)>0.4)) continue;
         
-        if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
+        if (name=="Z"){
             if (numGenJets==0){
                 weight = 3.630;
                 if (year=="2017") weight = 2.575;
@@ -600,7 +697,7 @@ int main(int argc, char** argv){
             }
         }
         
-        if (sample=="W" or sample=="W1" or sample=="W2" or sample=="W3" or sample=="W4"){
+        if (name=="W"){
             if (numGenJets==0){
                 weight = 51.81;
                 if (year=="2017") weight = 23.67;
@@ -638,19 +735,16 @@ int main(int argc, char** argv){
             //reject MC with a jet faking tau_h as duplicated in fake background estimation
             if (gen_match_2==6) continue;
             
-            //reject MC with 2 taus as duplicated in embedded sample except for signal/Higgs
-            //if (sample!="data_obs" && sample!="embedded" && sample!="gghbbtt12" && sample!="gghbbtt20" && sample!="gghbbtt30" && sample!="gghbbtt40" && sample!="gghbbtt50" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt20" && sample!="vbfbbtt30" && sample!="vbfbbtt40" && sample!="vbfbbtt50" && sample!="vbfbbtt60" && name!="HTT" && name!="ttHnonbb" && gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6) continue;
-            
             //electron ID/iso/tracking scale factors
             sf_MC *= e_trk_ratio * e_idiso_ic_ratio;
             
             //re-weigh Z pT spectrum for DY samples
-            if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
+            if (name=="Z"){
                 sf_MC *= zptmass_weight_nom;
             }
             
             //re-weigh top pT spectrum for ttbar samples
-            if (sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic" or name=="TT"){
+            if (name=="TT"){
                 float pttop1=pt_top1;
                 if (pttop1>472) pttop1=472;
                 float pttop2=pt_top2;
@@ -713,10 +807,10 @@ int main(int argc, char** argv){
         //scale factors for embedded Z->tautau and corrections
         if (sample=="embedded"){
             
-            if (l2_decayMode==0) sf_embed *= 0.975;
-            else if (l2_decayMode==1) sf_embed *= 0.975*1.051;
-            else if (l2_decayMode==10) sf_embed *= 0.975*0.975*0.975;
-            else sf_embed *= 0.975*0.975*0.975*1.051;
+            if (l2_decayMode==0) sf_embed *= 0.975;//1prong
+            else if (l2_decayMode==1) sf_embed *= 0.975*1.051;//1prong+1strip
+            else if (l2_decayMode==10) sf_embed *= 0.975*0.975*0.975;//3prongs
+            else sf_embed *= 0.975*0.975*0.975*1.051;//3prongs+1strip
             
             if (gen_match_2==6) continue;
             
@@ -733,62 +827,54 @@ int main(int argc, char** argv){
             sf_embed *= genweight;
         }
         
-        float weight_corr = weight * sf_MC * sf_embed;//end of applying fixed (no shifted systematics) scale factors to MC
+        float weight_corr = weight * sf_MC * sf_embed;
         
-        //counting reconstructed btagged jets
+        //count btagged jets (deepflavour)
         int nbtag20 = 0;
         float bMpt_1 = 0;
         float bMflavor_1 = 0;
         float bMpt_2 = 0;
         float bMflavor_2 = 0;
-        float bscore_thres = 0.4184;
-        if (year=="2017") bscore_thres = 0.4941;
-        if (year=="2016") bscore_thres = 0.6321;
-        if (bpt_deepcsv_1>20 && bscore_deepcsv_1>bscore_thres && fabs(beta_deepcsv_1)<2.4){
-            bMpt_1 = bpt_deepcsv_1;
-            bMflavor_1 = bflavour_deepcsv_1;
+        float bscore_thres = 0.2770;
+        if (year=="2017") bscore_thres = 0.3033;
+        if (year=="2016") bscore_thres = 0.3093;
+        if (bpt_deepflavour_1>20 && bscore_deepflavour_1>bscore_thres && fabs(beta_deepflavour_1)<2.4){
+            bMpt_1 = bpt_deepflavour_1;
+            bMflavor_1 = bflavour_deepflavour_1;
             nbtag20++;
         }
-        if (bpt_deepcsv_2>20 && bscore_deepcsv_2>bscore_thres && fabs(beta_deepcsv_2)<2.4){
-            bMpt_2 = bpt_deepcsv_2;
-            bMflavor_2 = bflavour_deepcsv_2;
+        if (bpt_deepflavour_2>20 && bscore_deepflavour_2>bscore_thres && fabs(beta_deepflavour_2)<2.4){
+            bMpt_2 = bpt_deepflavour_2;
+            bMflavor_2 = bflavour_deepflavour_2;
             nbtag20++;
         }
         //btag weights for MC only
-        float weight_btag_0b = 1.0;
         float weight_btag_1b = 1.0;
         float weight_btag_2b = 1.0;
-        float weight_btag_atleast1b = 1.0;
         if (sample!="data_obs" && sample!="embedded"){
-            //0 bjet
-            weight_btag_0b = bTagEventWeight2018(nbtag20,bMpt_1,bMflavor_1,bMpt_2,bMflavor_2,1,0,0);
-            if (year=="2017") weight_btag_0b = bTagEventWeight2017(nbtag20,bMpt_1,bMflavor_1,bMpt_2,bMflavor_2,1,0,0);
-            if (year=="2016") weight_btag_0b = bTagEventWeight2016(nbtag20,bMpt_1,bMflavor_1,bMpt_2,bMflavor_2,1,0,0);
-            //1 bjet
-            weight_btag_1b = GetSF2018(1, bMpt_1, bMflavor_1, 0);
-            if (year=="2017") weight_btag_1b = GetSF2017(1, bMpt_1, bMflavor_1, 0);
-            if (year=="2016") weight_btag_1b = GetSF2016(1, bMpt_1, bMflavor_1, 0);
-            //2 bjets
-            weight_btag_2b = GetSF2018(1, bMpt_1, bMflavor_1, 0)*GetSF2018(1, bMpt_2, bMflavor_2, 0);
-            if (year=="2017") weight_btag_2b = GetSF2017(1, bMpt_1, bMflavor_1, 0)*GetSF2017(1, bMpt_2, bMflavor_2, 0);
-            if (year=="2016") weight_btag_2b = GetSF2016(1, bMpt_1, bMflavor_1, 0)*GetSF2016(1, bMpt_2, bMflavor_2, 0);
+            weight_btag_1b = GetbtagSF(stoi(year.c_str()), bMpt_1, bMflavor_1, 0);
+            weight_btag_2b = GetbtagSF(stoi(year.c_str()), bMpt_1, bMflavor_1, 0)*GetbtagSF(stoi(year.c_str()), bMpt_2, bMflavor_2, 0);
         }
-        if (nbtag20==0) weight_corr *= weight_btag_0b;
-        else if (nbtag20==1) weight_corr *= weight_btag_1b;
-        else weight_corr *= weight_btag_2b;
+        if (nbtag20==1) weight_corr *= weight_btag_1b;
+        if (nbtag20==2) weight_corr *= weight_btag_2b;
+        
+        //######################btag sf shifts#######################
+        std::vector<float> btagsf_syst;
+        for (int j = 0; j < 4; j++){
+            btagsf_syst.push_back(1.0);
+            if (nbtag20==1) btagsf_syst[j] = GetbtagSF(stoi(year.c_str()), bMpt_1, bMflavor_1, j+1)/weight_btag_1b;
+            if (nbtag20==2) btagsf_syst[j] = GetbtagSF(stoi(year.c_str()), bMpt_1, bMflavor_1, j+1)*GetbtagSF(stoi(year.c_str()), bMpt_2, bMflavor_2, j+1)/weight_btag_2b;
+        }
         
         //nominal var
         TLorentzVector mymet;
         mymet.SetPtEtaPhiM(met,0,metphi,0);
         TLorentzVector mytt;
         mytt.SetPtEtaPhiM((myele+mytau+mymet).Pt(),(myele+mytau+mymet).Eta(),(myele+mytau+mymet).Phi(),m_sv);
-        
         float m_btt = (mytt + myb1).M();
         float m_bbtt = (mytt + myb1 + myb2).M();
-        
         float mt_tau1=TMass_F((myele).Pt(),mymet.Pt(),(myele).Px(),mymet.Px(),(myele).Py(),mymet.Py());
         float mt_tau2=TMass_F((mytau).Pt(),mymet.Pt(),(mytau).Px(),mymet.Px(),(mytau).Py(),mymet.Py());
-        
         float norm_zeta=norm_F(myele.Px()/myele.Pt()+mytau.Px()/mytau.Pt(),myele.Py()/myele.Pt()+mytau.Py()/mytau.Pt());
         float x_zeta= (myele.Px()/myele.Pt()+mytau.Px()/mytau.Pt())/norm_zeta;
         float y_zeta= (myele.Py()/myele.Pt()+mytau.Py()/mytau.Pt())/norm_zeta;
@@ -796,18 +882,43 @@ int main(int argc, char** argv){
         float pzeta_vis=(myele.Px()+mytau.Px())*x_zeta+(myele.Py()+mytau.Py())*y_zeta;
         float dzeta=p_zeta_mis-0.85*pzeta_vis;
         
-        //#####################tau ES shifting: mytau, mymet, mytt###########################
+        std::vector<std::vector<std::vector<float>>> var;
+        for (int j = 0; j < 2; j++) var.push_back(std::vector<std::vector<float>>());
+        for (int j = 0; j < 7; j++) var[0].push_back(std::vector<float>());
+        for (int j = 0; j < 8; j++) var[1].push_back(std::vector<float>());
+        for (int j = 0; j < 59; j++){//i=0 nominal, 1-8 TES, 9-12 muTES, 13-16 eleTES, 17-20 eleES, 21-44 jet, 45-56 recoil, 57-58 UES
+            //1 bjet
+            var[0][0].push_back(NN1b);
+            var[0][1].push_back(p_n(NN1b,2));
+            var[0][2].push_back(p_n(NN1b,2));
+            var[0][3].push_back(pt_1);
+            var[0][4].push_back(pt_2);
+            var[0][5].push_back(m_sv);
+            var[0][6].push_back(m_btt);
+            //2 bjets
+            var[1][0].push_back(NN2b);
+            var[1][1].push_back(p_n(NN2b,2));
+            var[1][2].push_back(p_n(NN2b,2));
+            var[1][3].push_back(pt_1);
+            var[1][4].push_back(pt_2);
+            var[1][5].push_back(m_sv);
+            var[1][6].push_back(m_btt);
+            var[1][7].push_back(m_bbtt);
+        }
+        
+        //#####################TES###########################
         std::vector<TLorentzVector> myshiftedtau;
         std::vector<TLorentzVector> mymet_shiftedtau;
         std::vector<TLorentzVector> mytt_shiftedtau;
         std::vector<float> m_btt_shiftedtau;
-        for (int j = 0; j < 8; j++){//define their default values (untouched when not gentau or DM not matched)
+        std::vector<float> m_bbtt_shiftedtau;
+        for (int j = 0; j < 8; j++){
             myshiftedtau.push_back(mytau);
             mymet_shiftedtau.push_back(mymet);
             mytt_shiftedtau.push_back(mytt);
             m_btt_shiftedtau.push_back(m_btt);
+            m_bbtt_shiftedtau.push_back(m_bbtt);
         }
-        
         //define TES central and uncert values by DM and low/high pt
         float tes_dm0_cent = 0.984;
         float tes_dm1_cent = 0.996;
@@ -907,7 +1018,6 @@ int main(int argc, char** argv){
             tes_dm11_up = tes_dm11_highpt_up;
             tes_dm11_down = tes_dm11_highpt_down;
         }
-        
         if (sample=="embedded" && year=="2018"){
             tes_dm0_up = 1.0039;
             tes_dm0_down = 0.9961;
@@ -938,43 +1048,58 @@ int main(int argc, char** argv){
             tes_dm11_up = 1.0033;
             tes_dm11_down = 0.9949;
         }
-        
-        float tauES_updowntonom_bymode[8] = {tes_dm0_up,tes_dm0_down,tes_dm1_up,tes_dm1_down,tes_dm10_up,tes_dm10_down,tes_dm11_up,tes_dm11_down};//=(ES_nom+/-uncert)/ES_nom, mytau already had nominal tes correction applied at skimming levle
+        float tauES_real[8] = {tes_dm0_up,tes_dm0_down,tes_dm1_up,tes_dm1_down,tes_dm10_up,tes_dm10_down,tes_dm11_up,tes_dm11_down};//mytau already had nominal tes correction applied at skimming level
         float taudecaymode[4] = {0,1,10,11};
         for (int j = 0; j < 4; j++){
-            if (gen_match_2==5 && l2_decayMode==taudecaymode[j]){//shift only when tau is real and DM is matched
+            if (gen_match_2==5 && l2_decayMode==taudecaymode[j]){
                 //[0]dm0up, [1]dm0down, [2]dm1up, [3]dm1down, [4]dm10up, [5]dm10down, [6]dm11up, [7]dm11down
-                myshiftedtau[2*j] *= tauES_updowntonom_bymode[2*j];
-                myshiftedtau[2*j+1] *= tauES_updowntonom_bymode[2*j+1];
-                //after tau is shifted, shift the met
+                myshiftedtau[2*j] *= tauES_real[2*j];
+                myshiftedtau[2*j+1] *= tauES_real[2*j+1];
+                
                 mymet_shiftedtau[2*j] = mymet + mytau - myshiftedtau[2*j];
                 mymet_shiftedtau[2*j+1] = mymet + mytau - myshiftedtau[2*j+1];
-                //after tau and met are shifted, shift the ditau system
+                
                 mytt_shiftedtau[2*j].SetPtEtaPhiM((myele+myshiftedtau[2*j]+mymet_shiftedtau[2*j]).Pt(),(myele+myshiftedtau[2*j]+mymet_shiftedtau[2*j]).Eta(),(myele+myshiftedtau[2*j]+mymet_shiftedtau[2*j]).Phi(),m_sv_UP);
                 mytt_shiftedtau[2*j+1].SetPtEtaPhiM((myele+myshiftedtau[2*j+1]+mymet_shiftedtau[2*j+1]).Pt(),(myele+myshiftedtau[2*j+1]+mymet_shiftedtau[2*j+1]).Eta(),(myele+myshiftedtau[2*j+1]+mymet_shiftedtau[2*j+1]).Phi(),m_sv_DOWN);
-                //after mytt is shifted, shift the mass m_btt
+                
                 m_btt_shiftedtau[2*j] = (mytt_shiftedtau[2*j]+myb1).M();
                 m_btt_shiftedtau[2*j+1] = (mytt_shiftedtau[2*j+1]+myb1).M();
-            }//everything is nominal if not gentau or DM not matched, by default
+                
+                m_bbtt_shiftedtau[2*j] = (mytt_shiftedtau[2*j]+myb1+myb2).M();
+                m_bbtt_shiftedtau[2*j+1] = (mytt_shiftedtau[2*j+1]+myb1+myb2).M();
+            }
+        }
+        float NN1b_tes[8] = {NN1b_Up,NN1b_Down,NN1b_Up,NN1b_Down,NN1b_Up,NN1b_Down,NN1b_Up,NN1b_Down};
+        float NN2b_tes[8] = {NN2b_Up,NN2b_Down,NN2b_Up,NN2b_Down,NN2b_Up,NN2b_Down,NN2b_Up,NN2b_Down};
+        for (int j = 0; j < 8; j++){
+            var[0][0][j+1] = NN1b_tes[j];
+            var[0][1][j+1] = p_n(NN1b_tes[j],2);
+            var[0][2][j+1] = p_n(NN1b_tes[j],2);
+            var[0][4][j+1] = myshiftedtau[j].Pt();
+            var[0][5][j+1] = mytt_shiftedtau[j].M();
+            var[0][6][j+1] = m_btt_shiftedtau[j];
+            
+            var[1][0][j+1] = NN2b_tes[j];
+            var[1][1][j+1] = p_n(NN2b_tes[j],2);
+            var[1][2][j+1] = p_n(NN2b_tes[j],2);
+            var[1][4][j+1] = myshiftedtau[j].Pt();
+            var[1][5][j+1] = mytt_shiftedtau[j].M();
+            var[1][6][j+1] = m_btt_shiftedtau[j];
+            var[1][7][j+1] = m_bbtt_shiftedtau[j];
         }
         
-        //###################tauId scale factors (shifted sf by pt bins or shifted tau with nom sf)####################
+        //###################tauId scale factors#######################
         std::vector<float> sf_tauid;
         for (int j = 0; j < 23; ++j){//j=0 nominal, 1-14 shifted sf, 15-22 shifted tau
             sf_tauid.push_back(1.0);
-        }//they are all 1.0 for data_obs/not real tau/anti-isolated tau
-        //evaluate tauId scale factor, on real tau
+        }
         if (sample!="data_obs" && byMediumDeepVSjet_2 && gen_match_2==5){
             //nominal
             sf_tauid[0] = fct_tauid_nominal->Eval(pt_2);
-            //shifted tauID scale factors evaluated with nominal tau pt bins
+            //shifted tauID scale factors evaluated at nominal tau pt
             float tauid_ptbins[8] = {20,25,30,35,40,500,1000,10000};
             for (int j = 0; j < 7; j++){
                 if (pt_2>tauid_ptbins[j] && pt_2<=tauid_ptbins[j+1]){
-                    //sf_tauid[1]: sf up only in 20<nominal_tau_pt<25, sf nominal otherwise
-                    //sf_tauid[2]: sf down only in 20<nominal_tau_pt<25, sf nominal otherwise
-                    //sf_tauid[3]: sf up only in 25<nominal_tau_pt<30, sf nominal otherwise
-                    //sf_tauid[4]: sf down only in 25<nominal_tau_pt<30, sf nominal otherwise...
                     sf_tauid[2*j+1] = fct_tauid_up->Eval(pt_2);
                     sf_tauid[2*j+2] = fct_tauid_down->Eval(pt_2);
                 }
@@ -983,18 +1108,14 @@ int main(int argc, char** argv){
                     sf_tauid[2*j+2] = fct_tauid_nominal->Eval(pt_2);
                 }
             }
-            //nominal tauID scale factors evaluated with shifted tau
+            //nominal tauID scale factors evaluated with shifted tau ES
             for (int j = 0; j < 8; j++){
-                //sf_tauid[15]: nominal tauid sf evaluated with tau shifted up for mode 0 only
-                //sf_tauid[16]: nominal tauid sf evaluated with tau shifted down for mode 0 only
-                //sf_tauid[17]: nominal tauid sf evaluated with tau shifted up for mode 1 only
-                //sf_tauid[18]: nominal tauid sf evaluated with tau shifted down for mode 1 only...
                 sf_tauid[15+j] = fct_tauid_nominal->Eval(myshiftedtau[j].Pt());
             }
         }
         
         //####################tauID SF anti-lepton#####################
-        //e faking tauh
+        //e faking tauh SF
         std::vector<float> sf_tauid_efake;
         for (int j = 0; j < 4; j++){
             sf_tauid_efake.push_back(1.0);
@@ -1021,7 +1142,7 @@ int main(int argc, char** argv){
                 if (year=="2016") sf_tauid_efake[3] = 1.0 - 0.32/taufakesf;
             }
         }
-        //mu faking tauh
+        //mu faking tauh SF
         std::vector<float> sf_tauid_mufake;
         for (int j = 0; j < 10; j++){
             sf_tauid_mufake.push_back(1.0);
@@ -1079,89 +1200,119 @@ int main(int argc, char** argv){
             }
         }
         
-        //########################muon faking tau ES shifting: mytau, mymet, mytt, m_btt##########################
+        //########################muon faking tau ES shifting##########################
         std::vector<TLorentzVector> mytau_isgenmu;
         std::vector<TLorentzVector> mymet_isgenmu;
         std::vector<TLorentzVector> mytt_isgenmu;
         std::vector<float> m_btt_isgenmu;
-        for (int j = 0; j < 2; j++){
+        std::vector<float> m_bbtt_isgenmu;
+        for (int j = 0; j < 4; j++){
             mytau_isgenmu.push_back(mytau);
             mymet_isgenmu.push_back(mymet);
             mytt_isgenmu.push_back(mytt);
             m_btt_isgenmu.push_back(m_btt);
-        }
-        float tauES_mufake[2] = {1.01,0.99};//nominal ES correction for muon->tau = 1.0
-        for (int j = 0; j < 1; j++){
-            if (gen_match_2==2 or gen_match_2==4){
-                //mytau
-                mytau_isgenmu[2*j] *= tauES_mufake[2*j];
-                mytau_isgenmu[2*j+1] *= tauES_mufake[2*j+1];
-                //mymet
-                mymet_isgenmu[2*j] = mymet + mytau - mytau_isgenmu[2*j];
-                mymet_isgenmu[2*j+1] = mymet + mytau - mytau_isgenmu[2*j+1];
-                //mytt
-                mytt_isgenmu[2*j].SetPtEtaPhiM((myele+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Pt(),(myele+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Eta(),(myele+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Phi(),m_sv_UP);
-                mytt_isgenmu[2*j+1].SetPtEtaPhiM((myele+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Pt(),(myele+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Eta(),(myele+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Phi(),m_sv_DOWN);
-                m_btt_isgenmu[2*j] = (mytt_isgenmu[2*j]+myb1).M();
-                m_btt_isgenmu[2*j+1] = (mytt_isgenmu[2*j+1]+myb1).M();
+            m_bbtt_isgenmu.push_back(m_bbtt);
+        }//ordered by: dm0up, dm0down, dm1up, dm1down
+        float tauES_mufake[4] = {1.01,0.99,1.01,0.99};//nominal ES correction for muon->tau = 1.0
+        if (gen_match_2==2 or gen_match_2==4){
+            for (int j = 0; j < 2; j++){
+                if (l2_decayMode==taudecaymode[j]){
+                    //mytau
+                    mytau_isgenmu[2*j] *= tauES_mufake[2*j];
+                    mytau_isgenmu[2*j+1] *= tauES_mufake[2*j+1];
+                    //mymet
+                    mymet_isgenmu[2*j] = mymet + mytau - mytau_isgenmu[2*j];
+                    mymet_isgenmu[2*j+1] = mymet + mytau - mytau_isgenmu[2*j+1];
+                    //mytt
+                    mytt_isgenmu[2*j].SetPtEtaPhiM((myele+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Pt(),(myele+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Eta(),(myele+mytau_isgenmu[2*j]+mymet_isgenmu[2*j]).Phi(),m_sv_UP);
+                    mytt_isgenmu[2*j+1].SetPtEtaPhiM((myele+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Pt(),(myele+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Eta(),(myele+mytau_isgenmu[2*j+1]+mymet_isgenmu[2*j+1]).Phi(),m_sv_DOWN);
+                    m_btt_isgenmu[2*j] = (mytt_isgenmu[2*j]+myb1).M();
+                    m_btt_isgenmu[2*j+1] = (mytt_isgenmu[2*j+1]+myb1).M();
+                    m_bbtt_isgenmu[2*j] = (mytt_isgenmu[2*j]+myb1+myb2).M();
+                    m_bbtt_isgenmu[2*j+1] = (mytt_isgenmu[2*j+1]+myb1+myb2).M();
+                }
             }
         }
+        for (int j = 0; j < 4; j++){
+            var[0][0][j+9] = NN1b_tes[j];
+            var[0][1][j+9] = p_n(NN1b_tes[j],2);
+            var[0][2][j+9] = p_n(NN1b_tes[j],2);
+            var[0][4][j+9] = mytau_isgenmu[j].Pt();
+            var[0][5][j+9] = mytt_isgenmu[j].M();
+            var[0][6][j+9] = m_btt_isgenmu[j];
+            
+            var[1][0][j+9] = NN2b_tes[j];
+            var[1][1][j+9] = p_n(NN2b_tes[j],2);
+            var[1][2][j+9] = p_n(NN2b_tes[j],2);
+            var[1][4][j+9] = mytau_isgenmu[j].Pt();
+            var[1][5][j+9] = mytt_isgenmu[j].M();
+            var[1][6][j+9] = m_btt_isgenmu[j];
+            var[1][7][j+9] = m_bbtt_isgenmu[j];
+        }
         
-        //########################electron faking tauh ES shifting, mytau, mymet, mytt, m_btt#######################
+        //########################electron faking tauh ES shifting#######################
         std::vector<TLorentzVector> mytau_isgenele;
         std::vector<TLorentzVector> mymet_isgenele;
         std::vector<TLorentzVector> mytt_isgenele;
         std::vector<float> m_btt_isgenele;
-        for (int j = 0; j < 8; j++){
+        std::vector<float> m_bbtt_isgenele;
+        for (int j = 0; j < 4; j++){
             mytau_isgenele.push_back(mytau);
             mymet_isgenele.push_back(mymet);
             mytt_isgenele.push_back(mytt);
             m_btt_isgenele.push_back(m_btt);
-        }//ordering: dm0barup, dm0bardown, dm0endup, dm0enddown, dm1barup, dm1bardown, dm1endup, dm1enddown
+            m_bbtt_isgenele.push_back(m_bbtt);
+        }//ordering: dm0up, dm0down, dm1up, dm1down
         float tauES_elefake[8] = {1.02266/1.01362,1.00888/1.01362,1.00307/0.96903,0.95653/0.96903,1.03171/1.01945,1.00347/1.01945,1.03999/0.985,0.94191/0.985};
         float tauES_elefake2017[8] = {1.02254/1.00911,1.00029/1.00911,0.99645/0.97396,0.95966/0.97396,1.03316/1.01154,1.00181/1.01154,1.07961/1.015,0.96531/1.015};
-        float tauES_elefake2016[8] = {1.01485/1.00679,0.99697/1.00679,0.98308/0.965,0.95398/0.965,1.04557/1.03389,1.00914/1.03389,1.1157/1.05,0.99306/1.05};
-        if (year=="2017"){
-            for (int j = 0; j < 8; j++) tauES_elefake[j] = tauES_elefake2017[j];
-        }
-        if (year=="2016"){
-            for (int j = 0; j < 8; j++) tauES_elefake[j] = tauES_elefake2016[j];
+        float tauES_elefake2016[8] = {1.01485/1.00679,0.99697/1.00679,0.98308/0.965,0.95398/0.965,1.04557/1.03389,1.00914/1.03389,1.1157/1.05,0.99306/1.05};//ordering: dm0barup, dm0bardown, dm0endup, dm0enddown, dm1barup, dm1bardown, dm1endup, dm1enddown
+        for (int j = 0; j < 8; j++){
+            if (year=="2017") tauES_elefake[j] = tauES_elefake2017[j];
+            if (year=="2016") tauES_elefake[j] = tauES_elefake2016[j];
         }
         if (gen_match_2==1 or gen_match_2==3){
             for (int j = 0; j < 2; j++){
                 if (l2_decayMode==taudecaymode[j]){//j=0 DM=0, j=1 DM=1
-                    //barrel
-                    if (fabs(eta_2)<1.5){
+                    if (fabs(eta_2)<1.5){//barrel
                         //mytau
-                        mytau_isgenele[4*j] *= tauES_elefake[4*j];
-                        mytau_isgenele[4*j+1] *= tauES_elefake[4*j+1];
-                        //mymet
-                        mymet_isgenele[4*j] = mymet + mytau - mytau_isgenele[4*j];
-                        mymet_isgenele[4*j+1] = mymet + mytau - mytau_isgenele[4*j+1];
-                        //mytt
-                        mytt_isgenele[4*j].SetPtEtaPhiM((myele+mytau_isgenele[4*j]+mymet_isgenele[4*j]).Pt(),(myele+mytau_isgenele[4*j]+mymet_isgenele[4*j]).Eta(),(myele+mytau_isgenele[4*j]+mymet_isgenele[4*j]).Phi(),m_sv_UP);
-                        mytt_isgenele[4*j+1].SetPtEtaPhiM((myele+mytau_isgenele[4*j+1]+mymet_isgenele[4*j+1]).Pt(),(myele+mytau_isgenele[4*j+1]+mymet_isgenele[4*j+1]).Eta(),(myele+mytau_isgenele[4*j+1]+mymet_isgenele[4*j+1]).Phi(),m_sv_DOWN);
-                        //m_btt
-                        m_btt_isgenele[4*j] = (mytt_isgenele[4*j]+myb1).M();
-                        m_btt_isgenele[4*j+1] = (mytt_isgenele[4*j+1]+myb1).M();
+                        mytau_isgenele[2*j] *= tauES_elefake[4*j];
+                        mytau_isgenele[2*j+1] *= tauES_elefake[4*j+1];
                     }
-                    //endcaps
-                    else {
+                    else {//endcap
                         //mytau
-                        mytau_isgenele[4*j+2] *= tauES_elefake[4*j+2];
-                        mytau_isgenele[4*j+3] *= tauES_elefake[4*j+3];
-                        //mymet
-                        mymet_isgenele[4*j+2] = mymet + mytau - mytau_isgenele[4*j+2];
-                        mymet_isgenele[4*j+3] = mymet + mytau - mytau_isgenele[4*j+3];
-                        //mytt
-                        mytt_isgenele[4*j+2].SetPtEtaPhiM((myele+mytau_isgenele[4*j+2]+mymet_isgenele[4*j+2]).Pt(),(myele+mytau_isgenele[4*j+2]+mymet_isgenele[4*j+2]).Eta(),(myele+mytau_isgenele[4*j+2]+mymet_isgenele[4*j+2]).Phi(),m_sv_UP);
-                        mytt_isgenele[4*j+3].SetPtEtaPhiM((myele+mytau_isgenele[4*j+3]+mymet_isgenele[4*j+3]).Pt(),(myele+mytau_isgenele[4*j+3]+mymet_isgenele[4*j+3]).Eta(),(myele+mytau_isgenele[4*j+3]+mymet_isgenele[4*j+3]).Phi(),m_sv_DOWN);
-                        //m_btt
-                        m_btt_isgenele[4*j+2] = (mytt_isgenele[4*j+2]+myb1).M();
-                        m_btt_isgenele[4*j+3] = (mytt_isgenele[4*j+3]+myb1).M();
+                        mytau_isgenele[2*j] *= tauES_elefake[4*j+2];
+                        mytau_isgenele[2*j+1] *= tauES_elefake[4*j+3];
                     }
+                    //mymet
+                    mymet_isgenele[2*j] = mymet + mytau - mytau_isgenele[2*j];
+                    mymet_isgenele[2*j+1] = mymet + mytau - mytau_isgenele[2*j+1];
+                    //mytt
+                    mytt_isgenele[2*j].SetPtEtaPhiM((myele+mytau_isgenele[2*j]+mymet_isgenele[2*j]).Pt(),(myele+mytau_isgenele[2*j]+mymet_isgenele[2*j]).Eta(),(myele+mytau_isgenele[2*j]+mymet_isgenele[2*j]).Phi(),m_sv_UP);
+                    mytt_isgenele[2*j+1].SetPtEtaPhiM((myele+mytau_isgenele[2*j+1]+mymet_isgenele[2*j+1]).Pt(),(myele+mytau_isgenele[2*j+1]+mymet_isgenele[2*j+1]).Eta(),(myele+mytau_isgenele[2*j+1]+mymet_isgenele[2*j+1]).Phi(),m_sv_DOWN);
+                    
+                    m_btt_isgenele[2*j] = (mytt_isgenele[2*j]+myb1).M();
+                    m_btt_isgenele[2*j+1] = (mytt_isgenele[2*j+1]+myb1).M();
+                    
+                    m_bbtt_isgenele[2*j] = (mytt_isgenele[2*j]+myb1+myb2).M();
+                    m_bbtt_isgenele[2*j+1] = (mytt_isgenele[2*j+1]+myb1+myb2).M();
                 }
             }
+        }
+        for (int j = 0; j < 4; j++){
+            var[0][0][j+13] = NN1b_tes[j];
+            var[0][1][j+13] = p_n(NN1b_tes[j],2);
+            var[0][2][j+13] = p_n(NN1b_tes[j],2);
+            var[0][4][j+13] = mytau_isgenele[j].Pt();
+            var[0][5][j+13] = mytt_isgenele[j].M();
+            var[0][6][j+13] = m_btt_isgenele[j];
+            
+            var[1][0][j+13] = NN2b_tes[j];
+            var[1][1][j+13] = p_n(NN2b_tes[j],2);
+            var[1][2][j+13] = p_n(NN2b_tes[j],2);
+            var[1][4][j+13] = mytau_isgenele[j].Pt();
+            var[1][5][j+13] = mytt_isgenele[j].M();
+            var[1][6][j+13] = m_btt_isgenele[j];
+            var[1][7][j+13] = m_bbtt_isgenele[j];
         }
         
         //#####################electron ES shifting##############################
@@ -1169,46 +1320,54 @@ int main(int argc, char** argv){
         std::vector<TLorentzVector> mymet_shiftedele;
         std::vector<TLorentzVector> mytt_shiftedele;
         std::vector<float> m_btt_shiftedele;
+        std::vector<float> m_bbtt_shiftedele;
         for (int j = 0; j < 4; j++){
             myshiftedele.push_back(myele);
             mymet_shiftedele.push_back(mymet);
             mytt_shiftedele.push_back(mytt);
             m_btt_shiftedele.push_back(m_btt);
+            m_bbtt_shiftedele.push_back(m_bbtt);
         }
         float eleESetabins[3] = {0,1.5,2.4};
-        float eleES_updowntonom_byeta[4] = {1.005,0.995,1.0125,0.9875};//correction on top of nominal already applied; ordered by: barrel up/down, endcap up/down
+        float eleES[4] = {1.005,0.995,1.0125,0.9875};//ordering: barrel up/down, endcap up/down
         for (int j = 0; j < 2; j++){
             if (fabs(eta_1)>eleESetabins[j] && fabs(eta_1)<eleESetabins[j+1]){//don't need to check gen match, can shift anything that is reco ele
                 //myele
-                myshiftedele[2*j] *= eleES_updowntonom_byeta[2*j];
-                myshiftedele[2*j+1] *= eleES_updowntonom_byeta[2*j+1];
+                myshiftedele[2*j] *= eleES[2*j];
+                myshiftedele[2*j+1] *= eleES[2*j+1];
                 //mymet
                 mymet_shiftedele[2*j] = mymet + myele - myshiftedele[2*j];
                 mymet_shiftedele[2*j+1] = mymet + myele - myshiftedele[2*j+1];;
                 //mytt
                 mytt_shiftedele[2*j].SetPtEtaPhiM((myshiftedele[2*j]+mytau+mymet_shiftedele[2*j]).Pt(),(myshiftedele[2*j]+mytau+mymet_shiftedele[2*j]).Eta(),(myshiftedele[2*j]+mytau+mymet_shiftedele[2*j]).Phi(),m_sv_ESCALEUP);
                 mytt_shiftedele[2*j+1].SetPtEtaPhiM((myshiftedele[2*j+1]+mytau+mymet_shiftedele[2*j+1]).Pt(),(myshiftedele[2*j+1]+mytau+mymet_shiftedele[2*j+1]).Eta(),(myshiftedele[2*j+1]+mytau+mymet_shiftedele[2*j+1]).Phi(),m_sv_ESCALEDOWN);
-                //m_btt
+                
                 m_btt_shiftedele[2*j] = (mytt_shiftedele[2*j]+myb1).M();
                 m_btt_shiftedele[2*j+1] = (mytt_shiftedele[2*j+1]+myb1).M();
+                
+                m_bbtt_shiftedele[2*j] = (mytt_shiftedele[2*j]+myb1+myb2).M();
+                m_bbtt_shiftedele[2*j+1] = (mytt_shiftedele[2*j+1]+myb1+myb2).M();
             }
         }
+        float NN1b_eleES[4] = {NN1b_ESCALEUP,NN1b_ESCALEDOWN,NN1b_ESCALEUP,NN1b_ESCALEDOWN};
+        float NN2b_eleES[4] = {NN2b_ESCALEUP,NN2b_ESCALEDOWN,NN2b_ESCALEUP,NN2b_ESCALEDOWN};
+        for (int j = 0; j < 4; j++){
+            var[0][0][j+17] = NN1b_eleES[j];
+            var[0][1][j+17] = p_n(NN1b_eleES[j],2);
+            var[0][2][j+17] = p_n(NN1b_eleES[j],2);
+            var[0][3][j+17] = myshiftedele[j].Pt();
+            var[0][5][j+17] = mytt_shiftedele[j].M();
+            var[0][6][j+17] = m_btt_shiftedele[j];
+            
+            var[1][0][j+17] = NN2b_eleES[j];
+            var[1][1][j+17] = p_n(NN2b_eleES[j],2);
+            var[1][2][j+17] = p_n(NN2b_eleES[j],2);
+            var[1][3][j+17] = myshiftedele[j].Pt();
+            var[1][5][j+17] = mytt_shiftedele[j].M();
+            var[1][6][j+17] = m_btt_shiftedele[j];
+            var[1][7][j+17] = m_bbtt_shiftedele[j];
+        }
         
-        //define trigger pt thresholds for different years
-        float single_elept_thres = 33;
-        float single_taupt_thres = 20;
-        float cross_elept_thres = 25;
-        float cross_taupt_thres = 35;
-        if (year=="2017"){
-            single_elept_thres = 28;
-            single_taupt_thres = 20;
-            cross_elept_thres = 25;
-            cross_taupt_thres = 35;
-        }
-        if (year=="2016"){//no cross trigger in 2016
-            single_elept_thres = 26;
-            single_taupt_thres = 20;
-        }
         //###################re-apply trigger scale factor for re-defined single/cross trigger regions due to shifted muon####################
         //define trigger sf with nominal ele ES (the usual weights)
         float trgsf = 1.0;
@@ -1249,7 +1408,7 @@ int main(int argc, char** argv){
                     trgsf_single = e_trg_ic_embed_ratio;
                 }
             }
-        }//nominal
+        }
         if (isSingleTrigger && pt_1>single_elept_thres) trgsf = trgsf_single;
         if (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres) trgsf = trgsf_cross;
         if (year=="2017" && sample=="embedded"){
@@ -1279,154 +1438,6 @@ int main(int argc, char** argv){
                     if (isCrossTrigger && myshiftedele[j].Pt()<single_elept_thres && myshiftedele[j].Pt()>cross_elept_thres) trgsf_shiftedele[j] = trgsf_17emb_cross2;
                 }
             }
-        }
-        
-        //#######################jet uncertainties shifting########################
-        float met_jetvar[22] = {met_JetAbsoluteUp,met_JetAbsoluteDown,met_JetAbsoluteyearUp,met_JetAbsoluteyearDown,met_JetBBEC1Up,met_JetBBEC1Down,met_JetBBEC1yearUp,met_JetBBEC1yearDown,met_JetEC2Up,met_JetEC2Down,met_JetEC2yearUp,met_JetEC2yearDown,met_JetFlavorQCDUp,met_JetFlavorQCDDown,met_JetHFUp,met_JetHFDown,met_JetHFyearUp,met_JetHFyearDown,met_JetRelativeBalUp,met_JetRelativeBalDown,met_JetRelativeSampleUp,met_JetRelativeSampleDown};
-        float metphi_jetvar[22] = {metphi_JetAbsoluteUp,metphi_JetAbsoluteDown,metphi_JetAbsoluteyearUp,metphi_JetAbsoluteyearDown,metphi_JetBBEC1Up,metphi_JetBBEC1Down,metphi_JetBBEC1yearUp,metphi_JetBBEC1yearDown,metphi_JetEC2Up,metphi_JetEC2Down,metphi_JetEC2yearUp,metphi_JetEC2yearDown,metphi_JetFlavorQCDUp,metphi_JetFlavorQCDDown,metphi_JetHFUp,metphi_JetHFDown,metphi_JetHFyearUp,metphi_JetHFyearDown,metphi_JetRelativeBalUp,metphi_JetRelativeBalDown,metphi_JetRelativeSampleUp,metphi_JetRelativeSampleDown};
-        float m_sv_jetvar[22] = {m_sv_JetAbsoluteUp,m_sv_JetAbsoluteDown,m_sv_JetAbsoluteyearUp,m_sv_JetAbsoluteyearDown,m_sv_JetBBEC1Up,m_sv_JetBBEC1Down,m_sv_JetBBEC1yearUp,m_sv_JetBBEC1yearDown,m_sv_JetEC2Up,m_sv_JetEC2Down,m_sv_JetEC2yearUp,m_sv_JetEC2yearDown,m_sv_JetFlavorQCDUp,m_sv_JetFlavorQCDDown,m_sv_JetHFUp,m_sv_JetHFDown,m_sv_JetHFyearUp,m_sv_JetHFyearDown,m_sv_JetRelativeBalUp,m_sv_JetRelativeBalDown,m_sv_JetRelativeSampleUp,m_sv_JetRelativeSampleDown};
-        std::vector<TLorentzVector> mymet_jet;
-        std::vector<TLorentzVector> mytt_jet;
-        std::vector<float> m_btt_jet;
-        for (int j = 0; j < 22; j++){
-            mymet_jet.push_back(mymet);
-            mytt_jet.push_back(mytt);
-            mymet_jet[j].SetPtEtaPhiM(met_jetvar[j],0,metphi_jetvar[j],0);
-            mytt_jet[j].SetPtEtaPhiM((myele+mytau+mymet_jet[j]).Pt(),(myele+mytau+mymet_jet[j]).Eta(),(myele+mytau+mymet_jet[j]).Phi(),m_sv_jetvar[j]);
-            m_btt_jet.push_back((mytt_jet[j]+myb1).M());
-        }
-        
-        //##########################tau tracking uncertainties####################################
-        std::vector<float> tau_tracking_shifting;
-        for (int j = 0; j < 6; j++){//ordered by: dm0dm10up, dm0dm10down, dm1up, dm1down, dm11up, dm11down
-            tau_tracking_shifting.push_back(1);
-        }
-        if (gen_match_2==5){
-            if (l2_decayMode==0){//+/-1%
-                tau_tracking_shifting[0] = 1.01;
-                tau_tracking_shifting[1] = 0.99;
-            }
-            if (l2_decayMode==10){//+/-3%
-                tau_tracking_shifting[0] = 1.03;
-                tau_tracking_shifting[1] = 0.97;
-            }
-            if (l2_decayMode==1){//+/-2.5%
-                tau_tracking_shifting[2] = 1.025;
-                tau_tracking_shifting[3] = 0.975;
-            }
-            if (l2_decayMode==11){//+/-6%
-                tau_tracking_shifting[4] = 1.06;
-                tau_tracking_shifting[5] = 0.94;
-            }
-        }
-        
-        //#########################DY MC Z pt reweight uncertainties################################
-        std::vector<float> zptmass_weight_shifting;
-        for (int j = 0; j < 2; j++){
-            zptmass_weight_shifting.push_back(1);
-        }
-        if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){//+/-10% of correction i.e. 1.5 -> 1.55/1.45
-            if (zptmass_weight_nom>1){
-                zptmass_weight_shifting[0] = 1 + (1 - 1/zptmass_weight_nom)*0.1;
-                zptmass_weight_shifting[1] = 1 - (1 - 1/zptmass_weight_nom)*0.1;
-            }
-            if (zptmass_weight_nom<1){
-                zptmass_weight_shifting[0] = 1 + (1/zptmass_weight_nom - 1)*0.1;//down/up?
-                zptmass_weight_shifting[1] = 1 - (1/zptmass_weight_nom - 1)*0.1;
-            }
-        }
-        
-        //##########################ttbar top pt reweight uncertainties##############################
-        std::vector<float> topfactor_shifting;
-        for (int j = 0; j < 2; j++){
-            topfactor_shifting.push_back(1);
-        }
-        if (sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic" or name=="TT"){//apply twice for up and not at all for down
-            topfactor_shifting[0] = topfactor;
-            topfactor_shifting[1] = 1/topfactor;
-        }
-        
-        //#######################recoil uncertainties########################
-        float met_recoilvar[4] = {met_resolutionUp,met_resolutionDown,met_responseUp,met_responseDown};
-        float metphi_recoilvar[4] = {metphi_resolutionUp,metphi_resolutionDown,metphi_responseUp,metphi_responseDown};
-        float m_sv_recoilvar[4] = {m_sv_ResolutionUp,m_sv_ResolutionDown,m_sv_ResponseUp,m_sv_ResponseDown};
-        std::vector<TLorentzVector> mymet_recoil;
-        std::vector<TLorentzVector> mytt_recoil;
-        std::vector<float> m_btt_recoil;
-        for (int j = 0; j < 12; j++){//ordered by: 0jet resolutionUp/Down, responseUp/Down, 1jet resolutionUp/Down, responseUp/Down, 2jetsmore resolutionUp/Down, responseUp/Down
-            mymet_recoil.push_back(mymet);
-            mytt_recoil.push_back(mytt);
-            m_btt_recoil.push_back(m_btt);
-        }
-        float njetsbins[4] = {0,1,2,10};
-        for (int j = 0; j < 3; j++){
-            if (njets>=njetsbins[j] && njets<njetsbins[j+1]){
-                for (int k = 0; k < 4; k++){
-                    mymet_recoil[4*j+k].SetPtEtaPhiM(met_recoilvar[k],0,metphi_recoilvar[k],0);
-                    mytt_recoil[4*j+k].SetPtEtaPhiM((myele+mytau+mymet_recoil[4*j+k]).Pt(),(myele+mytau+mymet_recoil[4*j+k]).Eta(),(myele+mytau+mymet_recoil[4*j+k]).Phi(),m_sv_recoilvar[k]);
-                    m_btt_recoil[4*j+k] = (mytt_recoil[4*j+k]+myb1).M();
-                }
-            }
-        }
-        
-        //#######################met unclustered ES########################
-        float met_UESvar[2] = {met_UESUp,met_UESDown};
-        float metphi_UESvar[2] = {metphi_UESUp,metphi_UESDown};
-        float m_sv_UESvar[2] = {m_sv_UESUp,m_sv_UESDown};
-        std::vector<TLorentzVector> mymet_UES;
-        std::vector<TLorentzVector> mytt_UES;
-        std::vector<float> m_btt_UES;
-        for (int j = 0; j < 2; j++){//ordered by: UES Up/Down
-            mymet_UES.push_back(mymet);
-            mytt_UES.push_back(mytt);
-            m_btt_UES.push_back(m_btt);
-            
-            mymet_UES[j].SetPtEtaPhiM(met_UESvar[j],0,metphi_UESvar[j],0);
-            mytt_UES[j].SetPtEtaPhiM((myele+mytau+mymet_UES[j]).Pt(),(myele+mytau+mymet_UES[j]).Eta(),(myele+mytau+mymet_UES[j]).Phi(),m_sv_UESvar[j]);
-            m_btt_UES[j] = (mytt_UES[j]+myb1).M();
-        }
-        
-        //#######################jer uncertainties########################
-        float met_jervar[2] = {met_JERUp,met_JERDown};
-        float metphi_jervar[2] = {metphi_JERUp,metphi_JERDown};
-        float m_sv_jervar[2] = {m_sv_JERUp,m_sv_JERDown};
-        std::vector<TLorentzVector> mymet_jer;
-        std::vector<TLorentzVector> mytt_jer;
-        std::vector<float> m_btt_jer;
-        for (int j = 0; j < 2; j++){
-            mymet_jer.push_back(mymet);
-            mytt_jer.push_back(mytt);
-            mymet_jer[j].SetPtEtaPhiM(met_jervar[j],0,metphi_jervar[j],0);
-            mytt_jer[j].SetPtEtaPhiM((myele+mytau+mymet_jer[j]).Pt(),(myele+mytau+mymet_jer[j]).Eta(),(myele+mytau+mymet_jer[j]).Phi(),m_sv_jervar[j]);
-            m_btt_jer.push_back((mytt_jer[j]+myb1).M());
-        }
-        
-        //##########################trigger regions with nominal/shifted ES###########################
-        //nominal
-        bool trigger_region_nominal = (isSingleTrigger && pt_1>single_elept_thres && pt_2>single_taupt_thres) or (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres && pt_2>cross_taupt_thres);
-        //shifted tau ES
-        std::vector<bool> trigger_region_shiftedtau;
-        for (int j = 0; j < 8; j++){
-            trigger_region_shiftedtau.push_back(0);
-            trigger_region_shiftedtau[j] = (isSingleTrigger && pt_1>single_elept_thres && myshiftedtau[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres && myshiftedtau[j].Pt()>cross_taupt_thres);
-        }
-        //muon->tauh fake ES
-        std::vector<bool> trigger_region_tauisgenmu;
-        for (int j = 0; j < 2; j++){
-            trigger_region_tauisgenmu.push_back(0);
-            trigger_region_tauisgenmu[j] = (isSingleTrigger && pt_1>single_elept_thres && mytau_isgenmu[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres && mytau_isgenmu[j].Pt()>cross_taupt_thres);
-        }
-        //electron->tauh fake ES
-        std::vector<bool> trigger_region_tauisgenele;
-        for (int j = 0; j < 8; j++){
-            trigger_region_tauisgenele.push_back(0);
-            trigger_region_tauisgenele[j] = (isSingleTrigger && pt_1>single_elept_thres && mytau_isgenele[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres && mytau_isgenele[j].Pt()>cross_taupt_thres);
-        }
-        //shifted electron ES
-        std::vector<bool> trigger_region_shiftedele;
-        for (int j = 0; j < 4; j++){
-            trigger_region_shiftedele.push_back(0);
-            trigger_region_shiftedele[j] = (isSingleTrigger && myshiftedele[j].Pt()>single_elept_thres && pt_2>single_taupt_thres) or (isCrossTrigger && myshiftedele[j].Pt()<single_elept_thres && myshiftedele[j].Pt()>cross_elept_thres && pt_2>cross_taupt_thres);
         }
         
         //############################trigger sf shifting################################
@@ -1462,458 +1473,880 @@ int main(int argc, char** argv){
                 }
             }
         }
-        //##############################histograms filling###################################
-        bool isnonSignal = (sample!="gghbbtt12" && sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt15" && sample!="vbfbbtt20" && sample!="vbfbbtt25" && sample!="vbfbbtt30" && sample!="vbfbbtt35" && sample!="vbfbbtt40" && sample!="vbfbbtt45" && sample!="vbfbbtt50" && sample!="vbfbbtt55" && sample!="vbfbbtt60");
-        bool isnonHiggsMC = (sample!="data_obs" && sample!="embedded" && isnonSignal && name!="HTT" && name!="ttHnonbb");
-        //do not fill for MC tautau events (duplicating emb) as normal
-        if (!isnonHiggsMC or (isnonHiggsMC && !(gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6))){
-            //tau isolated region (to be failed in fake)
-            if (byMediumDeepVSjet_2){
-                if (nbtag20==1){//1 bjet category
-                    if (trigger_region_nominal){//nominal trigger region
-                        h_iso[0][0]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]);
-                        h_iso[1][0]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]);
-                        h_iso[2][0]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]);
-                        h_iso[3][0]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]);
-                        
-                        if (sample!="data_obs"){
-                            for (int k = 0; k < 14; k++){//[0] all nominal, [1-14] tauID shifted
-                                h_iso[0][k+1]->Fill(pt_1,weight_corr*trgsf*sf_tauid[k]);
-                                h_iso[1][k+1]->Fill(pt_2,weight_corr*trgsf*sf_tauid[k]);
-                                h_iso[2][k+1]->Fill(m_sv,weight_corr*trgsf*sf_tauid[k]);
-                                h_iso[3][k+1]->Fill(m_btt,weight_corr*trgsf*sf_tauid[k]);
-                            }
-                            for (int k = 0; k < 22; k++){//[23-44] jet uncertainties
-                                h_iso[0][k+23]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]);
-                                h_iso[1][k+23]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]);
-                                h_iso[2][k+23]->Fill(mytt_jet[k].M(),weight_corr*trgsf*sf_tauid[0]);
-                                h_iso[3][k+23]->Fill(m_btt_jet[k],weight_corr*trgsf*sf_tauid[0]);
-                            }
-                            //trigger sf shifting
-                            for (int k = 0; k < 4; k++){
-                                h_iso[0][k+55]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
-                                h_iso[1][k+55]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
-                                h_iso[2][k+55]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
-                                h_iso[3][k+55]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
-                            }
-                            //tau tracking uncertainties, emb only
-                            if (sample=="embedded"){
-                                for (int k = 0; k < 6; k++){
-                                    h_iso[0][k+65]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]*tau_tracking_shifting[k]);
-                                    h_iso[1][k+65]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]*tau_tracking_shifting[k]);
-                                    h_iso[2][k+65]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]*tau_tracking_shifting[k]);
-                                    h_iso[3][k+65]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]*tau_tracking_shifting[k]);
-                                }
-                            }
-                            //Zpt reweight uncertainties for DY MC only
-                            if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
-                                for (int k = 0; k < 2; k++){
-                                    h_iso[0][k+71]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]*zptmass_weight_shifting[k]);
-                                    h_iso[1][k+71]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]*zptmass_weight_shifting[k]);
-                                    h_iso[2][k+71]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]*zptmass_weight_shifting[k]);
-                                    h_iso[3][k+71]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]*zptmass_weight_shifting[k]);
-                                }
-                            }
-                            //top pt reweight uncertainties for ttbar only
-                            if (name=="TT"){
-                                for (int k = 0; k < 2; k++){
-                                    h_iso[0][k+73]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
-                                    h_iso[1][k+73]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
-                                    h_iso[2][k+73]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
-                                    h_iso[3][k+73]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
-                                }
-                            }
-                            //recoil uncertainties
-                            if (sample!="embedded" && name!="TT" && name!="VV" && name!="ST"){
-                                for (int k = 0; k < 12; k++){
-                                    h_iso[0][k+75]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]);
-                                    h_iso[1][k+75]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]);
-                                    h_iso[2][k+75]->Fill(mytt_recoil[k].M(),weight_corr*trgsf*sf_tauid[0]);
-                                    h_iso[3][k+75]->Fill(m_btt_recoil[k],weight_corr*trgsf*sf_tauid[0]);
-                                }
-                            }
-                            //met unclustered ES
-                            if (name=="TT" or name=="VV" or name=="ST"){
-                                for (int k = 0; k < 2; k++){
-                                    h_iso[0][k+87]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]);
-                                    h_iso[1][k+87]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]);
-                                    h_iso[2][k+87]->Fill(mytt_UES[k].M(),weight_corr*trgsf*sf_tauid[0]);
-                                    h_iso[3][k+87]->Fill(m_btt_UES[k],weight_corr*trgsf*sf_tauid[0]);
-                                }
-                            }
-                            for (int k = 0; k < 2; k++){//[90-91] JER uncertainties
-                                h_iso[0][k+90]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]);
-                                h_iso[1][k+90]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]);
-                                h_iso[2][k+90]->Fill(mytt_jer[k].M(),weight_corr*trgsf*sf_tauid[0]);
-                                h_iso[3][k+90]->Fill(m_btt_jer[k],weight_corr*trgsf*sf_tauid[0]);
-                            }
-                            //e,mu fake tau sf
-                            if (sample!="embedded"){
-                                for (int k = 0; k < 4; k++){
-                                    h_iso[0][k+92]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]*sf_tauid_efake[k]);
-                                    h_iso[1][k+92]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]*sf_tauid_efake[k]);
-                                    h_iso[2][k+92]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]*sf_tauid_efake[k]);
-                                    h_iso[3][k+92]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]*sf_tauid_efake[k]);
-                                }
-                                for (int k = 0; k < 10; k++){
-                                    h_iso[0][k+96]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
-                                    h_iso[1][k+96]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
-                                    h_iso[2][k+96]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
-                                    h_iso[3][k+96]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
-                                }
-                            }
-                        }//end of sample!="data_obs"
-                    }//end of nominal trgger region
-                    if (sample!="data_obs"){
-                        //loop over trigger regions with shifted tau
-                        for (int k = 0; k < 8; k++){//h_OS[15-22] tau energy scale
-                            if (trigger_region_shiftedtau[k]){
-                                h_iso[0][k+15]->Fill(pt_1,weight_corr*trgsf*sf_tauid[k+15]);
-                                h_iso[1][k+15]->Fill(myshiftedtau[k].Pt(),weight_corr*trgsf*sf_tauid[k+15]);
-                                h_iso[2][k+15]->Fill(mytt_shiftedtau[k].M(),weight_corr*trgsf*sf_tauid[k+15]);
-                                h_iso[3][k+15]->Fill(m_btt_shiftedtau[k],weight_corr*trgsf*sf_tauid[k+15]);//nominal tauID sf evaluated at shifted tau pt
-                            }
-                        }
-                        //loop over trigger regions with muon->tau fake shifted
-                        for (int k = 0; k < 2; k++){
-                            if (trigger_region_tauisgenmu[k]){
-                                h_iso[0][k+45]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]);
-                                h_iso[1][k+45]->Fill(mytau_isgenmu[k].Pt(),weight_corr*trgsf*sf_tauid[0]);
-                                h_iso[2][k+45]->Fill(mytt_isgenmu[k].M(),weight_corr*trgsf*sf_tauid[0]);
-                                h_iso[3][k+45]->Fill(m_btt_isgenmu[k],weight_corr*trgsf*sf_tauid[0]);
-                            }
-                        }
-                        //loop over trigger regions with electron->tau fake shifted
-                        for (int k = 0; k < 8; k++){
-                            if (trigger_region_tauisgenele[k]){
-                                h_iso[0][k+47]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]);
-                                h_iso[1][k+47]->Fill(mytau_isgenele[k].Pt(),weight_corr*trgsf*sf_tauid[0]);
-                                h_iso[2][k+47]->Fill(mytt_isgenele[k].M(),weight_corr*trgsf*sf_tauid[0]);
-                                h_iso[3][k+47]->Fill(m_btt_isgenele[k],weight_corr*trgsf*sf_tauid[0]);
-                            }
-                        }
-                        //loop over trigger regions with shifted electron
-                        for (int k = 0; k < 4; k++){
-                            if (trigger_region_shiftedele[k]){
-                                h_iso[0][k+59]->Fill(myshiftedele[k].Pt(),weight_corr*trgsf_shiftedele[k]*sf_tauid[0]);
-                                h_iso[1][k+59]->Fill(pt_2,weight_corr*trgsf_shiftedele[k]*sf_tauid[0]);
-                                h_iso[2][k+59]->Fill(mytt_shiftedele[k].M(),weight_corr*trgsf_shiftedele[k]*sf_tauid[0]);
-                                h_iso[3][k+59]->Fill(m_btt_shiftedele[k],weight_corr*trgsf_shiftedele[k]*sf_tauid[0]);
-                            }
-                        }
-                    }//end of sample!="data_obs"
-                }//end of nbtag==1
-            }//end of isolated region
+        
+        //#######################jet uncertainties shifting########################
+        float met_jetvar[24] = {met_JetAbsoluteUp,met_JetAbsoluteDown,met_JetAbsoluteyearUp,met_JetAbsoluteyearDown,met_JetBBEC1Up,met_JetBBEC1Down,met_JetBBEC1yearUp,met_JetBBEC1yearDown,met_JetEC2Up,met_JetEC2Down,met_JetEC2yearUp,met_JetEC2yearDown,met_JetFlavorQCDUp,met_JetFlavorQCDDown,met_JetHFUp,met_JetHFDown,met_JetHFyearUp,met_JetHFyearDown,met_JetRelativeBalUp,met_JetRelativeBalDown,met_JetRelativeSampleUp,met_JetRelativeSampleDown,met_JERUp,met_JERDown};
+        float metphi_jetvar[24] = {metphi_JetAbsoluteUp,metphi_JetAbsoluteDown,metphi_JetAbsoluteyearUp,metphi_JetAbsoluteyearDown,metphi_JetBBEC1Up,metphi_JetBBEC1Down,metphi_JetBBEC1yearUp,metphi_JetBBEC1yearDown,metphi_JetEC2Up,metphi_JetEC2Down,metphi_JetEC2yearUp,metphi_JetEC2yearDown,metphi_JetFlavorQCDUp,metphi_JetFlavorQCDDown,metphi_JetHFUp,metphi_JetHFDown,metphi_JetHFyearUp,metphi_JetHFyearDown,metphi_JetRelativeBalUp,metphi_JetRelativeBalDown,metphi_JetRelativeSampleUp,metphi_JetRelativeSampleDown,metphi_JERUp,metphi_JERDown};
+        float m_sv_jetvar[24] = {m_sv_JetAbsoluteUp,m_sv_JetAbsoluteDown,m_sv_JetAbsoluteyearUp,m_sv_JetAbsoluteyearDown,m_sv_JetBBEC1Up,m_sv_JetBBEC1Down,m_sv_JetBBEC1yearUp,m_sv_JetBBEC1yearDown,m_sv_JetEC2Up,m_sv_JetEC2Down,m_sv_JetEC2yearUp,m_sv_JetEC2yearDown,m_sv_JetFlavorQCDUp,m_sv_JetFlavorQCDDown,m_sv_JetHFUp,m_sv_JetHFDown,m_sv_JetHFyearUp,m_sv_JetHFyearDown,m_sv_JetRelativeBalUp,m_sv_JetRelativeBalDown,m_sv_JetRelativeSampleUp,m_sv_JetRelativeSampleDown,m_sv_JERUp,m_sv_JERDown};
+        float bpt_1_jetvar[24] = {bpt_deepflavour_JetAbsoluteUp_1,bpt_deepflavour_JetAbsoluteDown_1,bpt_deepflavour_JetAbsoluteyearUp_1,bpt_deepflavour_JetAbsoluteyearDown_1,bpt_deepflavour_JetBBEC1Up_1,bpt_deepflavour_JetBBEC1Down_1,bpt_deepflavour_JetBBEC1yearUp_1,bpt_deepflavour_JetBBEC1yearDown_1,bpt_deepflavour_JetEC2Up_1,bpt_deepflavour_JetEC2Down_1,bpt_deepflavour_JetEC2yearUp_1,bpt_deepflavour_JetEC2yearDown_1,bpt_deepflavour_JetFlavorQCDUp_1,bpt_deepflavour_JetFlavorQCDDown_1,bpt_deepflavour_JetHFUp_1,bpt_deepflavour_JetHFDown_1,bpt_deepflavour_JetHFyearUp_1,bpt_deepflavour_JetHFyearDown_1,bpt_deepflavour_JetRelativeBalUp_1,bpt_deepflavour_JetRelativeBalDown_1,bpt_deepflavour_JetRelativeSampleUp_1,bpt_deepflavour_JetRelativeSampleDown_1,bpt_deepflavour_JERUp_1,bpt_deepflavour_JERDown_1};
+        float bpt_2_jetvar[24] = {bpt_deepflavour_JetAbsoluteUp_2,bpt_deepflavour_JetAbsoluteDown_2,bpt_deepflavour_JetAbsoluteyearUp_2,bpt_deepflavour_JetAbsoluteyearDown_2,bpt_deepflavour_JetBBEC1Up_2,bpt_deepflavour_JetBBEC1Down_2,bpt_deepflavour_JetBBEC1yearUp_2,bpt_deepflavour_JetBBEC1yearDown_2,bpt_deepflavour_JetEC2Up_2,bpt_deepflavour_JetEC2Down_2,bpt_deepflavour_JetEC2yearUp_2,bpt_deepflavour_JetEC2yearDown_2,bpt_deepflavour_JetFlavorQCDUp_2,bpt_deepflavour_JetFlavorQCDDown_2,bpt_deepflavour_JetHFUp_2,bpt_deepflavour_JetHFDown_2,bpt_deepflavour_JetHFyearUp_2,bpt_deepflavour_JetHFyearDown_2,bpt_deepflavour_JetRelativeBalUp_2,bpt_deepflavour_JetRelativeBalDown_2,bpt_deepflavour_JetRelativeSampleUp_2,bpt_deepflavour_JetRelativeSampleDown_2,bpt_deepflavour_JERUp_2,bpt_deepflavour_JERDown_2};
+        float NN1b_jetvar[24] = {NN1b_JetAbsoluteUp,NN1b_JetAbsoluteDown,NN1b_JetAbsoluteyearUp,NN1b_JetAbsoluteyearDown,NN1b_JetBBEC1Up,NN1b_JetBBEC1Down,NN1b_JetBBEC1yearUp,NN1b_JetBBEC1yearDown,NN1b_JetEC2Up,NN1b_JetEC2Down,NN1b_JetEC2yearUp,NN1b_JetEC2yearDown,NN1b_JetFlavorQCDUp,NN1b_JetFlavorQCDDown,NN1b_JetHFUp,NN1b_JetHFDown,NN1b_JetHFyearUp,NN1b_JetHFyearDown,NN1b_JetRelativeBalUp,NN1b_JetRelativeBalDown,NN1b_JetRelativeSampleUp,NN1b_JetRelativeSampleDown,NN1b_JERUp,NN1b_JERDown};
+        float NN2b_jetvar[24] = {NN2b_JetAbsoluteUp,NN2b_JetAbsoluteDown,NN2b_JetAbsoluteyearUp,NN2b_JetAbsoluteyearDown,NN2b_JetBBEC1Up,NN2b_JetBBEC1Down,NN2b_JetBBEC1yearUp,NN2b_JetBBEC1yearDown,NN2b_JetEC2Up,NN2b_JetEC2Down,NN2b_JetEC2yearUp,NN2b_JetEC2yearDown,NN2b_JetFlavorQCDUp,NN2b_JetFlavorQCDDown,NN2b_JetHFUp,NN2b_JetHFDown,NN2b_JetHFyearUp,NN2b_JetHFyearDown,NN2b_JetRelativeBalUp,NN2b_JetRelativeBalDown,NN2b_JetRelativeSampleUp,NN2b_JetRelativeSampleDown,NN2b_JERUp,NN2b_JERDown};
+        std::vector<TLorentzVector> mymet_jet;
+        std::vector<TLorentzVector> mytt_jet;
+        std::vector<TLorentzVector> myb1_jet;
+        std::vector<TLorentzVector> myb2_jet;
+        std::vector<float> m_btt_jet;
+        std::vector<float> m_bbtt_jet;
+        for (int j = 0; j < 24; j++){
+            mymet_jet.push_back(mymet);
+            mytt_jet.push_back(mytt);
+            myb1_jet.push_back(myb1);
+            myb2_jet.push_back(myb2);
             
-            //anti-isolated tau region for fake background
-            if (isnonSignal && byVVVLooseDeepVSjet_2 && !byMediumDeepVSjet_2){//fake taus, do not need tau energy scale shifting, or tauid sf
-                //fake rates
-                float fr = GetTauFR(mytau.Pt(),l2_decayMode,g_taufr_dm0M,g_taufr_dm1M,g_taufr_dm10M,g_taufr_dm11M,0);
-                //calculated with bjet
-                float fr_bjet = GetTauFR(mytau.Pt(),l2_decayMode,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,0);
-                
-                float weight_fake = 1.0;
-                if (nbtag20==0) weight_fake = fr/(1-fr);
-                else weight_fake = fr_bjet/(1-fr_bjet);
-                
-                float xtrgfakefactor = 1.0;//tighter cuts applied at cross trigger level -> less yields -> scale up to compensate
-                float xtrgfakefactor_updown[2] = {1.0,1.0};
-                if (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres){
-                    xtrgfakefactor = 1.5;//nominal
-                    xtrgfakefactor_updown[0] = 1.6;//+/-20%
-                    xtrgfakefactor_updown[1] = 1.4;
-                }
-                
-                std::vector<float> xtrgfakefactor_shiftedele;
-                //for shifted electron (re-defined single/cross)
-                for (int k = 0; k < 6; k++){
-                    xtrgfakefactor_shiftedele.push_back(1.0);
-                    if (isCrossTrigger && myshiftedele[k].Pt()<single_elept_thres && myshiftedele[k].Pt()>cross_elept_thres) xtrgfakefactor_shiftedele[k] = 1.5;
-                }
-                
-                //############################fake rate uncertainties for alldm by pt bins###########################
-                std::vector<float> fr_bjet_shifted;//only for nbjet>0; when nbjet==0 it is split by DM also..
-                std::vector<float> weight_fake_shifted;
-                for (int k = 0; k < 14; k++){
-                    fr_bjet_shifted.push_back(0);
-                    fr_bjet_shifted[k] = GetTauFR(mytau.Pt(),0,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,k+1);//see GetTauFR.h
-                    weight_fake_shifted.push_back(0);
-                    weight_fake_shifted[k] = fr_bjet_shifted[k]/(1-fr_bjet_shifted[k]);
-                }//ordered by: pt0to25up/down, pt25to30up/down,...
-                
+            mymet_jet[j].SetPtEtaPhiM(met_jetvar[j],0,metphi_jetvar[j],0);
+            mytt_jet[j].SetPtEtaPhiM((myele+mytau+mymet_jet[j]).Pt(),(myele+mytau+mymet_jet[j]).Eta(),(myele+mytau+mymet_jet[j]).Phi(),m_sv_jetvar[j]);
+            myb1_jet[j].SetPtEtaPhiM(bpt_1_jetvar[j],beta_deepflavour_1,bphi_deepflavour_1,bm_deepflavour_1);
+            myb2_jet[j].SetPtEtaPhiM(bpt_2_jetvar[j],beta_deepflavour_2,bphi_deepflavour_2,bm_deepflavour_2);
+            m_btt_jet.push_back((mytt_jet[j]+myb1_jet[j]).M());
+            m_bbtt_jet.push_back((mytt_jet[j]+myb1_jet[j]+myb2_jet[j]).M());
+        }
+        for (int j = 0; j < 24; j++){
+            var[0][0][j+21] = NN1b_jetvar[j];
+            var[0][1][j+21] = p_n(NN1b_jetvar[j],2);
+            var[0][2][j+21] = p_n(NN1b_jetvar[j],2);
+            var[0][5][j+21] = mytt_jet[j].M();
+            var[0][6][j+21] = m_btt_jet[j];
+            
+            var[1][0][j+21] = NN2b_jetvar[j];
+            var[1][1][j+21] = p_n(NN2b_jetvar[j],2);
+            var[1][2][j+21] = p_n(NN2b_jetvar[j],2);
+            var[1][5][j+21] = mytt_jet[j].M();
+            var[1][6][j+21] = m_btt_jet[j];
+            var[1][7][j+21] = m_bbtt_jet[j];
+        }
+        
+        //re-count nbtag20 and re-compute btag sf with shifted jet ES
+        std::vector<int> nbtag20_jetsyst;
+        std::vector<float> bMpt_1_jetsyst;
+        std::vector<float> bMflavour_1_jetsyst;
+        std::vector<float> bMpt_2_jetsyst;
+        std::vector<float> bMflavour_2_jetsyst;
+        std::vector<float> weight_btag_jetsyst;
+        for (int j = 0; j < 24; j++){
+            nbtag20_jetsyst.push_back(0);
+            bMpt_1_jetsyst.push_back(0);
+            bMflavour_1_jetsyst.push_back(0);
+            bMpt_2_jetsyst.push_back(0);
+            bMflavour_2_jetsyst.push_back(0);
+            if (bpt_1_jetvar[j]>20 && bscore_deepflavour_1>bscore_thres && fabs(beta_deepflavour_1)<2.4){
+                bMpt_1_jetsyst[j] = bpt_1_jetvar[j];
+                bMflavour_1_jetsyst[j] = bflavour_deepflavour_1;
+                nbtag20_jetsyst[j]++;
+            }
+            if (bpt_2_jetvar[j]>20 && bscore_deepflavour_2>bscore_thres && fabs(beta_deepflavour_2)<2.4){
+                bMpt_2_jetsyst[j] = bpt_2_jetvar[j];
+                bMflavour_2_jetsyst[j] = bflavour_deepflavour_2;
+                nbtag20_jetsyst[j]++;
+            }
+            weight_btag_jetsyst.push_back(1);
+            if (sample!="data_obs" && sample!="embedded"){
                 if (nbtag20==1){
-                    if (trigger_region_nominal){
-                        //nominal
-                        h_anti[0][0]->Fill(pt_1,weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                        h_anti[1][0]->Fill(pt_2,weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                        h_anti[2][0]->Fill(m_sv,weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                        h_anti[3][0]->Fill(m_btt,weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                        if (sample!="data_obs"){
-                            //jet uncertainties
-                            for (int k = 0; k < 22; k++){
-                                h_anti[0][k+1]->Fill(pt_1,weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                                h_anti[1][k+1]->Fill(pt_2,weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                                h_anti[2][k+1]->Fill(mytt_jet[k].M(),weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                                h_anti[3][k+1]->Fill(m_btt_jet[k],weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                            }
-                            //trigger sf shifting
-                            for (int k = 0; k < 4; k++){
-                                h_anti[0][k+23]->Fill(pt_1,weight_corr*weight_fake*trgsf*trigger_shiftedsf[k]*xtrgfakefactor);
-                                h_anti[1][k+23]->Fill(pt_2,weight_corr*weight_fake*trgsf*trigger_shiftedsf[k]*xtrgfakefactor);
-                                h_anti[2][k+23]->Fill(m_sv,weight_corr*weight_fake*trgsf*trigger_shiftedsf[k]*xtrgfakefactor);
-                                h_anti[3][k+23]->Fill(m_btt,weight_corr*weight_fake*trgsf*trigger_shiftedsf[k]*xtrgfakefactor);
-                            }
-                            //Zpt reweight uncertainties for DY MC only
-                            if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
-                                for (int k = 0; k < 2; k++){
-                                    h_anti[0][k+33]->Fill(pt_1,weight_corr*weight_fake*trgsf*zptmass_weight_shifting[k]*xtrgfakefactor);
-                                    h_anti[1][k+33]->Fill(pt_2,weight_corr*weight_fake*trgsf*zptmass_weight_shifting[k]*xtrgfakefactor);
-                                    h_anti[2][k+33]->Fill(m_sv,weight_corr*weight_fake*trgsf*zptmass_weight_shifting[k]*xtrgfakefactor);
-                                    h_anti[3][k+33]->Fill(m_btt,weight_corr*weight_fake*trgsf*zptmass_weight_shifting[k]*xtrgfakefactor);
-                                }
-                            }
-                            //top pt reweight uncertainties for ttbar only
-                            if (sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic" or name=="TT"){
-                                for (int k = 0; k < 2; k++){
-                                    h_anti[0][k+35]->Fill(pt_1,weight_corr*weight_fake*trgsf*topfactor_shifting[k]*xtrgfakefactor);
-                                    h_anti[1][k+35]->Fill(pt_2,weight_corr*weight_fake*trgsf*topfactor_shifting[k]*xtrgfakefactor);
-                                    h_anti[2][k+35]->Fill(m_sv,weight_corr*weight_fake*trgsf*topfactor_shifting[k]*xtrgfakefactor);
-                                    h_anti[3][k+35]->Fill(m_btt,weight_corr*weight_fake*trgsf*topfactor_shifting[k]*xtrgfakefactor);
-                                }
-                            }
-                            //recoil uncertainties
-                            if (sample!="embedded" && name!="TT" && name!="VV" && name!="ST"){
-                                for (int k = 0; k < 12; k++){
-                                    h_anti[0][k+37]->Fill(pt_1,weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                                    h_anti[1][k+37]->Fill(pt_2,weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                                    h_anti[2][k+37]->Fill(mytt_recoil[k].M(),weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                                    h_anti[3][k+37]->Fill(m_btt_recoil[k],weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                                }
-                            }
-                            //met unclustered ES
-                            if (name=="TT" or name=="VV" or name=="ST"){
-                                for (int k = 0; k < 2; k++){
-                                    h_anti[0][k+49]->Fill(pt_1,weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                                    h_anti[1][k+49]->Fill(pt_2,weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                                    h_anti[2][k+49]->Fill(mytt_UES[k].M(),weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                                    h_anti[3][k+49]->Fill(m_btt_UES[k],weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                                }
-                            }
-                            //JER uncertainties
-                            for (int k = 0; k < 2; k++){
-                                h_anti[0][k+51]->Fill(pt_1,weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                                h_anti[1][k+51]->Fill(pt_2,weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                                h_anti[2][k+51]->Fill(mytt_jer[k].M(),weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                                h_anti[3][k+51]->Fill(m_btt_jer[k],weight_corr*weight_fake*trgsf*xtrgfakefactor);
-                            }
-                        }//end of sample!="data_obs"
-                        //uncertainties in xtrgup factor
-                        for (int k = 0; k < 2; k++){
-                            h_anti[0][k+53]->Fill(pt_1,weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
-                            h_anti[1][k+53]->Fill(pt_2,weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
-                            h_anti[2][k+53]->Fill(m_sv,weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
-                            h_anti[3][k+53]->Fill(m_btt,weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
-                        }
-                        //fake rate uncertainties for alldm by pt bins
-                        for (int k = 0; k < 14; k++){
-                            h_anti[0][k+55]->Fill(pt_1,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
-                            h_anti[1][k+55]->Fill(pt_2,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
-                            h_anti[2][k+55]->Fill(m_sv,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
-                            h_anti[3][k+55]->Fill(m_btt,weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
-                        }
-                    }//end of trigger_region_nominal
-                    if (sample!="data_obs"){
-                        //loop over trigger regions with shifted electron
-                        for (int k = 0; k < 4; k++){
-                            if (trigger_region_shiftedele[k]){
-                                h_anti[0][k+27]->Fill(myshiftedele[k].Pt(),weight_corr*weight_fake*trgsf_shiftedele[k]*xtrgfakefactor_shiftedele[k]);
-                                h_anti[1][k+27]->Fill(pt_2,weight_corr*weight_fake*trgsf_shiftedele[k]*xtrgfakefactor_shiftedele[k]);
-                                h_anti[2][k+27]->Fill(mytt_shiftedele[k].M(),weight_corr*weight_fake*trgsf_shiftedele[k]*xtrgfakefactor_shiftedele[k]);
-                                h_anti[3][k+27]->Fill(m_btt_shiftedele[k],weight_corr*weight_fake*trgsf_shiftedele[k]*xtrgfakefactor_shiftedele[k]);
-                            }
-                        }
-                    }
-                }//end of nbtag==1
-            }//end of anti-isolated region
-        }//end of (!isnonHiggsMC or (isnonHiggsMC && !(gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6)))
+                    if (nbtag20_jetsyst[j]==1) weight_btag_jetsyst[j] = GetbtagSF(stoi(year.c_str()), bMpt_1_jetsyst[j], bMflavour_1_jetsyst[j], 0)/weight_btag_1b;
+                    if (nbtag20_jetsyst[j]==2) weight_btag_jetsyst[j] = GetbtagSF(stoi(year.c_str()), bMpt_1_jetsyst[j], bMflavour_1_jetsyst[j], 0)*GetbtagSF(stoi(year.c_str()), bMpt_2_jetsyst[j], bMflavour_2_jetsyst[j], 0)/weight_btag_1b;
+                }
+                if (nbtag20==2){
+                    if (nbtag20_jetsyst[j]==1) weight_btag_jetsyst[j] = GetbtagSF(stoi(year.c_str()), bMpt_1_jetsyst[j], bMflavour_1_jetsyst[j], 0)/weight_btag_2b;
+                    if (nbtag20_jetsyst[j]==2) weight_btag_jetsyst[j] = GetbtagSF(stoi(year.c_str()), bMpt_1_jetsyst[j], bMflavour_1_jetsyst[j], 0)*GetbtagSF(stoi(year.c_str()), bMpt_2_jetsyst[j], bMflavour_2_jetsyst[j], 0)/weight_btag_2b;
+                }
+            }
+        }
+        
+        //#######################recoil uncertainties########################
+        float met_recoilvar[4] = {met_resolutionUp,met_resolutionDown,met_responseUp,met_responseDown};
+        float metphi_recoilvar[4] = {metphi_resolutionUp,metphi_resolutionDown,metphi_responseUp,metphi_responseDown};
+        float m_sv_recoilvar[4] = {m_sv_ResolutionUp,m_sv_ResolutionDown,m_sv_ResponseUp,m_sv_ResponseDown};
+        float NN1b_recoilvar[4] = {NN1b_ResolutionUp,NN1b_ResolutionDown,NN1b_ResponseUp,NN1b_ResponseDown};
+        float NN2b_recoilvar[4] = {NN2b_ResolutionUp,NN2b_ResolutionDown,NN2b_ResponseUp,NN2b_ResponseDown};
+        std::vector<TLorentzVector> mymet_recoil;
+        std::vector<TLorentzVector> mytt_recoil;
+        std::vector<float> m_btt_recoil;
+        std::vector<float> m_bbtt_recoil;
+        for (int j = 0; j < 12; j++){//ordering: 0jet resolutionUp/Down, responseUp/Down, 1jet resolutionUp/Down, responseUp/Down, 2jetsmore resolutionUp/Down, responseUp/Down
+            mymet_recoil.push_back(mymet);
+            mytt_recoil.push_back(mytt);
+            m_btt_recoil.push_back(m_btt);
+            m_bbtt_recoil.push_back(m_bbtt);
+        }
+        float njetsbins[4] = {0,1,2,20};
+        for (int j = 0; j < 3; j++){
+            if (njets>=njetsbins[j] && njets<njetsbins[j+1]){
+                for (int k = 0; k < 4; k++){
+                    mymet_recoil[4*j+k].SetPtEtaPhiM(met_recoilvar[k],0,metphi_recoilvar[k],0);
+                    mytt_recoil[4*j+k].SetPtEtaPhiM((myele+mytau+mymet_recoil[4*j+k]).Pt(),(myele+mytau+mymet_recoil[4*j+k]).Eta(),(myele+mytau+mymet_recoil[4*j+k]).Phi(),m_sv_recoilvar[k]);
+                    m_btt_recoil[4*j+k] = (mytt_recoil[4*j+k]+myb1).M();
+                    m_bbtt_recoil[4*j+k] = (mytt_recoil[4*j+k]+myb1+myb2).M();
+                }
+            }
+        }
+        for (int j = 0; j < 12; j++){
+            var[0][0][j+45] = NN1b_recoilvar[j];
+            var[0][1][j+45] = p_n(NN1b_recoilvar[j],2);
+            var[0][2][j+45] = p_n(NN1b_recoilvar[j],2);
+            var[0][5][j+45] = mytt_recoil[j].M();
+            var[0][6][j+45] = m_btt_recoil[j];
+            
+            var[1][0][j+45] = NN2b_recoilvar[j];
+            var[1][1][j+45] = p_n(NN2b_recoilvar[j],2);
+            var[1][2][j+45] = p_n(NN2b_recoilvar[j],2);
+            var[1][5][j+45] = mytt_recoil[j].M();
+            var[1][6][j+45] = m_btt_recoil[j];
+            var[1][7][j+45] = m_bbtt_recoil[j];
+        }
+        
+        //#######################met unclustered ES########################
+        float met_UESvar[2] = {met_UESUp,met_UESDown};
+        float metphi_UESvar[2] = {metphi_UESUp,metphi_UESDown};
+        float m_sv_UESvar[2] = {m_sv_UESUp,m_sv_UESDown};
+        float NN1b_UESvar[2] = {NN1b_UESUp,NN1b_UESDown};
+        float NN2b_UESvar[2] = {NN2b_UESUp,NN2b_UESDown};
+        std::vector<TLorentzVector> mymet_UES;
+        std::vector<TLorentzVector> mytt_UES;
+        std::vector<float> m_btt_UES;
+        std::vector<float> m_bbtt_UES;
+        for (int j = 0; j < 2; j++){
+            mymet_UES.push_back(mymet);
+            mytt_UES.push_back(mytt);
+            m_btt_UES.push_back(m_btt);
+            m_bbtt_UES.push_back(m_bbtt);
+            
+            mymet_UES[j].SetPtEtaPhiM(met_UESvar[j],0,metphi_UESvar[j],0);
+            mytt_UES[j].SetPtEtaPhiM((myele+mytau+mymet_UES[j]).Pt(),(myele+mytau+mymet_UES[j]).Eta(),(myele+mytau+mymet_UES[j]).Phi(),m_sv_UESvar[j]);
+            m_btt_UES[j] = (mytt_UES[j]+myb1).M();
+            m_bbtt_UES[j] = (mytt_UES[j]+myb1+myb2).M();
+        }
+        for (int j = 0; j < 2; j++){
+            var[0][0][j+57] = NN1b_UESvar[j];
+            var[0][1][j+57] = p_n(NN1b_UESvar[j],2);
+            var[0][2][j+57] = p_n(NN1b_UESvar[j],2);
+            var[0][5][j+57] = mytt_UES[j].M();
+            var[0][6][j+57] = m_btt_UES[j];
+            
+            var[1][0][j+57] = NN2b_UESvar[j];
+            var[1][1][j+57] = p_n(NN2b_UESvar[j],2);
+            var[1][2][j+57] = p_n(NN2b_UESvar[j],2);
+            var[1][5][j+57] = mytt_UES[j].M();
+            var[1][6][j+57] = m_btt_UES[j];
+            var[1][7][j+57] = m_bbtt_UES[j];
+        }
+        
+        //##########################tau tracking uncertainties####################################
+        std::vector<float> tau_tracking_shifting;
+        for (int j = 0; j < 6; j++){//ordering: dm0dm10up, dm0dm10down, dm1up, dm1down, dm11up, dm11down
+            tau_tracking_shifting.push_back(1);
+        }
+        if (gen_match_2==5){
+            if (l2_decayMode==0){//+/-1%
+                tau_tracking_shifting[0] = 1.01;
+                tau_tracking_shifting[1] = 0.99;
+            }
+            if (l2_decayMode==10){//+/-3%
+                tau_tracking_shifting[0] = 1.03;
+                tau_tracking_shifting[1] = 0.97;
+            }
+            if (l2_decayMode==1){//+/-2.5%
+                tau_tracking_shifting[2] = 1.025;
+                tau_tracking_shifting[3] = 0.975;
+            }
+            if (l2_decayMode==11){//+/-6%
+                tau_tracking_shifting[4] = 1.06;
+                tau_tracking_shifting[5] = 0.94;
+            }
+        }
+        
+        //#########################DY MC Z pt reweight uncertainties################################
+        std::vector<float> zptmass_weight_shifting;
+        for (int j = 0; j < 2; j++){
+            zptmass_weight_shifting.push_back(1);
+        }
+        if (name=="Z"){//+/-10% of correction i.e. 1.5 -> 1.55/1.45
+            if (zptmass_weight_nom>1){
+                zptmass_weight_shifting[0] = 1 + (1 - 1/zptmass_weight_nom)*0.1;
+                zptmass_weight_shifting[1] = 1 - (1 - 1/zptmass_weight_nom)*0.1;
+            }
+            if (zptmass_weight_nom<1){
+                zptmass_weight_shifting[0] = 1 + (1/zptmass_weight_nom - 1)*0.1;//down/up?
+                zptmass_weight_shifting[1] = 1 - (1/zptmass_weight_nom - 1)*0.1;
+            }
+        }
+        
+        //##########################ttbar top pt reweight uncertainties##############################
+        std::vector<float> topfactor_shifting;
+        for (int j = 0; j < 2; j++){
+            topfactor_shifting.push_back(1);
+        }
+        if (name=="TT"){//apply twice for up and not at all for down
+            topfactor_shifting[0] = topfactor;
+            topfactor_shifting[1] = 1/topfactor;
+        }
+        
+        //##########################trigger regions with nominal/shifted ES###########################
+        //nominal
+        bool trigger_region_nominal = (isSingleTrigger && pt_1>single_elept_thres && pt_2>single_taupt_thres) or (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres && pt_2>cross_taupt_thres);
+        //shifted tau ES
+        std::vector<bool> trigger_region_shiftedtau;
+        for (int j = 0; j < 8; j++){
+            trigger_region_shiftedtau.push_back(0);
+            trigger_region_shiftedtau[j] = (isSingleTrigger && pt_1>single_elept_thres && myshiftedtau[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres && myshiftedtau[j].Pt()>cross_taupt_thres);
+        }
+        //muon->tauh fake ES
+        std::vector<bool> trigger_region_tauisgenmu;
+        for (int j = 0; j < 4; j++){
+            trigger_region_tauisgenmu.push_back(0);
+            trigger_region_tauisgenmu[j] = (isSingleTrigger && pt_1>single_elept_thres && mytau_isgenmu[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres && mytau_isgenmu[j].Pt()>cross_taupt_thres);
+        }
+        //electron->tauh fake ES
+        std::vector<bool> trigger_region_tauisgenele;
+        for (int j = 0; j < 4; j++){
+            trigger_region_tauisgenele.push_back(0);
+            trigger_region_tauisgenele[j] = (isSingleTrigger && pt_1>single_elept_thres && mytau_isgenele[j].Pt()>single_taupt_thres) or (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres && mytau_isgenele[j].Pt()>cross_taupt_thres);
+        }
+        //shifted electron ES
+        std::vector<bool> trigger_region_shiftedele;
+        for (int j = 0; j < 4; j++){
+            trigger_region_shiftedele.push_back(0);
+            trigger_region_shiftedele[j] = (isSingleTrigger && myshiftedele[j].Pt()>single_elept_thres && pt_2>single_taupt_thres) or (isCrossTrigger && myshiftedele[j].Pt()<single_elept_thres && myshiftedele[j].Pt()>cross_elept_thres && pt_2>cross_taupt_thres);
+        }
+        
+        //##############################histograms filling###################################
+        bool rejectEMBduplicate = !isnonHiggsMC or (isnonHiggsMC && !(gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6));
         
         //nonDY MC contamination to embedded (all nonHiggs MC events with two taus previously rejected)
         if (isnonHiggsMC && name!="Z" && gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6){
-            if (byMediumDeepVSjet_2){
+            if (byMediumDeepVSjet_2 && trigger_region_nominal){
                 if (nbtag20==1){
-                    if (trigger_region_nominal){
-                        h_iso[0][89]->Fill(pt_1,weight_corr*trgsf*sf_tauid[0]*0.1);//+/-10% on top of emb
-                        h_iso[1][89]->Fill(pt_2,weight_corr*trgsf*sf_tauid[0]*0.1);
-                        h_iso[2][89]->Fill(m_sv,weight_corr*trgsf*sf_tauid[0]*0.1);
-                        h_iso[3][89]->Fill(m_btt,weight_corr*trgsf*sf_tauid[0]*0.1);
+                    for (int m = 0; m < 7; m++){
+                        h_iso[0][m][105]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*0.1);//+/-10% on top of emb
+                    }
+                }
+                if (nbtag20==2){
+                    for (int m = 0; m < 8; m++){
+                        h_iso[1][m][105]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*0.1);//+/-10% on top of emb
                     }
                 }
             }
         }
+        
+        //do not fill for MC tautau events (duplicating emb) as normal
+        if (byMediumDeepVSjet_2 && rejectEMBduplicate){
+            //loop over variables to fill ###############1b################
+            for (int m = 0; m < 7; m++){
+                //fill nominal for 1 bjet, all samples
+                if (nbtag20==1 && trigger_region_nominal) h_iso[0][m][0]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]);
+                //fill shifted, non data
+                if (sample!="data_obs"){
+                    if (nbtag20==1 && trigger_region_nominal){
+                        //tauID eff
+                        for (int k = 0; k < 14; k++) h_iso[0][m][k+9]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[k+1]);
+                        //e,mu fake tau sf
+                        if (sample!="embedded"){
+                            //tauIDeff elefake
+                            for (int k = 0; k < 4; k++) h_iso[0][m][k+23]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*sf_tauid_efake[k]);
+                            //tauIDeff mufake
+                            for (int k = 0; k < 10; k++) h_iso[0][m][k+27]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
+                            //btageff
+                            for (int k = 0; k < 4; k++) h_iso[0][m][k+53]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*btagsf_syst[k]);
+                        }
+                        //trigger sf shifting
+                        for (int k = 0; k < 4; k++) h_iso[0][m][k+49]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
+                        //tau tracking, emb only
+                        if (sample=="embedded"){
+                            for (int k = 0; k < 6; k++) h_iso[0][m][k+95]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*tau_tracking_shifting[k]);
+                        }
+                        //recoil uncertainties
+                        if (sample!="embedded" && name!="TT" && name!="VV" && name!="ST"){
+                            for (int k = 0; k < 12; k++) h_iso[0][m][k+81]->Fill(var[0][m][k+45],weight_corr*trgsf*sf_tauid[0]);
+                        }
+                        //met unclustered ES
+                        if (name=="TT" or name=="VV" or name=="ST"){
+                            for (int k = 0; k < 2; k++) h_iso[0][m][k+93]->Fill(var[0][m][k+57],weight_corr*trgsf*sf_tauid[0]);
+                        }
+                        //Zpt reweight uncertainties for DY MC only
+                        if (name=="Z"){
+                            for (int k = 0; k < 2; k++) h_iso[0][m][k+101]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*zptmass_weight_shifting[k]);
+                        }
+                        //top pt reweight uncertainties for ttbar only
+                        if (name=="TT"){
+                            for (int k = 0; k < 2; k++) h_iso[0][m][k+103]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
+                        }
+                    }//end of nbtag20==1 and nominal trigger region
+                    
+                    //jet uncertainties, shifted nbtag and sf
+                    for (int k = 0; k < 24; k++){
+                        if (nbtag20_jetsyst[k]==1 && trigger_region_nominal && sample!="embedded") h_iso[0][m][k+57]->Fill(var[0][m][k+21],weight_corr*trgsf*sf_tauid[0]*weight_btag_jetsyst[k]);
+                    }
+                    //loop over trigger regions with shifted tau
+                    for (int k = 0; k < 8; k++){
+                        if (nbtag20==1 && trigger_region_shiftedtau[k]) h_iso[0][m][k+1]->Fill(var[0][m][k+1],weight_corr*trgsf*sf_tauid[k+15]);
+                    }
+                    //loop over trigger regions with muon->tau fake shifted
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==1 && trigger_region_tauisgenmu[k] && sample!="embedded") h_iso[0][m][k+37]->Fill(var[0][m][k+9],weight_corr*trgsf*sf_tauid[0]);
+                    }
+                    //loop over trigger regions with electron->tau fake shifted
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==1 && trigger_region_tauisgenele[k] && sample!="embedded") h_iso[0][m][k+41]->Fill(var[0][m][k+13],weight_corr*trgsf*sf_tauid[0]);
+                    }
+                    //loop over trigger regions with shifted electron
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==1 && trigger_region_shiftedele[k]) h_iso[0][m][k+45]->Fill(var[0][m][k+17],weight_corr*trgsf_shiftedele[k]*sf_tauid[0]);
+                    }
+                }//end of sample!="data_obs"
+            }//end of loop of variables to fill ###############1b################
+            
+            //loop over variables to fill ###############2b################
+            for (int m = 0; m < 8; m++){
+                //fill nominal for 2 bjet, all samples
+                if (nbtag20==2 && trigger_region_nominal) h_iso[1][m][0]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]);
+                //fill shifted, non data
+                if (sample!="data_obs"){
+                    if (nbtag20==2 && trigger_region_nominal){
+                        //tauID eff
+                        for (int k = 0; k < 14; k++) h_iso[1][m][k+9]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[k+1]);
+                        //e,mu fake tau sf
+                        if (sample!="embedded"){
+                            //tauIDeff elefake
+                            for (int k = 0; k < 4; k++) h_iso[1][m][k+23]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*sf_tauid_efake[k]);
+                            //tauIDeff mufake
+                            for (int k = 0; k < 10; k++) h_iso[1][m][k+27]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
+                            //btageff
+                            for (int k = 0; k < 4; k++) h_iso[1][m][k+53]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*btagsf_syst[k]);
+                        }
+                        //trigger sf shifting
+                        for (int k = 0; k < 4; k++) h_iso[1][m][k+49]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
+                        //tau tracking, emb only
+                        if (sample=="embedded"){
+                            for (int k = 0; k < 6; k++) h_iso[1][m][k+95]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*tau_tracking_shifting[k]);
+                        }
+                        //recoil uncertainties
+                        if (sample!="embedded" && name!="TT" && name!="VV" && name!="ST"){
+                            for (int k = 0; k < 12; k++) h_iso[1][m][k+81]->Fill(var[1][m][k+45],weight_corr*trgsf*sf_tauid[0]);
+                        }
+                        //met unclustered ES
+                        if (name=="TT" or name=="VV" or name=="ST"){
+                            for (int k = 0; k < 2; k++) h_iso[1][m][k+93]->Fill(var[1][m][k+57],weight_corr*trgsf*sf_tauid[0]);
+                        }
+                        //Zpt reweight uncertainties for DY MC only
+                        if (name=="Z"){
+                            for (int k = 0; k < 2; k++) h_iso[1][m][k+101]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*zptmass_weight_shifting[k]);
+                        }
+                        //top pt reweight uncertainties for ttbar only
+                        if (name=="TT"){
+                            for (int k = 0; k < 2; k++) h_iso[1][m][k+103]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
+                        }
+                    }//end of nbtag20==2 and nominal trigger region
+                    
+                    //jet uncertainties, shifted nbtag and sf
+                    for (int k = 0; k < 24; k++){
+                        if (nbtag20_jetsyst[k]==2 && trigger_region_nominal && sample!="embedded") h_iso[1][m][k+57]->Fill(var[1][m][k+21],weight_corr*trgsf*sf_tauid[0]*weight_btag_jetsyst[k]);
+                    }
+                    //loop over trigger regions with shifted tau
+                    for (int k = 0; k < 8; k++){
+                        if (nbtag20==2 && trigger_region_shiftedtau[k]) h_iso[1][m][k+1]->Fill(var[1][m][k+1],weight_corr*trgsf*sf_tauid[k+15]);
+                    }
+                    //loop over trigger regions with muon->tau fake shifted
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==2 && trigger_region_tauisgenmu[k] && sample!="embedded") h_iso[1][m][k+37]->Fill(var[1][m][k+9],weight_corr*trgsf*sf_tauid[0]);
+                    }
+                    //loop over trigger regions with electron->tau fake shifted
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==2 && trigger_region_tauisgenele[k] && sample!="embedded") h_iso[1][m][k+41]->Fill(var[1][m][k+13],weight_corr*trgsf*sf_tauid[0]);
+                    }
+                    //loop over trigger regions with shifted electron
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==2 && trigger_region_shiftedele[k]) h_iso[1][m][k+45]->Fill(var[1][m][k+17],weight_corr*trgsf_shiftedele[k]*sf_tauid[0]);
+                    }
+                }//end of sample!="data_obs"
+            }//end of loop of variables to fill ###############2b################
+        }//end of isolated region
+        
+        //anti-isolated tau region for fake background
+        if (byVVVLooseDeepVSjet_2 && !byMediumDeepVSjet_2 && isnonSignal && rejectEMBduplicate){//fake taus, do not need tau energy scale shifting, or tauid sf
+            
+            //FR calculated for bjet categories
+            float fr_bjet = GetTauFR(mytau.Pt(),l2_decayMode,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,0);
+            float weight_fake = fr_bjet/(1-fr_bjet);
+            
+            float xtrgfakefactor = 1.0;//tighter cuts applied at cross trigger level -> less yields -> scale up to compensate
+            float xtrgfakefactor_updown[2] = {1.0,1.0};
+            if (isCrossTrigger && pt_1<single_elept_thres && pt_1>cross_elept_thres){
+                xtrgfakefactor = 1.5;//nominal
+                xtrgfakefactor_updown[0] = 1.6;//+/-20%
+                xtrgfakefactor_updown[1] = 1.4;
+            }
+            
+            std::vector<float> xtrgfakefactor_shiftedele;
+            //for shifted mu (re-defined single/cross)
+            for (int k = 0; k < 4; k++){
+                xtrgfakefactor_shiftedele.push_back(1.0);
+                if (isCrossTrigger && myshiftedele[k].Pt()<single_elept_thres && myshiftedele[k].Pt()>cross_elept_thres) xtrgfakefactor_shiftedele[k] = 1.5;
+            }
+            
+            //############################fake rate uncertainties for alldm by pt bins###########################
+            std::vector<float> fr_bjet_shifted;
+            std::vector<float> weight_fake_shifted;
+            for (int k = 0; k < 14; k++){
+                fr_bjet_shifted.push_back(GetTauFR(mytau.Pt(),0,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,g_taufr_dmall,k+1));//see GetTauFR.h
+                weight_fake_shifted.push_back(fr_bjet_shifted[k]/(1-fr_bjet_shifted[k]));
+            }//ordering: pt0to25up/down, pt25to30up/down,...
+            
+            //loop over variables to fill ###############1b################
+            for (int m = 0; m < 7; m++){
+                //fill nominal for 1 bjet, all samples
+                if (nbtag20==1 && trigger_region_nominal) h_anti[0][m][0]->Fill(var[0][m][0],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                //fill shifted, non data
+                if (sample!="data_obs"){
+                    if (nbtag20==1 && trigger_region_nominal){
+                        //trigger sf shifting
+                        for (int k = 0; k < 4; k++) h_anti[0][m][k+5]->Fill(var[0][m][0],weight_corr*weight_fake*trgsf*trigger_shiftedsf[k]*xtrgfakefactor);
+                        //Zpt reweight uncertainties for DY MC only
+                        if (name=="Z"){
+                            for (int k = 0; k < 2; k++) h_anti[0][m][k+51]->Fill(var[0][m][0],weight_corr*weight_fake*trgsf*zptmass_weight_shifting[k]*xtrgfakefactor);
+                        }
+                        //top pt reweight uncertainties for ttbar only
+                        if (name=="TT"){
+                            for (int k = 0; k < 2; k++) h_anti[0][m][k+53]->Fill(var[0][m][0],weight_corr*weight_fake*trgsf*topfactor_shifting[k]*xtrgfakefactor);
+                        }
+                        //recoil uncertainties
+                        if (sample!="embedded" && name!="TT" && name!="VV" && name!="ST"){
+                            for (int k = 0; k < 12; k++) h_anti[0][m][k+37]->Fill(var[0][m][k+45],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                        }
+                        //met unclustered ES
+                        if (name=="TT" or name=="VV" or name=="ST"){
+                            for (int k = 0; k < 2; k++) h_anti[0][m][k+49]->Fill(var[0][m][k+57],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                        }
+                        //btag sf
+                        for (int k = 0; k < 4; k++) h_anti[0][m][k+9]->Fill(var[0][m][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
+                    }//end of nbtag20==1 && trigger_region_nominal
+                    
+                    //jet uncertainties, shifted nbtag and sf
+                    for (int k = 0; k < 24; k++){
+                        if (nbtag20_jetsyst[k]==1 && trigger_region_nominal && sample!="embedded") h_anti[0][m][k+13]->Fill(var[0][m][k+21],weight_corr*weight_fake*trgsf*xtrgfakefactor*weight_btag_jetsyst[k]);
+                    }
+                    //loop over trigger regions with shifted electron
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==1 && trigger_region_shiftedele[k]) h_anti[0][m][k+1]->Fill(var[0][m][k+17],weight_corr*weight_fake*trgsf_shiftedele[k]*xtrgfakefactor_shiftedele[k]);
+                    }
+                }//end of sample!="data_obs"
+                if (nbtag20==1 && trigger_region_nominal){
+                    //uncertainties in xtrgup factor
+                    for (int k = 0; k < 2; k++) h_anti[0][m][k+55]->Fill(var[0][m][0],weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
+                    //fake rate uncertainties for alldm by pt bins
+                    for (int k = 0; k < 14; k++) h_anti[0][m][k+57]->Fill(var[0][m][0],weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
+                }
+            }//end of loop over variables to fill ###############1b################
+            
+            //loop over variables to fill ###############2b################
+            for (int m = 0; m < 8; m++){
+                //fill nominal for 2 bjet, all samples
+                if (nbtag20==2 && trigger_region_nominal) h_anti[1][m][0]->Fill(var[1][m][0],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                //fill shifted, non data
+                if (sample!="data_obs"){
+                    if (nbtag20==2 && trigger_region_nominal){
+                        //trigger sf shifting
+                        for (int k = 0; k < 4; k++) h_anti[1][m][k+5]->Fill(var[1][m][0],weight_corr*weight_fake*trgsf*trigger_shiftedsf[k]*xtrgfakefactor);
+                        //Zpt reweight uncertainties for DY MC only
+                        if (name=="Z"){
+                            for (int k = 0; k < 2; k++) h_anti[1][m][k+51]->Fill(var[1][m][0],weight_corr*weight_fake*trgsf*zptmass_weight_shifting[k]*xtrgfakefactor);
+                        }
+                        //top pt reweight uncertainties for ttbar only
+                        if (name=="TT"){
+                            for (int k = 0; k < 2; k++) h_anti[1][m][k+53]->Fill(var[1][m][0],weight_corr*weight_fake*trgsf*topfactor_shifting[k]*xtrgfakefactor);
+                        }
+                        //recoil uncertainties
+                        if (sample!="embedded" && name!="TT" && name!="VV" && name!="ST"){
+                            for (int k = 0; k < 12; k++) h_anti[1][m][k+37]->Fill(var[1][m][k+45],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                        }
+                        //met unclustered ES
+                        if (name=="TT" or name=="VV" or name=="ST"){
+                            for (int k = 0; k < 2; k++) h_anti[1][m][k+49]->Fill(var[1][m][k+57],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                        }
+                        //btag sf
+                        for (int k = 0; k < 4; k++) h_anti[1][m][k+9]->Fill(var[1][m][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
+                    }//end of nbtag20==2 && trigger_region_nominal
+                    
+                    //jet uncertainties, shifted nbtag and sf
+                    for (int k = 0; k < 24; k++){
+                        if (nbtag20_jetsyst[k]==2 && trigger_region_nominal && sample!="embedded") h_anti[1][m][k+13]->Fill(var[1][m][k+21],weight_corr*weight_fake*trgsf*xtrgfakefactor*weight_btag_jetsyst[k]);
+                    }
+                    //loop over trigger regions with shifted electron
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==2 && trigger_region_shiftedele[k]) h_anti[1][m][k+1]->Fill(var[1][m][k+17],weight_corr*weight_fake*trgsf_shiftedele[k]*xtrgfakefactor_shiftedele[k]);
+                    }
+                }//end of sample!="data_obs"
+                if (nbtag20==2 && trigger_region_nominal){
+                    //uncertainties in xtrgup factor
+                    for (int k = 0; k < 2; k++) h_anti[1][m][k+55]->Fill(var[1][m][0],weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
+                    //fake rate uncertainties for alldm by pt bins
+                    for (int k = 0; k < 14; k++) h_anti[1][m][k+57]->Fill(var[1][m][0],weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
+                }
+            }//end of loop over variables to fill ###############2b################
+        }//end of anti-isolated region
+        
     }//end of event loop
     
     TFile * fout = TFile::Open(output.c_str(), "UPDATE");
     
-    TString dir[4] = {"pt_1","pt_2","m_tt","m_btt"};
+    TString dir1b[7] = {"p_1b","p2_1b","p2_z_1b","pt_1_1b","pt_2_1b","m_tt_1b","m_btt_1b"};
+    TString dir2b[8] = {"p_2b","p2_2b","p2_z_2b","pt_1_2b","pt_2_2b","m_tt_2b","m_btt_2b","m_bbtt_2b"};
     TString fake = "_fake";
     TString MC = "MC";
     
-    bool isnonSignal = (sample!="gghbbtt12" && sample!="gghbbtt15" && sample!="gghbbtt20" && sample!="gghbbtt25" && sample!="gghbbtt30" && sample!="gghbbtt35" && sample!="gghbbtt40" && sample!="gghbbtt45" && sample!="gghbbtt50" && sample!="gghbbtt55" && sample!="gghbbtt60" && sample!="vbfbbtt12" && sample!="vbfbbtt15" && sample!="vbfbbtt20" && sample!="vbfbbtt25" && sample!="vbfbbtt30" && sample!="vbfbbtt35" && sample!="vbfbbtt40" && sample!="vbfbbtt45" && sample!="vbfbbtt50" && sample!="vbfbbtt55" && sample!="vbfbbtt60");
-    bool isnonHiggsMC = (sample!="data_obs" && sample!="embedded" && isnonSignal && name!="HTT" && name!="ttHnonbb");
-    
     std::vector<TDirectory*> td;
-    for (int j = 0; j < 4; j++){//loop over histogram variables
-        td.push_back(fout->mkdir(dir[j]));
+    for (int j = 0; j < 7; j++){//loop over histogram variables ##############1b##############
+        td.push_back(fout->mkdir(dir1b[j]));
         td[j]->cd();
         
         if (sample!="data_obs"){
             //nominal
-            h_iso[j][0]->SetName(name.c_str());
-            h_iso[j][0]->Write();
-            if (isnonSignal){
-                h_anti[j][0]->SetName(name.c_str()+fake);
-                h_anti[j][0]->Write();
-            }
-            //shifted
+            h_iso[0][j][0]->SetName(name.c_str());
+            h_iso[0][j][0]->Write();
+            //shifted in isolated
             for (int i = 0; i < 14; ++i){
-                h_iso[j][i+1]->SetName(name.c_str()+shape_tauideff[i]);
-                h_iso[j][i+1]->Write();
+                h_iso[0][j][i+9]->SetName(name.c_str()+shape_tauideff[i]);
+                h_iso[0][j][i+9]->Write();
             }
             for (int i = 0; i < 8; ++i){
-                h_iso[j][i+15]->SetName(name.c_str()+shape_tauES[i]);
-                h_iso[j][i+15]->Write();
+                h_iso[0][j][i+1]->SetName(name.c_str()+shape_tauES[i]);
+                h_iso[0][j][i+1]->Write();
             }
             if (sample!="embedded"){
-                for (int i = 0; i < 22; ++i){
-                    h_iso[j][i+23]->SetName(name.c_str()+shape_jet[i]);
-                    h_iso[j][i+23]->Write();
-                    if (isnonSignal){
-                        h_anti[j][i+1]->SetName(name.c_str()+fake+shape_jet[i]);
-                        h_anti[j][i+1]->Write();
-                    }
-                }
-                for (int i = 0; i < 2; ++i){
-                    h_iso[j][i+45]->SetName(name.c_str()+shape_mufaketauES[i]);
-                    h_iso[j][i+45]->Write();
-                }
-                for (int i = 0; i < 8; ++i){
-                    h_iso[j][i+47]->SetName(name.c_str()+shape_elefaketauES[i]);
-                    h_iso[j][i+47]->Write();
+                for (int i = 0; i < 24; ++i){
+                    h_iso[0][j][i+57]->SetName(name.c_str()+shape_jet[i]);
+                    h_iso[0][j][i+57]->Write();
                 }
                 for (int i = 0; i < 4; ++i){
-                    h_iso[j][i+92]->SetName(name.c_str()+shape_tauideff_efake[i]);
-                    h_iso[j][i+92]->Write();
+                    h_iso[0][j][i+37]->SetName(name.c_str()+shape_mufaketauES[i]);
+                    h_iso[0][j][i+37]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_iso[0][j][i+41]->SetName(name.c_str()+shape_elefaketauES[i]);
+                    h_iso[0][j][i+41]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_iso[0][j][i+23]->SetName(name.c_str()+shape_tauideff_efake[i]);
+                    h_iso[0][j][i+23]->Write();
                 }
                 for (int i = 0; i < 10; ++i){
-                    h_iso[j][i+96]->SetName(name.c_str()+shape_tauideff_mufake[i]);
-                    h_iso[j][i+96]->Write();
+                    h_iso[0][j][i+27]->SetName(name.c_str()+shape_tauideff_mufake[i]);
+                    h_iso[0][j][i+27]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_iso[0][j][i+53]->SetName(name.c_str()+shape_btagsf[i]);
+                    h_iso[0][j][i+53]->Write();
                 }
             }
             for (int i = 0; i < 4; ++i){
-                h_iso[j][i+55]->SetName(name.c_str()+shape_trgeff[i]);
-                h_iso[j][i+55]->Write();
-                if (isnonSignal){
-                    h_anti[j][i+23]->SetName(name.c_str()+fake+shape_trgeff[i]);
-                    h_anti[j][i+23]->Write();
-                }
+                h_iso[0][j][i+49]->SetName(name.c_str()+shape_trgeff[i]);
+                h_iso[0][j][i+49]->Write();
             }
             for (int i = 0; i < 4; ++i){
-                h_iso[j][i+59]->SetName(name.c_str()+shape_eleES[i]);
-                h_iso[j][i+59]->Write();
-                if (isnonSignal){
-                    h_anti[j][i+27]->SetName(name.c_str()+fake+shape_eleES[i]);
-                    h_anti[j][i+27]->Write();
-                }
+                h_iso[0][j][i+45]->SetName(name.c_str()+shape_eleES[i]);
+                h_iso[0][j][i+45]->Write();
             }
-            //emb only
             if (sample=="embedded"){
                 for (int i = 0; i < 6; ++i){
-                    h_iso[j][i+65]->SetName(name.c_str()+embshape_tautracking[i]);
-                    h_iso[j][i+65]->Write();
+                    h_iso[0][j][i+95]->SetName(name.c_str()+embshape_tautracking[i]);
+                    h_iso[0][j][i+95]->Write();
                 }
             }
-            //DY MC only
-            if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
+            if (name=="Z"){
                 for (int i = 0; i < 2; ++i){
-                    h_iso[j][i+71]->SetName(name.c_str()+shape_DY_zpt[i]);
-                    h_iso[j][i+71]->Write();
-                    h_anti[j][i+33]->SetName(name.c_str()+fake+shape_DY_zpt[i]);
-                    h_anti[j][i+33]->Write();
+                    h_iso[0][j][i+101]->SetName(name.c_str()+shape_DY_zpt[i]);
+                    h_iso[0][j][i+101]->Write();
                 }
             }
-            //ttbar only
-            if (sample=="TTTo2L2Nu" or sample=="TTToHadronic" or sample=="TTToSemiLeptonic" or name=="TT"){
+            if (name=="TT"){
                 for (int i = 0; i < 2; ++i){
-                    h_iso[j][i+73]->SetName(name.c_str()+shape_ttbar_toppt[i]);
-                    h_iso[j][i+73]->Write();
-                    h_anti[j][i+35]->SetName(name.c_str()+fake+shape_ttbar_toppt[i]);
-                    h_anti[j][i+35]->Write();
+                    h_iso[0][j][i+103]->SetName(name.c_str()+shape_ttbar_toppt[i]);
+                    h_iso[0][j][i+103]->Write();
                 }
             }
-            //recoil: MC except ttbar diboson singletop
             if (sample!="embedded" && name!="TT" && name!="VV" && name!="ST"){
                 for (int i = 0; i < 12; ++i){
-                    h_iso[j][i+75]->SetName(name.c_str()+shape_recoil[i]);
-                    h_iso[j][i+75]->Write();
-                    if (isnonSignal){
-                        h_anti[j][i+37]->SetName(name.c_str()+fake+shape_recoil[i]);
-                        h_anti[j][i+37]->Write();
-                    }
+                    h_iso[0][j][i+81]->SetName(name.c_str()+shape_recoil[i]);
+                    h_iso[0][j][i+81]->Write();
                 }
             }
-            //met unclustered ES: only on ttbar diboson singletop
             if (name=="TT" or name=="VV" or name=="ST"){
                 for (int i = 0; i < 2; ++i){
-                    h_iso[j][i+87]->SetName(name.c_str()+shape_unclusteredES[i]);
-                    h_iso[j][i+87]->Write();
-                    h_anti[j][i+49]->SetName(name.c_str()+fake+shape_unclusteredES[i]);
-                    h_anti[j][i+49]->Write();
+                    h_iso[0][j][i+93]->SetName(name.c_str()+shape_UES[i]);
+                    h_iso[0][j][i+93]->Write();
                 }
             }
-            //nonDY
             if (isnonHiggsMC && name!="Z"){
                 TString nonDYMC = "nonDYMC";
-                h_iso[j][89]->SetName(nonDYMC+shape_nonDY[0]);
-                h_iso[j][89]->Write();
+                h_iso[0][j][105]->SetName(nonDYMC+shape_nonDY[0]);
+                h_iso[0][j][105]->Write();
             }
-            //JER
-            for (int i = 0; i < 2; ++i){
-                h_iso[j][i+90]->SetName(name.c_str()+shape_jer[i]);
-                h_iso[j][i+90]->Write();
-                if (isnonSignal){
-                    h_anti[j][i+51]->SetName(name.c_str()+fake+shape_jer[i]);
-                    h_anti[j][i+51]->Write();
-                }
-            }
-            //fake cross trg scale up uncertainties
+            
+            //shifted in anti-isolated
             if (isnonSignal){
+                h_anti[0][j][0]->SetName(MC+fake);
+                h_anti[0][j][0]->Write();
+                for (int i = 0; i < 24; ++i){
+                    if (sample!="embedded"){
+                        h_anti[0][j][i+13]->SetName(MC+fake+shape_jet[i]);
+                        h_anti[0][j][i+13]->Write();
+                    }
+                    else {
+                        h_anti[0][j][0]->SetName(MC+fake+shape_jet[i]);
+                        h_anti[0][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_anti[0][j][i+9]->SetName(MC+fake+shape_btagsf[i]);
+                    h_anti[0][j][i+9]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_anti[0][j][i+5]->SetName(MC+fake+shape_trgeff[i]);
+                    h_anti[0][j][i+5]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_anti[0][j][i+1]->SetName(MC+fake+shape_eleES[i]);
+                    h_anti[0][j][i+1]->Write();
+                }
                 for (int i = 0; i < 2; ++i){
-                    h_anti[j][i+53]->SetName(MC+fake+shape_fake_crosstrg[i]);
-                    h_anti[j][i+53]->Write();
+                    if (name=="Z"){
+                        h_anti[0][j][i+51]->SetName(MC+fake+shape_DY_zpt[i]);
+                        h_anti[0][j][i+51]->Write();
+                    }
+                    else {
+                        h_anti[0][j][0]->SetName(MC+fake+shape_DY_zpt[i]);
+                        h_anti[0][j][0]->Write();
+                    }
                 }
-            }
-            //fake rate uncertainties by pt bins
-            if (isnonSignal){
+                for (int i = 0; i < 2; ++i){
+                    if (name=="TT"){
+                        h_anti[0][j][i+53]->SetName(MC+fake+shape_ttbar_toppt[i]);
+                        h_anti[0][j][i+53]->Write();
+                    }
+                    else {
+                        h_anti[0][j][0]->SetName(MC+fake+shape_ttbar_toppt[i]);
+                        h_anti[0][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 12; ++i){
+                    if (sample!="embedded" && name!="TT" && name!="VV" && name!="ST"){
+                        h_anti[0][j][i+37]->SetName(MC+fake+shape_recoil[i]);
+                        h_anti[0][j][i+37]->Write();
+                    }
+                    else {
+                        h_anti[0][j][0]->SetName(MC+fake+shape_recoil[i]);
+                        h_anti[0][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 2; ++i){
+                    if (name=="TT" or name=="VV" or name=="ST"){
+                        h_anti[0][j][i+49]->SetName(MC+fake+shape_UES[i]);
+                        h_anti[0][j][i+49]->Write();
+                    }
+                    else {
+                        h_anti[0][j][0]->SetName(MC+fake+shape_UES[i]);
+                        h_anti[0][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 2; ++i){
+                    h_anti[0][j][i+55]->SetName(MC+fake+shape_fake_crosstrg[i]);
+                    h_anti[0][j][i+55]->Write();
+                }
                 for (int i = 0; i < 14; ++i){
-                    h_anti[j][i+55]->SetName(MC+fake+shape_fakerate[i]);
-                    h_anti[j][i+55]->Write();
+                    h_anti[0][j][i+57]->SetName(MC+fake+shape_fakerate[i]);
+                    h_anti[0][j][i+57]->Write();
                 }
-            }
+            }//end of anti-isolated
         }//end of (sample!="data_obs)
         if (sample=="data_obs"){
-            h_iso[j][0]->SetName(name.c_str());
-            h_iso[j][0]->Write();
-            h_anti[j][0]->SetName(name.c_str()+fake);
-            h_anti[j][0]->Write();
-            //fake cross trg scale up uncertainties
+            h_iso[0][j][0]->SetName(name.c_str());
+            h_iso[0][j][0]->Write();
+            h_anti[0][j][0]->SetName(name.c_str()+fake);
+            h_anti[0][j][0]->Write();
             for (int i = 0; i < 2; ++i){
-                h_anti[j][i+53]->SetName(name.c_str()+fake+shape_fake_crosstrg[i]);
-                h_anti[j][i+53]->Write();
+                h_anti[0][j][i+55]->SetName(name.c_str()+fake+shape_fake_crosstrg[i]);
+                h_anti[0][j][i+55]->Write();
             }
-            //fake rate uncertainties by pt bins
             for (int i = 0; i < 14; ++i){
-                h_anti[j][i+55]->SetName(name.c_str()+fake+shape_fakerate[i]);
-                h_anti[j][i+55]->Write();
+                h_anti[0][j][i+57]->SetName(name.c_str()+fake+shape_fakerate[i]);
+                h_anti[0][j][i+57]->Write();
+            }
+        }
+    }
+    
+    for (int j = 0; j < 8; j++){//loop over histogram variables ##############2b##############
+        td.push_back(fout->mkdir(dir2b[j]));
+        td[j+7]->cd();
+        
+        if (sample!="data_obs"){
+            //nominal
+            h_iso[1][j][0]->SetName(name.c_str());
+            h_iso[1][j][0]->Write();
+            //shifted in isolated
+            for (int i = 0; i < 14; ++i){
+                h_iso[1][j][i+9]->SetName(name.c_str()+shape_tauideff[i]);
+                h_iso[1][j][i+9]->Write();
+            }
+            for (int i = 0; i < 8; ++i){
+                h_iso[1][j][i+1]->SetName(name.c_str()+shape_tauES[i]);
+                h_iso[1][j][i+1]->Write();
+            }
+            if (sample!="embedded"){
+                for (int i = 0; i < 24; ++i){
+                    h_iso[1][j][i+57]->SetName(name.c_str()+shape_jet[i]);
+                    h_iso[1][j][i+57]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_iso[1][j][i+37]->SetName(name.c_str()+shape_mufaketauES[i]);
+                    h_iso[1][j][i+37]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_iso[1][j][i+41]->SetName(name.c_str()+shape_elefaketauES[i]);
+                    h_iso[1][j][i+41]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_iso[1][j][i+23]->SetName(name.c_str()+shape_tauideff_efake[i]);
+                    h_iso[1][j][i+23]->Write();
+                }
+                for (int i = 0; i < 10; ++i){
+                    h_iso[1][j][i+27]->SetName(name.c_str()+shape_tauideff_mufake[i]);
+                    h_iso[1][j][i+27]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_iso[1][j][i+53]->SetName(name.c_str()+shape_btagsf[i]);
+                    h_iso[1][j][i+53]->Write();
+                }
+            }
+            for (int i = 0; i < 4; ++i){
+                h_iso[1][j][i+49]->SetName(name.c_str()+shape_trgeff[i]);
+                h_iso[1][j][i+49]->Write();
+            }
+            for (int i = 0; i < 4; ++i){
+                h_iso[1][j][i+45]->SetName(name.c_str()+shape_eleES[i]);
+                h_iso[1][j][i+45]->Write();
+            }
+            if (sample=="embedded"){
+                for (int i = 0; i < 6; ++i){
+                    h_iso[1][j][i+95]->SetName(name.c_str()+embshape_tautracking[i]);
+                    h_iso[1][j][i+95]->Write();
+                }
+            }
+            if (name=="Z"){
+                for (int i = 0; i < 2; ++i){
+                    h_iso[1][j][i+101]->SetName(name.c_str()+shape_DY_zpt[i]);
+                    h_iso[1][j][i+101]->Write();
+                }
+            }
+            if (name=="TT"){
+                for (int i = 0; i < 2; ++i){
+                    h_iso[1][j][i+103]->SetName(name.c_str()+shape_ttbar_toppt[i]);
+                    h_iso[1][j][i+103]->Write();
+                }
+            }
+            if (sample!="embedded" && name!="TT" && name!="VV" && name!="ST"){
+                for (int i = 0; i < 12; ++i){
+                    h_iso[1][j][i+81]->SetName(name.c_str()+shape_recoil[i]);
+                    h_iso[1][j][i+81]->Write();
+                }
+            }
+            if (name=="TT" or name=="VV" or name=="ST"){
+                for (int i = 0; i < 2; ++i){
+                    h_iso[1][j][i+93]->SetName(name.c_str()+shape_UES[i]);
+                    h_iso[1][j][i+93]->Write();
+                }
+            }
+            if (isnonHiggsMC && name!="Z"){
+                TString nonDYMC = "nonDYMC";
+                h_iso[1][j][105]->SetName(nonDYMC+shape_nonDY[0]);
+                h_iso[1][j][105]->Write();
+            }
+            
+            //shifted in anti-isolated
+            if (isnonSignal){
+                h_anti[1][j][0]->SetName(MC+fake);
+                h_anti[1][j][0]->Write();
+                for (int i = 0; i < 24; ++i){
+                    if (sample!="embedded"){
+                        h_anti[1][j][i+13]->SetName(MC+fake+shape_jet[i]);
+                        h_anti[1][j][i+13]->Write();
+                    }
+                    else {
+                        h_anti[1][j][0]->SetName(MC+fake+shape_jet[i]);
+                        h_anti[1][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_anti[1][j][i+9]->SetName(MC+fake+shape_btagsf[i]);
+                    h_anti[1][j][i+9]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_anti[1][j][i+5]->SetName(MC+fake+shape_trgeff[i]);
+                    h_anti[1][j][i+5]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_anti[1][j][i+1]->SetName(MC+fake+shape_eleES[i]);
+                    h_anti[1][j][i+1]->Write();
+                }
+                for (int i = 0; i < 2; ++i){
+                    if (name=="Z"){
+                        h_anti[1][j][i+51]->SetName(MC+fake+shape_DY_zpt[i]);
+                        h_anti[1][j][i+51]->Write();
+                    }
+                    else {
+                        h_anti[1][j][0]->SetName(MC+fake+shape_DY_zpt[i]);
+                        h_anti[1][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 2; ++i){
+                    if (name=="TT"){
+                        h_anti[1][j][i+53]->SetName(MC+fake+shape_ttbar_toppt[i]);
+                        h_anti[1][j][i+53]->Write();
+                    }
+                    else {
+                        h_anti[1][j][0]->SetName(MC+fake+shape_ttbar_toppt[i]);
+                        h_anti[1][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 12; ++i){
+                    if (sample!="embedded" && name!="TT" && name!="VV" && name!="ST"){
+                        h_anti[1][j][i+37]->SetName(MC+fake+shape_recoil[i]);
+                        h_anti[1][j][i+37]->Write();
+                    }
+                    else {
+                        h_anti[1][j][0]->SetName(MC+fake+shape_recoil[i]);
+                        h_anti[1][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 2; ++i){
+                    if (name=="TT" or name=="VV" or name=="ST"){
+                        h_anti[1][j][i+49]->SetName(MC+fake+shape_UES[i]);
+                        h_anti[1][j][i+49]->Write();
+                    }
+                    else {
+                        h_anti[1][j][0]->SetName(MC+fake+shape_UES[i]);
+                        h_anti[1][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 2; ++i){
+                    h_anti[1][j][i+55]->SetName(MC+fake+shape_fake_crosstrg[i]);
+                    h_anti[1][j][i+55]->Write();
+                }
+                for (int i = 0; i < 14; ++i){
+                    h_anti[1][j][i+57]->SetName(MC+fake+shape_fakerate[i]);
+                    h_anti[1][j][i+57]->Write();
+                }
+            }//end of anti-isolated
+        }//end of (sample!="data_obs)
+        if (sample=="data_obs"){
+            h_iso[1][j][0]->SetName(name.c_str());
+            h_iso[1][j][0]->Write();
+            h_anti[1][j][0]->SetName(name.c_str()+fake);
+            h_anti[1][j][0]->Write();
+            for (int i = 0; i < 2; ++i){
+                h_anti[1][j][i+55]->SetName(name.c_str()+fake+shape_fake_crosstrg[i]);
+                h_anti[1][j][i+55]->Write();
+            }
+            for (int i = 0; i < 14; ++i){
+                h_anti[1][j][i+57]->SetName(name.c_str()+fake+shape_fakerate[i]);
+                h_anti[1][j][i+57]->Write();
             }
         }
     }
