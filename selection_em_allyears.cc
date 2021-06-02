@@ -1232,9 +1232,12 @@ int main(int argc, char** argv){
         //##############################histograms filling###################################
         bool rejectEMBduplicate = !isMCnonHiggs or (isMCnonHiggs && !(gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6));
         
+        bool iso_default = iso_1<0.10 && iso_2<0.15;
+        bool iso_loose = iso_1>0.05 or iso_2>0.05;
+        
         //nonDY MC contamination to embedded (all nonHiggs MC events with two taus previously rejected)
         if (isMCnonHiggs && name!="ZJ" && gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6){
-            if (byMediumDeepVSjet_2 && trigger_region_nominal){
+            if (q_1*q_2<0 && iso_default && trigger_region_nominal){
                 if (nbtag20==1){
                     for (int m = 3; m < 7; m++){
                         h_os[0][m][63]->Fill(var[0][m][0],weight_corr*trgsf*0.1);//+/-10% on top of emb
@@ -1247,9 +1250,6 @@ int main(int argc, char** argv){
                 }
             }
         }
-        
-        bool iso_default = iso_1<0.10 && iso_2<0.15;
-        bool iso_loose = iso_1>0.05 or iso_2>0.05;
         
         //do not fill for MC tautau events (duplicating emb) as normal
         if (q_1*q_2<0 && iso_default && rejectEMBduplicate){
