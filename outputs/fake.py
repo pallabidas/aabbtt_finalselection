@@ -34,8 +34,20 @@ if args.channel=="et" or args.channel=="mt":
         nonDYMC_down.SetName("embedded_CMS_nonDY_"+args.year+"Down")
         nonDYMC_down.Write()
         
-        ########### JES/recoil/UES/btag/trgeff/Z_pt/toppt/EMB_trgeff
-        syst_name=["JetAbsolute","JetAbsoluteyear","JetBBEC1","JetBBEC1year","JetEC2","JetEC2year","JetFlavorQCD","JetHF","JetHFyear","JetRelativeBal","JetRelativeSample","JER","0j_resolution","0j_response","1j_resolution","1j_response","gt1j_resolution","gt1j_response","UES","btagsf_heavy","btagsf_light","trgeff_single","trgeff_cross","Zpt","toppt","EMB_trgeff_single","EMB_trgeff_cross"]
+        ########### duplicate embedded shapes for partial correlation with MC (remove "EMB" from names)
+        duplicate_name=["trgeff_single_"+args.channel,"trgeff_cross_"+args.channel,"tauideff_pt20to25","tauideff_pt25to30","tauideff_pt30to35","tauideff_pt35to40","tauideff_pt40to500","tauideff_pt500to1000","tauideff_ptgt1000","TES_dm0","TES_dm1","TES_dm10","TES_dm11"]
+        
+        for j in range(len(duplicate_name)):
+            duplicate_up=file.Get(dir[i]).Get("embedded_CMS_EMB_"+duplicate_name[j]+"_"+args.year+"Up")
+            duplicate_up.SetName("embedded_CMS_"+duplicate_name[j]+"_"+args.year+"Up")
+            duplicate_up.Write()
+            
+            duplicate_down=file.Get(dir[i]).Get("embedded_CMS_EMB_"+duplicate_name[j]+"_"+args.year+"Down")
+            duplicate_down.SetName("embedded_CMS_"+duplicate_name[j]+"_"+args.year+"Down")
+            duplicate_down.Write()
+        
+        ########### JES uncorrelated accross years/recoil/UES/btag/trgeff/Z_pt/toppt
+        syst_name=["JetAbsolute","JetBBEC1","JetEC2","JetHF","0j_resolution","0j_response","1j_resolution","1j_response","gt1j_resolution","gt1j_response","UES","btagsf_heavy","btagsf_light","trgeff_single_"+args.channel,"trgeff_cross_"+args.channel,"Zpt","toppt"]
         
         for j in range(len(syst_name)):
             mc_fake_syst_up=file.Get(dir[i]).Get("MC_fake_CMS_"+syst_name[j]+"_"+args.year+"Up")
@@ -48,6 +60,22 @@ if args.channel=="et" or args.channel=="mt":
             fake_syst_down=file.Get(dir[i]).Get("data_obs_fake")
             fake_syst_down.Add(mc_fake_syst_down,-1)
             fake_syst_down.SetName("fake_CMS_"+syst_name[j]+"_"+args.year+"Down")
+            fake_syst_down.Write()
+            
+        ########### JES correlated across years
+        syst_name=["JetAbsolute","JetBBEC1","JetEC2","JetFlavorQCD","JetHF","JetRelativeBal","JetRelativeSample","JER"]
+        
+        for j in range(len(syst_name)):
+            mc_fake_syst_up=file.Get(dir[i]).Get("MC_fake_CMS_"+syst_name[j]+"Up")
+            fake_syst_up=file.Get(dir[i]).Get("data_obs_fake")
+            fake_syst_up.Add(mc_fake_syst_up,-1)
+            fake_syst_up.SetName("fake_CMS_"+syst_name[j]+"Up")
+            fake_syst_up.Write()
+            
+            mc_fake_syst_down=file.Get(dir[i]).Get("MC_fake_CMS_"+syst_name[j]+"Down")
+            fake_syst_down=file.Get(dir[i]).Get("data_obs_fake")
+            fake_syst_down.Add(mc_fake_syst_down,-1)
+            fake_syst_down.SetName("fake_CMS_"+syst_name[j]+"Down")
             fake_syst_down.Write()
             
         ########## lepton ES
@@ -113,7 +141,7 @@ if args.channel=="em":# do normalization on cloned histogram if it should be use
         scale=qcd_ss.Integral()/qcd_ssloose.Integral()
         qcd=qcd_ssloose
         qcd.Scale(scale)
-        qcd.SetName("qcd")
+        qcd.SetName("fake")
         qcd.Write()
         
         ########### nonDY MC contamination to embedded sample
@@ -129,8 +157,20 @@ if args.channel=="em":# do normalization on cloned histogram if it should be use
         nonDYMC_down.SetName("embedded_CMS_nonDY_"+args.year+"Down")
         nonDYMC_down.Write()
         
-        ########### JES/recoil/UES/btag/trgeff/Z_pt/toppt/eleES/muES/EMB_trgeff
-        syst_name=["JetAbsolute","JetAbsoluteyear","JetBBEC1","JetBBEC1year","JetEC2","JetEC2year","JetFlavorQCD","JetHF","JetHFyear","JetRelativeBal","JetRelativeSample","JER","0j_resolution","0j_response","1j_resolution","1j_response","gt1j_resolution","gt1j_response","UES","btagsf_heavy","btagsf_light","trgeff_Mu8E23","trgeff_Mu23E12","trgeff_both","Zpt","toppt","eleES_bar","eleES_end","muES_eta0to1p2","muES_eta1p2to2p1","muES_eta2p1to2p4","EMB_trgeff_Mu8E23","EMB_trgeff_Mu23E12","EMB_trgeff_both"]
+        ########### duplicate embedded shapes for partial correlation with MC (remove "EMB" from names)
+        duplicate_name=["trgeff_Mu8E23_em","trgeff_Mu23E12_em","trgeff_both_em"]
+        
+        for j in range(len(duplicate_name)):
+            duplicate_up=file.Get(dir[i]).Get("embedded_CMS_EMB_"+duplicate_name[j]+"_"+args.year+"Up")
+            duplicate_up.SetName("embedded_CMS_"+duplicate_name[j]+"_"+args.year+"Up")
+            duplicate_up.Write()
+            
+            duplicate_down=file.Get(dir[i]).Get("embedded_CMS_EMB_"+duplicate_name[j]+"_"+args.year+"Down")
+            duplicate_down.SetName("embedded_CMS_"+duplicate_name[j]+"_"+args.year+"Down")
+            duplicate_down.Write()
+            
+        ########### JES uncorrelated across years/recoil/UES/btag/trgeff/Z_pt/toppt/eleES/muES
+        syst_name=["JetAbsolute","JetBBEC1","JetEC2","JetHF","0j_resolution","0j_response","1j_resolution","1j_response","gt1j_resolution","gt1j_response","UES","btagsf_heavy","btagsf_light","trgeff_Mu8E23_em","trgeff_Mu23E12_em","trgeff_both_em","Zpt","toppt","eleES_bar","eleES_end","muES_eta0to1p2","muES_eta1p2to2p1","muES_eta2p1to2p4"]
         
         for j in range(len(syst_name)):
             mc_ss_syst_up=file.Get(dir[i]).Get("MC_ss_CMS_"+syst_name[j]+"_"+args.year+"Up")
@@ -142,7 +182,7 @@ if args.channel=="em":# do normalization on cloned histogram if it should be use
             scale=qcd_ss_syst_up.Integral()/qcd_ssloose_syst_up.Integral()
             qcd_syst_up=qcd_ssloose_syst_up
             qcd_syst_up.Scale(scale)
-            qcd_syst_up.SetName("qcd_CMS_"+syst_name[j]+"_"+args.year+"Up")
+            qcd_syst_up.SetName("fake_CMS_"+syst_name[j]+"_"+args.year+"Up")
             qcd_syst_up.Write()
             
             mc_ss_syst_down=file.Get(dir[i]).Get("MC_ss_CMS_"+syst_name[j]+"_"+args.year+"Down")
@@ -154,7 +194,35 @@ if args.channel=="em":# do normalization on cloned histogram if it should be use
             scale=qcd_ss_syst_down.Integral()/qcd_ssloose_syst_down.Integral()
             qcd_syst_down=qcd_ssloose_syst_down
             qcd_syst_down.Scale(scale)
-            qcd_syst_down.SetName("qcd_CMS_"+syst_name[j]+"_"+args.year+"Down")
+            qcd_syst_down.SetName("fake_CMS_"+syst_name[j]+"_"+args.year+"Down")
+            qcd_syst_down.Write()
+            
+        ########### JES correlated across years
+        syst_name=["JetAbsolute","JetBBEC1","JetEC2","JetFlavorQCD","JetHF","JetRelativeBal","JetRelativeSample","JER"]
+        
+        for j in range(len(syst_name)):
+            mc_ss_syst_up=file.Get(dir[i]).Get("MC_ss_CMS_"+syst_name[j]+"Up")
+            mc_ssloose_syst_up=file.Get(dir[i]).Get("MC_ssloose_CMS_"+syst_name[j]+"Up")
+            qcd_ss_syst_up=data_ss.Clone()
+            qcd_ss_syst_up.Add(mc_ss_syst_up,-1)
+            qcd_ssloose_syst_up=data_ssloose.Clone()
+            qcd_ssloose_syst_up.Add(mc_ssloose_syst_up,-1)
+            scale=qcd_ss_syst_up.Integral()/qcd_ssloose_syst_up.Integral()
+            qcd_syst_up=qcd_ssloose_syst_up
+            qcd_syst_up.Scale(scale)
+            qcd_syst_up.SetName("fake_CMS_"+syst_name[j]+"Up")
+            qcd_syst_up.Write()
+            
+            mc_ss_syst_down=file.Get(dir[i]).Get("MC_ss_CMS_"+syst_name[j]+"Down")
+            mc_ssloose_syst_down=file.Get(dir[i]).Get("MC_ssloose_CMS_"+syst_name[j]+"Down")
+            qcd_ss_syst_down=data_ss.Clone()
+            qcd_ss_syst_down.Add(mc_ss_syst_down,-1)
+            qcd_ssloose_syst_down=data_ssloose.Clone()
+            qcd_ssloose_syst_down.Add(mc_ssloose_syst_down,-1)
+            scale=qcd_ss_syst_down.Integral()/qcd_ssloose_syst_down.Integral()
+            qcd_syst_down=qcd_ssloose_syst_down
+            qcd_syst_down.Scale(scale)
+            qcd_syst_down.SetName("fake_CMS_"+syst_name[j]+"Down")
             qcd_syst_down.Write()
             
         ########### qcd estimation uncertainties: ss2d
@@ -170,7 +238,7 @@ if args.channel=="em":# do normalization on cloned histogram if it should be use
             scale=qcd_ss_syst_up.Integral()/qcd_ssloose_syst_up.Integral()
             qcd_syst_up=qcd_ssloose_syst_up
             qcd_syst_up.Scale(scale)
-            qcd_syst_up.SetName("qcd_CMS_"+syst_name[j]+"_"+args.year+"Up")
+            qcd_syst_up.SetName("fake_CMS_"+syst_name[j]+"_"+args.year+"Up")
             qcd_syst_up.Write()
             
             mc_ss_syst_down=file.Get(dir[i]).Get("MC_ss_CMS_"+syst_name[j]+"_"+args.year+"Down")
@@ -182,7 +250,8 @@ if args.channel=="em":# do normalization on cloned histogram if it should be use
             scale=qcd_ss_syst_down.Integral()/qcd_ssloose_syst_down.Integral()
             qcd_syst_down=qcd_ssloose_syst_down
             qcd_syst_down.Scale(scale)
-            qcd_syst_down.SetName("qcd_CMS_"+syst_name[j]+"_"+args.year+"Down")
+            qcd_syst_down.SetName("fake_CMS_"+syst_name[j]+"_"+args.year+"Down")
             qcd_syst_down.Write()
             
+
 

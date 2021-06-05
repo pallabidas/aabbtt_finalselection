@@ -46,6 +46,18 @@ then
   ./$exe $inpath/DY2.root $outpath/DY2.root DY2 ZJ $year
   ./$exe $inpath/DY3.root $outpath/DY3.root DY3 ZJ $year
   ./$exe $inpath/DY4.root $outpath/DY4.root DY4 ZJ $year
+  if [ $year == "2017" ] || [ $year == "2018" ]
+  then
+    ./$exe $inpath/DYlow.root $outpath/DYlow.root DYlow ZJ $year
+  fi
+  if [ $year == "2016" ]
+  then
+    ./$exe $inpath/DYlow.root $outpath/DYlow.root DYlow ZJ $year
+    ./$exe $inpath/DY1low.root $outpath/DY1low.root DY1low ZJ $year
+    ./$exe $inpath/DY2low.root $outpath/DY2low.root DY2low ZJ $year
+    ./$exe $inpath/DY3low.root $outpath/DY3low.root DY3low ZJ $year
+    ./$exe $inpath/DY4low.root $outpath/DY4low.root DY4low ZJ $year
+  fi
   ./$exe $inpath/GGHTT.root $outpath/GGHTT.root GGHTT ggh_htt $year
   ./$exe $inpath/GGHWW.root $outpath/GGHWW.root GGHWW ggh_hww $year
   ./$exe $inpath/GGZHLLTT.root $outpath/GGZHLLTT.root GGZHLLTT Zh_htt $year

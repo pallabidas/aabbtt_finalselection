@@ -59,7 +59,7 @@ int main(int argc, char** argv){
     float xs, weight;
     float luminosity = 59740.0;
     if (year=="2017") luminosity = 41530.0;
-    if (year=="2016") luminosity = 35920.0;
+    if (year=="2016") luminosity = 36330.0;
     
     if (sample == "data_obs"){weight = 1.0;}
     else if(sample == "gghbbtt12"){xs = 0.01*48.58*0.0380; weight = luminosity*xs/N;}
@@ -90,6 +90,11 @@ int main(int argc, char** argv){
     else if(sample == "DY2"){weight = 1.0;}
     else if(sample == "DY3"){weight = 1.0;}
     else if(sample == "DY4"){weight = 1.0;}
+    else if(sample == "DYlow"){weight = 1.0;}
+    else if(sample == "DY1low"){weight = 1.0;}
+    else if(sample == "DY2low"){weight = 1.0;}
+    else if(sample == "DY3low"){weight = 1.0;}
+    else if(sample == "DY4low"){weight = 1.0;}
     else if(sample == "GGHTT"){xs = 48.58*0.0627; weight = luminosity*xs/N;}
     else if(sample == "GGHWW"){xs = 48.58*0.2137*0.3258*0.3258; weight = luminosity*xs/N;}
     else if(sample == "GGZHLLTT"){xs = 0.1227*0.0627*3*0.033658; weight = luminosity*xs/N;}
@@ -435,26 +440,26 @@ int main(int argc, char** argv){
     tree_NN->SetBranchAddress("NN2b_ResolutionUp", &NN2b_ResolutionUp);
     tree_NN->SetBranchAddress("NN2b_ResolutionDown", &NN2b_ResolutionDown);*/
     
-    std::string shape_year = year.c_str();
-    
-    TString shape_eleES[4] = {"_CMS_eleES_bar_"+shape_year+"Up","_CMS_eleES_bar_"+shape_year+"Down","_CMS_eleES_end_"+shape_year+"Up","_CMS_eleES_end_"+shape_year+"Down"};
-    TString shape_muonES[6] = {"_CMS_muES_eta0to1p2_"+shape_year+"Up","_CMS_muES_eta0to1p2_"+shape_year+"Down","_CMS_muES_eta1p2to2p1_"+shape_year+"Up","_CMS_muES_eta1p2to2p1_"+shape_year+"Down","_CMS_muES_eta2p1to2p4_"+shape_year+"Up","_CMS_muES_eta2p1to2p4_"+shape_year+"Down"};
-    TString shape_trgeff[6] = {"_CMS_trgeff_Mu8E23_"+shape_year+"Up","_CMS_trgeff_Mu8E23_"+shape_year+"Down","_CMS_trgeff_Mu23E12_"+shape_year+"Up","_CMS_trgeff_Mu23E12_"+shape_year+"Down","_CMS_trgeff_both_"+shape_year+"Up","_CMS_trgeff_both_"+shape_year+"Down"};
-    TString shape_btagsf[4] = {"_CMS_btagsf_heavy_"+shape_year+"Up","_CMS_btagsf_heavy_"+shape_year+"Down","_CMS_btagsf_light_"+shape_year+"Up","_CMS_btagsf_light_"+shape_year+"Down"};
-    TString shape_jet[24] = {"_CMS_JetAbsolute_"+shape_year+"Up","_CMS_JetAbsolute_"+shape_year+"Down","_CMS_JetAbsoluteyear_"+shape_year+"Up","_CMS_JetAbsoluteyear_"+shape_year+"Down","_CMS_JetBBEC1_"+shape_year+"Up","_CMS_JetBBEC1_"+shape_year+"Down","_CMS_JetBBEC1year_"+shape_year+"Up","_CMS_JetBBEC1year_"+shape_year+"Down","_CMS_JetEC2_"+shape_year+"Up","_CMS_JetEC2_"+shape_year+"Down","_CMS_JetEC2year_"+shape_year+"Up","_CMS_JetEC2year_"+shape_year+"Down","_CMS_JetFlavorQCD_"+shape_year+"Up","_CMS_JetFlavorQCD_"+shape_year+"Down","_CMS_JetHF_"+shape_year+"Up","_CMS_JetHF_"+shape_year+"Down","_CMS_JetHFyear_"+shape_year+"Up","_CMS_JetHFyear_"+shape_year+"Down","_CMS_JetRelativeBal_"+shape_year+"Up","_CMS_JetRelativeBal_"+shape_year+"Down","_CMS_JetRelativeSample_"+shape_year+"Up","_CMS_JetRelativeSample_"+shape_year+"Down","_CMS_JER_"+shape_year+"Up","_CMS_JER_"+shape_year+"Down"};
+    TString shape_eleES[4] = {"_CMS_eleES_bar_"+year+"Up","_CMS_eleES_bar_"+year+"Down","_CMS_eleES_end_"+year+"Up","_CMS_eleES_end_"+year+"Down"};
+    TString shape_muonES[6] = {"_CMS_muES_eta0to1p2_"+year+"Up","_CMS_muES_eta0to1p2_"+year+"Down","_CMS_muES_eta1p2to2p1_"+year+"Up","_CMS_muES_eta1p2to2p1_"+year+"Down","_CMS_muES_eta2p1to2p4_"+year+"Up","_CMS_muES_eta2p1to2p4_"+year+"Down"};
+    TString shape_trgeff[6] = {"_CMS_trgeff_Mu8E23_em_"+year+"Up","_CMS_trgeff_Mu8E23_em_"+year+"Down","_CMS_trgeff_Mu23E12_em_"+year+"Up","_CMS_trgeff_Mu23E12_em_"+year+"Down","_CMS_trgeff_both_em_"+year+"Up","_CMS_trgeff_both_em_"+year+"Down"};
+    TString shape_btagsf[4] = {"_CMS_btagsf_heavy_"+year+"Up","_CMS_btagsf_heavy_"+year+"Down","_CMS_btagsf_light_"+year+"Up","_CMS_btagsf_light_"+year+"Down"};
+    TString shape_jet[24] = {"_CMS_JetAbsoluteUp","_CMS_JetAbsoluteDown","_CMS_JetAbsolute_"+year+"Up","_CMS_JetAbsolute_"+year+"Down","_CMS_JetBBEC1Up","_CMS_JetBBEC1Down","_CMS_JetBBEC1_"+year+"Up","_CMS_JetBBEC1_"+year+"Down","_CMS_JetEC2Up","_CMS_JetEC2Down","_CMS_JetEC2_"+year+"Up","_CMS_JetEC2_"+year+"Down","_CMS_JetFlavorQCDUp","_CMS_JetFlavorQCDDown","_CMS_JetHFUp","_CMS_JetHFDown","_CMS_JetHF_"+year+"Up","_CMS_JetHF_"+year+"Down","_CMS_JetRelativeBalUp","_CMS_JetRelativeBalDown","_CMS_JetRelativeSampleUp","_CMS_JetRelativeSampleDown","_CMS_JERUp","_CMS_JERDown"};
     //Z+jets, W+jets, ggH, qqH
-    TString shape_recoil[12] = {"_CMS_0j_resolution_"+shape_year+"Up","_CMS_0j_resolution_"+shape_year+"Down","_CMS_0j_response_"+shape_year+"Up","_CMS_0j_response_"+shape_year+"Down","_CMS_1j_resolution_"+shape_year+"Up","_CMS_1j_resolution_"+shape_year+"Down","_CMS_1j_response_"+shape_year+"Up","_CMS_1j_response_"+shape_year+"Down","_CMS_gt1j_resolution_"+shape_year+"Up","_CMS_gt1j_resolution_"+shape_year+"Down","_CMS_gt1j_response_"+shape_year+"Up","_CMS_gt1j_response_"+shape_year+"Down"};
+    TString shape_recoil[12] = {"_CMS_0j_resolution_"+year+"Up","_CMS_0j_resolution_"+year+"Down","_CMS_0j_response_"+year+"Up","_CMS_0j_response_"+year+"Down","_CMS_1j_resolution_"+year+"Up","_CMS_1j_resolution_"+year+"Down","_CMS_1j_response_"+year+"Up","_CMS_1j_response_"+year+"Down","_CMS_gt1j_resolution_"+year+"Up","_CMS_gt1j_resolution_"+year+"Down","_CMS_gt1j_response_"+year+"Up","_CMS_gt1j_response_"+year+"Down"};
     //those without recoil
-    TString shape_UES[2] = {"_CMS_UES_"+shape_year+"Up","_CMS_UES_"+shape_year+"Down"};
+    TString shape_UES[2] = {"_CMS_UES_"+year+"Up","_CMS_UES_"+year+"Down"};
     //for DY MC only
-    TString shape_DY_zpt[2] = {"_CMS_Zpt_"+shape_year+"Up","_CMS_Zpt_"+shape_year+"Down"};
+    TString shape_DY_zpt[2] = {"_CMS_Zpt_"+year+"Up","_CMS_Zpt_"+year+"Down"};
     //for ttbar only
-    TString shape_ttbar_toppt[2] = {"_CMS_toppt_"+shape_year+"Up","_CMS_toppt_"+shape_year+"Down"};
+    TString shape_ttbar_toppt[2] = {"_CMS_toppt_"+year+"Up","_CMS_toppt_"+year+"Down"};
     //SS 2d correction/closure
-    TString shape_ss2d[6] = {"_CMS_SScorrection_"+shape_year+"Up","_CMS_SScorrection_"+shape_year+"Down","_CMS_SSclosure_"+shape_year+"Up","_CMS_SSclosure_"+shape_year+"Down","_CMS_SSboth2D_"+shape_year+"Up","_CMS_SSboth2D_"+shape_year+"Down"};
+    TString shape_ss2d[6] = {"_CMS_SScorrection_"+year+"Up","_CMS_SScorrection_"+year+"Down","_CMS_SSclosure_"+year+"Up","_CMS_SSclosure_"+year+"Down","_CMS_SSboth2D_"+year+"Up","_CMS_SSboth2D_"+year+"Down"};
     
     //give different names for embedded
-    TString embshape_trgeff[6] = {"_CMS_EMB_trgeff_Mu8E23_"+shape_year+"Up","_CMS_EMB_trgeff_Mu8E23_"+shape_year+"Down","_CMS_EMB_trgeff_Mu23E12_"+shape_year+"Up","_CMS_EMB_trgeff_Mu23E12_"+shape_year+"Down","_CMS_EMB_trgeff_both_"+shape_year+"Up","_CMS_EMB_trgeff_both_"+shape_year+"Down"};
+    TString embshape_trgeff[6] = {"_CMS_EMB_trgeff_Mu8E23_em_"+year+"Up","_CMS_EMB_trgeff_Mu8E23_em_"+year+"Down","_CMS_EMB_trgeff_Mu23E12_em_"+year+"Up","_CMS_EMB_trgeff_Mu23E12_em_"+year+"Down","_CMS_EMB_trgeff_both_em_"+year+"Up","_CMS_EMB_trgeff_both_em_"+year+"Down"};
+    TString embshape_eleES[4] = {"_CMS_EMB_eleES_bar_"+year+"Up","_CMS_EMB_eleES_bar_"+year+"Down","_CMS_EMB_eleES_end_"+year+"Up","_CMS_EMB_eleES_end_"+year+"Down"};
+    TString embshape_muonES[6] = {"_CMS_EMB_muES_eta0to1p2_"+year+"Up","_CMS_EMB_muES_eta0to1p2_"+year+"Down","_CMS_EMB_muES_eta1p2to2p1_"+year+"Up","_CMS_EMB_muES_eta1p2to2p1_"+year+"Down","_CMS_EMB_muES_eta2p1to2p4_"+year+"Up","_CMS_EMB_muES_eta2p1to2p4_"+year+"Down"};
     
     //comtamination to emb: all non-DY MC with gen tautau
     TString shape_nonDY[1] = {"nonDYMC"};
@@ -634,30 +639,59 @@ int main(int argc, char** argv){
         if (!(myele.DeltaR(mymu)>0.1)) continue;//both isolation cones have size 0.4, but at skimming level the other leptons are removed from the cones to remove overlapping
         
         if (name=="ZJ"){
-            if (numGenJets==0){
-                weight = 3.630;
-                if (year=="2017") weight = 2.575;
-                if (year=="2016") weight = 1.491;
+            if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
+                if (numGenJets==0){
+                    weight = 3.630;
+                    if (year=="2017") weight = 2.575;
+                    if (year=="2016") weight = 1.509;
+                }
+                else if (numGenJets==1){
+                    weight = 0.6304;
+                    if (year=="2017") weight = 0.7084;
+                    if (year=="2016") weight = 0.4814;
+                }
+                else if (numGenJets==2){
+                    weight = 0.5528;
+                    if (year=="2017") weight = 0.9192;
+                    if (year=="2016") weight = 0.4987;
+                }
+                else if (numGenJets==3){
+                    weight = 0.6009;
+                    if (year=="2017") weight = 1.648;
+                    if (year=="2016") weight = 0.5113;
+                }
+                else if (numGenJets==4){
+                    weight = 0.8314;
+                    if (year=="2017") weight = 0.2192;
+                    if (year=="2016") weight = 0.4194;
+                }
             }
-            else if (numGenJets==1){
-                weight = 0.6304;
-                if (year=="2017") weight = 0.7084;
-                if (year=="2016") weight = 0.4757;
-            }
-            else if (numGenJets==2){
-                weight = 0.5528;
-                if (year=="2017") weight = 0.9192;
-                if (year=="2016") weight = 0.4952;
-            }
-            else if (numGenJets==3){
-                weight = 0.6009;
-                if (year=="2017") weight = 1.648;
-                if (year=="2016") weight = 0.5052;
-            }
-            else if (numGenJets==4){
-                weight = 0.8314;
-                if (year=="2017") weight = 0.2192;
-                if (year=="2016") weight = 0.4144;
+            if (sample=="DYlow" or sample=="DY1low" or sample=="DY2low" or sample=="DY3low" or sample=="DY4low"){
+                if (numGenJets==0){
+                    weight = 12.45;
+                    if (year=="2017") weight = 1.0;
+                    if (year=="2016") weight = 20.64;
+                }
+                else if (numGenJets==1){
+                    weight = 12.45;
+                    if (year=="2017") weight = 1.0;
+                    if (year=="2016") weight = 0.7822;
+                }
+                else if (numGenJets==2){
+                    weight = 12.45;
+                    if (year=="2017") weight = 1.0;
+                    if (year=="2016") weight = 0.8491;
+                }
+                else if (numGenJets==3){
+                    weight = 12.45;
+                    if (year=="2017") weight = 1.0;
+                    if (year=="2016") weight = 0.8178;
+                }
+                else if (numGenJets==4){
+                    weight = 12.45;
+                    if (year=="2017") weight = 1.0;
+                    if (year=="2016") weight = 0.7536;
+                }
             }
         }
         
@@ -665,27 +699,27 @@ int main(int argc, char** argv){
             if (numGenJets==0){
                 weight = 51.81;
                 if (year=="2017") weight = 23.67;
-                if (year=="2016") weight = 25.46;
+                if (year=="2016") weight = 25.72;
             }
             else if (numGenJets==1){
                 weight = 9.091;
                 if (year=="2017") weight = 3.106;
-                if (year=="2016") weight = 5.773;
+                if (year=="2016") weight = 5.840;
             }
             else if (numGenJets==2){
                 weight = 4.516;
                 if (year=="2017") weight = 3.014;
-                if (year=="2016") weight = 1.792;
+                if (year=="2016") weight = 1.814;
             }
             else if (numGenJets==3){
                 weight = 3.090;
                 if (year=="2017") weight = 2.202;
-                if (year=="2016") weight = 0.6829;
+                if (year=="2016") weight = 0.6878;
             }
             else if (numGenJets==4){
                 weight = 3.227;
                 if (year=="2017") weight = 2.150;
-                if (year=="2016") weight = 0.7365;
+                if (year=="2016") weight = 0.7453;
             }
         }
         
@@ -1591,11 +1625,13 @@ int main(int argc, char** argv){
             h_os[0][j][0]->Write();
             //shifted
             for (int i = 0; i < 4; ++i){
-                h_os[0][j][i+1]->SetName(name.c_str()+shape_eleES[i]);
+                if (sample!="embedded") h_os[0][j][i+1]->SetName(name.c_str()+shape_eleES[i]);
+                else h_os[0][j][i+1]->SetName(name.c_str()+embshape_eleES[i]);
                 h_os[0][j][i+1]->Write();
             }
             for (int i = 0; i < 6; ++i){
-                h_os[0][j][i+5]->SetName(name.c_str()+shape_muonES[i]);
+                if (sample!="embedded") h_os[0][j][i+5]->SetName(name.c_str()+shape_muonES[i]);
+                else h_os[0][j][i+5]->SetName(name.c_str()+embshape_muonES[i]);
                 h_os[0][j][i+5]->Write();
             }
             for (int i = 0; i < 6; ++i){
@@ -1650,16 +1686,32 @@ int main(int argc, char** argv){
                 h_ssloose[0][j][0]->SetName(MC+ssloose);
                 h_ssloose[0][j][0]->Write();
                 for (int i = 0; i < 4; ++i){
-                    h_ss[0][j][i+1]->SetName(MC+ss+shape_eleES[i]);
-                    h_ss[0][j][i+1]->Write();
-                    h_ssloose[0][j][i+1]->SetName(MC+ssloose+shape_eleES[i]);
-                    h_ssloose[0][j][i+1]->Write();
+                    if (sample!="embedded"){
+                        h_ss[0][j][i+1]->SetName(MC+ss+shape_eleES[i]);
+                        h_ss[0][j][i+1]->Write();
+                        h_ssloose[0][j][i+1]->SetName(MC+ssloose+shape_eleES[i]);
+                        h_ssloose[0][j][i+1]->Write();
+                    }
+                    else {
+                        h_ss[0][j][0]->SetName(MC+ss+shape_eleES[i]);
+                        h_ss[0][j][0]->Write();
+                        h_ssloose[0][j][0]->SetName(MC+ssloose+shape_eleES[i]);
+                        h_ssloose[0][j][0]->Write();
+                    }
                 }
                 for (int i = 0; i < 6; ++i){
-                    h_ss[0][j][i+5]->SetName(MC+ss+shape_muonES[i]);
-                    h_ss[0][j][i+5]->Write();
-                    h_ssloose[0][j][i+5]->SetName(MC+ssloose+shape_muonES[i]);
-                    h_ssloose[0][j][i+5]->Write();
+                    if (sample!="embedded"){
+                        h_ss[0][j][i+5]->SetName(MC+ss+shape_muonES[i]);
+                        h_ss[0][j][i+5]->Write();
+                        h_ssloose[0][j][i+5]->SetName(MC+ssloose+shape_muonES[i]);
+                        h_ssloose[0][j][i+5]->Write();
+                    }
+                    else {
+                        h_ss[0][j][0]->SetName(MC+ss+shape_muonES[i]);
+                        h_ss[0][j][0]->Write();
+                        h_ssloose[0][j][0]->SetName(MC+ssloose+shape_muonES[i]);
+                        h_ssloose[0][j][0]->Write();
+                    }
                 }
                 for (int i = 0; i < 6; ++i){
                     if (sample!="embedded"){
@@ -1672,18 +1724,6 @@ int main(int argc, char** argv){
                         h_ss[0][j][0]->SetName(MC+ss+shape_trgeff[i]);
                         h_ss[0][j][0]->Write();
                         h_ssloose[0][j][0]->SetName(MC+ssloose+shape_trgeff[i]);
-                        h_ssloose[0][j][0]->Write();
-                    }
-                    if (sample=="embedded"){
-                        h_ss[0][j][i+11]->SetName(MC+ss+embshape_trgeff[i]);
-                        h_ss[0][j][i+11]->Write();
-                        h_ssloose[0][j][i+11]->SetName(MC+ssloose+embshape_trgeff[i]);
-                        h_ssloose[0][j][i+11]->Write();
-                    }
-                    else {
-                        h_ss[0][j][0]->SetName(MC+ss+embshape_trgeff[i]);
-                        h_ss[0][j][0]->Write();
-                        h_ssloose[0][j][0]->SetName(MC+ssloose+embshape_trgeff[i]);
                         h_ssloose[0][j][0]->Write();
                     }
                 }
@@ -1805,11 +1845,13 @@ int main(int argc, char** argv){
             h_os[1][j][0]->Write();
             //shifted
             for (int i = 0; i < 4; ++i){
-                h_os[1][j][i+1]->SetName(name.c_str()+shape_eleES[i]);
+                if (sample!="embedded") h_os[1][j][i+1]->SetName(name.c_str()+shape_eleES[i]);
+                else h_os[1][j][i+1]->SetName(name.c_str()+embshape_eleES[i]);
                 h_os[1][j][i+1]->Write();
             }
             for (int i = 0; i < 6; ++i){
-                h_os[1][j][i+5]->SetName(name.c_str()+shape_muonES[i]);
+                if (sample!="embedded") h_os[1][j][i+5]->SetName(name.c_str()+shape_muonES[i]);
+                else h_os[1][j][i+5]->SetName(name.c_str()+embshape_muonES[i]);
                 h_os[1][j][i+5]->Write();
             }
             for (int i = 0; i < 6; ++i){
@@ -1864,16 +1906,32 @@ int main(int argc, char** argv){
                 h_ssloose[1][j][0]->SetName(MC+ssloose);
                 h_ssloose[1][j][0]->Write();
                 for (int i = 0; i < 4; ++i){
-                    h_ss[1][j][i+1]->SetName(MC+ss+shape_eleES[i]);
-                    h_ss[1][j][i+1]->Write();
-                    h_ssloose[1][j][i+1]->SetName(MC+ssloose+shape_eleES[i]);
-                    h_ssloose[1][j][i+1]->Write();
+                    if (sample!="embedded"){
+                        h_ss[1][j][i+1]->SetName(MC+ss+shape_eleES[i]);
+                        h_ss[1][j][i+1]->Write();
+                        h_ssloose[1][j][i+1]->SetName(MC+ssloose+shape_eleES[i]);
+                        h_ssloose[1][j][i+1]->Write();
+                    }
+                    else {
+                        h_ss[1][j][0]->SetName(MC+ss+shape_eleES[i]);
+                        h_ss[1][j][0]->Write();
+                        h_ssloose[1][j][0]->SetName(MC+ssloose+shape_eleES[i]);
+                        h_ssloose[1][j][0]->Write();
+                    }
                 }
                 for (int i = 0; i < 6; ++i){
-                    h_ss[1][j][i+5]->SetName(MC+ss+shape_muonES[i]);
-                    h_ss[1][j][i+5]->Write();
-                    h_ssloose[1][j][i+5]->SetName(MC+ssloose+shape_muonES[i]);
-                    h_ssloose[1][j][i+5]->Write();
+                    if (sample!="embedded"){
+                        h_ss[1][j][i+5]->SetName(MC+ss+shape_muonES[i]);
+                        h_ss[1][j][i+5]->Write();
+                        h_ssloose[1][j][i+5]->SetName(MC+ssloose+shape_muonES[i]);
+                        h_ssloose[1][j][i+5]->Write();
+                    }
+                    else {
+                        h_ss[1][j][0]->SetName(MC+ss+shape_muonES[i]);
+                        h_ss[1][j][0]->Write();
+                        h_ssloose[1][j][0]->SetName(MC+ssloose+shape_muonES[i]);
+                        h_ssloose[1][j][0]->Write();
+                    }
                 }
                 for (int i = 0; i < 6; ++i){
                     if (sample!="embedded"){
@@ -1886,18 +1944,6 @@ int main(int argc, char** argv){
                         h_ss[1][j][0]->SetName(MC+ss+shape_trgeff[i]);
                         h_ss[1][j][0]->Write();
                         h_ssloose[1][j][0]->SetName(MC+ssloose+shape_trgeff[i]);
-                        h_ssloose[1][j][0]->Write();
-                    }
-                    if (sample=="embedded"){
-                        h_ss[1][j][i+11]->SetName(MC+ss+embshape_trgeff[i]);
-                        h_ss[1][j][i+11]->Write();
-                        h_ssloose[1][j][i+11]->SetName(MC+ssloose+embshape_trgeff[i]);
-                        h_ssloose[1][j][i+11]->Write();
-                    }
-                    else {
-                        h_ss[1][j][0]->SetName(MC+ss+embshape_trgeff[i]);
-                        h_ss[1][j][0]->Write();
-                        h_ssloose[1][j][0]->SetName(MC+ssloose+embshape_trgeff[i]);
                         h_ssloose[1][j][0]->Write();
                     }
                 }
