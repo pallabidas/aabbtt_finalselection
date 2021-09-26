@@ -9,6 +9,7 @@ parser.add_argument('--channel', '-c', default=None, choices=['et','mt','em'], h
 parser.add_argument('--year', '-y', default=None, choices=['2018','2017','2016'], help='year')
 parser.add_argument('--signal', '-s', default=None, choices=['yes','no'], help='signal')
 parser.add_argument('--log', '-l', default=None, choices=['yes','no'], help='log')
+parser.add_argument('--blind', '-b', default=None, choices=['yes','no'], help='blind')
 args = parser.parse_args()
 
 def add_channel():
@@ -97,23 +98,22 @@ new_idx=ROOT.gROOT.GetListOfColors().GetSize() + 1
 trans=ROOT.TColor(new_idx, adapt.GetRed(), adapt.GetGreen(),adapt.GetBlue(), "",0.5)
 
 if args.channel=="mt":
-    dir=["pt_1_1b","pt_2_1b","m_tt_1b","m_btt_1b","pt_1_2b","pt_2_2b","m_tt_2b","m_btt_2b","m_bbtt_2b"]
-    xaxis=["p_{T}(#mu) (GeV)","p_{T}(#tau_{h}) (GeV)","m_{#tau#tau} (GeV)","m_{b#tau#tau} (GeV)","p_{T}(#mu) (GeV)","p_{T}(#tau_{h}) (GeV)","m_{#tau#tau} (GeV)","m_{b#tau#tau} (GeV)","m_{bb#tau#tau} (GeV)"]
+    dir=["p_1b","p2_1b","p2_z_1b","pt_1_1b","pt_2_1b","m_tt_1b","m_btt_1b","p_2b","p2_2b","p2_z_2b","pt_1_2b","pt_2_2b","m_tt_2b","m_btt_2b","m_bbtt_2b","1","2","3","4","5","6","7"]
+    xaxis=["NN output p","Transformed p","Transformed p","p_{T}(#mu) (GeV)","p_{T}(#tau_{h}) (GeV)","m_{#tau#tau} (GeV)","m_{b#tau#tau} (GeV)","NN output p","Transformed p","Transformed p","p_{T}(#mu) (GeV)","p_{T}(#tau_{h}) (GeV)","m_{#tau#tau} (GeV)","m_{b#tau#tau} (GeV)","m_{bb#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)"]
 if args.channel=="et":
-    dir=["pt_1_1b","pt_2_1b","m_tt_1b","m_btt_1b","pt_1_2b","pt_2_2b","m_tt_2b","m_btt_2b","m_bbtt_2b"]
-    xaxis=["p_{T}(e) (GeV)","p_{T}(#tau_{h}) (GeV)","m_{#tau#tau} (GeV)","m_{b#tau#tau} (GeV)","p_{T}(e) (GeV)","p_{T}(#tau_{h}) (GeV)","m_{#tau#tau} (GeV)","m_{b#tau#tau} (GeV)","m_{bb#tau#tau} (GeV)"]
+    dir=["p_1b","p2_1b","p2_z_1b","pt_1_1b","pt_2_1b","m_tt_1b","m_btt_1b","p_2b","p2_2b","p2_z_2b","pt_1_2b","pt_2_2b","m_tt_2b","m_btt_2b","m_bbtt_2b","1","2","3","4","5","6"]
+    xaxis=["NN output p","Transformed p","Transformed p","p_{T}(e) (GeV)","p_{T}(#tau_{h}) (GeV)","m_{#tau#tau} (GeV)","m_{b#tau#tau} (GeV)","NN output p","Transformed p","Transformed p","p_{T}(e) (GeV)","p_{T}(#tau_{h}) (GeV)","m_{#tau#tau} (GeV)","m_{b#tau#tau} (GeV)","m_{bb#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)"]
 if args.channel=="em":
-    dir=["pt_1_1b","pt_2_1b","m_tt_1b","m_btt_1b","pt_1_2b","pt_2_2b","m_tt_2b","m_btt_2b","m_bbtt_2b"]
-    xaxis=["p_{T}(e) (GeV)","p_{T}(#mu) (GeV)","m_{#tau#tau} (GeV)","m_{b#tau#tau} (GeV)","p_{T}(e) (GeV)","p_{T}(#mu) (GeV)","m_{#tau#tau} (GeV)","m_{b#tau#tau} (GeV)","m_{bb#tau#tau} (GeV)"]
+    dir=["p_1b","p2_1b","p2_z_1b","pt_1_1b","pt_2_1b","m_tt_1b","m_btt_1b","p_2b","p2_2b","p2_z_2b","pt_1_2b","pt_2_2b","m_tt_2b","m_btt_2b","m_bbtt_2b","1","2","3","4","5","6","7"]
+    xaxis=["NN output p","Transformed p","Transformed p","p_{T}(e) (GeV)","p_{T}(#mu) (GeV)","m_{#tau#tau} (GeV)","m_{b#tau#tau} (GeV)","NN output p","Transformed p","Transformed p","p_{T}(e) (GeV)","p_{T}(#mu) (GeV)","m_{#tau#tau} (GeV)","m_{b#tau#tau} (GeV)","m_{bb#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)","m_{#tau#tau} (GeV)"]
 
 for i in range(len(dir)):
     data=file.Get(dir[i]).Get("data_obs")
+    if args.blind=="yes":
+        data.Scale(0)
     ttbar=file.Get(dir[i]).Get("ttbar")
     embedded=file.Get(dir[i]).Get("embedded")
-    if args.channel=="et" or args.channel=="mt":
-        fake=file.Get(dir[i]).Get("fake")
-    if args.channel=="em":
-        fake=file.Get(dir[i]).Get("qcd")
+    fake=file.Get(dir[i]).Get("fake")
     
     ZJ=file.Get(dir[i]).Get("ZJ")
     ST=file.Get(dir[i]).Get("ST")
@@ -146,18 +146,22 @@ for i in range(len(dir)):
         other.Add(WJ)
     
     if args.signal=="yes":
-        gghbbtt20=file.Get(dir[i]).Get("gghbbtt20")
+        #gghbbtt12=file.Get(dir[i]).Get("gghbbtt12")
+        #gghbbtt20=file.Get(dir[i]).Get("gghbbtt20")
         gghbbtt40=file.Get(dir[i]).Get("gghbbtt40")
-        gghbbtt60=file.Get(dir[i]).Get("gghbbtt60")
-        vbfbbtt20=file.Get(dir[i]).Get("vbfbbtt20")
+        #gghbbtt60=file.Get(dir[i]).Get("gghbbtt60")
+        #vbfbbtt12=file.Get(dir[i]).Get("vbfbbtt12")
+        #vbfbbtt20=file.Get(dir[i]).Get("vbfbbtt20")
         vbfbbtt40=file.Get(dir[i]).Get("vbfbbtt40")
-        vbfbbtt60=file.Get(dir[i]).Get("vbfbbtt60")
-        bbtt20=gghbbtt20
-        bbtt20.Add(vbfbbtt20)
+        #vbfbbtt60=file.Get(dir[i]).Get("vbfbbtt60")
+        #bbtt12=gghbbtt12
+        #bbtt12.Add(vbfbbtt12)
+        #bbtt20=gghbbtt20
+        #bbtt20.Add(vbfbbtt20)
         bbtt40=gghbbtt40
         bbtt40.Add(vbfbbtt40)
-        bbtt60=gghbbtt60
-        bbtt60.Add(vbfbbtt60)
+        #bbtt60=gghbbtt60
+        #bbtt60.Add(vbfbbtt60)
     
     data.GetXaxis().SetTitle("")
     data.GetXaxis().SetTitleSize(0)
@@ -185,12 +189,14 @@ for i in range(len(dir)):
     other.SetLineColor(1)
     
     if args.signal=="yes":
-        bbtt20.SetLineColor(3)
-        bbtt20.SetLineWidth(3)
+        #bbtt12.SetLineColor(6)
+        #bbtt12.SetLineWidth(3)
+        #bbtt20.SetLineColor(3)
+        #bbtt20.SetLineWidth(3)
         bbtt40.SetLineColor(2)
         bbtt40.SetLineWidth(3)
-        bbtt60.SetLineColor(4)
-        bbtt60.SetLineWidth(3)
+        #bbtt60.SetLineColor(4)
+        #bbtt60.SetLineWidth(3)
     
     stack=ROOT.THStack("stack","stack")
     stack.Add(ttbar)
@@ -232,12 +238,14 @@ for i in range(len(dir)):
     stack.Draw("histsame")
     
     if args.signal=="yes":
-        bbtt20.Scale(10)
-        bbtt20.Draw("histsame")
-        bbtt40.Scale(10)
+        #bbtt12.Scale(100)
+        #bbtt12.Draw("histsame")
+        #bbtt20.Scale(100)
+        #bbtt20.Draw("histsame")
+        bbtt40.Scale(30)
         bbtt40.Draw("histsame")
-        bbtt60.Scale(10)
-        bbtt60.Draw("histsame")
+        #bbtt60.Scale(100)
+        #bbtt60.Draw("histsame")
     
     errorBand.Draw("e2same")
     data.Draw("esame")
@@ -253,9 +261,10 @@ for i in range(len(dir)):
         legende.AddEntry(fake,"QCD","f")
     legende.AddEntry(other,"Other","f")
     if args.signal=="yes":
-        legende.AddEntry(bbtt20,"m_{a}=20GeV,B=10%","l")
-        legende.AddEntry(bbtt40,"m_{a}=40GeV,B=10%","l")
-        legende.AddEntry(bbtt60,"m_{a}=60GeV,B=10%","l")
+        #legende.AddEntry(bbtt12,"m_{a}=12GeV,B=100%","l")
+        #legende.AddEntry(bbtt20,"m_{a}=20GeV,B=100%","l")
+        legende.AddEntry(bbtt40,"m_{a}=40GeV,B=30%","l")
+        #legende.AddEntry(bbtt60,"m_{a}=60GeV,B=100%","l")
     
     legende.AddEntry(errorBand,"Uncertainty","f")
     legende.Draw()
@@ -322,6 +331,14 @@ for i in range(len(dir)):
     ROOT.gPad.RedrawAxis()
     
     c.Modified()
+    if dir[i]=="p_1b" or dir[i]=="p2_1b":
+        for j in range(0,8):
+            data.SetBinContent(40-j,1000000000)
+            h1.SetBinContent(40-j,1000000000)
+    if dir[i]=="p_2b" or dir[i]=="p2_2b":
+        for j in range(0,4):
+            data.SetBinContent(20-j,1000000000)
+            h1.SetBinContent(20-j,1000000000)
     
     if args.log=="yes":
         mmin=0.1
@@ -333,13 +350,14 @@ for i in range(len(dir)):
         errorBand.SetMinimum(mmin)
         errorBand.SetMaximum(mmax)
         if args.signal=="yes":
-            bbtt20.SetMinimum(mmin)
-            bbtt20.SetMaximum(mmax)
+            #bbtt20.SetMinimum(mmin)
+            #bbtt20.SetMaximum(mmax)
             bbtt40.SetMinimum(mmin)
             bbtt40.SetMaximum(mmax)
-            bbtt60.SetMinimum(mmin)
-            bbtt60.SetMaximum(mmax)
+            #bbtt60.SetMinimum(mmin)
+            #bbtt60.SetMaximum(mmax)
         pad1.SetLogy()
     
     c.SaveAs(args.channel+args.year+"_"+dir[i]+".png")
+
 

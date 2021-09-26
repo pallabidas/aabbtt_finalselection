@@ -48,14 +48,14 @@ int main(int argc, char** argv){
     TTree * tree = (TTree*) skimmed->Get("etau_tree");
     TH1F * nevents = (TH1F*) skimmed->Get("nevents");
     float N = nevents->GetBinContent(2); //no. of generated events (before skimming) with genweight
-    /*
+    
     std::string sample_name = sample.c_str();
     std::string NNfile = "/hdfs/store/user/htsoi/NN/et18/" + sample_name + ".root";
     if (year=="2017") NNfile = "/hdfs/store/user/htsoi/NN/et17/" + sample_name + ".root";
     if (year=="2016") NNfile = "/hdfs/store/user/htsoi/NN/et16/" + sample_name + ".root";
     TFile * NN = new TFile(NNfile.c_str());
     TTree * tree_NN = (TTree*) NN->Get("etau_tree_NN");
-    */
+    
     //sample weights
     float xs, weight;
     float luminosity = 59740.0;
@@ -63,28 +63,28 @@ int main(int argc, char** argv){
     if (year=="2016") luminosity = 36330.0;
     
     if (sample == "data_obs"){weight = 1.0;}
-    else if(sample == "gghbbtt12"){xs = 0.01*48.58*0.0380; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt15"){xs = 0.01*48.58*0.0367; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt20"){xs = 0.01*48.58*0.0355; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt25"){xs = 0.01*48.58*0.0346; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt30"){xs = 0.01*48.58*0.0336; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt35"){xs = 0.01*48.58*0.0327; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt40"){xs = 0.01*48.58*0.0321; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt45"){xs = 0.01*48.58*0.0319; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt50"){xs = 0.01*48.58*0.0329; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt55"){xs = 0.01*48.58*0.0352; weight = luminosity*xs/N;}
-    else if(sample == "gghbbtt60"){xs = 0.01*48.58*0.0403; weight = luminosity*xs/N;}
-    else if(sample == "vbfbbtt12"){xs = 0.01*3.782*0.0785; weight = luminosity*xs/N;}
-    else if(sample == "vbfbbtt15"){xs = 0.01*3.782*0.0769; weight = luminosity*xs/N;}
-    else if(sample == "vbfbbtt20"){xs = 0.01*3.782*0.0749; weight = luminosity*xs/N;}
-    else if(sample == "vbfbbtt25"){xs = 0.01*3.782*0.0735; weight = luminosity*xs/N;}
-    else if(sample == "vbfbbtt30"){xs = 0.01*3.782*0.0717; weight = luminosity*xs/N;}
-    else if(sample == "vbfbbtt35"){xs = 0.01*3.782*0.0702; weight = luminosity*xs/N;}
-    else if(sample == "vbfbbtt40"){xs = 0.01*3.782*0.0682; weight = luminosity*xs/N;}
-    else if(sample == "vbfbbtt45"){xs = 0.01*3.782*0.0670; weight = luminosity*xs/N;}
-    else if(sample == "vbfbbtt50"){xs = 0.01*3.782*0.0661; weight = luminosity*xs/N;}
-    else if(sample == "vbfbbtt55"){xs = 0.01*3.782*0.0662; weight = luminosity*xs/N;}
-    else if(sample == "vbfbbtt60"){xs = 0.01*3.782*0.0676; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt12"){xs = 0.01*48.58*0.0378; if(year=="2017") xs = 0.01*48.58*0.0378; if(year=="2016") xs = 0.01*48.58*0.0381; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt15"){xs = 0.01*48.58*0.0349; if(year=="2017") xs = 0.01*48.58*0.0355; if(year=="2016") xs = 0.01*48.58*0.0354; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt20"){xs = 0.01*48.58*0.0336; if(year=="2017") xs = 0.01*48.58*0.0340; if(year=="2016") xs = 0.01*48.58*0.0337; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt25"){xs = 0.01*48.58*0.0346; if(year=="2017") xs = 0.01*48.58*0.0332; if(year=="2016") xs = 0.01*48.58*0.0356; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt30"){xs = 0.01*48.58*0.0318; if(year=="2017") xs = 0.01*48.58*0.0336; if(year=="2016") xs = 0.01*48.58*0.0316; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt35"){xs = 0.01*48.58*0.0328; if(year=="2017") xs = 0.01*48.58*0.0327; if(year=="2016") xs = 0.01*48.58*0.0330; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt40"){xs = 0.01*48.58*0.0310; if(year=="2017") xs = 0.01*48.58*0.0303; if(year=="2016") xs = 0.01*48.58*0.0330; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt45"){xs = 0.01*48.58*0.0321; if(year=="2017") xs = 0.01*48.58*0.0303; if(year=="2016") xs = 0.01*48.58*0.0323; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt50"){xs = 0.01*48.58*0.0314; if(year=="2017") xs = 0.01*48.58*0.0331; if(year=="2016") xs = 0.01*48.58*0.0342; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt55"){xs = 0.01*48.58*0.0356; if(year=="2017") xs = 0.01*48.58*0.0356; if(year=="2016") xs = 0.01*48.58*0.0365; weight = luminosity*xs/N;}
+    else if(sample == "gghbbtt60"){xs = 0.01*48.58*0.0338; if(year=="2017") xs = 0.01*48.58*0.0395; if(year=="2016") xs = 0.01*48.58*0.0373; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt12"){xs = 0.01*3.782*0.0778; if(year=="2017") xs = 0.01*3.782*0.0773; if(year=="2016") xs = 0.01*3.782*0.0794; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt15"){xs = 0.01*3.782*0.0752; if(year=="2017") xs = 0.01*3.782*0.0735; if(year=="2016") xs = 0.01*3.782*0.0738; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt20"){xs = 0.01*3.782*0.0687; if(year=="2017") xs = 0.01*3.782*0.0733; if(year=="2016") xs = 0.01*3.782*0.0727; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt25"){xs = 0.01*3.782*0.0721; if(year=="2017") xs = 0.01*3.782*0.0723; if(year=="2016") xs = 0.01*3.782*0.0721; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt30"){xs = 0.01*3.782*0.0651; if(year=="2017") xs = 0.01*3.782*0.0684; if(year=="2016") xs = 0.01*3.782*0.0687; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt35"){xs = 0.01*3.782*0.0695; if(year=="2017") xs = 0.01*3.782*0.0697; if(year=="2016") xs = 0.01*3.782*0.0680; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt40"){xs = 0.01*3.782*0.0681; if(year=="2017") xs = 0.01*3.782*0.0617; if(year=="2016") xs = 0.01*3.782*0.0678; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt45"){xs = 0.01*3.782*0.0662; if(year=="2017") xs = 0.01*3.782*0.0667; if(year=="2016") xs = 0.01*3.782*0.0656; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt50"){xs = 0.01*3.782*0.0656; if(year=="2017") xs = 0.01*3.782*0.0661; if(year=="2016") xs = 0.01*3.782*0.0640; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt55"){xs = 0.01*3.782*0.0664; if(year=="2017") xs = 0.01*3.782*0.0651; if(year=="2016") xs = 0.01*3.782*0.0654; weight = luminosity*xs/N;}
+    else if(sample == "vbfbbtt60"){xs = 0.01*3.782*0.0675; if(year=="2017") xs = 0.01*3.782*0.0671; if(year=="2016") xs = 0.01*3.782*0.0655; weight = luminosity*xs/N;}
     else if(sample == "embedded"){weight = 1.0;}
     else if(sample == "DY"){weight = 1.0;}
     else if(sample == "DY1"){weight = 1.0;}
@@ -138,6 +138,8 @@ int main(int argc, char** argv){
     
     tree->SetBranchAddress("run", &run);
     tree->SetBranchAddress("pt_1", &pt_1);
+    tree->SetBranchAddress("pt_1_ScaleUp", &pt_1_ScaleUp);
+    tree->SetBranchAddress("pt_1_ScaleDown", &pt_1_ScaleDown);
     tree->SetBranchAddress("phi_1", &phi_1);
     tree->SetBranchAddress("eta_1", &eta_1);
     tree->SetBranchAddress("m_1", &m_1);
@@ -343,6 +345,8 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("m_sel_id_ic_ratio_1", &m_sel_id_ic_ratio_1);
     tree->SetBranchAddress("m_sel_id_ic_ratio_2", &m_sel_id_ic_ratio_2);
     tree->SetBranchAddress("prefiring_weight", &prefiring_weight);
+    tree->SetBranchAddress("prefiring_weight_up", &prefiring_weight_up);
+    tree->SetBranchAddress("prefiring_weight_down", &prefiring_weight_down);
     tree->SetBranchAddress("m_sv", &m_sv);
     tree->SetBranchAddress("m_sv_UESUp", &m_sv_UESUp);
     tree->SetBranchAddress("m_sv_UESDown", &m_sv_UESDown);
@@ -378,7 +382,7 @@ int main(int argc, char** argv){
     tree->SetBranchAddress("m_sv_ResponseDown", &m_sv_ResponseDown);
     tree->SetBranchAddress("m_sv_ResolutionUp", &m_sv_ResolutionUp);
     tree->SetBranchAddress("m_sv_ResolutionDown", &m_sv_ResolutionDown);
-    /*
+    
     tree_NN->SetBranchAddress("NN1b", &NN1b);
     tree_NN->SetBranchAddress("NN1b_Up", &NN1b_Up);
     tree_NN->SetBranchAddress("NN1b_Down", &NN1b_Down);
@@ -448,9 +452,10 @@ int main(int argc, char** argv){
     tree_NN->SetBranchAddress("NN2b_ResponseUp", &NN2b_ResponseUp);
     tree_NN->SetBranchAddress("NN2b_ResponseDown", &NN2b_ResponseDown);
     tree_NN->SetBranchAddress("NN2b_ResolutionUp", &NN2b_ResolutionUp);
-    tree_NN->SetBranchAddress("NN2b_ResolutionDown", &NN2b_ResolutionDown);*/
+    tree_NN->SetBranchAddress("NN2b_ResolutionDown", &NN2b_ResolutionDown);
     
     TString shape_tauideff[14] = {"_CMS_tauideff_pt20to25_"+year+"Up","_CMS_tauideff_pt20to25_"+year+"Down","_CMS_tauideff_pt25to30_"+year+"Up","_CMS_tauideff_pt25to30_"+year+"Down","_CMS_tauideff_pt30to35_"+year+"Up","_CMS_tauideff_pt30to35_"+year+"Down","_CMS_tauideff_pt35to40_"+year+"Up","_CMS_tauideff_pt35to40_"+year+"Down","_CMS_tauideff_pt40to500_"+year+"Up","_CMS_tauideff_pt40to500_"+year+"Down","_CMS_tauideff_pt500to1000_"+year+"Up","_CMS_tauideff_pt500to1000_"+year+"Down","_CMS_tauideff_ptgt1000_"+year+"Up","_CMS_tauideff_ptgt1000_"+year+"Down"};
+    TString shape_tauidWP[2] = {"_CMS_tauidWP_et_"+year+"Up","_CMS_tauidWP_et_"+year+"Down"};
     TString shape_tauideff_efake[4] = {"_CMS_tauideff_VSe_bar_"+year+"Up","_CMS_tauideff_VSe_bar_"+year+"Down","_CMS_tauideff_VSe_end_"+year+"Up","_CMS_tauideff_VSe_end_"+year+"Down"};
     TString shape_tauideff_mufake[10] = {"_CMS_tauideff_VSmu_eta0to0p4_"+year+"Up","_CMS_tauideff_VSmu_eta0to0p4_"+year+"Down","_CMS_tauideff_VSmu_eta0p4to0p8_"+year+"Up","_CMS_tauideff_VSmu_eta0p4to0p8_"+year+"Down","_CMS_tauideff_VSmu_eta0p8to1p2_"+year+"Up","_CMS_tauideff_VSmu_eta0p8to1p2_"+year+"Down","_CMS_tauideff_VSmu_eta1p2to1p7_"+year+"Up","_CMS_tauideff_VSmu_eta1p2to1p7_"+year+"Down","_CMS_tauideff_VSmu_eta1p7to2p3_"+year+"Up","_CMS_tauideff_VSmu_eta1p7to2p3_"+year+"Down"};
     TString shape_trgeff[4] = {"_CMS_trgeff_single_et_"+year+"Up","_CMS_trgeff_single_et_"+year+"Down","_CMS_trgeff_cross_et_"+year+"Up","_CMS_trgeff_cross_et_"+year+"Down"};
@@ -472,9 +477,12 @@ int main(int argc, char** argv){
     TString shape_fake_crosstrg[2] = {"_CMS_crosstrg_fakefactor_"+year+"Up","_CMS_crosstrg_fakefactor_"+year+"Down"};
     //fake rate uncertainties
     TString shape_fakerate[14] = {"_CMS_jetFR_pt0to25_"+year+"Up","_CMS_jetFR_pt0to25_"+year+"Down","_CMS_jetFR_pt25to30_"+year+"Up","_CMS_jetFR_pt25to30_"+year+"Down","_CMS_jetFR_pt30to35_"+year+"Up","_CMS_jetFR_pt30to35_"+year+"Down","_CMS_jetFR_pt35to40_"+year+"Up","_CMS_jetFR_pt35to40_"+year+"Down","_CMS_jetFR_pt40to50_"+year+"Up","_CMS_jetFR_pt40to50_"+year+"Down","_CMS_jetFR_pt50to60_"+year+"Up","_CMS_jetFR_pt50to60_"+year+"Down","_CMS_jetFR_ptgt60_"+year+"Up","_CMS_jetFR_ptgt60_"+year+"Down"};
+    //prefiring
+    TString shape_prefiring[2] = {"_CMS_prefiring_"+year+"Up","_CMS_prefiring_"+year+"Down"};// only 2016 and 2017
     
     //give different names for embedded
     TString embshape_tauideff[14] = {"_CMS_EMB_tauideff_pt20to25_"+year+"Up","_CMS_EMB_tauideff_pt20to25_"+year+"Down","_CMS_EMB_tauideff_pt25to30_"+year+"Up","_CMS_EMB_tauideff_pt25to30_"+year+"Down","_CMS_EMB_tauideff_pt30to35_"+year+"Up","_CMS_EMB_tauideff_pt30to35_"+year+"Down","_CMS_EMB_tauideff_pt35to40_"+year+"Up","_CMS_EMB_tauideff_pt35to40_"+year+"Down","_CMS_EMB_tauideff_pt40to500_"+year+"Up","_CMS_EMB_tauideff_pt40to500_"+year+"Down","_CMS_EMB_tauideff_pt500to1000_"+year+"Up","_CMS_EMB_tauideff_pt500to1000_"+year+"Down","_CMS_EMB_tauideff_ptgt1000_"+year+"Up","_CMS_EMB_tauideff_ptgt1000_"+year+"Down"};
+    TString embshape_tauidWP[2] = {"_CMS_EMB_tauidWP_et_"+year+"Up","_CMS_EMB_tauidWP_et_"+year+"Down"};
     TString embshape_trgeff[4] = {"_CMS_EMB_trgeff_single_et_"+year+"Up","_CMS_EMB_trgeff_single_et_"+year+"Down","_CMS_EMB_trgeff_cross_et_"+year+"Up","_CMS_EMB_trgeff_cross_et_"+year+"Down"};
     TString embshape_tauES[8] = {"_CMS_EMB_TES_dm0_"+year+"Up","_CMS_EMB_TES_dm0_"+year+"Down","_CMS_EMB_TES_dm1_"+year+"Up","_CMS_EMB_TES_dm1_"+year+"Down","_CMS_EMB_TES_dm10_"+year+"Up","_CMS_EMB_TES_dm10_"+year+"Down","_CMS_EMB_TES_dm11_"+year+"Up","_CMS_EMB_TES_dm11_"+year+"Down"};
     TString embshape_tautracking[6] = {"_CMS_EMB_tautrack_dm0dm10_"+year+"Up","_CMS_EMB_tautrack_dm0dm10_"+year+"Down","_CMS_EMB_tautrack_dm1_"+year+"Up","_CMS_EMB_tautrack_dm1_"+year+"Down","_CMS_EMB_tautrack_dm11_"+year+"Up","_CMS_EMB_tautrack_dm11_"+year+"Down"};
@@ -483,10 +491,10 @@ int main(int argc, char** argv){
     //comtamination to emb: all non-DY MC with gen tautau
     TString shape_nonDY[1] = {"nonDYMC"};
     
-    //h[i][j][k]: (i=0: 1bjet, i=1: 2bjets), (j=filling variable), (k=systematics type)
+    //h[i][j][k]: (i=0: 1bjet, i=1: 2bjets, i=2: final mtt categories), (j=filling variable), (k=systematics type)
     std::vector<std::vector<std::vector<TH1F*>>> h_iso;
     std::vector<std::vector<std::vector<TH1F*>>> h_anti;
-    for (int i = 0; i < 2; i++){
+    for (int i = 0; i < 3; i++){
         h_iso.push_back(std::vector<std::vector<TH1F*>>());
         h_anti.push_back(std::vector<std::vector<TH1F*>>());
     }
@@ -498,49 +506,69 @@ int main(int argc, char** argv){
         h_iso[1].push_back(std::vector<TH1F*>());
         h_anti[1].push_back(std::vector<TH1F*>());
     }
+    for (int i = 0; i < 6; i++){//no. of final mtt categories
+        h_iso[2].push_back(std::vector<TH1F*>());
+        h_anti[2].push_back(std::vector<TH1F*>());
+    }
+    /*
     float bins_p_1b[] = {0.,0.02,0.04,0.06,0.08,0.1,0.15,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.85,0.9,0.92,0.94,0.96,0.98,1.};
     float bins_p_2b[] = {0.,0.05,0.1,0.15,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,0.95,1.};
     int nbins_p_1b = sizeof(bins_p_1b)/sizeof(Float_t)-1;
-    int nbins_p_2b = sizeof(bins_p_2b)/sizeof(Float_t)-1;
-    for (int i = 0; i < 106; i++){
-        //i=0 nominal, 1-8 TES, 9-22 tauIDeff, 23-26 efaketauIDeff, 27-36 mufaketauIDeff, 37-40 muTES, 41-44 eleTES, 45-48 eleES, 49-52 trgsf, 53-56 btagsf, 57-80 jet, 81-92 recoil, 93-94 UES, 95-100 emb tautracking, 101-102 DY zpt, 103-104 ttbar toppt, 105 nonDY
+    int nbins_p_2b = sizeof(bins_p_2b)/sizeof(Float_t)-1;*/
+    
+    for (int i = 0; i < 110; i++){
+        //i=0 nominal, 1-8 TES, 9-22 tauIDeff, 23-26 efaketauIDeff, 27-36 mufaketauIDeff, 37-40 muTES, 41-44 eleTES, 45-48 eleES, 49-52 trgsf, 53-56 btagsf, 57-80 jet, 81-92 recoil, 93-94 UES, 95-100 emb tautracking, 101-102 DY zpt, 103-104 ttbar toppt, 105 nonDY, 106-107 tauidWP, 108-109 prefiring
         //1 bjet
-        //h_iso[0][0].push_back(new TH1F("","",nbins_p_1b,bins_p_1b));//p
-        //h_iso[0][1].push_back(new TH1F("","",nbins_p_1b,bins_p_1b));//p2
-        //h_iso[0][2].push_back(new TH1F("","",40,0.6,1.));//p2_z
+        h_iso[0][0].push_back(new TH1F("","",40,0.,1.));//p
+        h_iso[0][1].push_back(new TH1F("","",40,0.,1.));//p2
+        h_iso[0][2].push_back(new TH1F("","",20,0.8,1.));//p2_z
         h_iso[0][3].push_back(new TH1F("","",70,10,150));//pt_1
         h_iso[0][4].push_back(new TH1F("","",45,10,100));//pt_2
         h_iso[0][5].push_back(new TH1F("","",40,0,400));//m_tt
-        h_iso[0][6].push_back(new TH1F("","",40,60,460));//m_btt
+        h_iso[0][6].push_back(new TH1F("","",42,40,460));//m_btt
         //2 bjets
-        //h_iso[1][0].push_back(new TH1F("","",nbins_p_2b,bins_p_2b));//p
-        //h_iso[1][1].push_back(new TH1F("","",nbins_p_2b,bins_p_2b));//p2
-        //h_iso[1][2].push_back(new TH1F("","",40,0.8,1.));//p2_z
+        h_iso[1][0].push_back(new TH1F("","",20,0.,1.));//p
+        h_iso[1][1].push_back(new TH1F("","",20,0.,1.));//p2
+        h_iso[1][2].push_back(new TH1F("","",40,0.8,1.));//p2_z
         h_iso[1][3].push_back(new TH1F("","",70,10,150));//pt_1
         h_iso[1][4].push_back(new TH1F("","",45,10,100));//pt_2
         h_iso[1][5].push_back(new TH1F("","",40,0,400));//m_tt
-        h_iso[1][6].push_back(new TH1F("","",40,60,460));//m_btt
+        h_iso[1][6].push_back(new TH1F("","",42,40,460));//m_btt
         h_iso[1][7].push_back(new TH1F("","",54,60,600));//m_bbtt
+        //final mtt categories
+        h_iso[2][0].push_back(new TH1F("","",13,0,104));//m_tt_1
+        h_iso[2][1].push_back(new TH1F("","",13,0,104));//m_tt_2
+        h_iso[2][2].push_back(new TH1F("","",13,0,104));//m_tt_3
+        h_iso[2][3].push_back(new TH1F("","",15,0,300));//m_tt_4
+        h_iso[2][4].push_back(new TH1F("","",9,0,108));//m_tt_5
+        h_iso[2][5].push_back(new TH1F("","",15,0,300));//m_tt_6
     }
-    for (int i = 0; i < 71; i++){
-        //tau anti-isolated region; i=0 nominal, 1-4 eleES, 5-8 trgsf, 9-12 btagsf, 13-36 jet, 37-48 recoil, 49-50 UES, 51-52 DY zpt, 53-54 ttbar toppt, 55-56 crosstrg fakefactor, 57-70 fake rate
+    for (int i = 0; i < 73; i++){
+        //tau anti-isolated region; i=0 nominal, 1-4 eleES, 5-8 trgsf, 9-12 btagsf, 13-36 jet, 37-48 recoil, 49-50 UES, 51-52 DY zpt, 53-54 ttbar toppt, 55-56 crosstrg fakefactor, 57-70 fake rate, 71-72 prefiring
         //1 bjet
-        //h_anti[0][0].push_back(new TH1F("","",nbins_p_1b,bins_p_1b));//p
-        //h_anti[0][1].push_back(new TH1F("","",nbins_p_1b,bins_p_1b));//p2
-        //h_anti[0][2].push_back(new TH1F("","",40,0.6,1.));//p2_z
+        h_anti[0][0].push_back(new TH1F("","",40,0.,1.));//p
+        h_anti[0][1].push_back(new TH1F("","",40,0.,1.));//p2
+        h_anti[0][2].push_back(new TH1F("","",20,0.8,1.));//p2_z
         h_anti[0][3].push_back(new TH1F("","",70,10,150));//pt_1
         h_anti[0][4].push_back(new TH1F("","",45,10,100));//pt_2
         h_anti[0][5].push_back(new TH1F("","",40,0,400));//m_tt
-        h_anti[0][6].push_back(new TH1F("","",40,60,460));//m_btt
+        h_anti[0][6].push_back(new TH1F("","",42,40,460));//m_btt
         //2 bjets
-        //h_anti[1][0].push_back(new TH1F("","",nbins_p_2b,bins_p_2b));//p
-        //h_anti[1][1].push_back(new TH1F("","",nbins_p_2b,bins_p_2b));//p2
-        //h_anti[1][2].push_back(new TH1F("","",40,0.8,1.));//p2_z
+        h_anti[1][0].push_back(new TH1F("","",20,0.,1.));//p
+        h_anti[1][1].push_back(new TH1F("","",20,0.,1.));//p2
+        h_anti[1][2].push_back(new TH1F("","",40,0.8,1.));//p2_z
         h_anti[1][3].push_back(new TH1F("","",70,10,150));//pt_1
         h_anti[1][4].push_back(new TH1F("","",45,10,100));//pt_2
         h_anti[1][5].push_back(new TH1F("","",40,0,400));//m_tt
-        h_anti[1][6].push_back(new TH1F("","",40,60,460));//m_btt
+        h_anti[1][6].push_back(new TH1F("","",42,40,460));//m_btt
         h_anti[1][7].push_back(new TH1F("","",54,60,600));//m_bbtt
+        //final mtt categories
+        h_anti[2][0].push_back(new TH1F("","",13,0,104));//m_tt_1
+        h_anti[2][1].push_back(new TH1F("","",13,0,104));//m_tt_2
+        h_anti[2][2].push_back(new TH1F("","",13,0,104));//m_tt_3
+        h_anti[2][3].push_back(new TH1F("","",15,0,300));//m_tt_4
+        h_anti[2][4].push_back(new TH1F("","",9,0,108));//m_tt_5
+        h_anti[2][5].push_back(new TH1F("","",15,0,300));//m_tt_6
     }
     
     //access pileup distributions in data/MC
@@ -599,9 +627,12 @@ int main(int argc, char** argv){
     //loop over events
     int n = tree->GetEntries(); //no. of events after skimming
     for(int i = 0; i < n; i++){
-        if(i % 10000 == 0) printf("event %d of %d...\n", i, n);
         tree->GetEntry(i);
-        //tree_NN->GetEntry(i);
+        if (i % 100 == 0) fprintf(stdout, "\r Processed events: %d of %d...", i, n);
+        fflush(stdout);
+        
+        tree_NN->GetEntry(i);
+        float p_N = 1.5;
         
         //MET filters
         if (Flag_goodVertices) continue;
@@ -611,7 +642,7 @@ int main(int argc, char** argv){
         if (Flag_EcalDeadCellTriggerPrimitiveFilter) continue;
         if (Flag_BadPFMuonFilter) continue;
         if ((sample=="data_obs" or sample=="embedded") && Flag_eeBadScFilter) continue;
-        if (Flag_ecalBadCalibReducedMINIAODFilter) continue;
+        if ((year=="2017" or year=="2018") && Flag_ecalBadCalibReducedMINIAODFilter) continue;
         
         TLorentzVector myele;
         myele.SetPtEtaPhiM(pt_1,eta_1,phi_1,m_1);
@@ -672,83 +703,67 @@ int main(int argc, char** argv){
             if (sample=="DY" or sample=="DY1" or sample=="DY2" or sample=="DY3" or sample=="DY4"){
                 if (numGenJets==0){
                     weight = 3.630;
-                    if (year=="2017") weight = 2.575;
+                    if (year=="2017") weight = 2.583;
                     if (year=="2016") weight = 1.509;
                 }
                 else if (numGenJets==1){
                     weight = 0.6304;
-                    if (year=="2017") weight = 0.7084;
+                    if (year=="2017") weight = 0.3269;
                     if (year=="2016") weight = 0.4814;
                 }
                 else if (numGenJets==2){
                     weight = 0.5528;
-                    if (year=="2017") weight = 0.9192;
+                    if (year=="2017") weight = 0.5667;
                     if (year=="2016") weight = 0.4987;
                 }
                 else if (numGenJets==3){
                     weight = 0.6009;
-                    if (year=="2017") weight = 1.648;
+                    if (year=="2017") weight = 0.5228;
                     if (year=="2016") weight = 0.5113;
                 }
                 else if (numGenJets==4){
                     weight = 0.8314;
-                    if (year=="2017") weight = 0.2192;
+                    if (year=="2017") weight = 0.2199;
                     if (year=="2016") weight = 0.4194;
                 }
             }
             if (sample=="DYlow" or sample=="DY1low" or sample=="DY2low" or sample=="DY3low" or sample=="DY4low"){
-                if (numGenJets==0){
-                    weight = 12.45;
-                    if (year=="2017") weight = 1.0;
-                    if (year=="2016") weight = 20.64;
+                if (year=="2016"){
+                    if (numGenJets==0) weight = 20.64;
+                    else if (numGenJets==1) weight = 0.7822;
+                    else if (numGenJets==2) weight = 0.8491;
+                    else if (numGenJets==3) weight = 0.8178;
+                    else if (numGenJets==4) weight = 0.7536;
                 }
-                else if (numGenJets==1){
-                    weight = 12.45;
-                    if (year=="2017") weight = 1.0;
-                    if (year=="2016") weight = 0.7822;
-                }
-                else if (numGenJets==2){
-                    weight = 12.45;
-                    if (year=="2017") weight = 1.0;
-                    if (year=="2016") weight = 0.8491;
-                }
-                else if (numGenJets==3){
-                    weight = 12.45;
-                    if (year=="2017") weight = 1.0;
-                    if (year=="2016") weight = 0.8178;
-                }
-                else if (numGenJets==4){
-                    weight = 12.45;
-                    if (year=="2017") weight = 1.0;
-                    if (year=="2016") weight = 0.7536;
-                }
+                if (year=="2017") weight = 9.416;
+                if (year=="2018") weight = 12.45;
             }
         }
         
         if (name=="WJ"){
             if (numGenJets==0){
                 weight = 51.81;
-                if (year=="2017") weight = 23.67;
+                if (year=="2017") weight = 23.74;
                 if (year=="2016") weight = 25.72;
             }
             else if (numGenJets==1){
                 weight = 9.091;
-                if (year=="2017") weight = 3.106;
+                if (year=="2017") weight = 3.116;
                 if (year=="2016") weight = 5.840;
             }
             else if (numGenJets==2){
                 weight = 4.516;
-                if (year=="2017") weight = 3.014;
+                if (year=="2017") weight = 3.024;
                 if (year=="2016") weight = 1.814;
             }
             else if (numGenJets==3){
                 weight = 3.090;
-                if (year=="2017") weight = 2.202;
+                if (year=="2017") weight = 1.355;
                 if (year=="2016") weight = 0.6878;
             }
             else if (numGenJets==4){
                 weight = 3.227;
-                if (year=="2017") weight = 2.150;
+                if (year=="2017") weight = 1.119;
                 if (year=="2016") weight = 0.7453;
             }
         }
@@ -916,17 +931,17 @@ int main(int argc, char** argv){
         for (int j = 0; j < 8; j++) var[1].push_back(std::vector<float>());
         for (int j = 0; j < 59; j++){//i=0 nominal, 1-8 TES, 9-12 muTES, 13-16 eleTES, 17-20 eleES, 21-44 jet, 45-56 recoil, 57-58 UES
             //1 bjet
-            //var[0][0].push_back(NN1b);
-            //var[0][1].push_back(p_n(NN1b,2));
-            //var[0][2].push_back(p_n(NN1b,2));
+            var[0][0].push_back(NN1b);
+            var[0][1].push_back(p_n(NN1b,p_N));
+            var[0][2].push_back(p_n(NN1b,p_N));
             var[0][3].push_back(pt_1);
             var[0][4].push_back(pt_2);
             var[0][5].push_back(m_sv);
             var[0][6].push_back(m_btt);
             //2 bjets
-            //var[1][0].push_back(NN2b);
-            //var[1][1].push_back(p_n(NN2b,2));
-            //var[1][2].push_back(p_n(NN2b,2));
+            var[1][0].push_back(NN2b);
+            var[1][1].push_back(p_n(NN2b,p_N));
+            var[1][2].push_back(p_n(NN2b,p_N));
             var[1][3].push_back(pt_1);
             var[1][4].push_back(pt_2);
             var[1][5].push_back(m_sv);
@@ -1097,19 +1112,19 @@ int main(int argc, char** argv){
                 m_bbtt_shiftedtau[2*j+1] = (mytt_shiftedtau[2*j+1]+myb1+myb2).M();
             }
         }
-        //float NN1b_tes[8] = {NN1b_Up,NN1b_Down,NN1b_Up,NN1b_Down,NN1b_Up,NN1b_Down,NN1b_Up,NN1b_Down};
-        //float NN2b_tes[8] = {NN2b_Up,NN2b_Down,NN2b_Up,NN2b_Down,NN2b_Up,NN2b_Down,NN2b_Up,NN2b_Down};
+        float NN1b_tes[8] = {NN1b_Up,NN1b_Down,NN1b_Up,NN1b_Down,NN1b_Up,NN1b_Down,NN1b_Up,NN1b_Down};
+        float NN2b_tes[8] = {NN2b_Up,NN2b_Down,NN2b_Up,NN2b_Down,NN2b_Up,NN2b_Down,NN2b_Up,NN2b_Down};
         for (int j = 0; j < 8; j++){
-            //var[0][0][j+1] = NN1b_tes[j];
-            //var[0][1][j+1] = p_n(NN1b_tes[j],2);
-            //var[0][2][j+1] = p_n(NN1b_tes[j],2);
+            var[0][0][j+1] = NN1b_tes[j];
+            var[0][1][j+1] = p_n(NN1b_tes[j],p_N);
+            var[0][2][j+1] = p_n(NN1b_tes[j],p_N);
             var[0][4][j+1] = myshiftedtau[j].Pt();
             var[0][5][j+1] = mytt_shiftedtau[j].M();
             var[0][6][j+1] = m_btt_shiftedtau[j];
             
-            //var[1][0][j+1] = NN2b_tes[j];
-            //var[1][1][j+1] = p_n(NN2b_tes[j],2);
-            //var[1][2][j+1] = p_n(NN2b_tes[j],2);
+            var[1][0][j+1] = NN2b_tes[j];
+            var[1][1][j+1] = p_n(NN2b_tes[j],p_N);
+            var[1][2][j+1] = p_n(NN2b_tes[j],p_N);
             var[1][4][j+1] = myshiftedtau[j].Pt();
             var[1][5][j+1] = mytt_shiftedtau[j].M();
             var[1][6][j+1] = m_btt_shiftedtau[j];
@@ -1139,6 +1154,16 @@ int main(int argc, char** argv){
             //nominal tauID scale factors evaluated with shifted tau ES
             for (int j = 0; j < 8; j++){
                 sf_tauid[15+j] = fct_tauid_nominal->Eval(myshiftedtau[j].Pt());
+            }
+        }
+        //different WP than used in measurement
+        float tauidWP[2] = {1.0,1.0};
+        if (sample!="data_obs" && byMediumDeepVSjet_2 && gen_match_2==5 && pt_2<100){
+            tauidWP[0] = 1.03;
+            tauidWP[1] = 0.97;
+            if (sample=="embedded"){
+                tauidWP[0] = 1.05;
+                tauidWP[1] = 0.95;
             }
         }
         
@@ -1262,16 +1287,16 @@ int main(int argc, char** argv){
             }
         }
         for (int j = 0; j < 4; j++){
-            //var[0][0][j+9] = NN1b_tes[j];
-            //var[0][1][j+9] = p_n(NN1b_tes[j],2);
-            //var[0][2][j+9] = p_n(NN1b_tes[j],2);
+            var[0][0][j+9] = NN1b_tes[j];
+            var[0][1][j+9] = p_n(NN1b_tes[j],p_N);
+            var[0][2][j+9] = p_n(NN1b_tes[j],p_N);
             var[0][4][j+9] = mytau_isgenmu[j].Pt();
             var[0][5][j+9] = mytt_isgenmu[j].M();
             var[0][6][j+9] = m_btt_isgenmu[j];
             
-            //var[1][0][j+9] = NN2b_tes[j];
-            //var[1][1][j+9] = p_n(NN2b_tes[j],2);
-            //var[1][2][j+9] = p_n(NN2b_tes[j],2);
+            var[1][0][j+9] = NN2b_tes[j];
+            var[1][1][j+9] = p_n(NN2b_tes[j],p_N);
+            var[1][2][j+9] = p_n(NN2b_tes[j],p_N);
             var[1][4][j+9] = mytau_isgenmu[j].Pt();
             var[1][5][j+9] = mytt_isgenmu[j].M();
             var[1][6][j+9] = m_btt_isgenmu[j];
@@ -1327,16 +1352,16 @@ int main(int argc, char** argv){
             }
         }
         for (int j = 0; j < 4; j++){
-            //var[0][0][j+13] = NN1b_tes[j];
-            //var[0][1][j+13] = p_n(NN1b_tes[j],2);
-            //var[0][2][j+13] = p_n(NN1b_tes[j],2);
+            var[0][0][j+13] = NN1b_tes[j];
+            var[0][1][j+13] = p_n(NN1b_tes[j],p_N);
+            var[0][2][j+13] = p_n(NN1b_tes[j],p_N);
             var[0][4][j+13] = mytau_isgenele[j].Pt();
             var[0][5][j+13] = mytt_isgenele[j].M();
             var[0][6][j+13] = m_btt_isgenele[j];
             
-            //var[1][0][j+13] = NN2b_tes[j];
-            //var[1][1][j+13] = p_n(NN2b_tes[j],2);
-            //var[1][2][j+13] = p_n(NN2b_tes[j],2);
+            var[1][0][j+13] = NN2b_tes[j];
+            var[1][1][j+13] = p_n(NN2b_tes[j],p_N);
+            var[1][2][j+13] = p_n(NN2b_tes[j],p_N);
             var[1][4][j+13] = mytau_isgenele[j].Pt();
             var[1][5][j+13] = mytt_isgenele[j].M();
             var[1][6][j+13] = m_btt_isgenele[j];
@@ -1357,12 +1382,18 @@ int main(int argc, char** argv){
             m_bbtt_shiftedele.push_back(m_bbtt);
         }
         float eleESetabins[3] = {0,1.479,2.4};
-        float eleES[4] = {1.005,0.995,1.0125,0.9875};//ordering: barrel up/down, endcap up/down
+        float eleES[4] = {1.005,0.995,1.0125,0.9875};//ordering: barrel up/down, endcap up/down (only for emb)
         for (int j = 0; j < 2; j++){
             if (fabs(eta_1)>eleESetabins[j] && fabs(eta_1)<eleESetabins[j+1]){//don't need to check gen match, can shift anything that is reco ele
                 //myele
-                myshiftedele[2*j] *= eleES[2*j];
-                myshiftedele[2*j+1] *= eleES[2*j+1];
+                if (sample=="embedded"){
+                    myshiftedele[2*j] *= eleES[2*j];
+                    myshiftedele[2*j+1] *= eleES[2*j+1];
+                }
+                else {
+                    myshiftedele[2*j].SetPtEtaPhiM(pt_1_ScaleUp,eta_1,phi_1,m_1);
+                    myshiftedele[2*j+1].SetPtEtaPhiM(pt_1_ScaleDown,eta_1,phi_1,m_1);
+                }
                 //mymet
                 mymet_shiftedele[2*j] = mymet + myele - myshiftedele[2*j];
                 mymet_shiftedele[2*j+1] = mymet + myele - myshiftedele[2*j+1];;
@@ -1377,19 +1408,19 @@ int main(int argc, char** argv){
                 m_bbtt_shiftedele[2*j+1] = (mytt_shiftedele[2*j+1]+myb1+myb2).M();
             }
         }
-        //float NN1b_eleES[4] = {NN1b_ESCALEUP,NN1b_ESCALEDOWN,NN1b_ESCALEUP,NN1b_ESCALEDOWN};
-        //float NN2b_eleES[4] = {NN2b_ESCALEUP,NN2b_ESCALEDOWN,NN2b_ESCALEUP,NN2b_ESCALEDOWN};
+        float NN1b_eleES[4] = {NN1b_ESCALEUP,NN1b_ESCALEDOWN,NN1b_ESCALEUP,NN1b_ESCALEDOWN};
+        float NN2b_eleES[4] = {NN2b_ESCALEUP,NN2b_ESCALEDOWN,NN2b_ESCALEUP,NN2b_ESCALEDOWN};
         for (int j = 0; j < 4; j++){
-            //var[0][0][j+17] = NN1b_eleES[j];
-            //var[0][1][j+17] = p_n(NN1b_eleES[j],2);
-            //var[0][2][j+17] = p_n(NN1b_eleES[j],2);
+            var[0][0][j+17] = NN1b_eleES[j];
+            var[0][1][j+17] = p_n(NN1b_eleES[j],p_N);
+            var[0][2][j+17] = p_n(NN1b_eleES[j],p_N);
             var[0][3][j+17] = myshiftedele[j].Pt();
             var[0][5][j+17] = mytt_shiftedele[j].M();
             var[0][6][j+17] = m_btt_shiftedele[j];
             
-            //var[1][0][j+17] = NN2b_eleES[j];
-            //var[1][1][j+17] = p_n(NN2b_eleES[j],2);
-            //var[1][2][j+17] = p_n(NN2b_eleES[j],2);
+            var[1][0][j+17] = NN2b_eleES[j];
+            var[1][1][j+17] = p_n(NN2b_eleES[j],p_N);
+            var[1][2][j+17] = p_n(NN2b_eleES[j],p_N);
             var[1][3][j+17] = myshiftedele[j].Pt();
             var[1][5][j+17] = mytt_shiftedele[j].M();
             var[1][6][j+17] = m_btt_shiftedele[j];
@@ -1508,8 +1539,8 @@ int main(int argc, char** argv){
         float m_sv_jetvar[24] = {m_sv_JetAbsoluteUp,m_sv_JetAbsoluteDown,m_sv_JetAbsoluteyearUp,m_sv_JetAbsoluteyearDown,m_sv_JetBBEC1Up,m_sv_JetBBEC1Down,m_sv_JetBBEC1yearUp,m_sv_JetBBEC1yearDown,m_sv_JetEC2Up,m_sv_JetEC2Down,m_sv_JetEC2yearUp,m_sv_JetEC2yearDown,m_sv_JetFlavorQCDUp,m_sv_JetFlavorQCDDown,m_sv_JetHFUp,m_sv_JetHFDown,m_sv_JetHFyearUp,m_sv_JetHFyearDown,m_sv_JetRelativeBalUp,m_sv_JetRelativeBalDown,m_sv_JetRelativeSampleUp,m_sv_JetRelativeSampleDown,m_sv_JERUp,m_sv_JERDown};
         float bpt_1_jetvar[24] = {bpt_deepflavour_JetAbsoluteUp_1,bpt_deepflavour_JetAbsoluteDown_1,bpt_deepflavour_JetAbsoluteyearUp_1,bpt_deepflavour_JetAbsoluteyearDown_1,bpt_deepflavour_JetBBEC1Up_1,bpt_deepflavour_JetBBEC1Down_1,bpt_deepflavour_JetBBEC1yearUp_1,bpt_deepflavour_JetBBEC1yearDown_1,bpt_deepflavour_JetEC2Up_1,bpt_deepflavour_JetEC2Down_1,bpt_deepflavour_JetEC2yearUp_1,bpt_deepflavour_JetEC2yearDown_1,bpt_deepflavour_JetFlavorQCDUp_1,bpt_deepflavour_JetFlavorQCDDown_1,bpt_deepflavour_JetHFUp_1,bpt_deepflavour_JetHFDown_1,bpt_deepflavour_JetHFyearUp_1,bpt_deepflavour_JetHFyearDown_1,bpt_deepflavour_JetRelativeBalUp_1,bpt_deepflavour_JetRelativeBalDown_1,bpt_deepflavour_JetRelativeSampleUp_1,bpt_deepflavour_JetRelativeSampleDown_1,bpt_deepflavour_JERUp_1,bpt_deepflavour_JERDown_1};
         float bpt_2_jetvar[24] = {bpt_deepflavour_JetAbsoluteUp_2,bpt_deepflavour_JetAbsoluteDown_2,bpt_deepflavour_JetAbsoluteyearUp_2,bpt_deepflavour_JetAbsoluteyearDown_2,bpt_deepflavour_JetBBEC1Up_2,bpt_deepflavour_JetBBEC1Down_2,bpt_deepflavour_JetBBEC1yearUp_2,bpt_deepflavour_JetBBEC1yearDown_2,bpt_deepflavour_JetEC2Up_2,bpt_deepflavour_JetEC2Down_2,bpt_deepflavour_JetEC2yearUp_2,bpt_deepflavour_JetEC2yearDown_2,bpt_deepflavour_JetFlavorQCDUp_2,bpt_deepflavour_JetFlavorQCDDown_2,bpt_deepflavour_JetHFUp_2,bpt_deepflavour_JetHFDown_2,bpt_deepflavour_JetHFyearUp_2,bpt_deepflavour_JetHFyearDown_2,bpt_deepflavour_JetRelativeBalUp_2,bpt_deepflavour_JetRelativeBalDown_2,bpt_deepflavour_JetRelativeSampleUp_2,bpt_deepflavour_JetRelativeSampleDown_2,bpt_deepflavour_JERUp_2,bpt_deepflavour_JERDown_2};
-        //float NN1b_jetvar[24] = {NN1b_JetAbsoluteUp,NN1b_JetAbsoluteDown,NN1b_JetAbsoluteyearUp,NN1b_JetAbsoluteyearDown,NN1b_JetBBEC1Up,NN1b_JetBBEC1Down,NN1b_JetBBEC1yearUp,NN1b_JetBBEC1yearDown,NN1b_JetEC2Up,NN1b_JetEC2Down,NN1b_JetEC2yearUp,NN1b_JetEC2yearDown,NN1b_JetFlavorQCDUp,NN1b_JetFlavorQCDDown,NN1b_JetHFUp,NN1b_JetHFDown,NN1b_JetHFyearUp,NN1b_JetHFyearDown,NN1b_JetRelativeBalUp,NN1b_JetRelativeBalDown,NN1b_JetRelativeSampleUp,NN1b_JetRelativeSampleDown,NN1b_JERUp,NN1b_JERDown};
-        //float NN2b_jetvar[24] = {NN2b_JetAbsoluteUp,NN2b_JetAbsoluteDown,NN2b_JetAbsoluteyearUp,NN2b_JetAbsoluteyearDown,NN2b_JetBBEC1Up,NN2b_JetBBEC1Down,NN2b_JetBBEC1yearUp,NN2b_JetBBEC1yearDown,NN2b_JetEC2Up,NN2b_JetEC2Down,NN2b_JetEC2yearUp,NN2b_JetEC2yearDown,NN2b_JetFlavorQCDUp,NN2b_JetFlavorQCDDown,NN2b_JetHFUp,NN2b_JetHFDown,NN2b_JetHFyearUp,NN2b_JetHFyearDown,NN2b_JetRelativeBalUp,NN2b_JetRelativeBalDown,NN2b_JetRelativeSampleUp,NN2b_JetRelativeSampleDown,NN2b_JERUp,NN2b_JERDown};
+        float NN1b_jetvar[24] = {NN1b_JetAbsoluteUp,NN1b_JetAbsoluteDown,NN1b_JetAbsoluteyearUp,NN1b_JetAbsoluteyearDown,NN1b_JetBBEC1Up,NN1b_JetBBEC1Down,NN1b_JetBBEC1yearUp,NN1b_JetBBEC1yearDown,NN1b_JetEC2Up,NN1b_JetEC2Down,NN1b_JetEC2yearUp,NN1b_JetEC2yearDown,NN1b_JetFlavorQCDUp,NN1b_JetFlavorQCDDown,NN1b_JetHFUp,NN1b_JetHFDown,NN1b_JetHFyearUp,NN1b_JetHFyearDown,NN1b_JetRelativeBalUp,NN1b_JetRelativeBalDown,NN1b_JetRelativeSampleUp,NN1b_JetRelativeSampleDown,NN1b_JERUp,NN1b_JERDown};
+        float NN2b_jetvar[24] = {NN2b_JetAbsoluteUp,NN2b_JetAbsoluteDown,NN2b_JetAbsoluteyearUp,NN2b_JetAbsoluteyearDown,NN2b_JetBBEC1Up,NN2b_JetBBEC1Down,NN2b_JetBBEC1yearUp,NN2b_JetBBEC1yearDown,NN2b_JetEC2Up,NN2b_JetEC2Down,NN2b_JetEC2yearUp,NN2b_JetEC2yearDown,NN2b_JetFlavorQCDUp,NN2b_JetFlavorQCDDown,NN2b_JetHFUp,NN2b_JetHFDown,NN2b_JetHFyearUp,NN2b_JetHFyearDown,NN2b_JetRelativeBalUp,NN2b_JetRelativeBalDown,NN2b_JetRelativeSampleUp,NN2b_JetRelativeSampleDown,NN2b_JERUp,NN2b_JERDown};
         std::vector<TLorentzVector> mymet_jet;
         std::vector<TLorentzVector> mytt_jet;
         std::vector<TLorentzVector> myb1_jet;
@@ -1530,15 +1561,15 @@ int main(int argc, char** argv){
             m_bbtt_jet.push_back((mytt_jet[j]+myb1_jet[j]+myb2_jet[j]).M());
         }
         for (int j = 0; j < 24; j++){
-            //var[0][0][j+21] = NN1b_jetvar[j];
-            //var[0][1][j+21] = p_n(NN1b_jetvar[j],2);
-            //var[0][2][j+21] = p_n(NN1b_jetvar[j],2);
+            var[0][0][j+21] = NN1b_jetvar[j];
+            var[0][1][j+21] = p_n(NN1b_jetvar[j],p_N);
+            var[0][2][j+21] = p_n(NN1b_jetvar[j],p_N);
             var[0][5][j+21] = mytt_jet[j].M();
             var[0][6][j+21] = m_btt_jet[j];
             
-            //var[1][0][j+21] = NN2b_jetvar[j];
-            //var[1][1][j+21] = p_n(NN2b_jetvar[j],2);
-            //var[1][2][j+21] = p_n(NN2b_jetvar[j],2);
+            var[1][0][j+21] = NN2b_jetvar[j];
+            var[1][1][j+21] = p_n(NN2b_jetvar[j],p_N);
+            var[1][2][j+21] = p_n(NN2b_jetvar[j],p_N);
             var[1][5][j+21] = mytt_jet[j].M();
             var[1][6][j+21] = m_btt_jet[j];
             var[1][7][j+21] = m_bbtt_jet[j];
@@ -1608,15 +1639,15 @@ int main(int argc, char** argv){
             }
         }
         for (int j = 0; j < 12; j++){
-            //var[0][0][j+45] = NN1b_recoilvar[j];
-            //var[0][1][j+45] = p_n(NN1b_recoilvar[j],2);
-            //var[0][2][j+45] = p_n(NN1b_recoilvar[j],2);
+            var[0][0][j+45] = NN1b_recoilvar[j];
+            var[0][1][j+45] = p_n(NN1b_recoilvar[j],p_N);
+            var[0][2][j+45] = p_n(NN1b_recoilvar[j],p_N);
             var[0][5][j+45] = mytt_recoil[j].M();
             var[0][6][j+45] = m_btt_recoil[j];
             
-            //var[1][0][j+45] = NN2b_recoilvar[j];
-            //var[1][1][j+45] = p_n(NN2b_recoilvar[j],2);
-            //var[1][2][j+45] = p_n(NN2b_recoilvar[j],2);
+            var[1][0][j+45] = NN2b_recoilvar[j];
+            var[1][1][j+45] = p_n(NN2b_recoilvar[j],p_N);
+            var[1][2][j+45] = p_n(NN2b_recoilvar[j],p_N);
             var[1][5][j+45] = mytt_recoil[j].M();
             var[1][6][j+45] = m_btt_recoil[j];
             var[1][7][j+45] = m_bbtt_recoil[j];
@@ -1644,15 +1675,15 @@ int main(int argc, char** argv){
             m_bbtt_UES[j] = (mytt_UES[j]+myb1+myb2).M();
         }
         for (int j = 0; j < 2; j++){
-            //var[0][0][j+57] = NN1b_UESvar[j];
-            //var[0][1][j+57] = p_n(NN1b_UESvar[j],2);
-            //var[0][2][j+57] = p_n(NN1b_UESvar[j],2);
+            var[0][0][j+57] = NN1b_UESvar[j];
+            var[0][1][j+57] = p_n(NN1b_UESvar[j],p_N);
+            var[0][2][j+57] = p_n(NN1b_UESvar[j],p_N);
             var[0][5][j+57] = mytt_UES[j].M();
             var[0][6][j+57] = m_btt_UES[j];
             
-            //var[1][0][j+57] = NN2b_UESvar[j];
-            //var[1][1][j+57] = p_n(NN2b_UESvar[j],2);
-            //var[1][2][j+57] = p_n(NN2b_UESvar[j],2);
+            var[1][0][j+57] = NN2b_UESvar[j];
+            var[1][1][j+57] = p_n(NN2b_UESvar[j],p_N);
+            var[1][2][j+57] = p_n(NN2b_UESvar[j],p_N);
             var[1][5][j+57] = mytt_UES[j].M();
             var[1][6][j+57] = m_btt_UES[j];
             var[1][7][j+57] = m_bbtt_UES[j];
@@ -1736,6 +1767,39 @@ int main(int argc, char** argv){
             trigger_region_shiftedele[j] = (isSingleTrigger && myshiftedele[j].Pt()>single_elept_thres && pt_2>single_taupt_thres) or (isCrossTrigger && myshiftedele[j].Pt()<single_elept_thres && myshiftedele[j].Pt()>cross_elept_thres && pt_2>cross_taupt_thres);
         }
         
+        //############################prefiring weight (only for 2016-17 not 2018)################################
+        float prefiring[2] = {1.0,1.0};
+        if ((year=="2016" or year=="2017") && sample!="data_obs" && sample!="embedded"){
+            weight_corr *= prefiring_weight;
+            prefiring[0] = prefiring_weight_up/prefiring_weight;
+            prefiring[1] = prefiring_weight_down/prefiring_weight;
+        }
+        /*
+        //~~~~~~~~~~~~~~~(can be deleted later)~~~~~~~~~~~~~~cut-based selection criteria
+        std::vector<bool> mtt_region;
+        for (int j = 0; j < 5; j++) mtt_region.push_back(0);
+        mtt_region[0] = nbtag20==1 && m_btt<90 && mt_tau1<50 && mt_tau2<60;
+        mtt_region[1] = nbtag20==1 && m_btt>90 && m_btt<105 && mt_tau1<50 && mt_tau2<60;
+        mtt_region[2] = nbtag20==1 && m_btt>105 && mt_tau1<50 && mt_tau2<60;
+        mtt_region[3] = nbtag20==2 && m_bbtt<150 && mt_tau1<50 && mt_tau2<60;
+        mtt_region[4] = nbtag20==2 && m_bbtt>150 && mt_tau1<50 && mt_tau2<60;
+        //~~~~~~~~~~~~~~~(can be deleted later)~~~~~~~~~~~~~~
+        */
+        
+        //##############################categories definition##############################
+        std::vector<std::vector<bool>> ctg;
+        for (int j = 0; j < 6; j++) ctg.push_back(std::vector<bool>());//6 categories (4 for 1b, 2 for 2b)
+        for (int j = 0; j < 59; j++){//59 shifted systematics
+            //1b
+            ctg[0].push_back(var[0][1][j]>0.99);
+            ctg[1].push_back(var[0][1][j]<0.99 && var[0][1][j]>0.975);
+            ctg[2].push_back(var[0][1][j]<0.975 && var[0][1][j]>0.93);
+            ctg[3].push_back(var[0][1][j]<0.93);
+            //2b
+            ctg[4].push_back(var[1][1][j]>0.99);
+            ctg[5].push_back(var[1][1][j]<0.99);
+        }
+        
         //##############################histograms filling###################################
         bool rejectEMBduplicate = !isMCnonHiggs or (isMCnonHiggs && !(gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6));
         
@@ -1754,11 +1818,74 @@ int main(int argc, char** argv){
                 }
             }
         }
+        /*
+        //~~~~~~~~~~~~~~~(can be deleted later)~~~~~~~~~~~~~~
+        if (isMCnonHiggs && name!="ZJ" && gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6){
+            if (byMediumDeepVSjet_2 && trigger_region_nominal){
+                for (int m = 0; m < 5; m++){
+                    if (mtt_region[m]==1) h_iso[2][m][105]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*0.1);
+                }
+            }
+        }
+        if (byMediumDeepVSjet_2 && rejectEMBduplicate){
+            for (int m = 0; m < 5; m++){
+                if (mtt_region[m]==1){
+                    if (trigger_region_nominal) h_iso[2][m][0]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]);
+                    if (sample!="data_obs"){
+                        if (trigger_region_nominal){
+                            for (int k = 0; k < 14; k++) h_iso[2][m][k+9]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[k+1]);
+                            for (int k = 0; k < 2; k++) h_iso[2][m][k+106]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*tauidWP[k]);
+                            if (sample!="embedded"){
+                                for (int k = 0; k < 4; k++) h_iso[2][m][k+23]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*sf_tauid_efake[k]);
+                                for (int k = 0; k < 10; k++) h_iso[2][m][k+27]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
+                                for (int k = 0; k < 4; k++) h_iso[2][m][k+53]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*btagsf_syst[k]);
+                            }
+                            for (int k = 0; k < 4; k++) h_iso[2][m][k+49]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
+                            if (sample=="embedded"){
+                                for (int k = 0; k < 6; k++) h_iso[2][m][k+95]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*tau_tracking_shifting[k]);
+                            }
+                            if (isRecoilMC){
+                                for (int k = 0; k < 12; k++) h_iso[2][m][k+81]->Fill(var[0][5][k+45],weight_corr*trgsf*sf_tauid[0]);
+                            }
+                            if (isnonRecoilMC){
+                                for (int k = 0; k < 2; k++) h_iso[2][m][k+93]->Fill(var[0][5][k+57],weight_corr*trgsf*sf_tauid[0]);
+                            }
+                            if (name=="ZJ"){
+                                for (int k = 0; k < 2; k++) h_iso[2][m][k+101]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*zptmass_weight_shifting[k]);
+                            }
+                            if (name=="ttbar"){
+                                for (int k = 0; k < 2; k++) h_iso[2][m][k+103]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
+                            }
+                            if (year!="2018" && sample!="embedded"){
+                                for (int k = 0; k < 2; k++) h_iso[2][m][k+108]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*prefiring[k]);
+                            }
+                        }
+                        for (int k = 0; k < 24; k++){
+                            if (trigger_region_nominal && sample!="embedded") h_iso[2][m][k+57]->Fill(var[0][5][k+21],weight_corr*trgsf*sf_tauid[0]*weight_btag_jetsyst[k]);
+                        }
+                        for (int k = 0; k < 8; k++){
+                            if (trigger_region_shiftedtau[k]) h_iso[2][m][k+1]->Fill(var[0][5][k+1],weight_corr*trgsf*sf_tauid[k+15]);
+                        }
+                        for (int k = 0; k < 4; k++){
+                            if (trigger_region_tauisgenmu[k] && sample!="embedded") h_iso[2][m][k+37]->Fill(var[0][5][k+9],weight_corr*trgsf*sf_tauid[0]);
+                        }
+                        for (int k = 0; k < 4; k++){
+                            if (trigger_region_tauisgenele[k] && sample!="embedded") h_iso[2][m][k+41]->Fill(var[0][5][k+13],weight_corr*trgsf*sf_tauid[0]);
+                        }
+                        for (int k = 0; k < 4; k++){
+                            if (trigger_region_shiftedele[k]) h_iso[2][m][k+45]->Fill(var[0][5][k+17],weight_corr*trgsf_shiftedele[k]*sf_tauid[0]);
+                        }
+                    }
+                }
+            }
+        }
+        //~~~~~~~~~~~~~~~(can be deleted later)~~~~~~~~~~~~~~
+         */
         
         //do not fill for MC tautau events (duplicating emb) as normal
         if (byMediumDeepVSjet_2 && rejectEMBduplicate){
             //loop over variables to fill ###############1b################
-            for (int m = 3; m < 7; m++){
+            for (int m = 0; m < 7; m++){
                 //fill nominal for 1 bjet, all samples
                 if (nbtag20==1 && trigger_region_nominal) h_iso[0][m][0]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]);
                 //fill shifted, non data
@@ -1766,6 +1893,8 @@ int main(int argc, char** argv){
                     if (nbtag20==1 && trigger_region_nominal){
                         //tauID eff
                         for (int k = 0; k < 14; k++) h_iso[0][m][k+9]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[k+1]);
+                        //tauID WP
+                        for (int k = 0; k < 2; k++) h_iso[0][m][k+106]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*tauidWP[k]);
                         //e,mu fake tau sf
                         if (sample!="embedded"){
                             //tauIDeff elefake
@@ -1797,6 +1926,10 @@ int main(int argc, char** argv){
                         if (name=="ttbar"){
                             for (int k = 0; k < 2; k++) h_iso[0][m][k+103]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
                         }
+                        //prefiring
+                        if (year!="2018" && sample!="embedded"){
+                            for (int k = 0; k < 2; k++) h_iso[0][m][k+108]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*prefiring[k]);
+                        }
                     }//end of nbtag20==1 and nominal trigger region
                     
                     //jet uncertainties, shifted nbtag and sf
@@ -1823,7 +1956,7 @@ int main(int argc, char** argv){
             }//end of loop of variables to fill ###############1b################
             
             //loop over variables to fill ###############2b################
-            for (int m = 3; m < 8; m++){
+            for (int m = 0; m < 8; m++){
                 //fill nominal for 2 bjet, all samples
                 if (nbtag20==2 && trigger_region_nominal) h_iso[1][m][0]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]);
                 //fill shifted, non data
@@ -1831,6 +1964,8 @@ int main(int argc, char** argv){
                     if (nbtag20==2 && trigger_region_nominal){
                         //tauID eff
                         for (int k = 0; k < 14; k++) h_iso[1][m][k+9]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[k+1]);
+                        //tauID WP
+                        for (int k = 0; k < 2; k++) h_iso[1][m][k+106]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*tauidWP[k]);
                         //e,mu fake tau sf
                         if (sample!="embedded"){
                             //tauIDeff elefake
@@ -1862,6 +1997,10 @@ int main(int argc, char** argv){
                         if (name=="ttbar"){
                             for (int k = 0; k < 2; k++) h_iso[1][m][k+103]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
                         }
+                        //prefiring
+                        if (year!="2018" && sample!="embedded"){
+                            for (int k = 0; k < 2; k++) h_iso[1][m][k+108]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*prefiring[k]);
+                        }
                     }//end of nbtag20==2 and nominal trigger region
                     
                     //jet uncertainties, shifted nbtag and sf
@@ -1886,6 +2025,151 @@ int main(int argc, char** argv){
                     }
                 }//end of sample!="data_obs"
             }//end of loop of variables to fill ###############2b################
+            
+            //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>><><><><><><><><><><><><><><><><><><><><><>fill final m_tt categories
+            //~~~~~~~~~~~~~~~~~~~1bNN
+            for (int m = 0; m < 4; m++){
+                //fill nominal for 1 bjet, all samples
+                if (nbtag20==1 && trigger_region_nominal) if (ctg[m][0]) h_iso[2][m][0]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]);
+                //fill shifted, non data
+                if (sample!="data_obs"){
+                    if (nbtag20==1 && trigger_region_nominal){
+                        //tauID eff
+                        for (int k = 0; k < 14; k++) if (ctg[m][0]) h_iso[2][m][k+9]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[k+1]);
+                        //tauID WP
+                        for (int k = 0; k < 2; k++) if (ctg[m][0]) h_iso[2][m][k+106]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*tauidWP[k]);
+                        //e,mu fake tau sf
+                        if (sample!="embedded"){
+                            //tauIDeff elefake
+                            for (int k = 0; k < 4; k++) if (ctg[m][0]) h_iso[2][m][k+23]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*sf_tauid_efake[k]);
+                            //tauIDeff mufake
+                            for (int k = 0; k < 10; k++) if (ctg[m][0]) h_iso[2][m][k+27]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
+                            //btageff
+                            for (int k = 0; k < 4; k++) if (ctg[m][0]) h_iso[2][m][k+53]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*btagsf_syst[k]);
+                        }
+                        //trigger sf shifting
+                        for (int k = 0; k < 4; k++) if (ctg[m][0]) h_iso[2][m][k+49]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
+                        //tau tracking, emb only
+                        if (sample=="embedded"){
+                            for (int k = 0; k < 6; k++) if (ctg[m][0]) h_iso[2][m][k+95]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*tau_tracking_shifting[k]);
+                        }
+                        //recoil uncertainties
+                        if (isRecoilMC){
+                            for (int k = 0; k < 12; k++) if (ctg[m][k+45]) h_iso[2][m][k+81]->Fill(var[0][5][k+45],weight_corr*trgsf*sf_tauid[0]);
+                        }
+                        //met unclustered ES
+                        if (isnonRecoilMC){
+                            for (int k = 0; k < 2; k++) if (ctg[m][k+57]) h_iso[2][m][k+93]->Fill(var[0][5][k+57],weight_corr*trgsf*sf_tauid[0]);
+                        }
+                        //Zpt reweight uncertainties for DY MC only
+                        if (name=="ZJ"){
+                            for (int k = 0; k < 2; k++) if (ctg[m][0]) h_iso[2][m][k+101]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*zptmass_weight_shifting[k]);
+                        }
+                        //top pt reweight uncertainties for ttbar only
+                        if (name=="ttbar"){
+                            for (int k = 0; k < 2; k++) if (ctg[m][0]) h_iso[2][m][k+103]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
+                        }
+                        //prefiring
+                        if (year!="2018" && sample!="embedded"){
+                            for (int k = 0; k < 2; k++) if (ctg[m][0]) h_iso[2][m][k+108]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*prefiring[k]);
+                        }
+                    }//end of nbtag20==1 and nominal trigger region
+                    
+                    //jet uncertainties, shifted nbtag and sf
+                    for (int k = 0; k < 24; k++){
+                        if (nbtag20_jetsyst[k]==1 && trigger_region_nominal && sample!="embedded") if (ctg[m][k+21]) h_iso[2][m][k+57]->Fill(var[0][5][k+21],weight_corr*trgsf*sf_tauid[0]*weight_btag_jetsyst[k]);
+                    }
+                    //loop over trigger regions with shifted tau
+                    for (int k = 0; k < 8; k++){
+                        if (nbtag20==1 && trigger_region_shiftedtau[k]) if (ctg[m][k+1]) h_iso[2][m][k+1]->Fill(var[0][5][k+1],weight_corr*trgsf*sf_tauid[k+15]);
+                    }
+                    //loop over trigger regions with muon->tau fake shifted
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==1 && trigger_region_tauisgenmu[k] && sample!="embedded") if (ctg[m][k+9]) h_iso[2][m][k+37]->Fill(var[0][5][k+9],weight_corr*trgsf*sf_tauid[0]);
+                    }
+                    //loop over trigger regions with electron->tau fake shifted
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==1 && trigger_region_tauisgenele[k] && sample!="embedded") if (ctg[m][k+13]) h_iso[2][m][k+41]->Fill(var[0][5][k+13],weight_corr*trgsf*sf_tauid[0]);
+                    }
+                    //loop over trigger regions with shifted electron
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==1 && trigger_region_shiftedele[k]) if (ctg[m][k+17]) h_iso[2][m][k+45]->Fill(var[0][5][k+17],weight_corr*trgsf_shiftedele[k]*sf_tauid[0]);
+                    }
+                }//end of sample!="data_obs"
+            }//~~~~~~~~~~~~~~~~~~~1bNN
+            
+            //~~~~~~~~~~~~~~~~~~~2bNN
+            for (int m = 4; m < 6; m++){
+                //fill nominal for 2 bjet, all samples
+                if (nbtag20==2 && trigger_region_nominal) if (ctg[m][0]) h_iso[2][m][0]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]);
+                //fill shifted, non data
+                if (sample!="data_obs"){
+                    if (nbtag20==2 && trigger_region_nominal){
+                        //tauID eff
+                        for (int k = 0; k < 14; k++) if (ctg[m][0]) h_iso[2][m][k+9]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[k+1]);
+                        //tauID WP
+                        for (int k = 0; k < 2; k++) if (ctg[m][0]) h_iso[2][m][k+106]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]*tauidWP[k]);
+                        //e,mu fake tau sf
+                        if (sample!="embedded"){
+                            //tauIDeff elefake
+                            for (int k = 0; k < 4; k++) if (ctg[m][0]) h_iso[2][m][k+23]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]*sf_tauid_efake[k]);
+                            //tauIDeff mufake
+                            for (int k = 0; k < 10; k++) if (ctg[m][0]) h_iso[2][m][k+27]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
+                            //btageff
+                            for (int k = 0; k < 4; k++) if (ctg[m][0]) h_iso[2][m][k+53]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]*btagsf_syst[k]);
+                        }
+                        //trigger sf shifting
+                        for (int k = 0; k < 4; k++) if (ctg[m][0]) h_iso[2][m][k+49]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
+                        //tau tracking, emb only
+                        if (sample=="embedded"){
+                            for (int k = 0; k < 6; k++) if (ctg[m][0]) h_iso[2][m][k+95]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]*tau_tracking_shifting[k]);
+                        }
+                        //recoil uncertainties
+                        if (isRecoilMC){
+                            for (int k = 0; k < 12; k++) if (ctg[m][k+45]) h_iso[2][m][k+81]->Fill(var[1][5][k+45],weight_corr*trgsf*sf_tauid[0]);
+                        }
+                        //met unclustered ES
+                        if (isnonRecoilMC){
+                            for (int k = 0; k < 2; k++) if (ctg[m][k+57]) h_iso[2][m][k+93]->Fill(var[1][5][k+57],weight_corr*trgsf*sf_tauid[0]);
+                        }
+                        //Zpt reweight uncertainties for DY MC only
+                        if (name=="ZJ"){
+                            for (int k = 0; k < 2; k++) if (ctg[m][0]) h_iso[2][m][k+101]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]*zptmass_weight_shifting[k]);
+                        }
+                        //top pt reweight uncertainties for ttbar only
+                        if (name=="ttbar"){
+                            for (int k = 0; k < 2; k++) if (ctg[m][0]) h_iso[2][m][k+103]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]*topfactor_shifting[k]);
+                        }
+                        //prefiring
+                        if (year!="2018" && sample!="embedded"){
+                            for (int k = 0; k < 2; k++) if (ctg[m][0]) h_iso[2][m][k+108]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]*prefiring[k]);
+                        }
+                    }//end of nbtag20==2 and nominal trigger region
+                    
+                    //jet uncertainties, shifted nbtag and sf
+                    for (int k = 0; k < 24; k++){
+                        if (nbtag20_jetsyst[k]==2 && trigger_region_nominal && sample!="embedded") if (ctg[m][k+21]) h_iso[2][m][k+57]->Fill(var[1][5][k+21],weight_corr*trgsf*sf_tauid[0]*weight_btag_jetsyst[k]);
+                    }
+                    //loop over trigger regions with shifted tau
+                    for (int k = 0; k < 8; k++){
+                        if (nbtag20==2 && trigger_region_shiftedtau[k]) if (ctg[m][k+1]) h_iso[2][m][k+1]->Fill(var[1][5][k+1],weight_corr*trgsf*sf_tauid[k+15]);
+                    }
+                    //loop over trigger regions with muon->tau fake shifted
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==2 && trigger_region_tauisgenmu[k] && sample!="embedded") if (ctg[m][k+9]) h_iso[2][m][k+37]->Fill(var[1][5][k+9],weight_corr*trgsf*sf_tauid[0]);
+                    }
+                    //loop over trigger regions with electron->tau fake shifted
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==2 && trigger_region_tauisgenele[k] && sample!="embedded") if (ctg[m][k+13]) h_iso[2][m][k+41]->Fill(var[1][5][k+13],weight_corr*trgsf*sf_tauid[0]);
+                    }
+                    //loop over trigger regions with shifted electron
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==2 && trigger_region_shiftedele[k]) if (ctg[m][k+17]) h_iso[2][m][k+45]->Fill(var[1][5][k+17],weight_corr*trgsf_shiftedele[k]*sf_tauid[0]);
+                    }
+                }//end of sample!="data_obs"
+            }//~~~~~~~~~~~~~~~~~~~2bNN
+            
+            //><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>><><><><><><><><><><><><><><><><><><><><><>end of fill final m_tt categories
         }//end of isolated region
         
         //anti-isolated tau region for fake background
@@ -1918,8 +2202,51 @@ int main(int argc, char** argv){
                 weight_fake_shifted.push_back(fr_bjet_shifted[k]/(1-fr_bjet_shifted[k]));
             }//ordering: pt0to25up/down, pt25to30up/down,...
             
+            /*
+            //~~~~~~~~~~~~~~~(can be deleted later)~~~~~~~~~~~~~~
+            for (int m = 0; m < 5; m++){
+                if (mtt_region[m]==1){
+                    if (trigger_region_nominal) h_anti[2][m][0]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                    if (sample!="data_obs"){
+                        if (trigger_region_nominal){
+                            for (int k = 0; k < 4; k++) h_anti[2][m][k+5]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*trigger_shiftedsf[k]*xtrgfakefactor);
+                            if (name=="ZJ"){
+                                for (int k = 0; k < 2; k++) h_anti[2][m][k+51]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*zptmass_weight_shifting[k]*xtrgfakefactor);
+                            }
+                            if (name=="ttbar"){
+                                for (int k = 0; k < 2; k++) h_anti[2][m][k+53]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*topfactor_shifting[k]*xtrgfakefactor);
+                            }
+                            if (isRecoilMC){
+                                for (int k = 0; k < 12; k++) h_anti[2][m][k+37]->Fill(var[0][5][k+45],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                            }
+                            if (isnonRecoilMC){
+                                for (int k = 0; k < 2; k++) h_anti[2][m][k+49]->Fill(var[0][5][k+57],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                            }
+                            if (sample!="embedded"){
+                                for (int k = 0; k < 4; k++) h_anti[2][m][k+9]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
+                            }
+                            if (year!="2018" && sample!="embedded"){
+                                for (int k = 0; k < 2; k++) h_anti[2][m][k+71]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*prefiring[k]*xtrgfakefactor);
+                            }
+                        }
+                        for (int k = 0; k < 24; k++){
+                            if (trigger_region_nominal && sample!="embedded") h_anti[2][m][k+13]->Fill(var[0][5][k+21],weight_corr*weight_fake*trgsf*xtrgfakefactor*weight_btag_jetsyst[k]);
+                        }
+                        for (int k = 0; k < 4; k++){
+                            if (trigger_region_shiftedele[k]) h_anti[2][m][k+1]->Fill(var[0][5][k+17],weight_corr*weight_fake*trgsf_shiftedele[k]*xtrgfakefactor_shiftedele[k]);
+                        }
+                    }
+                    if (trigger_region_nominal){
+                        for (int k = 0; k < 2; k++) h_anti[2][m][k+55]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
+                        for (int k = 0; k < 14; k++) h_anti[2][m][k+57]->Fill(var[0][5][0],weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
+                    }
+                }
+            }
+            //~~~~~~~~~~~~~~~(can be deleted later)~~~~~~~~~~~~~~
+             */
+            
             //loop over variables to fill ###############1b################
-            for (int m = 3; m < 7; m++){
+            for (int m = 0; m < 7; m++){
                 //fill nominal for 1 bjet, all samples
                 if (nbtag20==1 && trigger_region_nominal) h_anti[0][m][0]->Fill(var[0][m][0],weight_corr*weight_fake*trgsf*xtrgfakefactor);
                 //fill shifted, non data
@@ -1947,6 +2274,10 @@ int main(int argc, char** argv){
                         if (sample!="embedded"){
                             for (int k = 0; k < 4; k++) h_anti[0][m][k+9]->Fill(var[0][m][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
                         }
+                        //prefiring
+                        if (year!="2018" && sample!="embedded"){
+                            for (int k = 0; k < 2; k++) h_anti[0][m][k+71]->Fill(var[0][m][0],weight_corr*weight_fake*trgsf*prefiring[k]*xtrgfakefactor);
+                        }
                     }//end of nbtag20==1 && trigger_region_nominal
                     
                     //jet uncertainties, shifted nbtag and sf
@@ -1967,7 +2298,7 @@ int main(int argc, char** argv){
             }//end of loop over variables to fill ###############1b################
             
             //loop over variables to fill ###############2b################
-            for (int m = 3; m < 8; m++){
+            for (int m = 0; m < 8; m++){
                 //fill nominal for 2 bjet, all samples
                 if (nbtag20==2 && trigger_region_nominal) h_anti[1][m][0]->Fill(var[1][m][0],weight_corr*weight_fake*trgsf*xtrgfakefactor);
                 //fill shifted, non data
@@ -1995,6 +2326,10 @@ int main(int argc, char** argv){
                         if (sample!="embedded"){
                             for (int k = 0; k < 4; k++) h_anti[1][m][k+9]->Fill(var[1][m][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
                         }
+                        //prefiring
+                        if (year!="2018" && sample!="embedded"){
+                            for (int k = 0; k < 2; k++) h_anti[1][m][k+71]->Fill(var[1][m][0],weight_corr*weight_fake*trgsf*prefiring[k]*xtrgfakefactor);
+                        }
                     }//end of nbtag20==2 && trigger_region_nominal
                     
                     //jet uncertainties, shifted nbtag and sf
@@ -2013,6 +2348,111 @@ int main(int argc, char** argv){
                     for (int k = 0; k < 14; k++) h_anti[1][m][k+57]->Fill(var[1][m][0],weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
                 }
             }//end of loop over variables to fill ###############2b################
+            
+            //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>><><><><><><><><><><><><><><><><><><><><><>fill final m_tt categories
+            //~~~~~~~~~~~~~~~~~~~1bNN
+            for (int m = 0; m < 4; m++){
+                //fill nominal for 1 bjet, all samples
+                if (nbtag20==1 && trigger_region_nominal) if (ctg[m][0]) h_anti[2][m][0]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                //fill shifted, non data
+                if (sample!="data_obs"){
+                    if (nbtag20==1 && trigger_region_nominal){
+                        //trigger sf shifting
+                        for (int k = 0; k < 4; k++) if (ctg[m][0]) h_anti[2][m][k+5]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*trigger_shiftedsf[k]*xtrgfakefactor);
+                        //Zpt reweight uncertainties for DY MC only
+                        if (name=="ZJ"){
+                            for (int k = 0; k < 2; k++) if (ctg[m][0]) h_anti[2][m][k+51]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*zptmass_weight_shifting[k]*xtrgfakefactor);
+                        }
+                        //top pt reweight uncertainties for ttbar only
+                        if (name=="ttbar"){
+                            for (int k = 0; k < 2; k++) if (ctg[m][0]) h_anti[2][m][k+53]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*topfactor_shifting[k]*xtrgfakefactor);
+                        }
+                        //recoil uncertainties
+                        if (isRecoilMC){
+                            for (int k = 0; k < 12; k++) if (ctg[m][k+45]) h_anti[2][m][k+37]->Fill(var[0][5][k+45],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                        }
+                        //met unclustered ES
+                        if (isnonRecoilMC){
+                            for (int k = 0; k < 2; k++) if (ctg[m][k+57]) h_anti[2][m][k+49]->Fill(var[0][5][k+57],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                        }
+                        //btag sf
+                        if (sample!="embedded"){
+                            for (int k = 0; k < 4; k++) if (ctg[m][0]) h_anti[2][m][k+9]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
+                        }
+                        //prefiring
+                        if (year!="2018" && sample!="embedded"){
+                            for (int k = 0; k < 2; k++) if (ctg[m][0]) h_anti[2][m][k+71]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*prefiring[k]*xtrgfakefactor);
+                        }
+                    }//end of nbtag20==1 && trigger_region_nominal
+                    
+                    //jet uncertainties, shifted nbtag and sf
+                    for (int k = 0; k < 24; k++){
+                        if (nbtag20_jetsyst[k]==1 && trigger_region_nominal && sample!="embedded") if (ctg[m][k+21]) h_anti[2][m][k+13]->Fill(var[0][5][k+21],weight_corr*weight_fake*trgsf*xtrgfakefactor*weight_btag_jetsyst[k]);
+                    }
+                    //loop over trigger regions with shifted electron
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==1 && trigger_region_shiftedele[k]) if (ctg[m][k+17]) h_anti[2][m][k+1]->Fill(var[0][5][k+17],weight_corr*weight_fake*trgsf_shiftedele[k]*xtrgfakefactor_shiftedele[k]);
+                    }
+                }//end of sample!="data_obs"
+                if (nbtag20==1 && trigger_region_nominal){
+                    //uncertainties in xtrgup factor
+                    for (int k = 0; k < 2; k++) if (ctg[m][0]) h_anti[2][m][k+55]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
+                    //fake rate uncertainties for alldm by pt bins
+                    for (int k = 0; k < 14; k++) if (ctg[m][0]) h_anti[2][m][k+57]->Fill(var[0][5][0],weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
+                }
+            }//~~~~~~~~~~~~~~~~~~~1bNN
+            //~~~~~~~~~~~~~~~~~~~2bNN
+            for (int m = 4; m < 6; m++){
+                //fill nominal for 2 bjet, all samples
+                if (nbtag20==2 && trigger_region_nominal) if (ctg[m][0]) h_anti[2][m][0]->Fill(var[1][5][0],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                //fill shifted, non data
+                if (sample!="data_obs"){
+                    if (nbtag20==2 && trigger_region_nominal){
+                        //trigger sf shifting
+                        for (int k = 0; k < 4; k++) if (ctg[m][0]) h_anti[2][m][k+5]->Fill(var[1][5][0],weight_corr*weight_fake*trgsf*trigger_shiftedsf[k]*xtrgfakefactor);
+                        //Zpt reweight uncertainties for DY MC only
+                        if (name=="ZJ"){
+                            for (int k = 0; k < 2; k++) if (ctg[m][0]) h_anti[2][m][k+51]->Fill(var[1][5][0],weight_corr*weight_fake*trgsf*zptmass_weight_shifting[k]*xtrgfakefactor);
+                        }
+                        //top pt reweight uncertainties for ttbar only
+                        if (name=="ttbar"){
+                            for (int k = 0; k < 2; k++) if (ctg[m][0]) h_anti[2][m][k+53]->Fill(var[1][5][0],weight_corr*weight_fake*trgsf*topfactor_shifting[k]*xtrgfakefactor);
+                        }
+                        //recoil uncertainties
+                        if (isRecoilMC){
+                            for (int k = 0; k < 12; k++) if (ctg[m][k+45]) h_anti[2][m][k+37]->Fill(var[1][5][k+45],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                        }
+                        //met unclustered ES
+                        if (isnonRecoilMC){
+                            for (int k = 0; k < 2; k++) if (ctg[m][k+57]) h_anti[2][m][k+49]->Fill(var[1][5][k+57],weight_corr*weight_fake*trgsf*xtrgfakefactor);
+                        }
+                        //btag sf
+                        if (sample!="embedded"){
+                            for (int k = 0; k < 4; k++) if (ctg[m][0]) h_anti[2][m][k+9]->Fill(var[1][5][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
+                        }
+                        //prefiring
+                        if (year!="2018" && sample!="embedded"){
+                            for (int k = 0; k < 2; k++) if (ctg[m][0]) h_anti[2][m][k+71]->Fill(var[1][5][0],weight_corr*weight_fake*trgsf*prefiring[k]*xtrgfakefactor);
+                        }
+                    }//end of nbtag20==2 && trigger_region_nominal
+                    
+                    //jet uncertainties, shifted nbtag and sf
+                    for (int k = 0; k < 24; k++){
+                        if (nbtag20_jetsyst[k]==2 && trigger_region_nominal && sample!="embedded") if (ctg[m][k+21]) h_anti[2][m][k+13]->Fill(var[1][5][k+21],weight_corr*weight_fake*trgsf*xtrgfakefactor*weight_btag_jetsyst[k]);
+                    }
+                    //loop over trigger regions with shifted electron
+                    for (int k = 0; k < 4; k++){
+                        if (nbtag20==2 && trigger_region_shiftedele[k]) if (ctg[m][k+17]) h_anti[2][m][k+1]->Fill(var[1][5][k+17],weight_corr*weight_fake*trgsf_shiftedele[k]*xtrgfakefactor_shiftedele[k]);
+                    }
+                }//end of sample!="data_obs"
+                if (nbtag20==2 && trigger_region_nominal){
+                    //uncertainties in xtrgup factor
+                    for (int k = 0; k < 2; k++) if (ctg[m][0]) h_anti[2][m][k+55]->Fill(var[1][5][0],weight_corr*weight_fake*trgsf*xtrgfakefactor_updown[k]);
+                    //fake rate uncertainties for alldm by pt bins
+                    for (int k = 0; k < 14; k++) if (ctg[m][0]) h_anti[2][m][k+57]->Fill(var[1][5][0],weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
+                }
+            }//~~~~~~~~~~~~~~~~~~~2bNN
+            
         }//end of anti-isolated region
         
     }//end of event loop
@@ -2021,13 +2461,14 @@ int main(int argc, char** argv){
     
     TString dir1b[7] = {"p_1b","p2_1b","p2_z_1b","pt_1_1b","pt_2_1b","m_tt_1b","m_btt_1b"};
     TString dir2b[8] = {"p_2b","p2_2b","p2_z_2b","pt_1_2b","pt_2_2b","m_tt_2b","m_btt_2b","m_bbtt_2b"};
+    TString dirmtt[6] = {"1","2","3","4","5","6"};
     TString fake = "_fake";
     TString MC = "MC";
     
     std::vector<TDirectory*> td;
-    for (int j = 3; j < 7; j++){//loop over histogram variables ##############1b##############
+    for (int j = 0; j < 7; j++){//loop over histogram variables ##############1b##############
         td.push_back(fout->mkdir(dir1b[j]));
-        td[j-3]->cd();
+        td[j]->cd();
         
         if (sample!="data_obs"){
             //nominal
@@ -2038,6 +2479,11 @@ int main(int argc, char** argv){
                 if (sample!="embedded") h_iso[0][j][i+9]->SetName(name.c_str()+shape_tauideff[i]);
                 else h_iso[0][j][i+9]->SetName(name.c_str()+embshape_tauideff[i]);
                 h_iso[0][j][i+9]->Write();
+            }
+            for (int i = 0; i < 2; ++i){
+                if (sample!="embedded") h_iso[0][j][i+106]->SetName(name.c_str()+shape_tauidWP[i]);
+                else h_iso[0][j][i+106]->SetName(name.c_str()+embshape_tauidWP[i]);
+                h_iso[0][j][i+106]->Write();
             }
             for (int i = 0; i < 8; ++i){
                 if (sample!="embedded") h_iso[0][j][i+1]->SetName(name.c_str()+shape_tauES[i]);
@@ -2096,6 +2542,12 @@ int main(int argc, char** argv){
                 for (int i = 0; i < 2; ++i){
                     h_iso[0][j][i+103]->SetName(name.c_str()+shape_ttbar_toppt[i]);
                     h_iso[0][j][i+103]->Write();
+                }
+            }
+            if (year!="2018" && sample!="embedded"){
+                for (int i = 0; i < 2; ++i){
+                    h_iso[0][j][i+108]->SetName(name.c_str()+shape_prefiring[i]);
+                    h_iso[0][j][i+108]->Write();
                 }
             }
             if (isRecoilMC){
@@ -2179,6 +2631,18 @@ int main(int argc, char** argv){
                         h_anti[0][j][0]->Write();
                     }
                 }
+                if (year!="2018"){
+                    for (int i = 0; i < 2; ++i){
+                        if (sample!="embedded"){
+                            h_anti[0][j][i+71]->SetName(MC+fake+shape_prefiring[i]);
+                            h_anti[0][j][i+71]->Write();
+                        }
+                        else {
+                            h_anti[0][j][0]->SetName(MC+fake+shape_prefiring[i]);
+                            h_anti[0][j][0]->Write();
+                        }
+                    }
+                }
                 for (int i = 0; i < 12; ++i){
                     if (isRecoilMC){
                         h_anti[0][j][i+37]->SetName(MC+fake+shape_recoil[i]);
@@ -2225,9 +2689,9 @@ int main(int argc, char** argv){
         }
     }
     
-    for (int j = 3; j < 8; j++){//loop over histogram variables ##############2b##############
+    for (int j = 0; j < 8; j++){//loop over histogram variables ##############2b##############
         td.push_back(fout->mkdir(dir2b[j]));
-        td[j+1]->cd();
+        td[j+7]->cd();
         
         if (sample!="data_obs"){
             //nominal
@@ -2238,6 +2702,11 @@ int main(int argc, char** argv){
                 if (sample!="embedded") h_iso[1][j][i+9]->SetName(name.c_str()+shape_tauideff[i]);
                 else h_iso[1][j][i+9]->SetName(name.c_str()+embshape_tauideff[i]);
                 h_iso[1][j][i+9]->Write();
+            }
+            for (int i = 0; i < 2; ++i){
+                if (sample!="embedded") h_iso[1][j][i+106]->SetName(name.c_str()+shape_tauidWP[i]);
+                else h_iso[1][j][i+106]->SetName(name.c_str()+embshape_tauidWP[i]);
+                h_iso[1][j][i+106]->Write();
             }
             for (int i = 0; i < 8; ++i){
                 if (sample!="embedded") h_iso[1][j][i+1]->SetName(name.c_str()+shape_tauES[i]);
@@ -2296,6 +2765,12 @@ int main(int argc, char** argv){
                 for (int i = 0; i < 2; ++i){
                     h_iso[1][j][i+103]->SetName(name.c_str()+shape_ttbar_toppt[i]);
                     h_iso[1][j][i+103]->Write();
+                }
+            }
+            if (year!="2018" && sample!="embedded"){
+                for (int i = 0; i < 2; ++i){
+                    h_iso[1][j][i+108]->SetName(name.c_str()+shape_prefiring[i]);
+                    h_iso[1][j][i+108]->Write();
                 }
             }
             if (isRecoilMC){
@@ -2379,6 +2854,18 @@ int main(int argc, char** argv){
                         h_anti[1][j][0]->Write();
                     }
                 }
+                if (year!="2018"){
+                    for (int i = 0; i < 2; ++i){
+                        if (sample!="embedded"){
+                            h_anti[1][j][i+71]->SetName(MC+fake+shape_prefiring[i]);
+                            h_anti[1][j][i+71]->Write();
+                        }
+                        else {
+                            h_anti[1][j][0]->SetName(MC+fake+shape_prefiring[i]);
+                            h_anti[1][j][0]->Write();
+                        }
+                    }
+                }
                 for (int i = 0; i < 12; ++i){
                     if (isRecoilMC){
                         h_anti[1][j][i+37]->SetName(MC+fake+shape_recoil[i]);
@@ -2424,6 +2911,227 @@ int main(int argc, char** argv){
             }
         }
     }
+    
+    //~~~~~~~~~~~~~~~final m_tt
+    for (int j = 0; j < 6; j++){
+        td.push_back(fout->mkdir(dirmtt[j]));
+        td[j+15]->cd();
+        if (sample!="data_obs"){
+            h_iso[2][j][0]->SetName(name.c_str());
+            h_iso[2][j][0]->Write();
+            for (int i = 0; i < 14; ++i){
+                if (sample!="embedded") h_iso[2][j][i+9]->SetName(name.c_str()+shape_tauideff[i]);
+                else h_iso[2][j][i+9]->SetName(name.c_str()+embshape_tauideff[i]);
+                h_iso[2][j][i+9]->Write();
+            }
+            for (int i = 0; i < 2; ++i){
+                if (sample!="embedded") h_iso[2][j][i+106]->SetName(name.c_str()+shape_tauidWP[i]);
+                else h_iso[2][j][i+106]->SetName(name.c_str()+embshape_tauidWP[i]);
+                h_iso[2][j][i+106]->Write();
+            }
+            for (int i = 0; i < 8; ++i){
+                if (sample!="embedded") h_iso[2][j][i+1]->SetName(name.c_str()+shape_tauES[i]);
+                else h_iso[2][j][i+1]->SetName(name.c_str()+embshape_tauES[i]);
+                h_iso[2][j][i+1]->Write();
+            }
+            if (sample!="embedded"){
+                for (int i = 0; i < 24; ++i){
+                    h_iso[2][j][i+57]->SetName(name.c_str()+shape_jet[i]);
+                    h_iso[2][j][i+57]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_iso[2][j][i+37]->SetName(name.c_str()+shape_mufaketauES[i]);
+                    h_iso[2][j][i+37]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_iso[2][j][i+41]->SetName(name.c_str()+shape_elefaketauES[i]);
+                    h_iso[2][j][i+41]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_iso[2][j][i+23]->SetName(name.c_str()+shape_tauideff_efake[i]);
+                    h_iso[2][j][i+23]->Write();
+                }
+                for (int i = 0; i < 10; ++i){
+                    h_iso[2][j][i+27]->SetName(name.c_str()+shape_tauideff_mufake[i]);
+                    h_iso[2][j][i+27]->Write();
+                }
+                for (int i = 0; i < 4; ++i){
+                    h_iso[2][j][i+53]->SetName(name.c_str()+shape_btagsf[i]);
+                    h_iso[2][j][i+53]->Write();
+                }
+            }
+            for (int i = 0; i < 4; ++i){
+                if (sample!="embedded") h_iso[2][j][i+49]->SetName(name.c_str()+shape_trgeff[i]);
+                else h_iso[2][j][i+49]->SetName(name.c_str()+embshape_trgeff[i]);
+                h_iso[2][j][i+49]->Write();
+            }
+            for (int i = 0; i < 4; ++i){
+                if (sample!="embedded") h_iso[2][j][i+45]->SetName(name.c_str()+shape_eleES[i]);
+                else h_iso[2][j][i+45]->SetName(name.c_str()+embshape_eleES[i]);
+                h_iso[2][j][i+45]->Write();
+            }
+            if (sample=="embedded"){
+                for (int i = 0; i < 6; ++i){
+                    h_iso[2][j][i+95]->SetName(name.c_str()+embshape_tautracking[i]);
+                    h_iso[2][j][i+95]->Write();
+                }
+            }
+            if (name=="ZJ"){
+                for (int i = 0; i < 2; ++i){
+                    h_iso[2][j][i+101]->SetName(name.c_str()+shape_DY_zpt[i]);
+                    h_iso[2][j][i+101]->Write();
+                }
+            }
+            if (name=="ttbar"){
+                for (int i = 0; i < 2; ++i){
+                    h_iso[2][j][i+103]->SetName(name.c_str()+shape_ttbar_toppt[i]);
+                    h_iso[2][j][i+103]->Write();
+                }
+            }
+            if (year!="2018" && sample!="embedded"){
+                for (int i = 0; i < 2; ++i){
+                    h_iso[2][j][i+108]->SetName(name.c_str()+shape_prefiring[i]);
+                    h_iso[2][j][i+108]->Write();
+                }
+            }
+            if (isRecoilMC){
+                for (int i = 0; i < 12; ++i){
+                    h_iso[2][j][i+81]->SetName(name.c_str()+shape_recoil[i]);
+                    h_iso[2][j][i+81]->Write();
+                }
+            }
+            if (isnonRecoilMC){
+                for (int i = 0; i < 2; ++i){
+                    h_iso[2][j][i+93]->SetName(name.c_str()+shape_UES[i]);
+                    h_iso[2][j][i+93]->Write();
+                }
+            }
+            if (isMCnonHiggs && name!="ZJ"){
+                h_iso[2][j][105]->SetName(shape_nonDY[0]);
+                h_iso[2][j][105]->Write();
+            }
+            //shifted in anti-isolated
+            if (!isSignal){
+                h_anti[2][j][0]->SetName(MC+fake);
+                h_anti[2][j][0]->Write();
+                for (int i = 0; i < 24; ++i){
+                    if (sample!="embedded"){
+                        h_anti[2][j][i+13]->SetName(MC+fake+shape_jet[i]);
+                        h_anti[2][j][i+13]->Write();
+                    }
+                    else {
+                        h_anti[2][j][0]->SetName(MC+fake+shape_jet[i]);
+                        h_anti[2][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 4; ++i){
+                    if (sample!="embedded"){
+                        h_anti[2][j][i+9]->SetName(MC+fake+shape_btagsf[i]);
+                        h_anti[2][j][i+9]->Write();
+                    }
+                    else {
+                        h_anti[2][j][0]->SetName(MC+fake+shape_btagsf[i]);
+                        h_anti[2][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 4; ++i){
+                    if (sample!="embedded"){
+                        h_anti[2][j][i+5]->SetName(MC+fake+shape_trgeff[i]);
+                        h_anti[2][j][i+5]->Write();
+                    }
+                    else {
+                        h_anti[2][j][0]->SetName(MC+fake+shape_trgeff[i]);
+                        h_anti[2][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 4; ++i){
+                    if (sample!="embedded"){
+                        h_anti[2][j][i+1]->SetName(MC+fake+shape_eleES[i]);
+                        h_anti[2][j][i+1]->Write();
+                    }
+                    else {
+                        h_anti[2][j][0]->SetName(MC+fake+shape_eleES[i]);
+                        h_anti[2][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 2; ++i){
+                    if (name=="ZJ"){
+                        h_anti[2][j][i+51]->SetName(MC+fake+shape_DY_zpt[i]);
+                        h_anti[2][j][i+51]->Write();
+                    }
+                    else {
+                        h_anti[2][j][0]->SetName(MC+fake+shape_DY_zpt[i]);
+                        h_anti[2][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 2; ++i){
+                    if (name=="ttbar"){
+                        h_anti[2][j][i+53]->SetName(MC+fake+shape_ttbar_toppt[i]);
+                        h_anti[2][j][i+53]->Write();
+                    }
+                    else {
+                        h_anti[2][j][0]->SetName(MC+fake+shape_ttbar_toppt[i]);
+                        h_anti[2][j][0]->Write();
+                    }
+                }
+                if (year!="2018"){
+                    for (int i = 0; i < 2; ++i){
+                        if (sample!="embedded"){
+                            h_anti[2][j][i+71]->SetName(MC+fake+shape_prefiring[i]);
+                            h_anti[2][j][i+71]->Write();
+                        }
+                        else {
+                            h_anti[2][j][0]->SetName(MC+fake+shape_prefiring[i]);
+                            h_anti[2][j][0]->Write();
+                        }
+                    }
+                }
+                for (int i = 0; i < 12; ++i){
+                    if (isRecoilMC){
+                        h_anti[2][j][i+37]->SetName(MC+fake+shape_recoil[i]);
+                        h_anti[2][j][i+37]->Write();
+                    }
+                    else {
+                        h_anti[2][j][0]->SetName(MC+fake+shape_recoil[i]);
+                        h_anti[2][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 2; ++i){
+                    if (isnonRecoilMC){
+                        h_anti[2][j][i+49]->SetName(MC+fake+shape_UES[i]);
+                        h_anti[2][j][i+49]->Write();
+                    }
+                    else {
+                        h_anti[2][j][0]->SetName(MC+fake+shape_UES[i]);
+                        h_anti[2][j][0]->Write();
+                    }
+                }
+                for (int i = 0; i < 2; ++i){
+                    h_anti[2][j][i+55]->SetName(MC+fake+shape_fake_crosstrg[i]);
+                    h_anti[2][j][i+55]->Write();
+                }
+                for (int i = 0; i < 14; ++i){
+                    h_anti[2][j][i+57]->SetName(MC+fake+shape_fakerate[i]);
+                    h_anti[2][j][i+57]->Write();
+                }
+            }//end of anti-isolated
+        }//end of (sample!="data_obs)
+        if (sample=="data_obs"){
+            h_iso[2][j][0]->SetName(name.c_str());
+            h_iso[2][j][0]->Write();
+            h_anti[2][j][0]->SetName(name.c_str()+fake);
+            h_anti[2][j][0]->Write();
+            for (int i = 0; i < 2; ++i){
+                h_anti[2][j][i+55]->SetName(name.c_str()+fake+shape_fake_crosstrg[i]);
+                h_anti[2][j][i+55]->Write();
+            }
+            for (int i = 0; i < 14; ++i){
+                h_anti[2][j][i+57]->SetName(name.c_str()+fake+shape_fakerate[i]);
+                h_anti[2][j][i+57]->Write();
+            }
+        }
+    }
+    //~~~~~~~~~~~~~~~(can be deleted later)~~~~~~~~~~~~~~
     
     fout->Close();
     
