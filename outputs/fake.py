@@ -73,7 +73,7 @@ if args.channel=="et" or args.channel=="mt":
             fake_syst_down.Write()
 
         ########### JES uncorrelated accross years/recoil/UES/btag/trgeff/Z_pt/toppt
-        syst_name=["JetAbsolute","JetBBEC1","JetEC2","JetHF","0j_resolution","0j_response","1j_resolution","1j_response","gt1j_resolution","gt1j_response","UES","btagsf_heavy","btagsf_light","trgeff_single_"+args.channel,"trgeff_cross_"+args.channel,"Zpt","toppt"]
+        syst_name=["JetAbsolute","JetBBEC1","JetEC2","JetHF","JetRelativeSample","0j_resolution","0j_response","1j_resolution","1j_response","gt1j_resolution","gt1j_response","UES","btagsf_hfstats1","btagsf_hfstats2","btagsf_lfstats1","btagsf_lfstats2","trgeff_single_"+args.channel,"trgeff_cross_"+args.channel,"Zpt","toppt"]
         
         for j in range(len(syst_name)):
             mc_fake_syst_up=file.Get(dir[i]).Get("MC_fake_CMS_"+syst_name[j]+"_"+args.year+"Up")
@@ -88,8 +88,8 @@ if args.channel=="et" or args.channel=="mt":
             fake_syst_down.SetName("fake_CMS_"+syst_name[j]+"_"+args.year+"Down")
             fake_syst_down.Write()
             
-        ########### JES correlated across years
-        syst_name=["JetAbsolute","JetBBEC1","JetEC2","JetFlavorQCD","JetHF","JetRelativeBal","JetRelativeSample","JER"]
+        ########### JES correlated across years/btag
+        syst_name=["JetAbsolute","JetBBEC1","JetEC2","JetFlavorQCD","JetHF","JetRelativeBal","JER","btagsf_hf","btagsf_lf","btagsf_cferr1","btagsf_cferr2"]
         
         for j in range(len(syst_name)):
             mc_fake_syst_up=file.Get(dir[i]).Get("MC_fake_CMS_"+syst_name[j]+"Up")
@@ -156,7 +156,7 @@ if args.channel=="em":# do normalization on cloned histogram if it should be use
     for i in range(len(dir)):
         
         # do default qcd for 2bjets categories to avoid unrealistic ssdefault-to-ssloose scale
-        if "2b" in dir[i]:
+        if "2b" in dir[i] or dir[i]=="5" or dir[i]=="6" or dir[i]=="7":
             is2b=True
         else:
             is2b=False
@@ -244,7 +244,7 @@ if args.channel=="em":# do normalization on cloned histogram if it should be use
                 qcd_syst_down.Write()
             
         ########### JES uncorrelated across years/recoil/UES/btag/trgeff/Z_pt/toppt/eleES/muES
-        syst_name=["JetAbsolute","JetBBEC1","JetEC2","JetHF","0j_resolution","0j_response","1j_resolution","1j_response","gt1j_resolution","gt1j_response","UES","btagsf_heavy","btagsf_light","trgeff_Mu8E23_em","trgeff_Mu23E12_em","trgeff_both_em","Zpt","toppt","eleES_bar","eleES_end","muES_eta0to1p2","muES_eta1p2to2p1","muES_eta2p1to2p4"]
+        syst_name=["JetAbsolute","JetBBEC1","JetEC2","JetHF","JetRelativeSample","0j_resolution","0j_response","1j_resolution","1j_response","gt1j_resolution","gt1j_response","UES","btagsf_hfstats1","btagsf_hfstats2","btagsf_lfstats1","btagsf_lfstats2","trgeff_Mu8E23_em","trgeff_Mu23E12_em","trgeff_both_em","Zpt","toppt","eleES_bar","eleES_end","muES_eta0to1p2","muES_eta1p2to2p1","muES_eta2p1to2p4"]
         
         for j in range(len(syst_name)):
             mc_ss_syst_up=file.Get(dir[i]).Get("MC_ss_CMS_"+syst_name[j]+"_"+args.year+"Up")
@@ -281,8 +281,8 @@ if args.channel=="em":# do normalization on cloned histogram if it should be use
                 qcd_syst_down.SetName("fake_CMS_"+syst_name[j]+"_"+args.year+"Down")
                 qcd_syst_down.Write()
             
-        ########### JES correlated across years
-        syst_name=["JetAbsolute","JetBBEC1","JetEC2","JetFlavorQCD","JetHF","JetRelativeBal","JetRelativeSample","JER"]
+        ########### JES correlated across years/btag
+        syst_name=["JetAbsolute","JetBBEC1","JetEC2","JetFlavorQCD","JetHF","JetRelativeBal","JER","btagsf_hf","btagsf_lf","btagsf_cferr1","btagsf_cferr2"]
         
         for j in range(len(syst_name)):
             mc_ss_syst_up=file.Get(dir[i]).Get("MC_ss_CMS_"+syst_name[j]+"Up")

@@ -31,6 +31,8 @@
 #include "RooFunctor.h"
 #include "GetTauFR.h"
 #include "NN_transform.h"
+#include "BTagCalibrationStandalone.h"
+#include "BTagCalibrationStandalone.cpp"
 
 using namespace std;
 
@@ -473,12 +475,13 @@ int main(int argc, char** argv){
     TString shape_tauideff_efake[4] = {"_CMS_tauideff_VSe_bar_"+year+"Up","_CMS_tauideff_VSe_bar_"+year+"Down","_CMS_tauideff_VSe_end_"+year+"Up","_CMS_tauideff_VSe_end_"+year+"Down"};
     TString shape_tauideff_mufake[10] = {"_CMS_tauideff_VSmu_eta0to0p4_"+year+"Up","_CMS_tauideff_VSmu_eta0to0p4_"+year+"Down","_CMS_tauideff_VSmu_eta0p4to0p8_"+year+"Up","_CMS_tauideff_VSmu_eta0p4to0p8_"+year+"Down","_CMS_tauideff_VSmu_eta0p8to1p2_"+year+"Up","_CMS_tauideff_VSmu_eta0p8to1p2_"+year+"Down","_CMS_tauideff_VSmu_eta1p2to1p7_"+year+"Up","_CMS_tauideff_VSmu_eta1p2to1p7_"+year+"Down","_CMS_tauideff_VSmu_eta1p7to2p3_"+year+"Up","_CMS_tauideff_VSmu_eta1p7to2p3_"+year+"Down"};
     TString shape_trgeff[4] = {"_CMS_trgeff_single_mt_"+year+"Up","_CMS_trgeff_single_mt_"+year+"Down","_CMS_trgeff_cross_mt_"+year+"Up","_CMS_trgeff_cross_mt_"+year+"Down"};
-    TString shape_btagsf[4] = {"_CMS_btagsf_heavy_"+year+"Up","_CMS_btagsf_heavy_"+year+"Down","_CMS_btagsf_light_"+year+"Up","_CMS_btagsf_light_"+year+"Down"};
+    //TString shape_btagsf[4] = {"_CMS_btagsf_heavy_"+year+"Up","_CMS_btagsf_heavy_"+year+"Down","_CMS_btagsf_light_"+year+"Up","_CMS_btagsf_light_"+year+"Down"};
+    TString shape_btagsf[16] = {"_CMS_btagsf_hfUp","_CMS_btagsf_hfDown","_CMS_btagsf_lfUp","_CMS_btagsf_lfDown","_CMS_btagsf_hfstats1_"+year+"Up","_CMS_btagsf_hfstats1_"+year+"Down","_CMS_btagsf_hfstats2_"+year+"Up","_CMS_btagsf_hfstats2_"+year+"Down","_CMS_btagsf_lfstats1_"+year+"Up","_CMS_btagsf_lfstats1_"+year+"Down","_CMS_btagsf_lfstats2_"+year+"Up","_CMS_btagsf_lfstats2_"+year+"Down","_CMS_btagsf_cferr1Up","_CMS_btagsf_cferr1Down","_CMS_btagsf_cferr2Up","_CMS_btagsf_cferr2Down"};
     TString shape_tauES[8] = {"_CMS_TES_dm0_"+year+"Up","_CMS_TES_dm0_"+year+"Down","_CMS_TES_dm1_"+year+"Up","_CMS_TES_dm1_"+year+"Down","_CMS_TES_dm10_"+year+"Up","_CMS_TES_dm10_"+year+"Down","_CMS_TES_dm11_"+year+"Up","_CMS_TES_dm11_"+year+"Down"};
     TString shape_mufaketauES[4] = {"_CMS_muTES_dm0_"+year+"Up","_CMS_muTES_dm0_"+year+"Down","_CMS_muTES_dm1_"+year+"Up","_CMS_muTES_dm1_"+year+"Down"};
     TString shape_elefaketauES[4] = {"_CMS_eleTES_dm0_"+year+"Up","_CMS_eleTES_dm0_"+year+"Down","_CMS_eleTES_dm1_"+year+"Up","_CMS_eleTES_dm1_"+year+"Down"};
     TString shape_muonES[6] = {"_CMS_muES_eta0to1p2_"+year+"Up","_CMS_muES_eta0to1p2_"+year+"Down","_CMS_muES_eta1p2to2p1_"+year+"Up","_CMS_muES_eta1p2to2p1_"+year+"Down","_CMS_muES_eta2p1to2p4_"+year+"Up","_CMS_muES_eta2p1to2p4_"+year+"Down"};
-    TString shape_jet[24] = {"_CMS_JetAbsoluteUp","_CMS_JetAbsoluteDown","_CMS_JetAbsolute_"+year+"Up","_CMS_JetAbsolute_"+year+"Down","_CMS_JetBBEC1Up","_CMS_JetBBEC1Down","_CMS_JetBBEC1_"+year+"Up","_CMS_JetBBEC1_"+year+"Down","_CMS_JetEC2Up","_CMS_JetEC2Down","_CMS_JetEC2_"+year+"Up","_CMS_JetEC2_"+year+"Down","_CMS_JetFlavorQCDUp","_CMS_JetFlavorQCDDown","_CMS_JetHFUp","_CMS_JetHFDown","_CMS_JetHF_"+year+"Up","_CMS_JetHF_"+year+"Down","_CMS_JetRelativeBalUp","_CMS_JetRelativeBalDown","_CMS_JetRelativeSampleUp","_CMS_JetRelativeSampleDown","_CMS_JERUp","_CMS_JERDown"};
+    TString shape_jet[24] = {"_CMS_JetAbsoluteUp","_CMS_JetAbsoluteDown","_CMS_JetAbsolute_"+year+"Up","_CMS_JetAbsolute_"+year+"Down","_CMS_JetBBEC1Up","_CMS_JetBBEC1Down","_CMS_JetBBEC1_"+year+"Up","_CMS_JetBBEC1_"+year+"Down","_CMS_JetEC2Up","_CMS_JetEC2Down","_CMS_JetEC2_"+year+"Up","_CMS_JetEC2_"+year+"Down","_CMS_JetFlavorQCDUp","_CMS_JetFlavorQCDDown","_CMS_JetHFUp","_CMS_JetHFDown","_CMS_JetHF_"+year+"Up","_CMS_JetHF_"+year+"Down","_CMS_JetRelativeBalUp","_CMS_JetRelativeBalDown","_CMS_JetRelativeSample_"+year+"Up","_CMS_JetRelativeSample_"+year+"Down","_CMS_JERUp","_CMS_JERDown"};
     //Z+jets, W+jets, ggH, qqH
     TString shape_recoil[12] = {"_CMS_0j_resolution_"+year+"Up","_CMS_0j_resolution_"+year+"Down","_CMS_0j_response_"+year+"Up","_CMS_0j_response_"+year+"Down","_CMS_1j_resolution_"+year+"Up","_CMS_1j_resolution_"+year+"Down","_CMS_1j_response_"+year+"Up","_CMS_1j_response_"+year+"Down","_CMS_gt1j_resolution_"+year+"Up","_CMS_gt1j_resolution_"+year+"Down","_CMS_gt1j_response_"+year+"Up","_CMS_gt1j_response_"+year+"Down"};
     //those without recoil
@@ -531,8 +534,8 @@ int main(int argc, char** argv){
     int nbins_p_1b = sizeof(bins_p_1b)/sizeof(Float_t) - 1;
     int nbins_p_2b = sizeof(bins_p_2b)/sizeof(Float_t) - 1;*/
     
-    for (int i = 0; i < 110; i++){
-        //i=0 nominal, 1-8 TES, 9-22 tauIDeff, 23-26 efaketauIDeff, 27-36 mufaketauIDeff, 37-40 muTES, 41-44 eleTES, 45-50 muonES, 51-54 trgsf, 55-58 btagsf, 59-82 jet, 83-94 recoil, 95-96 UES, 97-102 emb tautracking, 103-104 DY zpt, 105-106 ttbar toppt, 107 nonDY, 108-109 prefiring
+    for (int i = 0; i < 126; i++){
+        //i=0 nominal, 1-8 TES, 9-22 tauIDeff, 23-26 efaketauIDeff, 27-36 mufaketauIDeff, 37-40 muTES, 41-44 eleTES, 45-50 muonES, 51-54 trgsf, 55-58 btagsf (deprecated btag SF method 1c), 59-82 jet, 83-94 recoil, 95-96 UES, 97-102 emb tautracking, 103-104 DY zpt, 105-106 ttbar toppt, 107 nonDY, 108-109 prefiring, 110-125 btagsf (method 1d)
         //1 bjet
         h_iso[0][0].push_back(new TH1F("","",40,0.,1.));//p
         h_iso[0][1].push_back(new TH1F("","",40,0.,1.));//p2
@@ -551,16 +554,16 @@ int main(int argc, char** argv){
         h_iso[1][6].push_back(new TH1F("","",42,40,460));//m_btt
         h_iso[1][7].push_back(new TH1F("","",54,60,600));//m_bbtt
         //final mtt categories
-        h_iso[2][0].push_back(new TH1F("","",13,0,104));//m_tt_1
-        h_iso[2][1].push_back(new TH1F("","",13,0,104));//m_tt_2
-        h_iso[2][2].push_back(new TH1F("","",13,0,104));//m_tt_3
+        h_iso[2][0].push_back(new TH1F("","",20,0,100));//m_tt_1
+        h_iso[2][1].push_back(new TH1F("","",20,0,100));//m_tt_2
+        h_iso[2][2].push_back(new TH1F("","",20,0,100));//m_tt_3
         h_iso[2][3].push_back(new TH1F("","",15,0,300));//m_tt_4
         h_iso[2][4].push_back(new TH1F("","",9,0,108));//m_tt_5
-        h_iso[2][5].push_back(new TH1F("","",9,0,108));//m_tt_6
+        h_iso[2][5].push_back(new TH1F("","",10,0,100));//m_tt_6
         h_iso[2][6].push_back(new TH1F("","",15,0,300));//m_tt_7
     }
-    for (int i = 0; i < 75; i++){
-        //tau anti-isolated region; i=0 nominal, 1-6 muonES, 7-10 trgsf, 11-14 btagsf, 15-38 jet, 39-50 recoil, 51-52 UES, 53-54 DY zpt, 55-56 ttbar toppt, 57-58 crosstrg fakefactor, 59-72 fake rate, 73-74 prefiring
+    for (int i = 0; i < 91; i++){
+        //tau anti-isolated region; i=0 nominal, 1-6 muonES, 7-10 trgsf, 11-14 btagsf (deprecated btag SF method 1c), 15-38 jet, 39-50 recoil, 51-52 UES, 53-54 DY zpt, 55-56 ttbar toppt, 57-58 crosstrg fakefactor, 59-72 fake rate, 73-74 prefiring, 75-90 btagsf (method 1d)
         //1 bjet
         h_anti[0][0].push_back(new TH1F("","",40,0.,1.));//p
         h_anti[0][1].push_back(new TH1F("","",40,0.,1.));//p2
@@ -579,12 +582,12 @@ int main(int argc, char** argv){
         h_anti[1][6].push_back(new TH1F("","",42,40,460));//m_btt
         h_anti[1][7].push_back(new TH1F("","",54,60,600));//m_bbtt
         //final mtt categories
-        h_anti[2][0].push_back(new TH1F("","",13,0,104));//m_tt_1
-        h_anti[2][1].push_back(new TH1F("","",13,0,104));//m_tt_2
-        h_anti[2][2].push_back(new TH1F("","",13,0,104));//m_tt_3
+        h_anti[2][0].push_back(new TH1F("","",20,0,100));//m_tt_1
+        h_anti[2][1].push_back(new TH1F("","",20,0,100));//m_tt_2
+        h_anti[2][2].push_back(new TH1F("","",20,0,100));//m_tt_3
         h_anti[2][3].push_back(new TH1F("","",15,0,300));//m_tt_4
         h_anti[2][4].push_back(new TH1F("","",9,0,108));//m_tt_5
-        h_anti[2][5].push_back(new TH1F("","",9,0,108));//m_tt_6
+        h_anti[2][5].push_back(new TH1F("","",10,0,100));//m_tt_6
         h_anti[2][6].push_back(new TH1F("","",15,0,300));//m_tt_7
     }
     
@@ -640,6 +643,46 @@ int main(int argc, char** argv){
     TGraphAsymmErrors *g_taufr_dm11M = (TGraphAsymmErrors*) f_taufr->Get("hpt_dm11_VLe_Tmu_deepmedium_hpt_dm11_VLe_Tmu_deepveryveryveryloose");*/
     
     TGraphAsymmErrors *g_taufr_dmall = (TGraphAsymmErrors*) f_taufr->Get("hpt_dmall_VLe_Tmu_1jet_deepmedium_hpt_dmall_VLe_Tmu_1jet_deepveryveryveryloose");
+    
+    //btagging SF reader
+    std::string btagSFfile = "DeepJet_102XSF_V2_JESreduced";
+    if (year=="2017") btagSFfile = "DeepFlavour_94XSF_V4_B_F_JESreduced";
+    if (year=="2016") btagSFfile = "DeepJet_2016LegacySF_V1_TuneCP5_JESreduced";
+    std::string btagSFfilecsv = btagSFfile + ".csv";
+    
+    BTagCalibration calib(btagSFfile, btagSFfilecsv);
+    //list of btag SF variations to take from the csv
+    std::vector<std::string> btagSFvariations = {
+        //all syst except cferr1/2 (jes, hf, lf, hfstats1/2, lfstats1/2) are applied to both b and udsg flavours
+        //cferr1/2 is applied to c flavour jets only
+        //hfstats1/2 and lfstats1/2 are statistical in nature -> uncorrelated across years
+        //other SF-related syst (hf, lf, cferr1/2) are correlated across years
+        //jes-varied SFs are to be applied with corresponding jes-varied jets (not nominal jets)
+        "up_hf",                        "down_hf",
+        "up_lf",                        "down_lf",
+        "up_hfstats1",                  "down_hfstats1",
+        "up_hfstats2",                  "down_hfstats2",
+        "up_lfstats1",                  "down_lfstats1",
+        "up_lfstats2",                  "down_lfstats2",
+        "up_cferr1",                    "down_cferr1",
+        "up_cferr2",                    "down_cferr2",
+        "up_jesAbsolute",               "down_jesAbsolute",
+        "up_jesAbsolute_"+year,         "down_jesAbsolute_"+year,
+        "up_jesBBEC1",                  "down_jesBBEC1",
+        "up_jesBBEC1_"+year,            "down_jesBBEC1_"+year,
+        "up_jesEC2",                    "down_jesEC2",
+        "up_jesEC2_"+year,              "down_jesEC2_"+year,
+        "up_jesFlavorQCD",              "down_jesFlavorQCD",
+        "up_jesHF",                     "down_jesHF",
+        "up_jesHF_"+year,               "down_jesHF_"+year,
+        "up_jesRelativeBal",            "down_jesRelativeBal",
+        "up_jesRelativeSample_"+year,   "down_jesRelativeSample_"+year
+    };
+    BTagCalibrationReader reader(BTagEntry::OP_RESHAPING, "central", btagSFvariations);
+    reader.load(calib, BTagEntry::FLAV_B, "iterativefit");
+    reader.load(calib, BTagEntry::FLAV_C, "iterativefit");
+    reader.load(calib, BTagEntry::FLAV_UDSG, "iterativefit");
+    
     
     //loop over events
     int n = tree->GetEntries(); //no. of events after skimming
@@ -807,9 +850,9 @@ int main(int argc, char** argv){
             //re-weigh top pT spectrum for ttbar samples
             if (name=="ttbar"){
                 float pttop1=pt_top1;
-                if (pttop1>472) pttop1=472;
+                if (pttop1>500) pttop1=500;
                 float pttop2=pt_top2;
-                if (pttop2>472) pttop2=472;
+                if (pttop2>500) pttop2=500;
                 topfactor = sqrt(exp(0.088-0.00087*pttop1+0.00000092*pttop1*pttop1)*exp(0.088-0.00087*pttop2+0.00000092*pttop2*pttop2));
                 sf_MC *= topfactor;
             }
@@ -893,39 +936,93 @@ int main(int argc, char** argv){
         
         //count btagged jets (deepflavour)
         int nbtag20 = 0;
-        float bMpt_1 = 0;
-        float bMflavor_1 = 0;
-        float bMpt_2 = 0;
-        float bMflavor_2 = 0;
         float bscore_thres = 0.2770;
         if (year=="2017") bscore_thres = 0.3033;
         if (year=="2016") bscore_thres = 0.3093;
         if (bpt_deepflavour_1>20 && bscore_deepflavour_1>bscore_thres && fabs(beta_deepflavour_1)<2.4){
-            bMpt_1 = bpt_deepflavour_1;
-            bMflavor_1 = bflavour_deepflavour_1;
             nbtag20++;
         }
         if (bpt_deepflavour_2>20 && bscore_deepflavour_2>bscore_thres && fabs(beta_deepflavour_2)<2.4){
-            bMpt_2 = bpt_deepflavour_2;
-            bMflavor_2 = bflavour_deepflavour_2;
             nbtag20++;
         }
+        //b-tagged jet true flavour to be passed to btag SF reader
+        auto btagflavour_1 = BTagEntry::FLAV_B;
+        if (bflavour_deepflavour_1==5) btagflavour_1 = BTagEntry::FLAV_B;
+        if (bflavour_deepflavour_1==4) btagflavour_1 = BTagEntry::FLAV_C;
+        if (bflavour_deepflavour_1==0) btagflavour_1 = BTagEntry::FLAV_UDSG;
+        auto btagflavour_2 = BTagEntry::FLAV_B;
+        if (bflavour_deepflavour_2==5) btagflavour_2 = BTagEntry::FLAV_B;
+        if (bflavour_deepflavour_2==4) btagflavour_2 = BTagEntry::FLAV_C;
+        if (bflavour_deepflavour_2==0) btagflavour_2 = BTagEntry::FLAV_UDSG;
+        
         //btag weights for MC only
         float weight_btag_1b = 1.0;
         float weight_btag_2b = 1.0;
         if (sample!="data_obs" && sample!="embedded"){
-            weight_btag_1b = GetbtagSF(stoi(year.c_str()), bMpt_1, bMflavor_1, 0);
-            weight_btag_2b = GetbtagSF(stoi(year.c_str()), bMpt_1, bMflavor_1, 0)*GetbtagSF(stoi(year.c_str()), bMpt_2, bMflavor_2, 0);
+            //weight_btag_1b = GetbtagSF(stoi(year.c_str()), bMpt_1, bMflavor_1, 0);
+            //weight_btag_2b = GetbtagSF(stoi(year.c_str()), bMpt_1, bMflavor_1, 0)*GetbtagSF(stoi(year.c_str()), bMpt_2, bMflavor_2, 0);
+            if (nbtag20==1) weight_btag_1b = reader.eval_auto_bounds("central", btagflavour_1, fabs(beta_deepflavour_1), bpt_deepflavour_1, bscore_deepflavour_1);
+            if (nbtag20==2) weight_btag_2b = reader.eval_auto_bounds("central", btagflavour_1, fabs(beta_deepflavour_1), bpt_deepflavour_1, bscore_deepflavour_1)*reader.eval_auto_bounds("central", btagflavour_2, fabs(beta_deepflavour_2), bpt_deepflavour_2, bscore_deepflavour_2);
         }
         if (nbtag20==1) weight_corr *= weight_btag_1b;
         if (nbtag20==2) weight_corr *= weight_btag_2b;
         
-        //######################btag sf shifts#######################
+        //######################btag SF-related shifts (use nominal jet templates in the shifted SF)#######################
         std::vector<float> btagsf_syst;
-        for (int j = 0; j < 4; j++){
+        for (int j = 0; j < 16; j++){
+            //ordering: hf updown, lf updown, hfstats1 updown, hfstats2 updown, lfstats1 updown, lfstats2 updown, cferr1 updown, cferr2 updown
+            //NOTE: variations due to "jes", "lf", "hf", "hfstats1/2", and "lfstats1/2" are applied to both b and udsg jets. For c-flavored jets, only "cferr1/2" is applied
             btagsf_syst.push_back(1.0);
-            if (sample!="data_obs" && sample!="embedded" && nbtag20==1) btagsf_syst[j] = GetbtagSF(stoi(year.c_str()), bMpt_1, bMflavor_1, j+1)/weight_btag_1b;
-            if (sample!="data_obs" && sample!="embedded" && nbtag20==2) btagsf_syst[j] = GetbtagSF(stoi(year.c_str()), bMpt_1, bMflavor_1, j+1)*GetbtagSF(stoi(year.c_str()), bMpt_2, bMflavor_2, j+1)/weight_btag_2b;
+            if (sample!="data_obs" && sample!="embedded"){
+                if (j < 12){//{hf, lf, hfstats1/2, lfstats1/2} applied to both b and udsg jets only (use central for c jets, which is flat 1.0)
+                    if (nbtag20==1){
+                        if (btagflavour_1==BTagEntry::FLAV_B or btagflavour_1==BTagEntry::FLAV_UDSG){
+                            btagsf_syst[j] = reader.eval_auto_bounds(btagSFvariations[j], btagflavour_1, fabs(beta_deepflavour_1), bpt_deepflavour_1, bscore_deepflavour_1)/weight_btag_1b;
+                        }
+                        else if (btagflavour_1==BTagEntry::FLAV_C){
+                            btagsf_syst[j] = 1.0;
+                        }
+                    }
+                    if (nbtag20==2){
+                        if ((btagflavour_1==BTagEntry::FLAV_B or btagflavour_1==BTagEntry::FLAV_UDSG) and (btagflavour_2==BTagEntry::FLAV_B or btagflavour_2==BTagEntry::FLAV_UDSG)){
+                            btagsf_syst[j] = reader.eval_auto_bounds(btagSFvariations[j], btagflavour_1, fabs(beta_deepflavour_1), bpt_deepflavour_1, bscore_deepflavour_1)*reader.eval_auto_bounds(btagSFvariations[j], btagflavour_2, fabs(beta_deepflavour_2), bpt_deepflavour_2, bscore_deepflavour_2)/weight_btag_2b;
+                        }
+                        else if (btagflavour_1==BTagEntry::FLAV_C and (btagflavour_2==BTagEntry::FLAV_B or btagflavour_2==BTagEntry::FLAV_UDSG)){
+                            btagsf_syst[j] = 1.0*reader.eval_auto_bounds(btagSFvariations[j], btagflavour_2, fabs(beta_deepflavour_2), bpt_deepflavour_2, bscore_deepflavour_2)/weight_btag_2b;
+                        }
+                        else if ((btagflavour_1==BTagEntry::FLAV_B or btagflavour_1==BTagEntry::FLAV_UDSG) and btagflavour_2==BTagEntry::FLAV_C){
+                            btagsf_syst[j] = reader.eval_auto_bounds(btagSFvariations[j], btagflavour_1, fabs(beta_deepflavour_1), bpt_deepflavour_1, bscore_deepflavour_1)*1.0/weight_btag_2b;
+                        }
+                        else if (btagflavour_1==BTagEntry::FLAV_C and btagflavour_2==BTagEntry::FLAV_C){
+                            btagsf_syst[j] = 1.0;
+                        }
+                    }
+                }
+                else{//{cferr1/2} applied to c jets only (use central for both b and udsg jets)
+                    if (nbtag20==1){
+                        if (btagflavour_1==BTagEntry::FLAV_C){
+                            btagsf_syst[j] = reader.eval_auto_bounds(btagSFvariations[j], btagflavour_1, fabs(beta_deepflavour_1), bpt_deepflavour_1, bscore_deepflavour_1)/weight_btag_1b;
+                        }
+                        else if (btagflavour_1==BTagEntry::FLAV_B or btagflavour_1==BTagEntry::FLAV_UDSG){
+                            btagsf_syst[j] = 1.0;
+                        }
+                    }
+                    if (nbtag20==2){
+                        if ((btagflavour_1==BTagEntry::FLAV_B or btagflavour_1==BTagEntry::FLAV_UDSG) and (btagflavour_2==BTagEntry::FLAV_B or btagflavour_2==BTagEntry::FLAV_UDSG)){
+                            btagsf_syst[j] = 1.0;
+                        }
+                        else if (btagflavour_1==BTagEntry::FLAV_C and (btagflavour_2==BTagEntry::FLAV_B or btagflavour_2==BTagEntry::FLAV_UDSG)){
+                            btagsf_syst[j] = reader.eval_auto_bounds(btagSFvariations[j], btagflavour_1, fabs(beta_deepflavour_1), bpt_deepflavour_1, bscore_deepflavour_1)*reader.eval_auto_bounds("central", btagflavour_2, fabs(beta_deepflavour_2), bpt_deepflavour_2, bscore_deepflavour_2)/weight_btag_2b;
+                        }
+                        else if ((btagflavour_1==BTagEntry::FLAV_B or btagflavour_1==BTagEntry::FLAV_UDSG) and btagflavour_2==BTagEntry::FLAV_C){
+                            btagsf_syst[j] = reader.eval_auto_bounds("central", btagflavour_1, fabs(beta_deepflavour_1), bpt_deepflavour_1, bscore_deepflavour_1)*reader.eval_auto_bounds(btagSFvariations[j], btagflavour_2, fabs(beta_deepflavour_2), bpt_deepflavour_2, bscore_deepflavour_2)/weight_btag_2b;
+                        }
+                        else if (btagflavour_1==BTagEntry::FLAV_C and btagflavour_2==BTagEntry::FLAV_C){
+                            btagsf_syst[j] = reader.eval_auto_bounds(btagSFvariations[j], btagflavour_1, fabs(beta_deepflavour_1), bpt_deepflavour_1, bscore_deepflavour_1)*reader.eval_auto_bounds(btagSFvariations[j], btagflavour_2, fabs(beta_deepflavour_2), bpt_deepflavour_2, bscore_deepflavour_2)/weight_btag_2b;
+                        }
+                    }
+                }
+            }
         }
         
         //nominal var
@@ -1535,12 +1632,18 @@ int main(int argc, char** argv){
             var[0][0][j+23] = NN1b_jetvar[j];
             var[0][1][j+23] = p_n(NN1b_jetvar[j],p_N);
             var[0][2][j+23] = p_n(NN1b_jetvar[j],p_N);
+            //var[0][0][j+23] = NN1b;
+            //var[0][1][j+23] = p_n(NN1b,p_N);
+            //var[0][2][j+23] = p_n(NN1b,p_N);
             var[0][5][j+23] = mytt_jet[j].M();
             var[0][6][j+23] = m_btt_jet[j];
             
             var[1][0][j+23] = NN2b_jetvar[j];
             var[1][1][j+23] = p_n(NN2b_jetvar[j],p_N);
             var[1][2][j+23] = p_n(NN2b_jetvar[j],p_N);
+            //var[1][0][j+23] = NN2b;
+            //var[1][1][j+23] = p_n(NN2b,p_N);
+            //var[1][2][j+23] = p_n(NN2b,p_N);
             var[1][5][j+23] = mytt_jet[j].M();
             var[1][6][j+23] = m_btt_jet[j];
             var[1][7][j+23] = m_bbtt_jet[j];
@@ -1548,37 +1651,56 @@ int main(int argc, char** argv){
         
         //re-count nbtag20 and re-compute btag sf with shifted jet ES
         std::vector<int> nbtag20_jetsyst;
-        std::vector<float> bMpt_1_jetsyst;
-        std::vector<float> bMflavour_1_jetsyst;
-        std::vector<float> bMpt_2_jetsyst;
-        std::vector<float> bMflavour_2_jetsyst;
         std::vector<float> weight_btag_jetsyst;
+        std::vector<std::string> btagSFvariations_JESandJERonly = {//11 JES-varied SFs provided, not including JER (use central instead), to be applied to both b and udsg jets with the JES/JER-varied jet templates
+            "up_jesAbsolute",               "down_jesAbsolute",
+            "up_jesAbsolute_"+year,         "down_jesAbsolute_"+year,
+            "up_jesBBEC1",                  "down_jesBBEC1",
+            "up_jesBBEC1_"+year,            "down_jesBBEC1_"+year,
+            "up_jesEC2",                    "down_jesEC2",
+            "up_jesEC2_"+year,              "down_jesEC2_"+year,
+            "up_jesFlavorQCD",              "down_jesFlavorQCD",
+            "up_jesHF",                     "down_jesHF",
+            "up_jesHF_"+year,               "down_jesHF_"+year,
+            "up_jesRelativeBal",            "down_jesRelativeBal",
+            "up_jesRelativeSample_"+year,   "down_jesRelativeSample_"+year,
+            "central",                      "central"//for JER
+        };
         for (int j = 0; j < 24; j++){
             nbtag20_jetsyst.push_back(0);
-            bMpt_1_jetsyst.push_back(0);
-            bMflavour_1_jetsyst.push_back(0);
-            bMpt_2_jetsyst.push_back(0);
-            bMflavour_2_jetsyst.push_back(0);
             if (bpt_1_jetvar[j]>20 && bscore_deepflavour_1>bscore_thres && fabs(beta_deepflavour_1)<2.4){
-                bMpt_1_jetsyst[j] = bpt_1_jetvar[j];
-                bMflavour_1_jetsyst[j] = bflavour_deepflavour_1;
                 nbtag20_jetsyst[j]++;
             }
             if (bpt_2_jetvar[j]>20 && bscore_deepflavour_2>bscore_thres && fabs(beta_deepflavour_2)<2.4){
-                bMpt_2_jetsyst[j] = bpt_2_jetvar[j];
-                bMflavour_2_jetsyst[j] = bflavour_deepflavour_2;
                 nbtag20_jetsyst[j]++;
             }
-            weight_btag_jetsyst.push_back(1);
+            weight_btag_jetsyst.push_back(1);//apply jes-varied SFs (only for b and udsg jets; for c jets use central which is flat 1.0) to jes-varied jet templates (not to nominal jet templates)
             if (sample!="data_obs" && sample!="embedded"){
-                if (nbtag20==1){
-                    if (nbtag20_jetsyst[j]==1) weight_btag_jetsyst[j] = GetbtagSF(stoi(year.c_str()), bMpt_1_jetsyst[j], bMflavour_1_jetsyst[j], 0)/weight_btag_1b;
-                    if (nbtag20_jetsyst[j]==2) weight_btag_jetsyst[j] = GetbtagSF(stoi(year.c_str()), bMpt_1_jetsyst[j], bMflavour_1_jetsyst[j], 0)*GetbtagSF(stoi(year.c_str()), bMpt_2_jetsyst[j], bMflavour_2_jetsyst[j], 0)/weight_btag_1b;
+                if (nbtag20_jetsyst[j]==1){
+                    if (btagflavour_1==BTagEntry::FLAV_B or btagflavour_1==BTagEntry::FLAV_UDSG){
+                        weight_btag_jetsyst[j] = reader.eval_auto_bounds(btagSFvariations_JESandJERonly[j], btagflavour_1, fabs(beta_deepflavour_1), bpt_1_jetvar[j], bscore_deepflavour_1);
+                    }
+                    else if (btagflavour_1==BTagEntry::FLAV_C){
+                        weight_btag_jetsyst[j] = 1.0;
+                    }
                 }
-                if (nbtag20==2){
-                    if (nbtag20_jetsyst[j]==1) weight_btag_jetsyst[j] = GetbtagSF(stoi(year.c_str()), bMpt_1_jetsyst[j], bMflavour_1_jetsyst[j], 0)/weight_btag_2b;
-                    if (nbtag20_jetsyst[j]==2) weight_btag_jetsyst[j] = GetbtagSF(stoi(year.c_str()), bMpt_1_jetsyst[j], bMflavour_1_jetsyst[j], 0)*GetbtagSF(stoi(year.c_str()), bMpt_2_jetsyst[j], bMflavour_2_jetsyst[j], 0)/weight_btag_2b;
+                if (nbtag20_jetsyst[j]==2){
+                    if ((btagflavour_1==BTagEntry::FLAV_B or btagflavour_1==BTagEntry::FLAV_UDSG) and (btagflavour_2==BTagEntry::FLAV_B or btagflavour_2==BTagEntry::FLAV_UDSG)){
+                        weight_btag_jetsyst[j] = reader.eval_auto_bounds(btagSFvariations_JESandJERonly[j], btagflavour_1, fabs(beta_deepflavour_1), bpt_1_jetvar[j], bscore_deepflavour_1)*reader.eval_auto_bounds(btagSFvariations_JESandJERonly[j], btagflavour_2, fabs(beta_deepflavour_2), bpt_2_jetvar[j], bscore_deepflavour_2);
+                    }
+                    else if ((btagflavour_1==BTagEntry::FLAV_B or btagflavour_1==BTagEntry::FLAV_UDSG) and btagflavour_2==BTagEntry::FLAV_C){
+                        weight_btag_jetsyst[j] = reader.eval_auto_bounds(btagSFvariations_JESandJERonly[j], btagflavour_1, fabs(beta_deepflavour_1), bpt_1_jetvar[j], bscore_deepflavour_1)*1.0;
+                    }
+                    else if (btagflavour_1==BTagEntry::FLAV_C and (btagflavour_2==BTagEntry::FLAV_B or btagflavour_2==BTagEntry::FLAV_UDSG)){
+                        weight_btag_jetsyst[j] = 1.0*reader.eval_auto_bounds(btagSFvariations_JESandJERonly[j], btagflavour_2, fabs(beta_deepflavour_2), bpt_2_jetvar[j], bscore_deepflavour_2);
+                    }
+                    else if (btagflavour_1==BTagEntry::FLAV_C and btagflavour_2==BTagEntry::FLAV_C){
+                        weight_btag_jetsyst[j] = 1.0;
+                    }
                 }
+                if (nbtag20==0) weight_btag_jetsyst[j] *= 1.0;
+                if (nbtag20==1) weight_btag_jetsyst[j] *= 1.0/weight_btag_1b;
+                if (nbtag20==2) weight_btag_jetsyst[j] *= 1.0/weight_btag_2b;
             }
         }
         
@@ -1592,11 +1714,15 @@ int main(int argc, char** argv){
         std::vector<TLorentzVector> mytt_recoil;
         std::vector<float> m_btt_recoil;
         std::vector<float> m_bbtt_recoil;
+        std::vector<float> NN1b_recoil;
+        std::vector<float> NN2b_recoil;
         for (int j = 0; j < 12; j++){//ordering: 0jet resolutionUp/Down, responseUp/Down, 1jet resolutionUp/Down, responseUp/Down, 2jetsmore resolutionUp/Down, responseUp/Down
             mymet_recoil.push_back(mymet);
             mytt_recoil.push_back(mytt);
             m_btt_recoil.push_back(m_btt);
             m_bbtt_recoil.push_back(m_bbtt);
+            NN1b_recoil.push_back(NN1b);
+            NN2b_recoil.push_back(NN2b);
         }
         float njetsbins[4] = {0,1,2,20};
         for (int j = 0; j < 3; j++){
@@ -1606,19 +1732,21 @@ int main(int argc, char** argv){
                     mytt_recoil[4*j+k].SetPtEtaPhiM((mymu+mytau+mymet_recoil[4*j+k]).Pt(),(mymu+mytau+mymet_recoil[4*j+k]).Eta(),(mymu+mytau+mymet_recoil[4*j+k]).Phi(),m_sv_recoilvar[k]);
                     m_btt_recoil[4*j+k] = (mytt_recoil[4*j+k]+myb1).M();
                     m_bbtt_recoil[4*j+k] = (mytt_recoil[4*j+k]+myb1+myb2).M();
+                    NN1b_recoil[4*j+k] = NN1b_recoilvar[k];
+                    NN2b_recoil[4*j+k] = NN2b_recoilvar[k];
                 }
             }
         }
         for (int j = 0; j < 12; j++){
-            var[0][0][j+47] = NN1b_recoilvar[j];
-            var[0][1][j+47] = p_n(NN1b_recoilvar[j],p_N);
-            var[0][2][j+47] = p_n(NN1b_recoilvar[j],p_N);
+            var[0][0][j+47] = NN1b_recoil[j];
+            var[0][1][j+47] = p_n(NN1b_recoil[j],p_N);
+            var[0][2][j+47] = p_n(NN1b_recoil[j],p_N);
             var[0][5][j+47] = mytt_recoil[j].M();
             var[0][6][j+47] = m_btt_recoil[j];
             
-            var[1][0][j+47] = NN2b_recoilvar[j];
-            var[1][1][j+47] = p_n(NN2b_recoilvar[j],p_N);
-            var[1][2][j+47] = p_n(NN2b_recoilvar[j],p_N);
+            var[1][0][j+47] = NN2b_recoil[j];
+            var[1][1][j+47] = p_n(NN2b_recoil[j],p_N);
+            var[1][2][j+47] = p_n(NN2b_recoil[j],p_N);
             var[1][5][j+47] = mytt_recoil[j].M();
             var[1][6][j+47] = m_btt_recoil[j];
             var[1][7][j+47] = m_bbtt_recoil[j];
@@ -1758,18 +1886,38 @@ int main(int argc, char** argv){
         */
         
         //##############################categories definition##############################
+        float cat1bthres1 = 0.98;//0.98
+        float cat1bthres2 = 0.95;//0.95
+        float cat1bthres3 = 0.90;//0.90
+        float cat2bthres1 = 0.99;//0.995 -a> 0.992 -d> 0.99
+        float cat2bthres2 = 0.96;//0.97 -d> 0.96
+        if (year=="2017"){
+            cat1bthres1 = 0.97;//0.98 -d> 0.975 -e> 0.97
+            cat1bthres2 = 0.94;//0.95 -d> 0.945 -e> 0.94
+            cat1bthres3 = 0.90;
+            cat2bthres1 = 0.98;//0.995 -a> 0.99 -b> 0.985 -d> 0.98
+            cat2bthres2 = 0.94;//0.97 -b> 0.965 -c> 0.96 -d> 0.95 -e> 0.94
+        }
+        if (year=="2016"){
+            cat1bthres1 = 0.97;//0.98 -d> 0.975 -e> 0.97
+            cat1bthres2 = 0.94;//0.95 -d> 0.945 -e> 0.94
+            cat1bthres3 = 0.89;//0.90 -e> 0.89
+            cat2bthres1 = 0.97;//0.995 -a> 0.99 -b> 0.985 -c> 0.98 -d> 0.97
+            cat2bthres2 = 0.93;//0.97 -b> 0.96 -c> 0.955 -d> 0.94 -e> 0.93
+        }
+        
         std::vector<std::vector<bool>> ctg;
         for (int j = 0; j < 7; j++) ctg.push_back(std::vector<bool>());//7 categories (4 for 1b, 3 for 2b)
         for (int j = 0; j < 61; j++){//61 shifted systematics
             //1b
-            ctg[0].push_back(var[0][1][j]>0.98);
-            ctg[1].push_back(var[0][1][j]<0.98 && var[0][1][j]>0.95);
-            ctg[2].push_back(var[0][1][j]<0.95 && var[0][1][j]>0.9);
-            ctg[3].push_back(var[0][1][j]<0.9);
+            ctg[0].push_back(var[0][1][j]>cat1bthres1);
+            ctg[1].push_back(var[0][1][j]<cat1bthres1 && var[0][1][j]>cat1bthres2);
+            ctg[2].push_back(var[0][1][j]<cat1bthres2 && var[0][1][j]>cat1bthres3);
+            ctg[3].push_back(var[0][1][j]<cat1bthres3);
             //2b
-            ctg[4].push_back(var[1][1][j]>0.995);
-            ctg[5].push_back(var[1][1][j]<0.995 && var[1][1][j]>0.97);
-            ctg[6].push_back(var[1][1][j]<0.97);
+            ctg[4].push_back(var[1][1][j]>cat2bthres1);
+            ctg[5].push_back(var[1][1][j]<cat2bthres1 && var[1][1][j]>cat2bthres2);
+            ctg[6].push_back(var[1][1][j]<cat2bthres2);
         }
         
         //##############################histograms filling###################################
@@ -1782,10 +1930,18 @@ int main(int argc, char** argv){
                     for (int m = 0; m < 7; m++){
                         h_iso[0][m][107]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*0.1);//+/-10% on top of emb
                     }
+                    //final m_tt
+                    for (int m = 0; m < 4; m ++){
+                        if (ctg[m][0]) h_iso[2][m][107]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*0.1);
+                    }
                 }
                 if (nbtag20==2){
                     for (int m = 0; m < 8; m++){
                         h_iso[1][m][107]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*0.1);//+/-10% on top of emb
+                    }
+                    //final m_tt
+                    for (int m = 4; m < 7; m++){
+                        if (ctg[m][0]) h_iso[2][m][107]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]*0.1);
                     }
                 }
             }
@@ -1875,7 +2031,7 @@ int main(int argc, char** argv){
                             //tauIDeff mufake
                             for (int k = 0; k < 10; k++) h_iso[0][m][k+27]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
                             //btageff
-                            for (int k = 0; k < 4; k++) h_iso[0][m][k+55]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*btagsf_syst[k]);
+                            for (int k = 0; k < 16; k++) h_iso[0][m][k+110]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*btagsf_syst[k]);
                         }
                         //trigger sf shifting
                         for (int k = 0; k < 4; k++) h_iso[0][m][k+51]->Fill(var[0][m][0],weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
@@ -1944,7 +2100,7 @@ int main(int argc, char** argv){
                             //tauIDeff mufake
                             for (int k = 0; k < 10; k++) h_iso[1][m][k+27]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
                             //btageff
-                            for (int k = 0; k < 4; k++) h_iso[1][m][k+55]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*btagsf_syst[k]);
+                            for (int k = 0; k < 16; k++) h_iso[1][m][k+110]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*btagsf_syst[k]);
                         }
                         //trigger sf shifting
                         for (int k = 0; k < 4; k++) h_iso[1][m][k+51]->Fill(var[1][m][0],weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
@@ -2014,7 +2170,7 @@ int main(int argc, char** argv){
                             //tauIDeff mufake
                             for (int k = 0; k < 10; k++) if (ctg[m][0]) h_iso[2][m][k+27]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
                             //btageff
-                            for (int k = 0; k < 4; k++) if (ctg[m][0]) h_iso[2][m][k+55]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*btagsf_syst[k]);
+                            for (int k = 0; k < 16; k++) if (ctg[m][0]) h_iso[2][m][k+110]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*btagsf_syst[k]);
                         }
                         //trigger sf shifting
                         for (int k = 0; k < 4; k++) if (ctg[m][0]) h_iso[2][m][k+51]->Fill(var[0][5][0],weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
@@ -2083,7 +2239,7 @@ int main(int argc, char** argv){
                             //tauIDeff mufake
                             for (int k = 0; k < 10; k++) if (ctg[m][0]) h_iso[2][m][k+27]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]*sf_tauid_mufake[k]);
                             //btageff
-                            for (int k = 0; k < 4; k++) if (ctg[m][0]) h_iso[2][m][k+55]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]*btagsf_syst[k]);
+                            for (int k = 0; k < 16; k++) if (ctg[m][0]) h_iso[2][m][k+110]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]*btagsf_syst[k]);
                         }
                         //trigger sf shifting
                         for (int k = 0; k < 4; k++) if (ctg[m][0]) h_iso[2][m][k+51]->Fill(var[1][5][0],weight_corr*trgsf*sf_tauid[0]*trigger_shiftedsf[k]);
@@ -2239,7 +2395,7 @@ int main(int argc, char** argv){
                         }
                         //btag sf
                         if (sample!="embedded"){
-                            for (int k = 0; k < 4; k++) h_anti[0][m][k+11]->Fill(var[0][m][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
+                            for (int k = 0; k < 16; k++) h_anti[0][m][k+75]->Fill(var[0][m][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
                         }
                         //prefiring
                         if (year!="2018" && sample!="embedded"){
@@ -2291,7 +2447,7 @@ int main(int argc, char** argv){
                         }
                         //btag sf
                         if (sample!="embedded"){
-                            for (int k = 0; k < 4; k++) h_anti[1][m][k+11]->Fill(var[1][m][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
+                            for (int k = 0; k < 16; k++) h_anti[1][m][k+75]->Fill(var[1][m][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
                         }
                         //prefiring
                         if (year!="2018" && sample!="embedded"){
@@ -2344,7 +2500,7 @@ int main(int argc, char** argv){
                         }
                         //btag sf
                         if (sample!="embedded"){
-                            for (int k = 0; k < 4; k++) if (ctg[m][0]) h_anti[2][m][k+11]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
+                            for (int k = 0; k < 16; k++) if (ctg[m][0]) h_anti[2][m][k+75]->Fill(var[0][5][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
                         }
                         //prefiring
                         if (year!="2018" && sample!="embedded"){
@@ -2395,7 +2551,7 @@ int main(int argc, char** argv){
                         }
                         //btag sf
                         if (sample!="embedded"){
-                            for (int k = 0; k < 4; k++) if (ctg[m][0]) h_anti[2][m][k+11]->Fill(var[1][5][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
+                            for (int k = 0; k < 16; k++) if (ctg[m][0]) h_anti[2][m][k+75]->Fill(var[1][5][0],weight_corr*weight_fake*trgsf*xtrgfakefactor*btagsf_syst[k]);
                         }
                         //prefiring
                         if (year!="2018" && sample!="embedded"){
@@ -2473,9 +2629,9 @@ int main(int argc, char** argv){
                     h_iso[0][j][i+27]->SetName(name.c_str()+shape_tauideff_mufake[i]);
                     h_iso[0][j][i+27]->Write();
                 }
-                for (int i = 0; i < 4; ++i){
-                    h_iso[0][j][i+55]->SetName(name.c_str()+shape_btagsf[i]);
-                    h_iso[0][j][i+55]->Write();
+                for (int i = 0; i < 16; ++i){
+                    h_iso[0][j][i+110]->SetName(name.c_str()+shape_btagsf[i]);
+                    h_iso[0][j][i+110]->Write();
                 }
             }
             for (int i = 0; i < 4; ++i){
@@ -2543,10 +2699,10 @@ int main(int argc, char** argv){
                         h_anti[0][j][0]->Write();
                     }
                 }
-                for (int i = 0; i < 4; ++i){
+                for (int i = 0; i < 16; ++i){
                     if (sample!="embedded"){
-                        h_anti[0][j][i+11]->SetName(MC+fake+shape_btagsf[i]);
-                        h_anti[0][j][i+11]->Write();
+                        h_anti[0][j][i+75]->SetName(MC+fake+shape_btagsf[i]);
+                        h_anti[0][j][i+75]->Write();
                     }
                     else {
                         h_anti[0][j][0]->SetName(MC+fake+shape_btagsf[i]);
@@ -2691,9 +2847,9 @@ int main(int argc, char** argv){
                     h_iso[1][j][i+27]->SetName(name.c_str()+shape_tauideff_mufake[i]);
                     h_iso[1][j][i+27]->Write();
                 }
-                for (int i = 0; i < 4; ++i){
-                    h_iso[1][j][i+55]->SetName(name.c_str()+shape_btagsf[i]);
-                    h_iso[1][j][i+55]->Write();
+                for (int i = 0; i < 16; ++i){
+                    h_iso[1][j][i+110]->SetName(name.c_str()+shape_btagsf[i]);
+                    h_iso[1][j][i+110]->Write();
                 }
             }
             for (int i = 0; i < 4; ++i){
@@ -2761,10 +2917,10 @@ int main(int argc, char** argv){
                         h_anti[1][j][0]->Write();
                     }
                 }
-                for (int i = 0; i < 4; ++i){
+                for (int i = 0; i < 16; ++i){
                     if (sample!="embedded"){
-                        h_anti[1][j][i+11]->SetName(MC+fake+shape_btagsf[i]);
-                        h_anti[1][j][i+11]->Write();
+                        h_anti[1][j][i+75]->SetName(MC+fake+shape_btagsf[i]);
+                        h_anti[1][j][i+75]->Write();
                     }
                     else {
                         h_anti[1][j][0]->SetName(MC+fake+shape_btagsf[i]);
@@ -2909,9 +3065,9 @@ int main(int argc, char** argv){
                     h_iso[2][j][i+27]->SetName(name.c_str()+shape_tauideff_mufake[i]);
                     h_iso[2][j][i+27]->Write();
                 }
-                for (int i = 0; i < 4; ++i){
-                    h_iso[2][j][i+55]->SetName(name.c_str()+shape_btagsf[i]);
-                    h_iso[2][j][i+55]->Write();
+                for (int i = 0; i < 16; ++i){
+                    h_iso[2][j][i+110]->SetName(name.c_str()+shape_btagsf[i]);
+                    h_iso[2][j][i+110]->Write();
                 }
             }
             for (int i = 0; i < 4; ++i){
@@ -2979,10 +3135,10 @@ int main(int argc, char** argv){
                         h_anti[2][j][0]->Write();
                     }
                 }
-                for (int i = 0; i < 4; ++i){
+                for (int i = 0; i < 16; ++i){
                     if (sample!="embedded"){
-                        h_anti[2][j][i+11]->SetName(MC+fake+shape_btagsf[i]);
-                        h_anti[2][j][i+11]->Write();
+                        h_anti[2][j][i+75]->SetName(MC+fake+shape_btagsf[i]);
+                        h_anti[2][j][i+75]->Write();
                     }
                     else {
                         h_anti[2][j][0]->SetName(MC+fake+shape_btagsf[i]);
