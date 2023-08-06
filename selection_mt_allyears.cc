@@ -43,6 +43,9 @@ int main(int argc, char** argv){
     std::string sample = *(argv + 3);
     std::string name = *(argv + 4);
     std::string year = *(argv + 5);
+
+    ofstream myfile;
+    myfile.open("sync_events.txt");
     
     cout << "************* input: " << input.c_str() << " *************" << endl;
     
@@ -52,7 +55,8 @@ int main(int argc, char** argv){
     float N = nevents->GetBinContent(2); //no. of generated events (before skimming) with genweight
     
     std::string sample_name = sample.c_str();
-    std::string NNfile = "/hdfs/store/user/htsoi/NN/mt18/" + sample_name + ".root";
+    //std::string NNfile = "/hdfs/store/user/htsoi/NN/mt18/" + sample_name + ".root";
+    std::string NNfile = "/hdfs/store/user/htsoi/NN/NN_mt2018/" + sample_name + ".root";
     if (year=="2017") NNfile = "/hdfs/store/user/htsoi/NN/mt17/" + sample_name + ".root";
     if (year=="2016") NNfile = "/hdfs/store/user/htsoi/NN/mt16/" + sample_name + ".root";
     TFile * NN = new TFile(NNfile.c_str());
@@ -139,6 +143,8 @@ int main(int argc, char** argv){
     bool isnonRecoilMC = (sample!="data_obs" && sample!="embedded" && !isRecoilMC);
     
     tree->SetBranchAddress("run", &run);
+    tree->SetBranchAddress("lumi", &lumi);
+    tree->SetBranchAddress("evt", &evt);
     tree->SetBranchAddress("pt_1", &pt_1);
     tree->SetBranchAddress("phi_1", &phi_1);
     tree->SetBranchAddress("eta_1", &eta_1);
@@ -1921,6 +1927,7 @@ int main(int argc, char** argv){
         }
         
         //##############################histograms filling###################################
+        if(trigger_region_nominal && (nbtag20==1 || nbtag20==2)) myfile<<run<<":"<<lumi<<":"<<evt<<"\n";
         bool rejectEMBduplicate = !isMCnonHiggs or (isMCnonHiggs && !(gen_match_1>2 && gen_match_1<6 && gen_match_2>2 && gen_match_2<6));
         
         //nonDY MC contamination to embedded (all nonHiggs MC events with two taus previously rejected)
@@ -2471,7 +2478,7 @@ int main(int argc, char** argv){
                     for (int k = 0; k < 14; k++) h_anti[1][m][k+59]->Fill(var[1][m][0],weight_corr*weight_fake_shifted[k]*trgsf*xtrgfakefactor);
                 }
             }//end of loop over variables to fill ###############2b################
-            
+
             //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>><><><><><><><><><><><><><><><><><><><><><>fill final m_tt categories
             //~~~~~~~~~~~~~~~~~~~1bNN
             for (int m = 0; m < 4; m++){
@@ -2584,7 +2591,7 @@ int main(int argc, char** argv){
     
     TString dir1b[7] = {"p_1b","p2_1b","p2_z_1b","pt_1_1b","pt_2_1b","m_tt_1b","m_btt_1b"};
     TString dir2b[8] = {"p_2b","p2_2b","p2_z_2b","pt_1_2b","pt_2_2b","m_tt_2b","m_btt_2b","m_bbtt_2b"};
-    TString dirmtt[7] = {"1","2","3","4","5","6","7"};
+    TString dirmtt[7] = {"mtt1","mtt2","mtt3","mtt4","mtt5","mtt6","mtt7"};
     TString fake = "_fake";
     TString MC = "MC";
     
@@ -3244,7 +3251,7 @@ int main(int argc, char** argv){
     }
     //~~~~~~~~~~~~~~~(can be deleted later)~~~~~~~~~~~~~~
     
-    
+    myfile.close(); 
     fout->Close();
     
     cout << "************* output: " << output.c_str() << " *************" << endl;
